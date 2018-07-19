@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ (c) 2018 BATTELLE ENERGY ALLIANCE, LLC
+ ALL RIGHTS RESERVED 
+ -->
+<sgComponentListData xmlns="generated.components.inl.igcapt">
+	<sgComponentGroupData groupName="DCC">
+		<sgComponentData name="UtilityDCC" uuid="05958113-48bf-4409-a549-a5cc906fb756">
+			<iconPath>sgicons/utilityDCC.png</iconPath>
+			<passthrough>true</passthrough>
+		</sgComponentData>
+		<sgComponentData name="HeadEnd" uuid="669026c8-dadb-4b97-af3c-d048798d3ed5">
+			<iconPath>sgicons/headEnd.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>43e7c6df-4b29-4aac-9d42-b191a06ecf65</collapseInto>
+				<collapseInto>921eee6b-d5d7-474a-ad45-2b8f79834ca2</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+		<sgComponentData name="MDMS" uuid="80441b19-7fba-470c-8e67-db6dc9b5c1a0">
+			<iconPath>sgicons/mdms.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgUseCaseData>
+				<sgDataElement useCase="normalMeterRead" name="Mtr-read_multi-interval-data_cmd"/>
+				<sgDataElement useCase="onDemandMeterRead" name="on-demand_Mtr-read_cmd"/>
+				<sgDataElement useCase="bulkMeterRead" name="bulk_Mtr-read_cmd"/>
+			</sgUseCaseData>
+		</sgComponentData>
+	</sgComponentGroupData>
+	
+	<sgComponentGroupData groupName="Network Devices">
+		<sgComponentData name="Aggregation Point" uuid="43e7c6df-4b29-4aac-9d42-b191a06ecf65" aggregate="true">
+			<iconPath>sgicons/collector.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>5095504a-2bc7-42eb-8c90-ab5f0aadf40b</collapseInto>
+				<collapseInto>31773042-c616-42b2-9f56-aa1cda1a5d6b</collapseInto>
+				<collapseInto>85e23e49-0c0c-4466-994f-775b318c54f4</collapseInto>
+				<collapseInto>89ca2726-ecba-490a-affc-2e826a638c9f</collapseInto>
+				<collapseInto>4576de98-9fa1-4bc6-90d3-32edb265551f</collapseInto>
+				<collapseInto>a5a6b1fe-071a-4eb5-b70b-43b20bc9eb5b</collapseInto>
+				<collapseInto>698061a7-964a-48b8-a1ed-7e4fed22fe97</collapseInto>
+				<collapseInto>43e2ec5a-d844-491f-99ce-9de15bfe7cb5</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+		<sgComponentData name="LTE" uuid="491cf4eb-61ec-4895-95d3-fa5625c0391c">
+			<iconPath>sgicons/lte.png</iconPath>
+			<passthrough>true</passthrough>
+		</sgComponentData>
+		<sgComponentData name="Router" uuid="6f08a95c-6d4f-442b-9320-6e4afc0c4462">
+			<iconPath>sgicons/router.png</iconPath>
+			<passthrough>true</passthrough>
+		</sgComponentData>
+		<sgComponentData name="Switch" uuid="8063d0a1-8a3c-4123-87b3-f50b4b4c4e2a">
+			<iconPath>sgicons/switch.png</iconPath>
+			<passthrough>true</passthrough>
+		</sgComponentData>
+		<sgComponentData name="FAN Gateway" uuid="2dde76ab-94de-4cde-be6d-ce1e9d0e1986" aggregate="false">
+			<iconPath>sgicons/router.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>fa6d3830-b172-4cbb-90b3-32c404fe7d8c</collapseInto>
+				<collapseInto>47d6ad24-c444-4789-b5f5-5d610488081a</collapseInto>
+				<collapseInto>28e2b53d-20f7-4bf2-8f56-add644bfdba6</collapseInto>
+				<collapseInto>09f386c4-7df9-4736-8f45-a7d4671d146c</collapseInto>
+				<collapseInto>8973bd4c-0511-46ca-a364-83687eecf19a</collapseInto>
+				<collapseInto>676e25b5-3806-4295-98c5-54b4eda501d1</collapseInto>
+				<collapseInto>657e066b-9569-429d-b99b-bca3d33b6dbf</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+	</sgComponentGroupData>
+	
+	<sgComponentGroupData groupName="Customer Premise">
+		<sgComponentData name="CarBattery" uuid="5095504a-2bc7-42eb-8c90-ab5f0aadf40b">
+			<iconPath>sgicons/carBattery.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="EVCharger" uuid="31773042-c616-42b2-9f56-aa1cda1a5d6b">
+			<iconPath>sgicons/evCharger.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="PoolPump" uuid="85e23e49-0c0c-4466-994f-775b318c54f4">
+			<iconPath>sgicons/poolPump.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="SimpleElectricMeter" uuid="89ca2726-ecba-490a-affc-2e826a638c9f">
+			<iconPath>sgicons/simpleElectricMeter.png</iconPath>
+			<sgUseCaseData>
+				<sgDataElement useCase="normalMeterRead" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>80441b19-7fba-470c-8e67-db6dc9b5c1a0</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="onDemandMeterRead" name="on-demand_Mtr-read_resp-data">
+					<endPt>80441b19-7fba-470c-8e67-db6dc9b5c1a0</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="bulkMeterRead" name="bulk_Mtr-read_resp-data">
+					<endPt>80441b19-7fba-470c-8e67-db6dc9b5c1a0</endPt>
+				</sgDataElement>
+			</sgUseCaseData>
+		</sgComponentData>
+		<sgComponentData name="SimpleElectricPolyMeter" uuid="4576de98-9fa1-4bc6-90d3-32edb265551f">
+			<iconPath>sgicons/simpleElectricPolyMeter.png</iconPath>
+			<sgUseCaseData>
+				<sgDataElement useCase="normalMeterRead" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>80441b19-7fba-470c-8e67-db6dc9b5c1a0</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="onDemandMeterRead" name="on-demand_Mtr-read_resp-data">
+					<endPt>80441b19-7fba-470c-8e67-db6dc9b5c1a0</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="bulkMeterRead" name="bulk_Mtr-read_resp-data">
+					<endPt>80441b19-7fba-470c-8e67-db6dc9b5c1a0</endPt>
+				</sgDataElement>
+			</sgUseCaseData>
+		</sgComponentData>
+		<sgComponentData name="SimpleThermostat" uuid="a5a6b1fe-071a-4eb5-b70b-43b20bc9eb5b">
+			<iconPath>sgicons/simpleThermostat.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="WaterHeater" uuid="698061a7-964a-48b8-a1ed-7e4fed22fe97">
+			<iconPath>sgicons/waterHeater.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="PTAC" uuid="43e2ec5a-d844-491f-99ce-9de15bfe7cb5">
+			<iconPath>sgicons/PTAC.png</iconPath>
+		</sgComponentData>
+	</sgComponentGroupData>
+	
+	<sgComponentGroupData groupName="Distribution">
+		<sgComponentData name="CapBank" uuid="fa6d3830-b172-4cbb-90b3-32c404fe7d8c">
+			<iconPath>sgicons/capBank.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="Compensator" uuid="47d6ad24-c444-4789-b5f5-5d610488081a">
+			<iconPath>sgicons/compensator.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="Generator" uuid="28e2b53d-20f7-4bf2-8f56-add644bfdba6">
+			<iconPath>sgicons/generator.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="Inverter" uuid="09f386c4-7df9-4736-8f45-a7d4671d146c">
+			<iconPath>sgicons/inverter.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="Recloser" uuid="8973bd4c-0511-46ca-a364-83687eecf19a">
+			<iconPath>sgicons/recloser.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="Regulator" uuid="676e25b5-3806-4295-98c5-54b4eda501d1">
+			<iconPath>sgicons/regulator.png</iconPath>
+		</sgComponentData>
+		<sgComponentData name="Sectionalizer" uuid="657e066b-9569-429d-b99b-bca3d33b6dbf">
+			<iconPath>sgicons/sectionalizer.png</iconPath>
+		</sgComponentData>
+	</sgComponentGroupData>
+
+	<sgComponentGroupData groupName="Misc" display="false">
+		<sgComponentData name="groupNode" uuid="921eee6b-d5d7-474a-ad45-2b8f79834ca2">
+			<!-- <iconPath>sgicons/groupNode.png</iconPath> -->
+		</sgComponentData>
+	</sgComponentGroupData>
+	
+	<sgComponentGroupData groupName="Miscellaneous">
+		<!-- The name here can be changed, but this UUID is used to identify this particular component...don't change it. -->
+		<sgComponentData name="Aggregation" uuid="a169911e-9079-449f-b9b7-9f79efcec135">
+			<iconPath>sgicons/aggregate.png</iconPath>
+		</sgComponentData>
+	</sgComponentGroupData>
+</sgComponentListData>

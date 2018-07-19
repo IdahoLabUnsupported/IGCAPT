@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ (c) 2018 BATTELLE ENERGY ALLIANCE, LLC
+ ALL RIGHTS RESERVED 
+ -->
+<sgUseCaseData xmlns="generated.components.inl.igcapt">
+	<sgApplication name="meterReading">
+		<sgUseCase name="normalMeterRead">
+			<sgDataElement name="Mtr-read_multi-interval-data_cmd" payload="25" maxLatency="15" source="srsv5"/>
+			<sgDataElement name="Mtr-read_multi-interval-data_resp-data" payload="200" maxLatency="15" source="srsv5"/>
+		</sgUseCase>
+		<sgUseCase name="onDemandMeterRead">
+			<sgDataElement name="on-demand_Mtr-read_cmd" payload="25" maxLatency="15" source="srsv5"/>
+			<sgDataElement name="on-demand_Mtr-read_resp-data" payload="100" maxLatency="60" source="srsv5"/>
+		</sgUseCase>
+		<sgUseCase name="bulkMeterRead">
+			<sgDataElement name="bulk_Mtr-read_cmd" payload="25" maxLatency="60" source="srsv5"/>
+			<sgDataElement name="bulk_Mtr-read_resp-data" payload="100" maxLatency="60" source="srsv5"/>
+		</sgUseCase>
+	</sgApplication>
+	<sgApplication name="demandResponse">
+		<sgUseCase name="loadManagementRequest">
+			<sgDataElement name="Load_mgm_req_reqst" payload="100" maxLatency="240" source="srsv5"/>
+			<sgDataElement name="Load_mgm_req_ack" payload="25" maxLatency="60" source="srsv5"/>
+		</sgUseCase>
+		<sgUseCase name="volLoadManagementRequest">
+			<sgDataElement name="Vol_load_shed_reqst" payload="25" maxLatency="15" source="srsv5"/>
+			<sgDataElement name="Vol_load_shed_req_ack" payload="25" maxLatency="15" source="srsv5"/>
+			<sgDataElement name="Vol_load_shed_reqst_brdcst" payload="100" maxLatency="60" source="srsv5"/>
+			<sgDataElement name="Vol_load_shed_reqst_mltcst" payload="100" maxLatency="60" source="srsv5"/>
+		</sgUseCase>
+		<sgUseCase name="loadManagementRequestOptOuts">
+			<sgDataElement name="Load_mgm_opt_out" payload="25" maxLatency="60" source="srsv5"/>
+		</sgUseCase>
+	</sgApplication>
+</sgUseCaseData>
