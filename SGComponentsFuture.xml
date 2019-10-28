@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ (c) 2019 BATTELLE ENERGY ALLIANCE, LLC
+ ALL RIGHTS RESERVED 
+ -->
+<sgComponentListData xmlns="generated.components.inl.igcapt">
+	<sgComponentGroupData groupName="Network Devices">
+		<sgComponentData name="Collector" uuid="43e7c6df-4b29-4aac-9d42-b191a06ecf65">
+			<iconPath>sgicons/collector.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>6d8c4fa1-e05e-4c10-b5f6-04faa964a2e9</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+		<sgComponentData name="Cell Tower" uuid="6d8c4fa1-e05e-4c10-b5f6-04faa964a2e9">
+			<iconPath>sgicons/tower.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>0b56081f-ecb1-4e9e-b451-35105fdc4d16</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+		<sgComponentData name="Access Point" uuid="0b56081f-ecb1-4e9e-b451-35105fdc4d16">
+			<iconPath>sgicons/accesspoint.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>6aa285f6-2938-4cbc-9e0d-e03067c88709</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+		<sgComponentData name="Cell Relay" uuid="6aa285f6-2938-4cbc-9e0d-e03067c88709">
+			<iconPath>sgicons/relay.png</iconPath>
+			<passthrough>true</passthrough>
+			<sgCollapseIntoData>
+				<collapseInto>89ca2726-ecba-490a-affc-2e826a638c9f</collapseInto>
+				<collapseInto>4576de98-9fa1-4bc6-90d3-32edb265551f</collapseInto>
+				<collapseInto>490027ba-e03a-4b4e-8ef8-3280c056aa12</collapseInto>
+			</sgCollapseIntoData>
+		</sgComponentData>
+	</sgComponentGroupData>
+	
+	<sgComponentGroupData groupName="Customer Premise">
+		<sgComponentData name="Meter1" uuid="89ca2726-ecba-490a-affc-2e826a638c9f">
+			<iconPath>sgicons/AMeter.png</iconPath>
+			<DataElements>
+				<Element name="usageData" defaultSize="1198" />
+				<Element name="voltageMonitoring" defaultSize="463" />
+			</DataElements>
+			<sgUseCaseData>
+				<sgDataElement useCase="normalMeterRead8noVM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" defaultState="on" />
+						<Element name="voltageMonitoring" defaultState="off" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead8VM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" defaultState="on" />
+						<Element name="voltageMonitoring" defaultState="on" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead16noVM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" size="1741" defaultState="on" />
+						<Element name="voltageMonitoring" size="719" defaultState="off" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead16VM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" size="1741" defaultState="on" />
+						<Element name="voltageMonitoring" size="719" defaultState="on" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead24noVM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" size="2169" defaultState="on" />
+						<Element name="voltageMonitoring" size="1220" defaultState="off" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead24VM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" size="2169" defaultState="on" />
+						<Element name="voltageMonitoring" size="1220" defaultState="on" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="onDemandMeterRead" name="on-demand_Mtr-read_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="bulkMeterRead" name="bulk_Mtr-read_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+			</sgUseCaseData>
+		</sgComponentData>
+		<sgComponentData name="Meter2" uuid="4576de98-9fa1-4bc6-90d3-32edb265551f">
+			<iconPath>sgicons/ACMeter.png</iconPath>
+			<sgUseCaseData>
+				<sgDataElement useCase="normalMeterRead" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="onDemandMeterRead" name="on-demand_Mtr-read_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="bulkMeterRead" name="bulk_Mtr-read_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+			</sgUseCaseData>
+		</sgComponentData>
+		<sgComponentData name="Meter3" uuid="490027ba-e03a-4b4e-8ef8-3280c056aa12">
+			<iconPath>sgicons/ABCMeter.png</iconPath>
+			<DataElements>
+				<Element name="usageData" defaultSize="1049" />
+				<Element name="voltageMonitoring" defaultSize="1035" />
+			</DataElements>
+			<sgUseCaseData>
+				<sgDataElement useCase="normalMeterRead8noVM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" defaultState="on" />
+						<Element name="voltageMonitoring" defaultState="off" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead8VM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" defaultState="on" />
+						<Element name="voltageMonitoring" defaultState="on" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead16noVM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" size="1148" defaultState="on" />
+						<Element name="voltageMonitoring" size="1798" defaultState="off" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="normalMeterRead16VM" name="Mtr-read_multi-interval-data_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+					<availableElements>
+						<Element name="usageData" size="1148" defaultState="on" />
+						<Element name="voltageMonitoring" size="1798" defaultState="on" />
+					</availableElements>
+				</sgDataElement>
+				<sgDataElement useCase="onDemandMeterRead" name="on-demand_Mtr-read_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+				<sgDataElement useCase="bulkMeterRead" name="bulk_Mtr-read_resp-data">
+					<endPt>43e7c6df-4b29-4aac-9d42-b191a06ecf65</endPt>
+				</sgDataElement>
+			</sgUseCaseData>
+		</sgComponentData>
+	</sgComponentGroupData>
+</sgComponentListData>

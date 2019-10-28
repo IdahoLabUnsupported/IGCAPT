@@ -1,1 +1,1 @@
-javaw  -Djava.net.useSystemProxies=true -jar ./dist/JMapViewer.jar
+java  -Djava.net.useSystemProxies=true -jar ./target/IGCAPT-1.0.jar

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+Idaho National Laboratory, 2017
+
+ (c) 2018 BATTELLE ENERGY ALLIANCE, LLC
+ ALL RIGHTS RESERVED 
+
+Schema for the component file.
+-->
+
+<xs:schema version="1.0"
+		targetNamespace="gov.inl.igcapt.components.generated"
+                xmlns="generated.components.inl.igcapt"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		elementFormDefault="qualified">
+
+    <xs:element name="sgComponentListData" type="SgComponentListData">
+        <xs:unique name="uniqueComponentName">
+            <xs:selector xpath="sgComponentData"/>
+            <xs:field xpath="name"/>
+        </xs:unique>
+        <xs:unique name="uniqueComponentUuid">
+            <xs:selector xpath="sgComponentData"/>
+            <xs:field xpath="uuid"/>
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="SgComponentListData">
+        <xs:sequence>
+            <xs:element name="date" type="xs:string" />
+            <xs:element name="sgComponentGroupData" type="SgComponentGroupData" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SgComponentGroupData">
+        <xs:sequence>
+            <xs:element name="sgComponentData" type="SgComponentData" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="groupName" type="xs:string" use="required"/>
+        <xs:attribute name="display" type="xs:boolean" default="true"/>
+    </xs:complexType>
+
+    <xs:complexType name="SgComponentData">
+        <xs:sequence>
+            <xs:element name="iconPath" type="xs:string"/>
+            <xs:element name="passthrough" type="xs:boolean" default="true"/>
+            <xs:element name="sgCollapseIntos" type="SgCollapseIntoData"/>
+            <xs:element name="sgUseCaseData" type="SgComponentUseCaseData"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="uuid" type="xs:string" use="required"/>
+        <xs:attribute name="aggregate" type="xs:boolean" default="false"/>
+    </xs:complexType>
+
+    <xs:complexType name="SgCollapseInto">
+        <xs:sequence>
+            <xs:element name="collapseInto" type="xs:string" maxOccurs="unbounded"/>        
+        </xs:sequence>            
+    </xs:complexType>
+
+    <xs:complexType name="SgComponentUseCaseData">
+        <xs:sequence>
+            <xs:element name="sgDataElement" type="SgComponentDataElement" maxOccurs="unbounded"/>        
+        </xs:sequence>            
+    </xs:complexType>
+
+    <xs:complexType name="SgComponentDataElement">
+        <xs:sequence>
+            <xs:element name="endPt" type="xs:string" maxOccurs="unbounded"/>        
+        </xs:sequence>            
+        <xs:attribute name="useCase" type="xs:string" use="required"/>           
+        <xs:attribute name="name" type="xs:string" use="required"/>        
+    </xs:complexType>
+</xs:schema>

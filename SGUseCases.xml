@@ -5,32 +5,39 @@
  -->
 <sgUseCaseData xmlns="generated.components.inl.igcapt">
 	<sgApplication name="meterReading">
-		<sgUseCase name="normalMeterRead">
-			<sgDataElement name="Mtr-read_multi-interval-data_cmd" payload="25" maxLatency="15" source="srsv5"/>
-			<sgDataElement name="Mtr-read_multi-interval-data_resp-data" payload="200" maxLatency="15" source="srsv5"/>
+		<!-- Single Phase -->
+		<sgUseCase name="MeterRead-8Hr-NoVM-1198">
+			<sgDataElement name="Response-payload-SP" payload="1198" maxLatency="30" source="cnp"/>		
+			<sgDataElement name="Response-payload-PP" payload="1049" maxLatency="30" source="cnp"/>		
 		</sgUseCase>
-		<sgUseCase name="onDemandMeterRead">
-			<sgDataElement name="on-demand_Mtr-read_cmd" payload="25" maxLatency="15" source="srsv5"/>
-			<sgDataElement name="on-demand_Mtr-read_resp-data" payload="100" maxLatency="60" source="srsv5"/>
+		<sgUseCase name="MeterRead-16Hr-NoVM-1741">
+			<sgDataElement name="Response-payload-SP" payload="1741" maxLatency="30" source="cnp"/>		
+			<sgDataElement name="Response-payload-PP" payload="1148" maxLatency="30" source="cnp"/>		
 		</sgUseCase>
-		<sgUseCase name="bulkMeterRead">
-			<sgDataElement name="bulk_Mtr-read_cmd" payload="25" maxLatency="60" source="srsv5"/>
-			<sgDataElement name="bulk_Mtr-read_resp-data" payload="100" maxLatency="60" source="srsv5"/>
+		<sgUseCase name="MeterRead-24Hr-NoVM-2169">
+			<sgDataElement name="Response-payload-SP" payload="2169" maxLatency="30" source="cnp"/>		
+			<sgDataElement name="Response-payload-PP" payload="1276" maxLatency="30" source="cnp"/>		
 		</sgUseCase>
-	</sgApplication>
-	<sgApplication name="demandResponse">
-		<sgUseCase name="loadManagementRequest">
-			<sgDataElement name="Load_mgm_req_reqst" payload="100" maxLatency="240" source="srsv5"/>
-			<sgDataElement name="Load_mgm_req_ack" payload="25" maxLatency="60" source="srsv5"/>
+		<sgUseCase name="MeterRead-8Hr-VM-1661">
+			<sgDataElement name="Response-payload-SP" payload="1661" maxLatency="30" source="cnp"/>		
+			<sgDataElement name="Response-payload-PP" payload="2048" maxLatency="30" source="cnp"/>		
 		</sgUseCase>
-		<sgUseCase name="volLoadManagementRequest">
-			<sgDataElement name="Vol_load_shed_reqst" payload="25" maxLatency="15" source="srsv5"/>
-			<sgDataElement name="Vol_load_shed_req_ack" payload="25" maxLatency="15" source="srsv5"/>
-			<sgDataElement name="Vol_load_shed_reqst_brdcst" payload="100" maxLatency="60" source="srsv5"/>
-			<sgDataElement name="Vol_load_shed_reqst_mltcst" payload="100" maxLatency="60" source="srsv5"/>
+		<sgUseCase name="MeterRead-16Hr-VM-2460">
+			<sgDataElement name="Response-payload-SP" payload="2460" maxLatency="30" source="cnp"/>		
+			<sgDataElement name="Response-payload-PP" payload="2946" maxLatency="30" source="cnp"/>		
 		</sgUseCase>
-		<sgUseCase name="loadManagementRequestOptOuts">
-			<sgDataElement name="Load_mgm_opt_out" payload="25" maxLatency="60" source="srsv5"/>
+		<sgUseCase name="MeterRead-24Hr-VM-3389">
+			<sgDataElement name="Response-payload-SP" payload="3389" maxLatency="30" source="cnp"/>		
+			<sgDataElement name="Response-payload-PP" payload="4334" maxLatency="30" source="cnp"/>		
+		</sgUseCase>
+		<sgUseCase name="Outage-81">
+			<sgDataElement name="Payload" payload="81" maxLatency="30" source="cnp"/>		
+		</sgUseCase>
+		<sgUseCase name="Restoration-152">
+			<sgDataElement name="Payload" payload="152" maxLatency="30" source="cnp"/>		
+		</sgUseCase>
+		<sgUseCase name="VM Exception-136">
+			<sgDataElement name="Payload" payload="136" maxLatency="30" source="cnp"/>		
 		</sgUseCase>
 	</sgApplication>
 </sgUseCaseData>
