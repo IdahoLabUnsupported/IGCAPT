@@ -9,11 +9,11 @@
         <!-- Entity classes -->
         <class>gov.inl.igcapt.components.DataModels.SgComponentData</class>
         <class>gov.inl.igcapt.components.DataModels.SgCollapseInto</class>
-        <class>gov.inl.igcapt.components.generated.SgComponentDataElement</class>
+<!--        <class>gov.inl.igcapt.components.generated.SgComponentDataElement</class>-->
         <class>gov.inl.igcapt.components.DataModels.SgComponentListData</class>
         <class>gov.inl.igcapt.components.DataModels.SgComponentGroupData</class>
-        <class>gov.inl.igcapt.components.generated.SgComponentUseCaseData</class>
-        <class>gov.inl.igcapt.components.generated.SgEndPoint</class>
+<!--        <class>gov.inl.igcapt.components.generated.SgComponentUseCaseData</class>-->
+        <class>gov.inl.igcapt.components.DataModels.SgEndPoint</class>
 
         <properties>
 <!--            <property name="hibernate.default_schema" value="IGCAPT"/>-->
