@@ -139,6 +139,8 @@ import gov.inl.igcapt.components.DataModels.SgCollapseInto;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import org.apache.commons.collections15.Factory;
@@ -336,7 +338,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         fileDirty = true;
 
         clearEdgeUtilization();
-        updateGISObjects();
+        refresh();
     }
 
     private Icon loadIcon(String path) {
@@ -801,6 +803,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem saveTopology = new JMenuItem("Save Topology");
         JMenuItem applyPayload = new JMenuItem("Apply Payload...");
         JMenuItem analyzeTopology = new JMenuItem("Analyze Topology");
+        JMenuItem importResults = new JMenuItem("Import NS-3 Results...");
+        JMenuItem clearResults = new JMenuItem("Clear Analysis Results");
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
@@ -809,6 +813,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         fileMenu.add(new JSeparator()); // SEPARATOR
         fileMenu.add(applyPayload);
         fileMenu.add(analyzeTopology);
+        fileMenu.add(importResults);
+        fileMenu.add(clearResults);
         fileMenu.add(new JSeparator()); // SEPARATOR
         fileMenu.add(exportData);
         fileMenu.add(new JSeparator());
@@ -994,6 +1000,37 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         });
 
+        importResults.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ev) {
+                
+                JFileChooser chooser = new JFileChooser();
+                
+                if (!lastPath.isEmpty()) {
+                    chooser.setCurrentDirectory(new File(lastPath));
+                }
+
+                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            importResults(chooser);
+                        }
+                    });
+                }
+            }
+        });
+        
+        clearResults.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ev) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        clearEdgeUtilization();
+                    }
+                });
+            }
+        });
+        
         exportData.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser chooser = new JFileChooser();
@@ -1426,9 +1463,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 layout.setLocation((SgNodeInterface) clusterGraph, cp);
             }
             vv.getPickedVertexState().clear();
-            vv.repaint();
-
-            updateGISObjects();
+            
+            refresh();
         }
     }
 
@@ -2086,10 +2122,64 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         fileDirty = false;
     }
     
-    void exportFile(JFileChooser chooser) {
+    private void exportFile(JFileChooser chooser) {
         String selectedSaveFile = chooser.getSelectedFile().toString();
 
         writeGraphToCSV(selectedSaveFile);
+    }
+    
+    private void setUtilization(List<long[]> utilList) {
+        Graph expandedGraph = getOriginalGraph();
+        ArrayList<SgNodeInterface> sgNodes = new ArrayList<>(expandedGraph.getVertices());
+        ArrayList<SgEdge> sgEdges = new ArrayList<SgEdge>(expandedGraph.getEdges());
+
+        for (long[] element : utilList) {
+
+            for (SgEdge edge : sgEdges) {
+                Pair<SgNodeInterface> endNodes = expandedGraph.getEndpoints(edge);
+
+                if ((endNodes.getFirst().getId() == element[0] && endNodes.getSecond().getId() == element[1]) ||
+                    (endNodes.getFirst().getId() == element[1] && endNodes.getSecond().getId() == element[0])) {
+
+                    edge.setEdgeRate(element[2]);
+                    edge.setCalcTransRate(element[3]*element[2]*0.01);
+                    break;
+                }
+            }
+        }
+        
+        refresh();
+    }
+    
+    private void importResults(JFileChooser chooser) {
+        
+        // Read the file and process.
+        try (BufferedReader br = new BufferedReader(new FileReader(chooser.getSelectedFile()))) {
+            String line;
+            List<long[]> utilList = new ArrayList<>();
+            boolean readError = false;
+            
+            while ((line = br.readLine()) != null) {
+                // Parse four longs
+                long[] utilLongs = Arrays.stream(line.split(","))
+                                        .map(String::trim)
+                                        .mapToLong(Long::valueOf)
+                                        .toArray();
+                
+                if (utilLongs.length >= 4) {
+                    utilList.add(utilLongs);
+                }
+                else {
+                    System.out.println("Error in reading line: " + line);
+                    readError = true;
+                    break;
+                }
+            }
+            
+            setUtilization(utilList);
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void clearEdgeUtilization() {
@@ -2309,7 +2399,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 ta.setText(returnval);
             }
 
-            updateGISObjects();
+            refresh();
 
             return returnval;
         }
@@ -2822,6 +2912,12 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         }
     }
     // end of 5 methods for DropTargetListener
+    
+    // Cause the displays to redraw, both the logical and GIS views.
+    private void refresh() {
+        vv.repaint(); // logical refresh
+        updateGISObjects(); // GIS refresh
+    }
 
     public SgNodeInterface createAggregation(ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig,
             SgComponentData selectedAggregateComponent, Point point, Coordinate latLongCoord, double defaultMaxRate) {
@@ -2890,8 +2986,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         collapse();
         setContextClickNode(null);
 
-        vv.repaint();
-        updateGISObjects();
+        refresh();
 
         return returnval;
     }
@@ -2912,9 +3007,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             nodeIndex++;
             currentTypeUuidStr = uuidStr;
 
-            vv.repaint();
-
-            updateGISObjects();
+            refresh();
         } catch (Exception e) {
         }
     }
