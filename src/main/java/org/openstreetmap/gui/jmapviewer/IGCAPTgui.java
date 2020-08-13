@@ -1386,9 +1386,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
                 sgNode.setMaxLatency(0);
                 sgNode.setDataToSend(0);
+                sgNode.clearUseCaseUserData();
                 
                 // This gets set according to the element found in the SGComponents.xml
-                sgNode.getEndPointList().clear();
+                // sgNode.getEndPointList().clear();
             }
         }
         
@@ -1688,8 +1689,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     n1.setLat(Double.parseDouble(eElement.getElementsByTagName("lat").item(0).getTextContent()));
                     n1.setLongit(Double.parseDouble(eElement.getElementsByTagName("long").item(0).getTextContent()));
 
+                    Element endPtElement = (Element)(eElement.getElementsByTagName("endPoints").item(0));
                     List<Integer> endPointList = new ArrayList<>();
-                    NodeList endPointListNodes = eElement.getElementsByTagName("endPoint");
+                    NodeList endPointListNodes = endPtElement.getElementsByTagName("endPoint");
 
                     for (int j = 0; j < endPointListNodes.getLength(); ++j) {
                         Node endPointNode = endPointListNodes.item(j);
@@ -1972,10 +1974,14 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         // Now save out the uncollapsed graph.
         graph = getOriginalGraph();
-        graphNodes = new ArrayList<>(getOriginalGraph().getVertices());
+        ArrayList<SgEdge> edges = new ArrayList<>(graph.getEdges());
+        
         try (PrintWriter writer = new PrintWriter(new File(fileName))) {
             StringBuilder sb = new StringBuilder();
             
+            // Write nodes
+            graphNodes = new ArrayList<>(graph.getVertices());
+
             // Write field labels
             sb.append("Id,Name,Type,EnableDataSending,EnableDataPassThrough,IsAggregate,IsCollapsed,DataToSend,MaxLatency,X,Y,Latitude,Longitude,EndPt,UserData");
             sb.append("\n");
@@ -2009,32 +2015,42 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     sb.append(sgNode.getLat());
                     sb.append(",");
                     sb.append(sgNode.getLongit());
+                    sb.append(",");
                     
-                    
+                    sb.append("[");
                     if (sgNode != null && sgNode.getEndPointList() != null &&
-                            sgNode.getEndPointList().size() > 0 &&
-                            sgNode.getEndPointList().get(0) != null &&
-                            sgNode.getEndPointList().get(0).toString() != null)
+                            sgNode.getEndPointList().size() > 0)
                     {
-                        String endPt = sgNode.getEndPointList().get(0).toString();
-                        sb.append(",");
-                        sb.append(endPt);
-                    }
-
-                    KeyValueManager kVManager = new KeyValueManager(sgNode.getUserData());
-                        
-                    // Write out the userData values. Headings won't be printed
-                    // because we don't know this until we encounter it when
-                    // reading the nodes.
-                    if (kVManager != null && kVManager.KeyValues() != null && kVManager.KeyValues().values() != null) {
-                        for (String value : kVManager.KeyValues().values()) {
-                            sb.append(",");
-                            sb.append(value);
+                        boolean first = true;
+                        for(var endpt:sgNode.getEndPointList()) {
+                            if (endpt != null && endpt.toString() != null && !endpt.toString().isBlank()) {
+                                String endPt = endpt.toString();
+                                if (!first) {
+                                    sb.append(",");
+                                    first = false;
+                                }
+                                sb.append(endPt);                               
+                            }
                         }
                     }
-                    
+                    sb.append("]");
+                    sb.append(",");
+                    sb.append(sgNode.getUserData());
                     sb.append('\n');
                 }
+            }
+            
+            sb.append("\n");
+            
+            // Write edges as pair of ids representing nodes at the ends.
+            sb.append("node1,node2\n");
+            for(var edge:edges) {
+                Pair<SgNodeInterface> edgeEndPts = graph.getEndpoints(edge);
+
+                sb.append(edgeEndPts.getFirst().getId());
+                sb.append(",");
+                sb.append(edgeEndPts.getSecond().getId());
+                sb.append("\n");
             }
             
             writer.write(sb.toString());

@@ -15,12 +15,12 @@ import com.google.common.base.Splitter;
  * Take a string of the form: key|value;key|value and parse it into the dictionary.
  */
 public class KeyValueManager {
-    Map<String, String> _keyValues;
+    private Map<String, String> _keyValues;
     
     public KeyValueManager(String keyValues) {
         if (keyValues != null && !keyValues.isEmpty()) {
             
-            _keyValues = Splitter.on(';')
+            var unmodmap = Splitter.on(';')
                 .trimResults()
                 .omitEmptyStrings()
                 .withKeyValueSeparator(
@@ -28,6 +28,8 @@ public class KeyValueManager {
                         .limit(2)
                         .trimResults())
                 .split(keyValues);
+            
+            _keyValues = new HashMap<>(unmodmap);
         }
     }
     
@@ -45,5 +47,20 @@ public class KeyValueManager {
         }
         
         return returnval;
+    }
+    
+    // Convert the key/values to Key|Value;Key|Value...
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        
+        for (var entry : _keyValues.entrySet()){
+            sb.append(entry.getKey());
+            sb.append("|");
+            sb.append(entry.getValue());
+            sb.append(";");
+        }
+        
+        return sb.toString();
     }
 }
