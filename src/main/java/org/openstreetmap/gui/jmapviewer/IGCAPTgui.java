@@ -1967,6 +1967,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     
     void writeGraphToCSV(String fileName) {
 
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
         // Mark collapsed nodes
         SgGraph graph = (SgGraph)getGraph();
         ArrayList<SgNodeInterface> graphNodes = new ArrayList<>(graph.getVertices()); 
@@ -2064,34 +2066,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
-/*
-        ArrayList<SgEdge> sgEdges = new ArrayList<SgEdge>(graph.getEdges());
-
-        for (SgEdge sgEdge : sgEdges) {
-
-            // edge element
-            Element edge = doc.createElement("edge");
-            edge.setAttribute("id", Integer.toString(sgEdge.getId()));
-            Pair<SgNodeInterface> endpoints = graph.getEndpoints(sgEdge);
-
-            SgNodeInterface endPt1 = endpoints.getFirst();
-            SgNodeInterface endPt2 = endpoints.getSecond();
-
-            if (endPt1 instanceof SgNode && endPt2 instanceof SgNode) {
-                SgNode sgEndPt1 = (SgNode) endPt1;
-                SgNode sgEndPt2 = (SgNode) endPt2;
-
-                edge.setAttribute("source", Integer.toString(sgEndPt1.getId()));
-                edge.setAttribute("target", Integer.toString(sgEndPt2.getId()));
-            }
-
-            // capacity element
-            Element capacity = doc.createElement("capacity");
-            capacity.appendChild(doc.createTextNode(Double.toString(sgEdge.getEdgeRate())));
-            edge.appendChild(capacity);
-
-            edgeRoot.appendChild(edge);
-        } */
+        setCursor(Cursor.getDefaultCursor());
     }
 
     
