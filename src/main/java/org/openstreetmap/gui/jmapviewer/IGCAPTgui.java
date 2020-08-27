@@ -830,6 +830,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 analyzeTopology.setEnabled(isGraphPresent);
                 applyPayload.setEnabled(isGraphPresent);
                 exportData.setEnabled(isGraphPresent);
+                importResults.setEnabled(isGraphPresent);
             }
 
             @Override
@@ -869,7 +870,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     }
                 }
 
-                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             openFile(chooser);
@@ -884,6 +885,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 
                 if (payloadEditorForm == null) {
                     payloadEditorForm = new PayloadEditorForm(payload);
+                    payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
                     payloadEditorForm.setVisible(true);
 
                     // Closed the Payload Editor dialog with Ok.
@@ -897,6 +899,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     payloadEditorForm = null;
                 }
                 else {
+                    payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
                     payloadEditorForm.setVisible(true);
                     payloadEditorForm.toFront();
                     
@@ -1010,7 +1013,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     chooser.setCurrentDirectory(new File(lastPath));
                 }
 
-                if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             importResults(chooser);
@@ -1039,7 +1042,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     chooser.setCurrentDirectory(new File(lastPath));
                 }
 
-                if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             exportFile(chooser);
@@ -1379,6 +1382,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     
     private void applyPayload() {
         
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
         // Clear all existing payloads.
         for (SgNodeInterface node : getOriginalGraph().getVertices()) {
             if (node instanceof SgNode) {
@@ -1422,7 +1427,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 exclusionSet.addAll(depNodesToApply);
             }
         }
-    }
+        
+        setCursor(Cursor.getDefaultCursor());
+   }
 
     public void collapse() {
 
@@ -1510,7 +1517,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     private void confirmExit() {
         if (fileDirty) {
-            if (JOptionPane.showConfirmDialog(null,
+            if (JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(),
                     "Are you sure you want to exit? The current scenario has not been saved.", "Confirm Close",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
@@ -1607,7 +1614,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         nodeIndex = 0;
         
         if (getGraph().getVertexCount() > 0) {
-            result = JOptionPane.showConfirmDialog((Component) null, "Are you sure you want to clear the current graph?",
+            result = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), "Are you sure you want to clear the current graph?",
                     "alert", JOptionPane.OK_CANCEL_OPTION);
         }
 
@@ -2144,18 +2151,17 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         writeGraphToCSV(selectedSaveFile);
     }
     
-    private void setUtilization(List<long[]> utilList) {
+    private void setUtilization(List<double[]> utilList) {
         Graph expandedGraph = getOriginalGraph();
-        ArrayList<SgNodeInterface> sgNodes = new ArrayList<>(expandedGraph.getVertices());
         ArrayList<SgEdge> sgEdges = new ArrayList<SgEdge>(expandedGraph.getEdges());
 
-        for (long[] element : utilList) {
+        for (double[] element : utilList) {
 
             for (SgEdge edge : sgEdges) {
                 Pair<SgNodeInterface> endNodes = expandedGraph.getEndpoints(edge);
 
-                if ((endNodes.getFirst().getId() == element[0] && endNodes.getSecond().getId() == element[1]) ||
-                    (endNodes.getFirst().getId() == element[1] && endNodes.getSecond().getId() == element[0])) {
+                if ((endNodes.getFirst().getId() == (int)element[0] && endNodes.getSecond().getId() == (int)element[1]) ||
+                    (endNodes.getFirst().getId() == (int)element[1] && endNodes.getSecond().getId() == (int)element[0])) {
 
                     edge.setEdgeRate(element[2]);
                     edge.setCalcTransRate(element[3]*element[2]*0.01);
@@ -2169,25 +2175,31 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     
     private void importResults(JFileChooser chooser) {
         
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
         // Read the file and process.
         try (BufferedReader br = new BufferedReader(new FileReader(chooser.getSelectedFile()))) {
             String line;
-            List<long[]> utilList = new ArrayList<>();
-            boolean readError = false;
+            List<double[]> utilList = new ArrayList<>();
+            
+            boolean headerPresent = true;
+            
+            if (headerPresent) {
+                br.readLine(); // Throw away the header.                
+            }
             
             while ((line = br.readLine()) != null) {
-                // Parse four longs
-                long[] utilLongs = Arrays.stream(line.split(","))
+                // Parse four doubles
+                double[] utilDoubles = Arrays.stream(line.split(","))
                                         .map(String::trim)
-                                        .mapToLong(Long::valueOf)
+                                        .mapToDouble(Double::valueOf)
                                         .toArray();
                 
-                if (utilLongs.length >= 4) {
-                    utilList.add(utilLongs);
+                if (utilDoubles.length >= 4) {
+                    utilList.add(utilDoubles);
                 }
                 else {
                     System.out.println("Error in reading line: " + line);
-                    readError = true;
                     break;
                 }
             }
@@ -2196,6 +2208,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         } catch(IOException ex) {
             ex.printStackTrace();
         }
+        
+        setCursor(Cursor.getDefaultCursor());
     }
 
     private void clearEdgeUtilization() {
@@ -2209,7 +2223,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             sgEdge.setCalcTransRate(0.0);
         }
 
-        vv.repaint();
+        refresh();
     }
 
     private class AnalysisTask extends SwingWorker<String, Integer> {
@@ -3076,7 +3090,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             "End Point 2", tbxEndPoint2,
             "Enable", cbxEnable};
 
-        int option = JOptionPane.showConfirmDialog(null, inputFields, "Line Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), inputFields, "Line Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
         if (option == 0) {
             fileDirty = true;
