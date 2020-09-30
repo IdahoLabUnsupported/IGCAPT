@@ -19,7 +19,7 @@ public abstract class SgPanel extends JPanel {
 
     public void showConfirmDialog() {
         while (true) {
-            int selection = JOptionPane.showConfirmDialog(null, this, title
+            int selection = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), this, title
                     , JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (selection == JOptionPane.YES_OPTION) {

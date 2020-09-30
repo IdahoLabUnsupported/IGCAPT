@@ -57,6 +57,10 @@ public class SgComponentData implements BaseModel {
     @JoinColumn(name = "componentId")
     private List<SgField> fields;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "componentDataId")
+    private List<SgEndPoint> endpoints;
+
     public Long getId() {
         return id;
     }
@@ -172,6 +176,9 @@ public class SgComponentData implements BaseModel {
     public void setComponentGroupId(Long componentGroupId) {
         this.componentGroupId = componentGroupId;
     }
+
+    public List<SgEndPoint> getEndpoints() { return endpoints; }
+    public void setEndpoints(List<SgEndPoint> endpoints) { this.endpoints = endpoints; }
 
     @Override
     public String toString() {

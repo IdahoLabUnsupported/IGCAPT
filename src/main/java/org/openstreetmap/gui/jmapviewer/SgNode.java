@@ -10,6 +10,7 @@ import edu.uci.ics.jung.visualization.LayeredIcon;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
+import gov.inl.igcapt.components.KeyValueManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -258,6 +259,16 @@ public class SgNode implements SgNodeInterface {
     public void setRefNode(SgNode refNode) {
         // Don't do anything because an SgNode is its own ref node.  SgGraphs will refer to the SgNode that was collapsed.
     }
+    
+    public void clearUseCaseUserData(){
+                // Remove old userData that are useCase entries (they begin with "@$")
+        KeyValueManager kVManager = new KeyValueManager(this.getUserData());
+        if (kVManager != null && kVManager.KeyValues() != null && kVManager.KeyValues().entrySet() != null && kVManager.KeyValues().entrySet().size() > 0) {
+            kVManager.KeyValues().entrySet().removeIf(e -> e.getKey().startsWith("@$"));
+            //kVManager.KeyValues().keySet().removeIf(key -> key.startsWith("@$"));
+            setUserData(kVManager.toString());
+        }
+    }
         
     public void applyUseCase(String useCaseName) {
         SgComponentData component = getAssociatedComponent();
@@ -291,6 +302,14 @@ public class SgNode implements SgNodeInterface {
                             combinedBandwidth += (double)newPayload/newLatency;
                         }
                         int effectiveLatency = (int)((double)combinedPayload/combinedBandwidth);
+                        
+                        // How do we clear out old user data? We need to make sure that we remove
+                        // previous use case data when this is done.
+                        String currentUserData = getUserData();
+                        
+                        // "@$" indicate use case data.
+                        String newUserData = currentUserData + "@$" + useCaseName + "|" + newPayload + ";";
+                        setUserData(newUserData);
 
                         setDataToSend(combinedPayload);
                         setMaxLatency(effectiveLatency);

@@ -287,7 +287,7 @@ public class PayloadEditorForm extends javax.swing.JDialog {
     private void addPayloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPayloadBtnActionPerformed
         AddUseCaseDlg addUseCaseDlg = new AddUseCaseDlg(null, true);
         
-        addUseCaseDlg.setLocationRelativeTo(null);
+        addUseCaseDlg.setLocationRelativeTo(IGCAPTgui.getInstance());
         addUseCaseDlg.setVisible(true);
         
         if (addUseCaseDlg.getReturnValue() == AddUseCaseDlg.ReturnValue.Ok) {

@@ -20,7 +20,7 @@ public class AddComponentMenuItem extends JMenuItem {
 
                 
                 // This will center it within the screen.
-                componentEditor.setLocationRelativeTo(null);
+                componentEditor.setLocationRelativeTo(IGCAPTgui.getInstance());
                 componentEditor.setVisible(true);
 
                 if(componentEditor.clickedCancel()) {
