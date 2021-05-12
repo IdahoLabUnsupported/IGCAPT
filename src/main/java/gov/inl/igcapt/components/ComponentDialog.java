@@ -523,9 +523,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                                     .addComponent(guidEditBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(newFieldPayloadFld)
                                     .addComponent(newFieldNameFld))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -624,11 +622,7 @@ public class ComponentDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_newFieldBtnActionPerformed
 
     private void guidEditBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guidEditBtnActionPerformed
-        if (guidFld.isEnabled()) {
-            guidFld.disable();
-        } else {
-            guidFld.enable();
-        }
+        guidFld.setEnabled(!guidFld.isEnabled());
     }//GEN-LAST:event_guidEditBtnActionPerformed
 
     private void addIconBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addIconBtnActionPerformed
