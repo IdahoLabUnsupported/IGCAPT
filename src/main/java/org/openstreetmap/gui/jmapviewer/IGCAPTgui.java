@@ -2888,7 +2888,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 Point2D d = transformer.inverseTransform(point);
                 Point newPoint = new Point((int) d.getX(), (int) d.getY());
 
-                if (sgComponent.getUuid().equals(UUID.fromString("a169911e-9079-449f-b9b7-9f79efcec135"))) {
+                if (sgComponent.getUuid().equals("a169911e-9079-449f-b9b7-9f79efcec135")) {
                     AggregationDialog aggregationDialog = new AggregationDialog(this, true);
                     showAggregationComponent = aggregationDialog.showDialog();
 

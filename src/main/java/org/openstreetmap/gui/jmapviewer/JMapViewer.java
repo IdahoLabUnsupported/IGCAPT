@@ -2292,7 +2292,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                 SgComponentData sgComponent = _igCAPTgui.getComponentByUuid(uuidStr);
                 
                 if (sgComponent != null) {
-                    if (sgComponent.getUuid().equals(UUID.fromString("a169911e-9079-449f-b9b7-9f79efcec135"))) {
+                    if (sgComponent.getUuid().equals("a169911e-9079-449f-b9b7-9f79efcec135")) {
                         AggregationDialog aggregationDialog = new AggregationDialog(_igCAPTgui, true);
                         showAggregationComponent = aggregationDialog.showDialog();
 
