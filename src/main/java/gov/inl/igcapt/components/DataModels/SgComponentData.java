@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 public class SgComponentData implements BaseModel {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -41,11 +41,11 @@ public class SgComponentData implements BaseModel {
     @Column
     private Long componentGroupId;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "componentId")
     private List<SgCollapseInto> sgCollapseIntos;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(
             name="component_usecase",
             joinColumns = { @JoinColumn(name="componentId")},
@@ -53,11 +53,11 @@ public class SgComponentData implements BaseModel {
     )
     private List<SgUseCase> usecases;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "componentId")
     private List<SgField> fields;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "componentDataId")
     private List<SgEndPoint> endpoints;
 

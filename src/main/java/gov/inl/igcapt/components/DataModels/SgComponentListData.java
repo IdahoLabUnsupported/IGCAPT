@@ -9,11 +9,11 @@ import javax.persistence.*;
 @Entity(name="componentList")
 public class SgComponentListData implements BaseModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private Date date;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="componentListId")
     private List<SgComponentGroupData> sgComponentGroupData;
 

@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity(name = "usecase")
 public class SgUseCase implements BaseModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -20,10 +20,10 @@ public class SgUseCase implements BaseModel {
     @Column
     private int latency;
 
-    @ManyToMany(mappedBy = "usecases", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "usecases", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<SgComponentData> components;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name="usecase_field",
             joinColumns = { @JoinColumn(name="usecaseId")},

@@ -18,11 +18,13 @@
         <properties>
 <!--            <property name="hibernate.default_schema" value="IGCAPT"/>-->
 
-            <property name="hibernate.dialect" value="com.enigmabridge.hibernate.dialect.SQLiteDialect" />
+            <property name="hibernate.dialect" value="org.sqlite.hibernate.dialect.SQLiteDialect" />
             <property name="hibernate.connection.driver_class" value="org.sqlite.JDBC" />
 
             <!-- The JDBC URL to the database instance -->
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:SGComponents.db" />
+            
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
 
 <!--            <property name="hibernate.hbm2ddl.auto" value="update" />-->
         </properties>

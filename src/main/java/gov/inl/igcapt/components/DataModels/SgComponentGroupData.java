@@ -8,10 +8,10 @@ import javax.persistence.*;
 public class SgComponentGroupData implements BaseModel {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "componentGroupId")
     private List<SgComponentData> components;
     @Column(unique = true)
