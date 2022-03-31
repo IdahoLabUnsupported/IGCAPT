@@ -31,7 +31,6 @@ import gov.inl.igcapt.components.AnalysisProgress;
 import gov.inl.igcapt.components.ButtonTabComponent;
 import gov.inl.igcapt.components.DependentUseCaseEntry;
 import gov.inl.igcapt.components.HelpDialog;
-import gov.inl.igcapt.components.KeyValueManager;
 import gov.inl.igcapt.components.NodeSettingsDialog;
 import gov.inl.igcapt.components.Payload;
 import gov.inl.igcapt.components.PayloadEditorForm;
@@ -125,24 +124,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import gov.inl.igcapt.components.DataModels.ComponentDao;
-import gov.inl.igcapt.components.DataModels.SgCollapseInto;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -361,36 +353,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return returnval;
     }
 
-    private Connection connectToDB() {
-        Connection conn = null;
-
-        try {
-            // db parameters
-            String url = "jdbc:sqlite:"+IGCAPTPROPERTIES.getPropertyKeyValue("sgComponentsDbFile");
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return conn;
-    }
-
-    private void disconnectFromDb(Connection connection) {
-        try {
-            connection.close();
-        } catch (SQLException | NullPointerException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
     // Redraw the GIS images based upon the current Jung graph
     void updateGISObjects() {
 
-        List<SgNodeInterface> nodes = new ArrayList<SgNodeInterface>(getGraph().getVertices());
+        List<SgNodeInterface> nodes = new ArrayList<>(getGraph().getVertices());
 
         JMapViewer map = map();
         map.removeAllMapImages();
@@ -407,7 +373,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             map.addMapImage(myimage);
         }
 
-        List<SgEdge> edges = new ArrayList<SgEdge>(getGraph().getEdges());
+        List<SgEdge> edges = new ArrayList<>(getGraph().getEdges());
 
         for (SgEdge edge : edges) {
             Pair nodePair = getGraph().getEndpoints(edge);
@@ -492,22 +458,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             new OsmTileSource.Mapnik(),
             new OsmTileSource.CycleMap(),
             new BingAerialTileSource(),});
-        tileSourceSelector.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                map().setTileSource((TileSource) e.getItem());
-            }
+        tileSourceSelector.addItemListener((ItemEvent e) -> {
+            map().setTileSource((TileSource) e.getItem());
         });
 
         tileSourceSelector.setVisible(false);
 
         JComboBox<TileLoader> tileLoaderSelector;
         tileLoaderSelector = new JComboBox<>(new TileLoader[]{new OsmTileLoader(map())});
-        tileLoaderSelector.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                map().setTileLoader((TileLoader) e.getItem());
-            }
+        tileLoaderSelector.addItemListener((ItemEvent e) -> {
+            map().setTileLoader((TileLoader) e.getItem());
         });
         map().setTileLoader((TileLoader) tileLoaderSelector.getSelectedItem());
         panelTop.add(tileSourceSelector);
@@ -517,15 +477,12 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         // GIS Enabled
         final JCheckBox gisEnabled = new JCheckBox("GIS", true);
-        gisEnabled.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (gisEnabled.isSelected()) {
-                    currentGisMap = map();
-                    jtp.add("Geographical Model", currentGisMap);
-                } else {
-                    jtp.remove(currentGisMap);
-                }
+        gisEnabled.addActionListener((ActionEvent e) -> {
+            if (gisEnabled.isSelected()) {
+                currentGisMap = map();
+                jtp.add("Geographical Model", currentGisMap);
+            } else {
+                jtp.remove(currentGisMap);
             }
         });
 

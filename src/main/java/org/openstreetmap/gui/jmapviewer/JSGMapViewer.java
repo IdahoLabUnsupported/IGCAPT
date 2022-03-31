@@ -5,7 +5,6 @@
  */
 package org.openstreetmap.gui.jmapviewer;
 
-import edu.uci.ics.jung.graph.Graph;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.List;

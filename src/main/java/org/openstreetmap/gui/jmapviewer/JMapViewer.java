@@ -6,7 +6,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import gov.inl.igcapt.components.AggregationDialog;
-import gov.inl.igcapt.components.DataModels.SgCollapseInto;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -66,7 +65,8 @@ import org.openstreetmap.gui.jmapviewer.interfaces.TileLoaderListener;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 import gov.inl.igcapt.components.NodeSelectionDialog;
-import java.util.UUID;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.JMenuItem;
 
 /**
@@ -81,9 +81,8 @@ import javax.swing.JMenuItem;
  *ALL RIGHTS RESERVED 
  *
  */
-public class JMapViewer extends JPanel implements TileLoaderListener, DropTargetListener, MouseListener, MouseMotionListener {
-//public class JMapViewer extends JPanel implements TileLoaderListener, DropTargetListener, MouseListener {
-
+public class JMapViewer extends JPanel implements TileLoaderListener, DropTargetListener, MouseListener,
+        MouseMotionListener, MouseWheelListener {
     /**
      * whether debug mode is enabled or not
      */
@@ -111,6 +110,8 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     public static final int MIN_ZOOM = 0;
     public static final int SGNODECLICKWIDTH = 20;
     public static final int SGNODECLICKHEIGHT = 20;
+    
+    private static final boolean wheelZoomEnabled = true;
 
     protected transient List<MapMarker> mapMarkerList;
     protected transient List<MapRectangle> mapRectangleList;
@@ -219,7 +220,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     @Override
     public void mouseMoved(MouseEvent e) {
         // This is for tool tips
-        String positionString = new Integer(e.getX()).toString() + ", " + new Integer(e.getY()).toString();
+        String positionString = String.valueOf(e.getX()) + ", " + String.valueOf(e.getY());
         _igCAPTgui.setXyPosition(positionString);
         if (_igCAPTgui.toolTipsEnabled) {
             boolean mousePointIsOnLine = false;
@@ -351,7 +352,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
 
                     ArrayList<SgNodeInterface> vertices = new ArrayList<>(sgGraph.getVertices());
 
-                    if (vertices.size() > 0)
+                    if (!vertices.isEmpty())
                     {
                         ttText += "<tr/><tr>"
                         + "<th align='left'>" + "Collapsed Nodes" + "</font></th>"
@@ -374,6 +375,8 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         }
         repaint();
     }
+    
+    
 
     protected double getMouseX() {
         return mouseX;
@@ -424,27 +427,38 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
             }
         }
     }
+    
+    private SgNodeInterface ptInNode(int x, int y) {
+        SgNodeInterface returnval = null;
+        
+        List<SgNodeInterface> nodes = new ArrayList<>(_igCAPTgui.getGraph().getVertices());
+
+        for (SgNodeInterface node : nodes) {
+            double latitude = node.getLat();
+            double longitude = node.getLongit();
+            Point nodePoint = this.getMapPosition(latitude, longitude);
+            if (nodePoint != null) { //eliminates exception thrown when trying to move a node, but lat,long are Ok
+                Rectangle nodeRect = new Rectangle(nodePoint.x - SGNODECLICKWIDTH / 2, nodePoint.y - SGNODECLICKHEIGHT / 2, SGNODECLICKWIDTH, SGNODECLICKHEIGHT);
+
+                if (nodeRect.contains(x, y)) {
+                    returnval = node;
+                    break;
+                }
+            }
+        }
+
+        return returnval;
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            // Mouse select button processing
-            Coordinate c = (Coordinate) getPosition(e.getX(), e.getY());
-            List<SgNodeInterface> nodes = new ArrayList<>(_igCAPTgui.getGraph().getVertices());
-
-            for (SgNodeInterface node : nodes) {
-                double latitude = node.getLat();
-                double longitude = node.getLongit();
-                Point nodePoint = this.getMapPosition(latitude, longitude);
-                if (nodePoint != null) { //eliminates exception thrown when trying to move a node, but lat,long are Ok
-                    Rectangle nodeRect = new Rectangle(nodePoint.x - SGNODECLICKWIDTH / 2, nodePoint.y - SGNODECLICKHEIGHT / 2, SGNODECLICKWIDTH, SGNODECLICKHEIGHT);
-
-                    if (nodeRect.contains(e.getX(), e.getY())) {
-                        _clickInfo = new ClickInfo(node, new Point(e.getX(), e.getY()));
-                        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-                        break;
-                    }
-                }
+        
+        SgNodeInterface clickNode = ptInNode(e.getX(), e.getY());
+        
+        if (e.getButton() == MouseEvent.BUTTON1) {            
+            if (clickNode != null) {
+                _clickInfo = new ClickInfo(clickNode, new Point(e.getX(), e.getY()));
+                setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             }
         } // check if mouse context button menu was pushed
         else if (e.getButton() == MouseEvent.BUTTON2 | e.getButton() == MouseEvent.BUTTON3) {
@@ -464,25 +478,11 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
             List<SgNodeInterface> nodes = new ArrayList<>(_igCAPTgui.getGraph().getVertices());
             List<SgEdge> edges = new ArrayList<>(_igCAPTgui.getGraph().getEdges());
 
-            //check if mouse is on a node
-            for (SgNodeInterface node : nodes) {
-                if (node instanceof SgNodeInterface) {
-                    SgNodeInterface sgNode = (SgNodeInterface) node;
-                    double latitude = sgNode.getLat();
-                    double longitude = sgNode.getLongit();
-                    Point nodePoint = this.getMapPosition(latitude, longitude);
-                    if (nodePoint != null && _igCAPTgui.toolTipsEnabled) { //eliminates exception thrown when trying to move a node, but lat,long are Ok
-                        Rectangle nodeRect = new Rectangle(nodePoint.x - SGNODECLICKWIDTH / 2, nodePoint.y - SGNODECLICKHEIGHT / 2, SGNODECLICKWIDTH, SGNODECLICKHEIGHT);
-
-                        if (nodeRect.contains(e.getX(), e.getY())) {
-                            mousePointIsOnNode = true;
-                            selectedNode = sgNode;
-                            break;
-                        }
-                    }
-                }
+            if (clickNode != null) {
+                mousePointIsOnNode = true;
+                selectedNode = clickNode;
             }
-            
+                       
             if (!mousePointIsOnNode) {
                 // check to see if the mouse is on an edge
                 for (SgEdge edge : edges) {
@@ -658,6 +658,16 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
 
         }
     }
+    
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if (wheelZoomEnabled) {
+            int rotation = JMapViewer.zoomReverseWheel ? e.getWheelRotation() : -e.getWheelRotation();
+            this.setZoom(this.getZoom() - rotation, e.getPoint());
+        }
+    }
+
+
 
     // Recursively remove the graphNodes from the baseGraph.
     private void removeNodes(SgGraph graphNode, SgGraph baseGraph) {
@@ -739,13 +749,13 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     /**
      * Creates a standard {@link JMapViewer} instance that can be controlled via
      * mouse: hold right mouse button for moving, double click left mouse button
-     * or use mouse wheel for zooming. Loaded tiles are stored in a
-     * {@link MemoryTileCache} and the tile loader uses 4 parallel threads for
-     * retrieving the tiles.
+     * or use mouse wheel for zooming.Loaded tiles are stored in a
+     * {@link MemoryTileCache} and the tile loader uses 4 parallel threads for retrieving the tiles.
+     * @param igCAPTgui
      */
     public JMapViewer(IGCAPTgui igCAPTgui) {
         this(new MemoryTileCache(), igCAPTgui);
-        new DefaultMapController(this);
+        //new DefaultMapController(this);
     }
 
     /**
@@ -753,6 +763,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
      *
      * @param tileCache The cache where to store tiles
      * @param downloadThreadCount not used anymore
+     * @param igCAPTgui
      * @deprecated use {@link #JMapViewer(TileCache)}
      */
     @Deprecated
@@ -791,6 +802,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     public void initialize() {
         addMouseListener(this);
         addMouseMotionListener(this);
+        addMouseWheelListener(this);
     }
 
     @Override

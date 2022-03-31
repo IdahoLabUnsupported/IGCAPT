@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.swing.Icon;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
 
@@ -365,7 +363,7 @@ public class SgNode implements SgNodeInterface {
         if (sgComponent != null) {
             List<String> collapseIntoUuids = sgComponent.getSgCollapseIntoUuids();
             
-            if (collapseIntoUuids != null && collapseIntoUuids.size() > 0) {
+            if (collapseIntoUuids != null && !collapseIntoUuids.isEmpty()) {
                 // Get the list of connected nodes
                 ArrayList<SgNodeInterface> collapseableNeighborNodes = new ArrayList<>();
                 collapseableNeighborNodes.add(this);
