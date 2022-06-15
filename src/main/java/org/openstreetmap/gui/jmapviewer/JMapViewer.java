@@ -215,7 +215,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         }
         else {
             if (isMoving) {
-                setCursor(new Cursor(Cursor.MOVE_CURSOR));
+                setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 
                 Point p = e.getPoint();
                 if (lastDragPoint != null) {
@@ -713,7 +713,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         
         isMoving = false;
         lastDragPoint = null;
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         if (_clickInfo != null && !_clickInfo.getClickPoint().equals(releasePoint)) {
 
