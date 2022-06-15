@@ -689,8 +689,6 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         }
     }
 
-
-
     // Recursively remove the graphNodes from the baseGraph.
     private void removeNodes(SgGraph graphNode, SgGraph baseGraph) {
         
