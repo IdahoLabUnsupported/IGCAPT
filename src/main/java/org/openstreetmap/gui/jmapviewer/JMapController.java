@@ -24,12 +24,12 @@ public abstract class JMapController {
 
     public JMapController(JMapViewer map) {
         this.map = map;
-        if (this instanceof MouseListener)
-            map.addMouseListener((MouseListener) this);
-        if (this instanceof MouseWheelListener)
-            map.addMouseWheelListener((MouseWheelListener) this);
-        if (this instanceof MouseMotionListener)
-            map.addMouseMotionListener((MouseMotionListener) this);
+        if (this instanceof MouseListener mouseListener)
+            map.addMouseListener(mouseListener);
+        if (this instanceof MouseWheelListener mouseWheelListener)
+            map.addMouseWheelListener(mouseWheelListener);
+        if (this instanceof MouseMotionListener mouseMotionListener)
+            map.addMouseMotionListener(mouseMotionListener);
     }
 
 }
