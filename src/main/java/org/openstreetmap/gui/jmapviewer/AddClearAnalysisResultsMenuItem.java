@@ -4,17 +4,15 @@ import javax.swing.*;
 
 public class AddClearAnalysisResultsMenuItem extends JMenuItem {
 
-    AddClearAnalysisResultsMenuItem(java.awt.Frame parent) {
-        super("Component Editor...");
-        createClearAnalysisMenu(parent);
+    AddClearAnalysisResultsMenuItem(IGCAPTgui igcaptGui) {
+        super("Clear Analysis Results");
+        createClearAnalysisMenu(igcaptGui);
     }
 
-    private void createClearAnalysisMenu(java.awt.Frame parent) {
+    private void createClearAnalysisMenu(IGCAPTgui igcaptGui) {
         
-        if (parent instanceof IGCAPTgui igcaptGui) {
-            this.addActionListener(ActionListener -> {
-                igcaptGui.clearEdgeUtilization();
-            });           
-        }
+        this.addActionListener(ActionListener -> {
+            igcaptGui.clearEdgeUtilization();
+        });           
     }
 }

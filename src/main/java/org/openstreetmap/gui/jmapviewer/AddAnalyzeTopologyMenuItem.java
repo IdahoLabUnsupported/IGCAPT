@@ -15,69 +15,66 @@ import javax.swing.*;
 
 public class AddAnalyzeTopologyMenuItem extends JMenuItem {
 
-    AddAnalyzeTopologyMenuItem(java.awt.Frame parent) {
-        super("Component Editor...");
-        createAnalyzeTopologyMenu(parent);
+    AddAnalyzeTopologyMenuItem(IGCAPTgui igcaptGui) {
+        super("Analyze Topology...");
+        createAnalyzeTopologyMenu(igcaptGui);
     }
 
-    private void createAnalyzeTopologyMenu(java.awt.Frame parent) {
+    private void createAnalyzeTopologyMenu(IGCAPTgui igcaptGui) {
         
-        if (parent instanceof IGCAPTgui igcaptGui) {
-            
-            this.addActionListener(ActionListener -> {
-                
-                SwingUtilities.invokeLater(() -> {
-                    AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
+        this.addActionListener(ActionListener -> {
 
-                    Graph expandedGraph = igcaptGui.getOriginalGraph();
-                    IGCAPTgui.AnalysisTask analysisTask = igcaptGui.new AnalysisTask(expandedGraph);
-                    igcaptGui.setAnalysisCanceled(false);
+            SwingUtilities.invokeLater(() -> {
+                AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
 
-                    analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
-                        if ("progress".equals(evt.getPropertyName())) {
-                            analysisProgress.setProgress((Integer) evt.getNewValue());
-                        } else if ("status".equals(evt.getPropertyName())) {
-                            analysisProgress.addStatus((String) evt.getNewValue());
-                        } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !igcaptGui.isAnalysisCanceled()) {
-                            JEditorPane ep1;
-                            try {
-                                ep1 = new JEditorPane("text/html", analysisTask.get());
+                Graph expandedGraph = igcaptGui.getOriginalGraph();
+                IGCAPTgui.AnalysisTask analysisTask = igcaptGui.new AnalysisTask(expandedGraph);
+                igcaptGui.setAnalysisCanceled(false);
 
-                                JScrollPane analysisResultsText = new JScrollPane(ep1);
-                                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
-                                Date now = new Date();
-                                String newTabStringLabel = sdfDate.format(now);
-
-                                String label = "Analysis Results" + newTabStringLabel;
-
-                                Component add = igcaptGui.getJtp().add(label, analysisResultsText);
-                                igcaptGui.getJtp().setTabComponentAt(igcaptGui.getJtp().indexOfComponent(add), new ButtonTabComponent(igcaptGui.getJtp()));
-
-                                int count = igcaptGui.getJtp().getTabCount();
-                                igcaptGui.getJtp().setSelectedIndex(count - 1);
-
-                            } catch (InterruptedException | ExecutionException ex) {
-                                Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            analysisProgress.setVisible(false);
-                        }
-                    });
-
-                    analysisProgress.addPropertyChangeListener("abort", (PropertyChangeEvent evt) -> {
+                analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
+                    if ("progress".equals(evt.getPropertyName())) {
+                        analysisProgress.setProgress((Integer) evt.getNewValue());
+                    } else if ("status".equals(evt.getPropertyName())) {
+                        analysisProgress.addStatus((String) evt.getNewValue());
+                    } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !igcaptGui.isAnalysisCanceled()) {
+                        JEditorPane ep1;
                         try {
-                            analysisTask.terminate();
-                            igcaptGui.setAnalysisCanceled(true);
-                        } catch (CancellationException ex) {
-                            // Don't do anything here.  This exception always is
-                            // thrown when a running task is cancelled.
-                        }
-                    });
+                            ep1 = new JEditorPane("text/html", analysisTask.get());
 
-                    analysisTask.execute();
-                    analysisProgress.setVisible(true);
+                            JScrollPane analysisResultsText = new JScrollPane(ep1);
+                            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
+                            Date now = new Date();
+                            String newTabStringLabel = sdfDate.format(now);
+
+                            String label = "Analysis Results" + newTabStringLabel;
+
+                            Component add = igcaptGui.getJtp().add(label, analysisResultsText);
+                            igcaptGui.getJtp().setTabComponentAt(igcaptGui.getJtp().indexOfComponent(add), new ButtonTabComponent(igcaptGui.getJtp()));
+
+                            int count = igcaptGui.getJtp().getTabCount();
+                            igcaptGui.getJtp().setSelectedIndex(count - 1);
+
+                        } catch (InterruptedException | ExecutionException ex) {
+                            Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        analysisProgress.setVisible(false);
+                    }
                 });
-            });            
-        }
+
+                analysisProgress.addPropertyChangeListener("abort", (PropertyChangeEvent evt) -> {
+                    try {
+                        analysisTask.terminate();
+                        igcaptGui.setAnalysisCanceled(true);
+                    } catch (CancellationException ex) {
+                        // Don't do anything here.  This exception always is
+                        // thrown when a running task is cancelled.
+                    }
+                });
+
+                analysisTask.execute();
+                analysisProgress.setVisible(true);
+            });
+        });            
     }
 }

@@ -17,7 +17,7 @@ import javax.swing.DefaultListModel;
  */
 public class AnalysisProgress extends javax.swing.JDialog {
 
-    private DefaultListModel defaultListModel = new DefaultListModel();
+    private final DefaultListModel defaultListModel = new DefaultListModel();
     /**
      * Creates new form AnalysisProgress
      */

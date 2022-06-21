@@ -66,7 +66,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -82,7 +81,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -129,7 +127,6 @@ import javax.xml.transform.stream.StreamResult;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
-import gov.inl.igcapt.components.DataModels.SgUseCase;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import org.apache.commons.collections15.Factory;
@@ -711,21 +708,18 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         jtp.add("Geographical Model", currentGisMap);
 
         // ChangeListener is invoked when a user selects a tab
-        jtp.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                modeMenu.setEnabled(false);
-                JTabbedPane myTabbedPane = (JTabbedPane) e.getSource();
-                int selectedIndex = myTabbedPane.getSelectedIndex();
-                String title = myTabbedPane.getTitleAt(selectedIndex);
-
-                if (title.equalsIgnoreCase("Geographical Model")) {
-                    logicalModelDropTarget.setActive(false);
-                    gisModelDropTarget.setActive(true);
-                } else if (title.equalsIgnoreCase("Logical Model")) {
-                    modeMenu.setEnabled(true);
-                    gisModelDropTarget.setActive(false);
-                    logicalModelDropTarget.setActive(true);
-                }
+        jtp.addChangeListener((ChangeEvent e) -> {
+            modeMenu.setEnabled(false);
+            JTabbedPane myTabbedPane = (JTabbedPane) e.getSource();
+            int selectedIndex = myTabbedPane.getSelectedIndex();
+            String title1 = myTabbedPane.getTitleAt(selectedIndex);
+            if (title1.equalsIgnoreCase("Geographical Model")) {
+                logicalModelDropTarget.setActive(false);
+                gisModelDropTarget.setActive(true);
+            } else if (title1.equalsIgnoreCase("Logical Model")) {
+                modeMenu.setEnabled(true);
+                gisModelDropTarget.setActive(false);
+                logicalModelDropTarget.setActive(true);
             }
         });
         splitPane.setDividerLocation(300);
@@ -792,20 +786,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem newTopology = new JMenuItem("New Topology");
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
-        JMenuItem applyPayload = new JMenuItem("Apply Payload...");
-        JMenuItem analyzeTopology = new JMenuItem("Analyze Topology");
-        JMenuItem importResults = new JMenuItem("Import NS-3 Results...");
-        JMenuItem clearResults = new JMenuItem("Clear Analysis Results");
+        JMenuItem applyPayload;
+        JMenuItem analyzeTopology;
+        JMenuItem importResults;
+        JMenuItem clearResults;
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
-        fileMenu.add(new JSeparator()); // SEPARATOR
-        fileMenu.add(applyPayload);
-        fileMenu.add(analyzeTopology);
-        fileMenu.add(importResults);
-        fileMenu.add(clearResults);
         fileMenu.add(new JSeparator()); // SEPARATOR
         fileMenu.add(exportData);
         fileMenu.add(new JSeparator());
@@ -818,10 +807,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 saveTopology.setEnabled(fileDirty);
                 
                 boolean isGraphPresent = IGCAPTgui.getInstance().getOriginalGraph().getVertexCount() > 0;
-                analyzeTopology.setEnabled(isGraphPresent);
-                applyPayload.setEnabled(isGraphPresent);
                 exportData.setEnabled(isGraphPresent);
-                importResults.setEnabled(isGraphPresent);
             }
 
             @Override
@@ -860,37 +846,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         });
 
-        applyPayload.addActionListener((ActionEvent ev) -> {
-            if (payloadEditorForm == null) {
-                payloadEditorForm = new PayloadEditorForm(payload);
-                payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
-                payloadEditorForm.setVisible(true);
-                
-                // Closed the Payload Editor dialog with Ok.
-                if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                    payload = payloadEditorForm.getPayload();
-                    
-                    // Apply the payload
-                    applyPayload();
-                }
-                
-                payloadEditorForm = null;
-            }
-            else {
-                payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
-                payloadEditorForm.setVisible(true);
-                payloadEditorForm.toFront();
-                
-                // Closed the Payload Editor dialog with Ok.
-                if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                    payload = payloadEditorForm.getPayload();
-                    
-                    // Apply the payload
-                    applyPayload();
-                }
-            }
-        });
-
         // get the file name for Save Topology
         saveTopology.addActionListener((ActionEvent ev) -> {
             JFileChooser chooser = new JFileChooser();
@@ -904,88 +859,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     saveFile(chooser);
                 });
             }
-        });
-
-        // analyze the current logical topology
-        analyzeTopology.addActionListener((ActionEvent ev) -> {
-            SwingUtilities.invokeLater(() -> {
-                AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
-                
-                Graph expandedGraph = getOriginalGraph();
-                AnalysisTask analysisTask = new AnalysisTask(expandedGraph);
-                analysisCanceled = false;
-                
-                analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
-                    if ("progress".equals(evt.getPropertyName())) {
-                        analysisProgress.setProgress((Integer) evt.getNewValue());
-                    } else if ("status".equals(evt.getPropertyName())) {
-                        analysisProgress.addStatus((String) evt.getNewValue());
-                    } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !analysisCanceled) {
-                        JEditorPane ep1;
-                        try {
-                            ep1 = new JEditorPane("text/html", analysisTask.get());
-                            
-                            JScrollPane analysisResultsText = new JScrollPane(ep1);
-                            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
-                            Date now = new Date();
-                            String newTabStringLabel = sdfDate.format(now);
-                            
-                            String label = "Analysis Results" + newTabStringLabel;
-                            
-                            Component add = jtp.add(label, analysisResultsText);
-                            jtp.setTabComponentAt(jtp.indexOfComponent(add), new ButtonTabComponent(getJtp()));
-                            
-                            int count = jtp.getTabCount();
-                            jtp.setSelectedIndex(count - 1);
-                            
-                        } catch (InterruptedException | ExecutionException ex) {
-                            Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        
-                        analysisProgress.setVisible(false);
-                    }
-                });
-                
-                analysisProgress.addPropertyChangeListener("abort",
-                        new PropertyChangeListener() {
-                            @Override
-                            public void propertyChange(PropertyChangeEvent evt) {
-                                try {
-                                    analysisTask.terminate();
-                                    setAnalysisCanceled(true);
-                                } catch (CancellationException ex) {
-                                    // Don't do anything here.  This exception always is
-                                    // thrown when a running task is cancelled.
-                                }
-                            }
-                        }
-                );
-                
-                analysisTask.execute();
-                analysisProgress.setVisible(true);
-            });
-        });
-
-        importResults.addActionListener((ActionEvent ev) -> {
-            JFileChooser chooser = new JFileChooser();
-            
-            if (!lastPath.isEmpty()) {
-                chooser.setCurrentDirectory(new File(getLastPath()));
-            }
-            
-            if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        importResults(chooser);
-                    }
-                });
-            }
-        });
-        
-        clearResults.addActionListener((ActionEvent ev) -> {
-            SwingUtilities.invokeLater(() -> {
-                clearEdgeUtilization();
-            });
         });
         
         exportData.addActionListener((ActionEvent ev) -> {
@@ -1057,49 +930,35 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     private JMenu createAnalysisMenu() {
         JMenu analysisMenu = new JMenu("Analysis");
-        analysisMenu.add(new AddApplyPayloadMenuItem(this));
-        analysisMenu.add(new AddAnalyzeTopologyMenuItem(null));
-        analysisMenu.add(new AddImportNs3ResultsMenuItem(null));
+        JMenuItem applyPayloadItem;
+        JMenuItem analyzeTopologyItem;
+        JMenuItem importResultsItem;
+        
+        analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem(this));
+        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem(null));
+        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem(null));
         analysisMenu.add(new AddClearAnalysisResultsMenuItem(this));
-        return analysisMenu;
-    }
+        
+        analysisMenu.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent ev) {
 
-    /**
-     * How to know if a device is connected to a device that can collapse the
-     * first device into it. WE ONLY DEAL WITH THE EXPANDED GRAPH HERE.
-     */
-    /**
-     * Get the parent node that can collapse this node into it.
-     *
-     * @param node
-     * @return
-     */
-    private SgNode getParentCollapser(SgNode node) {
-        SgNode returnval = null;
-
-        ArrayList<SgEdge> edges = new ArrayList<>(originalGraph.getIncidentEdges(node));
-
-        if (edges != null) {
-
-            for (SgEdge edge : edges) {
-                Pair<SgNodeInterface> endNodes = originalGraph.getEndpoints(edge);
-
-                SgNode parent = null;
-                if (endNodes.getFirst() == node) {
-                    parent = (SgNode) endNodes.getSecond();
-                } else {
-                    parent = (SgNode) endNodes.getFirst();
-                }
-
-                SgComponentData parentComponent = parent.getAssociatedComponent();
-                if (parentComponent != null && parentComponent.getSgCollapseIntos().contains(node.getAssociatedComponent())) {
-                    returnval = parent;
-                    break;
-                }
+                boolean isGraphPresent = IGCAPTgui.getInstance().getOriginalGraph().getVertexCount() > 0;
+                analyzeTopologyItem.setEnabled(isGraphPresent);
+                applyPayloadItem.setEnabled(isGraphPresent);
+                importResultsItem.setEnabled(isGraphPresent);
             }
-        }
+            
+            @Override
+            public void menuCanceled(MenuEvent ev) {
+            }
 
-        return returnval;
+            @Override
+            public void menuDeselected(MenuEvent e) {
+            }
+        });
+        
+        return analysisMenu;
     }
 
     /**
