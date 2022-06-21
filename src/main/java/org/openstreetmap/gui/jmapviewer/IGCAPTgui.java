@@ -73,9 +73,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -158,6 +155,41 @@ import org.w3c.dom.NodeList;
 
 public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTargetListener {
 
+    /**
+     * @return the lastPath
+     */
+    public String getLastPath() {
+        return lastPath;
+    }
+
+    /**
+     * @param lastPath the lastPath to set
+     */
+    public void setLastPath(String lastPath) {
+        this.lastPath = lastPath;
+    }
+
+    /**
+     * @return the jtp
+     */
+    public JTabbedPane getJtp() {
+        return jtp;
+    }
+
+    /**
+     * @return the analysisCanceled
+     */
+    public boolean isAnalysisCanceled() {
+        return analysisCanceled;
+    }
+
+    /**
+     * @param analysisCanceled the analysisCanceled to set
+     */
+    public void setAnalysisCanceled(boolean analysisCanceled) {
+        this.analysisCanceled = analysisCanceled;
+    }
+
     static final IGCAPTproperties IGCAPTPROPERTIES = IGCAPTproperties.getInstance();
     private static final long serialVersionUID = 1L;
 
@@ -183,7 +215,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     int edgeIndex = 0;  // edge index in the graph
     int nodeIndex = 0;  // node index in the graph
 
-    JTabbedPane jtp;
+    private JTabbedPane jtp;
     
     JMapViewer currentGisMap;
     boolean toolTipsEnabled = true;
@@ -205,6 +237,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return payload;
     }
     
+    public void setPayload(Payload lpayload) {
+        payload = lpayload;
+    }
+    
     private Point clickPoint = null;
     public Point getClickPoint() {
         return clickPoint;
@@ -213,8 +249,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public void setClickPoint(Point clickPoint) {
         this.clickPoint = clickPoint;
     }
-
-    private final HashMap<gov.inl.igcapt.components.Pair<String, String>, HashMap<UUID, Integer>> useCaseApplyData = new HashMap<>();
 
     private HashMap<String, Icon> _layerIconMap = new HashMap<>();
 
@@ -263,7 +297,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return _IGCAPTgui;
     }
 
-    public void loadLayerIcons() {
+    public final void loadLayerIcons() {
 
         // These correspond to the names from the property file.
         String[] iconKeys = new String[]{
@@ -800,214 +834,172 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         });
 
         // exit the app when Exit menu item selected
-        exitItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                confirmExit();
+        exitItem.addActionListener((ActionEvent ev) -> {
+            confirmExit();
+        });
+
+        newTopology.addActionListener((ActionEvent ev) -> {
+            if (clearGraph()) {
+                graphChanged();
+                fileDirty = false;
             }
         });
 
-        newTopology.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                if (clearGraph()) {
-                    graphChanged();
-                    fileDirty = false;
+        loadTopology.addActionListener((ActionEvent ev) -> {
+            JFileChooser chooser = new JFileChooser();
+            if (lastPath != null && !lastPath.isEmpty()) {
+                File lastPath1 = new File(IGCAPTgui.this.getLastPath());
+                if (lastPath1.exists()) {
+                    chooser.setCurrentDirectory(lastPath1);
                 }
+            }
+            if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                SwingUtilities.invokeLater(() -> {
+                    openFile(chooser);
+                });
             }
         });
 
-        loadTopology.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                JFileChooser chooser = new JFileChooser();
-
-                if (lastPath != null && !lastPath.isEmpty()) {
-                    File lastPath = new File(IGCAPTgui.this.lastPath);
-                    
-                    if (lastPath.exists()) {
-                        chooser.setCurrentDirectory(lastPath);
-                    }
-                }
-
-                if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            openFile(chooser);
-                        }
-                    });
-                }
-            }
-        });
-
-        applyPayload.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
+        applyPayload.addActionListener((ActionEvent ev) -> {
+            if (payloadEditorForm == null) {
+                payloadEditorForm = new PayloadEditorForm(payload);
+                payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
+                payloadEditorForm.setVisible(true);
                 
-                if (payloadEditorForm == null) {
-                    payloadEditorForm = new PayloadEditorForm(payload);
-                    payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
-                    payloadEditorForm.setVisible(true);
-
-                    // Closed the Payload Editor dialog with Ok.
-                    if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                        payload = payloadEditorForm.getPayload();
-                        
-                        // Apply the payload
-                        applyPayload();
-                    }
-
-                    payloadEditorForm = null;
-                }
-                else {
-                    payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
-                    payloadEditorForm.setVisible(true);
-                    payloadEditorForm.toFront();
+                // Closed the Payload Editor dialog with Ok.
+                if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
+                    payload = payloadEditorForm.getPayload();
                     
-                   // Closed the Payload Editor dialog with Ok.
-                    if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                        payload = payloadEditorForm.getPayload();
-                        
-                        // Apply the payload
-                        applyPayload();
-                    }
+                    // Apply the payload
+                    applyPayload();
+                }
+                
+                payloadEditorForm = null;
+            }
+            else {
+                payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
+                payloadEditorForm.setVisible(true);
+                payloadEditorForm.toFront();
+                
+                // Closed the Payload Editor dialog with Ok.
+                if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
+                    payload = payloadEditorForm.getPayload();
+                    
+                    // Apply the payload
+                    applyPayload();
                 }
             }
         });
 
         // get the file name for Save Topology
-        saveTopology.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                JFileChooser chooser = new JFileChooser();
-
-                if (!lastPath.isEmpty()) {
-                    chooser.setCurrentDirectory(new File(lastPath));
-                }
-
-                if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            saveFile(chooser);
-                        }
-                    });
-                }
+        saveTopology.addActionListener((ActionEvent ev) -> {
+            JFileChooser chooser = new JFileChooser();
+            
+            if (!lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(getLastPath()));
+            }
+            
+            if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                SwingUtilities.invokeLater(() -> {
+                    saveFile(chooser);
+                });
             }
         });
 
         // analyze the current logical topology
-        analyzeTopology.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ev) {
-
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-
-                        AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
-
-                        Graph expandedGraph = getOriginalGraph();
-                        AnalysisTask analysisTask = new AnalysisTask(expandedGraph);
-                        analysisCanceled = false;
-
-                        analysisTask.addPropertyChangeListener(new PropertyChangeListener() {
-                            @Override
-                            public void propertyChange(PropertyChangeEvent evt) {
-                                if ("progress".equals(evt.getPropertyName())) {
-                                    analysisProgress.setProgress((Integer) evt.getNewValue());
-                                } else if ("status".equals(evt.getPropertyName())) {
-                                    analysisProgress.addStatus((String) evt.getNewValue());
-                                } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !analysisCanceled) {
-                                    JEditorPane ep1;
-                                    try {
-                                        ep1 = new JEditorPane("text/html", analysisTask.get());
-
-                                        JScrollPane analysisResultsText = new JScrollPane(ep1);
-                                        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
-                                        Date now = new Date();
-                                        String newTabStringLabel = sdfDate.format(now);
-
-                                        String label = "Analysis Results" + newTabStringLabel;
-
-                                        Component add = jtp.add(label, analysisResultsText);
-                                        jtp.setTabComponentAt(jtp.indexOfComponent(add), new ButtonTabComponent(jtp));
-
-                                        int count = jtp.getTabCount();
-                                        jtp.setSelectedIndex(count - 1);
-
-                                    } catch (InterruptedException | ExecutionException ex) {
-                                        Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-
-                                    analysisProgress.setVisible(false);
-                                }
-                            }
-                        });
-
-                        analysisProgress.addPropertyChangeListener("abort",
-                                new PropertyChangeListener() {
+        analyzeTopology.addActionListener((ActionEvent ev) -> {
+            SwingUtilities.invokeLater(() -> {
+                AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
+                
+                Graph expandedGraph = getOriginalGraph();
+                AnalysisTask analysisTask = new AnalysisTask(expandedGraph);
+                analysisCanceled = false;
+                
+                analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
+                    if ("progress".equals(evt.getPropertyName())) {
+                        analysisProgress.setProgress((Integer) evt.getNewValue());
+                    } else if ("status".equals(evt.getPropertyName())) {
+                        analysisProgress.addStatus((String) evt.getNewValue());
+                    } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !analysisCanceled) {
+                        JEditorPane ep1;
+                        try {
+                            ep1 = new JEditorPane("text/html", analysisTask.get());
+                            
+                            JScrollPane analysisResultsText = new JScrollPane(ep1);
+                            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
+                            Date now = new Date();
+                            String newTabStringLabel = sdfDate.format(now);
+                            
+                            String label = "Analysis Results" + newTabStringLabel;
+                            
+                            Component add = jtp.add(label, analysisResultsText);
+                            jtp.setTabComponentAt(jtp.indexOfComponent(add), new ButtonTabComponent(getJtp()));
+                            
+                            int count = jtp.getTabCount();
+                            jtp.setSelectedIndex(count - 1);
+                            
+                        } catch (InterruptedException | ExecutionException ex) {
+                            Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        analysisProgress.setVisible(false);
+                    }
+                });
+                
+                analysisProgress.addPropertyChangeListener("abort",
+                        new PropertyChangeListener() {
                             @Override
                             public void propertyChange(PropertyChangeEvent evt) {
                                 try {
                                     analysisTask.terminate();
-                                    analysisCanceled = true;
+                                    setAnalysisCanceled(true);
                                 } catch (CancellationException ex) {
                                     // Don't do anything here.  This exception always is
                                     // thrown when a running task is cancelled.
                                 }
                             }
                         }
-                        );
-
-                        analysisTask.execute();
-                        analysisProgress.setVisible(true);
-                    }
-                });
-            }
-        });
-
-        importResults.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ev) {
+                );
                 
-                JFileChooser chooser = new JFileChooser();
-                
-                if (!lastPath.isEmpty()) {
-                    chooser.setCurrentDirectory(new File(lastPath));
-                }
-
-                if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            importResults(chooser);
-                        }
-                    });
-                }
-            }
+                analysisTask.execute();
+                analysisProgress.setVisible(true);
+            });
         });
-        
-        clearResults.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent ev) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        clearEdgeUtilization();
-                    }
-                });
-            }
-        });
-        
-        exportData.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                JFileChooser chooser = new JFileChooser();
-
-                if (!lastPath.isEmpty()) {
-                    chooser.setCurrentDirectory(new File(lastPath));
-                }
-
-                if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        public void run() {
-                            exportFile(chooser);
-                        }
-                    });
-                }
+        importResults.addActionListener((ActionEvent ev) -> {
+            JFileChooser chooser = new JFileChooser();
+            
+            if (!lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(getLastPath()));
             }
             
+            if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        importResults(chooser);
+                    }
+                });
+            }
+        });
+        
+        clearResults.addActionListener((ActionEvent ev) -> {
+            SwingUtilities.invokeLater(() -> {
+                clearEdgeUtilization();
+            });
+        });
+        
+        exportData.addActionListener((ActionEvent ev) -> {
+            JFileChooser chooser = new JFileChooser();
+            
+            if (!lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(getLastPath()));
+            }
+            
+            if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                SwingUtilities.invokeLater(() -> {
+                    exportFile(chooser);
+                });
+            }
         });
         modeMenu = graphMouse.getModeMenu();  // obtain mode menu from the mouse
         modeMenu.setText("Mouse Mode");
@@ -1016,6 +1008,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         menuBar.add(modeMenu);
 
         menuBar.add(createComponentsMenu());
+        menuBar.add(createAnalysisMenu());
 
         JMenu helpMenu = new JMenu("Help");
         JMenuItem helpIGCAPT = new JMenuItem("IGCAPT Help");
@@ -1025,17 +1018,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         helpMenu.add(aboutIGCAPT);
         menuBar.add(helpMenu);
 
-        helpIGCAPT.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                HelpDialog helpDialog = new HelpDialog(null, true);
-
-                helpDialog.setVisible(true);
-            }
+        helpIGCAPT.addActionListener((ActionEvent ev) -> {
+            HelpDialog helpDialog = new HelpDialog(null, true);
+            
+            helpDialog.setVisible(true);
         });
 
-        aboutIGCAPT.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-            }
+        aboutIGCAPT.addActionListener((ActionEvent ev) -> {
         });
 
         this.setJMenuBar(menuBar);
@@ -1063,9 +1052,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private JMenu createComponentsMenu() {
         JMenu componentsMenu = new JMenu("Components");
         componentsMenu.add(new AddComponentMenuItem(null));
-//        componentsMenu.add(new AddUseCaseMenuItem());
-//        componentsMenu.add(new AddFieldMenuItem());
         return componentsMenu;
+    }
+
+    private JMenu createAnalysisMenu() {
+        JMenu analysisMenu = new JMenu("Analysis");
+        analysisMenu.add(new AddApplyPayloadMenuItem(this));
+        analysisMenu.add(new AddAnalyzeTopologyMenuItem(null));
+        analysisMenu.add(new AddImportNs3ResultsMenuItem(null));
+        analysisMenu.add(new AddClearAnalysisResultsMenuItem(this));
+        return analysisMenu;
     }
 
     /**
@@ -1107,184 +1103,12 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     /**
-     * Return the list of nodes associated with collapser nodes (if contained
-     * under a collapser). The first value in the pair will be the node if the
-     * second is null. If the second is not null, the first will be the
-     * collapser, with the second containing the list of nodes collapsed into
-     * the collapser.
-     *
-     * @return
-     */
-    private ArrayList<gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>> getCollapserNodeList() {
-
-        ArrayList<gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>> returnval = new ArrayList<>();
-
-        ArrayList<SgNodeInterface> nodes = new ArrayList<>(getOriginalGraph().getVertices());
-
-        for (SgNodeInterface node : nodes) {
-            if (node instanceof SgNode) {
-                SgNode sgNode = (SgNode) node;
-
-                SgNode parentCollapser = getParentCollapser(sgNode);
-                if (parentCollapser != null) {
-                    // Is there already one here with this collapser?
-                    boolean found = false;
-                    for (gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>> pair : returnval) {
-                        if (pair.first == parentCollapser && pair.second != null) {
-                            pair.second.add(sgNode);
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
-                        returnval.add(new gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>(parentCollapser, new ArrayList<SgNode>(Arrays.asList(sgNode))));
-                    }
-                } else { // Not under a collapser, store as the first element in the Pair.
-                    returnval.add(new gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>(sgNode, null));
-                }
-            }
-        }
-
-        return returnval;
-    }
-
-    /**
-     * Return the list filtered by the uuid and paired down to the percent of
-     * the total.
-     *
-     * @param unfilteredList
-     * @return
-     */
-    ArrayList<gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>> getFilteredList(ArrayList<gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>> unfilteredList,
-            UUID uuid, int percent) {
-        ArrayList<gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>> returnval = new ArrayList<>();
-
-        int uncollapsedNum = 0;
-
-        // Compile entire list filtered by uuid. Then pair down to percent.
-        // This must be done in two passes because we don't know how many there are
-        // of the uuid type until we compile them all.
-        for (gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>> pair : unfilteredList) {
-
-            // Single node not under collapser.
-            if (pair.second == null) {
-                if (pair.first.getAssociatedComponent().getUuid().equals(uuid.toString())) {
-                    returnval.add(new gov.inl.igcapt.components.Pair<>(pair.first, null));
-                    uncollapsedNum++;
-                }
-            } // Need to look through collapser list. Only keep those with type uuid.
-            else {
-                ArrayList<SgNode> nodeList = new ArrayList<>();
-
-                for (SgNode sgNode : pair.second) {
-                    if (sgNode.getAssociatedComponent().getUuid().equals(uuid.toString())) {
-                        nodeList.add(sgNode);
-                    }
-                }
-
-                if (!nodeList.isEmpty()) {
-                    returnval.add(new gov.inl.igcapt.components.Pair<>(pair.first, nodeList));
-                }
-            }
-        }
-
-        // Filter nodes not associated with a collapser and those associated in the same pass.
-        final int percentUncollapsed = (int) ((percent / 100.0) * uncollapsedNum + 0.5);
-        int numUncollapsed = 0;
-
-        Iterator<gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>>> it = returnval.iterator();
-
-        while (it.hasNext()) {
-
-            gov.inl.igcapt.components.Pair<SgNode, ArrayList<SgNode>> pair = it.next();
-
-            if (pair.second == null) {
-                numUncollapsed++;
-
-                if (numUncollapsed > percentUncollapsed) {
-                    it.remove();
-                }
-            } else {
-                final int percentCollapsed = (int) ((percent / 100.0) * pair.second.size() + 0.5);
-                int numCollapsed = 0;
-
-                Iterator<SgNode> it2 = pair.second.iterator();
-                while (it2.hasNext()) {
-                    SgNode sgNode = it2.next();
-
-                    numCollapsed++;
-                    if (numCollapsed > percentCollapsed) {
-                        it2.remove();
-                    }
-                }
-            }
-
-        }
-        return returnval;
-    }
-
-    /**
-     * Get the components corresponding to the use cases selected. These are
-     * determined by the devices currently in the topology that are of a type
-     * that include these use cases.
-     */
-    private ArrayList<SgNode> getUseCaseDevices(gov.inl.igcapt.components.Pair<String, String> useCase) {
-
-        ArrayList<SgNode> returnval = new ArrayList<>();
-
-        // Looking through all current nodes, find all types that have this use case.
-        Graph originalGraph = IGCAPTgui.getInstance().getOriginalGraph();
-        List<SgNodeInterface> nodes = new ArrayList<>(originalGraph.getVertices());
-
-        for (SgNodeInterface node : nodes) {
-
-            if (node instanceof SgNode) {
-                SgComponentData component = ((SgNode) node).getAssociatedComponent();
-                ComponentDao componentDao = new ComponentDao();
-                
-                if (component != null)
-                {
-                    List<SgUseCase> useCaseData = component.getUsecases();
-
-                    for (SgUseCase useCaseEntry : useCaseData) {
-                        if (useCase.first.equals(useCaseEntry.getName())) {
-                            returnval.add((SgNode) node);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return returnval;
-    }
-    
-    // Find the first device that has this type uuid.
-    private SgNode findFirstNode(UUID uuid) {
-        SgNode returnval = null;
-        
-        ArrayList<SgNodeInterface> nodeList = new ArrayList<>(getOriginalGraph().getVertices());
-        
-        for (SgNodeInterface node : nodeList) {
-            if (node instanceof SgNode) {
-                SgComponentData component = ((SgNode)node).getAssociatedComponent();
-                if (component != null && component.getUuid().equals(uuid)) {
-                    returnval = (SgNode)node;
-                }
-            }
-        }
-        
-        return returnval;
-    }
-      
-    /**
      * Get the percent nodes from the entire graph, excluding aggregate nodes.
      * @param percentOfNodes
      * @param exclusionList
      * @return 
      */
-    private List<SgNode> getPercentNodes(int percentOfNodes, List<SgNode> exclusionList) {
+    public List<SgNode> getPercentNodes(int percentOfNodes, List<SgNode> exclusionList) {
         
         // Create a set of all nodes excluding aggregate nodes.
         SgGraph graph = getOriginalGraph();
@@ -1308,8 +1132,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
      * @param exlusionList
      * @return 
      */
-    private List<SgNode> getPercentNodes(List<SgNode> nodeList, int percentOfNodes, List<SgNode> exclusionList) {
-        List<SgNode> returnval = new ArrayList<SgNode>();
+    public List<SgNode> getPercentNodes(List<SgNode> nodeList, int percentOfNodes, List<SgNode> exclusionList) {
+        List<SgNode> returnval = new ArrayList<>();
         int listSize = nodeList.size();
         
         // Get a set of N unique random nodes
@@ -1337,14 +1161,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return returnval;
     }
     
-    private void applyPayload() {
+    public void applyPayload() {
         
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         // Clear all existing payloads.
         for (SgNodeInterface node : getOriginalGraph().getVertices()) {
-            if (node instanceof SgNode) {
-                SgNode sgNode = (SgNode) node;
+            if (node instanceof SgNode sgNode) {
 
                 sgNode.setMaxLatency(0);
                 sgNode.setDataToSend(0);
@@ -1394,13 +1217,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         if (picked.size() > 1) {
             Graph inGraph = getGraph();
 
-            SgNodeInterface contextClickNode = getContextClickNode();
+            SgNodeInterface ctextClickNode = getContextClickNode();
 
             // Get the selected nodes that comprise the sub-graph.
             Graph clusterGraph = collapser.getClusterGraph(inGraph, picked);
-            if (clusterGraph instanceof SgGraph && contextClickNode instanceof SgNode) {
+            if (clusterGraph instanceof SgGraph && ctextClickNode instanceof SgNode) {
                 SgGraph sgGraph = (SgGraph) clusterGraph;
-                sgGraph.setRefNode((SgNode) contextClickNode);
+                sgGraph.setRefNode((SgNode) ctextClickNode);
             }
 
             Graph collapseGraph = collapser.collapse(getGraph(), clusterGraph);
@@ -1408,8 +1231,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             // If available, use the contextClickNode position.
             Point2D cp;
 
-            if (contextClickNode != null) {
-                cp = (Point2D) layout.transform(contextClickNode);
+            if (ctextClickNode != null) {
+                cp = (Point2D) layout.transform(ctextClickNode);
             } else {
                 double sumx = 0;
                 double sumy = 0;
@@ -1601,10 +1424,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         String selectedOpenFile = chooser.getSelectedFile().toString();
         File lastFile = new File(selectedOpenFile);
         try {
-            lastPath = lastFile.getCanonicalPath();
-            IGCAPTproperties.getInstance().setPropertyKeyValue("LastPath", lastPath);
+            setLastPath(lastFile.getCanonicalPath());
+            IGCAPTproperties.getInstance().setPropertyKeyValue("LastPath", getLastPath());
         } catch (IOException ex) {
-            lastPath = "";
+            setLastPath("");
         }
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -2032,9 +1855,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         File lastFile = new File(selectedSaveFile);
         try {
-            lastPath = lastFile.getCanonicalPath();
+            setLastPath(lastFile.getCanonicalPath());
         } catch (IOException ex) {
-            lastPath = "";
+            setLastPath("");
         }
 
         try {
@@ -2105,7 +1928,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         refresh();
     }
     
-    private void importResults(JFileChooser chooser) {
+    public void importResults(JFileChooser chooser) {
         
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -2144,7 +1967,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         setCursor(Cursor.getDefaultCursor());
     }
 
-    private void clearEdgeUtilization() {
+    public void clearEdgeUtilization() {
 
         // Reset utilization on all SgNodes.  Need to expand the graph
         // in case some are collapsed.
@@ -2158,7 +1981,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         refresh();
     }
 
-    private class AnalysisTask extends SwingWorker<String, Integer> {
+    public class AnalysisTask extends SwingWorker<String, Integer> {
 
         private Graph<SgNodeInterface, SgEdge> _graph;
         private volatile boolean _running = true;
@@ -2215,8 +2038,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
                 // If there is data to send and sending is enabled, generate the list
                 // of start/end nodes for which the paths will be generated.
-                if (sgAbstractNode instanceof SgNode) {
-                    SgNode sgNode = (SgNode) sgAbstractNode;
+                if (sgAbstractNode instanceof SgNode sgNode) {
                     if (sgNode.getDataToSend() > 0 && sgNode.getEnableDataSending()) {
                         for (int endPointId : sgNode.getEndPointList()) {
                             SgNodeInterface endPointNode = getNode(sgNodeList, endPointId);
@@ -2251,8 +2073,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                             SgEdge sgEdge = getEdge(sgEdgeList, value);
                             SgNodeInterface sgAbstractNode = pair.first;
 
-                            if (sgAbstractNode instanceof SgNode) {
-                                SgNode sgNode = (SgNode) sgAbstractNode;
+                            if (sgAbstractNode instanceof SgNode sgNode) {
                                 sgEdge.setCalcTransRate(sgEdge.getCalcTransRate() + sgNode.getComputedRate());
                             }
                         }
@@ -2788,9 +2609,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     private JTabbedPane createTabbedPane() {
         jtp = new JTabbedPane();
-        jtp.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-        jtp.add("Logical Model", vv);
-        return jtp;
+        getJtp().setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+        getJtp().add("Logical Model", vv);
+        return getJtp();
     }
 
     // start of 5 methods for DropTargetListener
