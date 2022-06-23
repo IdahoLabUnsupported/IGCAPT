@@ -27,8 +27,6 @@ import edu.uci.ics.jung.visualization.renderers.Checkmark;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import gov.inl.igcapt.components.AggregationDialog;
-import gov.inl.igcapt.components.AnalysisProgress;
-import gov.inl.igcapt.components.ButtonTabComponent;
 import gov.inl.igcapt.components.DependentUseCaseEntry;
 import gov.inl.igcapt.components.HelpDialog;
 import gov.inl.igcapt.components.NodeSettingsDialog;
@@ -39,7 +37,6 @@ import gov.inl.igcapt.components.SgMapImage;
 import gov.inl.igcapt.components.UseCaseEntry;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -65,7 +62,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -74,7 +70,6 @@ import java.io.PrintWriter;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -85,10 +80,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -96,7 +87,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -116,7 +106,6 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.xml.parsers.DocumentBuilder;
@@ -127,6 +116,7 @@ import javax.xml.transform.stream.StreamResult;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
+import gov.inl.igcapt.components.Heatmap;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import org.apache.commons.collections15.Factory;
@@ -434,6 +424,17 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             edge.setMapLine(line);
             map.addMapLine(line);
         }
+        
+        // May have a heatmap that needs to be drawn.
+        if (heatmap != null) {
+            heatmap.Draw(map());
+        }
+    }
+    
+    private Heatmap heatmap;
+    
+    public void SetHeatmap(Heatmap lheatmap){
+        heatmap = lheatmap;
     }
 
     /**
@@ -933,11 +934,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem applyPayloadItem;
         JMenuItem analyzeTopologyItem;
         JMenuItem importResultsItem;
+        JMenuItem showHeatmapItem;
+        JMenuItem clearHeatmapItem;
         
         analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem(this));
         analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem(null));
         analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem(null));
         analysisMenu.add(new AddClearAnalysisResultsMenuItem(this));
+        analysisMenu.add(new JSeparator()); // SEPARATOR
+        analysisMenu.add(showHeatmapItem = new AddShowHeatmapMenuItem(this));
+        analysisMenu.add(clearHeatmapItem = new AddClearHeatmapMenuItem(this));
         
         analysisMenu.addMenuListener(new MenuListener() {
             @Override
@@ -947,6 +953,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 analyzeTopologyItem.setEnabled(isGraphPresent);
                 applyPayloadItem.setEnabled(isGraphPresent);
                 importResultsItem.setEnabled(isGraphPresent);
+                showHeatmapItem.setEnabled(isGraphPresent);
+                clearHeatmapItem.setEnabled(heatmap != null);
             }
             
             @Override
