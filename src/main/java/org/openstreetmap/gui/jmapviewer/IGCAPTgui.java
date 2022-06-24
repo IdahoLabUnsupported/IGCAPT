@@ -374,7 +374,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return returnval;
     }
 
-    // Redraw the GIS images based upon the current Jung graph
+    // Redraw the GIS images based upon the current Jung graph contents.
     void updateGISObjects() {
 
         List<SgNodeInterface> nodes = new ArrayList<>(getGraph().getVertices());
@@ -424,10 +424,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             edge.setMapLine(line);
             map.addMapLine(line);
         }
-        
+
         // May have a heatmap that needs to be drawn.
         if (heatmap != null) {
-            heatmap.Draw(map());
+            heatmap.Draw(map);
         }
     }
     
@@ -513,6 +513,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             if (gisEnabled.isSelected()) {
                 currentGisMap = map();
                 jtp.add("Geographical Model", currentGisMap);
+                jtp.setSelectedIndex(1);
+                logicalModelDropTarget.setActive(false);
+                gisModelDropTarget.setActive(true);
             } else {
                 jtp.remove(currentGisMap);
             }
@@ -703,10 +706,18 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 createTreePanel(),
                 createTabbedPane());
 
+        // Set up DROP Target for Logical Model as active
+        logicalModelDropTarget = new DropTarget(vv, DnDConstants.ACTION_COPY_OR_MOVE, this);
+        // Set up DROP Target for GIS Model as inactive
+        gisModelDropTarget = new DropTarget(map(), DnDConstants.ACTION_COPY_OR_MOVE, map(), false);
+
         // create the GIS view so that when we load a topology file, the icons can be placed there
         gisEnabled.setSelected(true);
         currentGisMap = map();
         jtp.add("Geographical Model", currentGisMap);
+        jtp.setSelectedIndex(1);
+        logicalModelDropTarget.setActive(false);
+        gisModelDropTarget.setActive(true);
 
         // ChangeListener is invoked when a user selects a tab
         jtp.addChangeListener((ChangeEvent e) -> {
@@ -728,40 +739,32 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        // Set up DROP Target for Logical Model as active
-        logicalModelDropTarget = new DropTarget(vv, DnDConstants.ACTION_COPY_OR_MOVE, this);
-        // Set up DROP Target for GIS Model as inactive
-        gisModelDropTarget = new DropTarget(map(), DnDConstants.ACTION_COPY_OR_MOVE, map(), false);
-
         // Node Factory is only invoked when a user single clicks on the logical model pane
-        Factory<SgNodeInterface> sgvertexFactory = new Factory<SgNodeInterface>() {
-            @Override
-            public SgNodeInterface create() {
-                SgComponentData sgComponent = getComponentByUuid(currentTypeUuidStr);
-                String typeName = sgComponent.getName();
-                boolean showAggregationComponent = false;
-                SgNodeInterface returnval = null;
-
-                if (typeName.length() >= 11 && typeName.substring(0, 11).equalsIgnoreCase("Aggregation")) {
-                    AggregationDialog aggregationDialog = new AggregationDialog(IGCAPTgui.getInstance(), true);
-                    showAggregationComponent = aggregationDialog.showDialog();
-
-                    if (showAggregationComponent) {
-
-                        // Create aggregate node, which is the type selected in the dialog
-                        // Then create all the subnodes.
-                        ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig = aggregationDialog.getAggregateConfiguration();
-                        SgComponentData selectedAggregateComponent = aggregationDialog.getSelectedComponent();
-
-                        returnval = createAggregation(aggregateConfig, selectedAggregateComponent, IGCAPTgui.getInstance().getClickPoint(), new Coordinate(0.0, 0.0), aggregationDialog.getDefaultMaxRate());
-                    }
-                } else {
-                    returnval = new SgNode(nodeIndex, currentTypeUuidStr, typeName + "_" + String.valueOf(nodeIndex), true, true, false, 0, 0, "");
-                    nodeIndex++;
+        Factory<SgNodeInterface> sgvertexFactory = () -> {
+            SgComponentData sgComponent = getComponentByUuid(currentTypeUuidStr);
+            String typeName = sgComponent.getName();
+            boolean showAggregationComponent = false;
+            SgNodeInterface returnval = null;
+            
+            if (typeName.length() >= 11 && typeName.substring(0, 11).equalsIgnoreCase("Aggregation")) {
+                AggregationDialog aggregationDialog = new AggregationDialog(IGCAPTgui.getInstance(), true);
+                showAggregationComponent = aggregationDialog.showDialog();
+                
+                if (showAggregationComponent) {
+                    
+                    // Create aggregate node, which is the type selected in the dialog
+                    // Then create all the subnodes.
+                    ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig = aggregationDialog.getAggregateConfiguration();
+                    SgComponentData selectedAggregateComponent = aggregationDialog.getSelectedComponent();
+                    
+                    returnval = createAggregation(aggregateConfig, selectedAggregateComponent, IGCAPTgui.getInstance().getClickPoint(), new Coordinate(0.0, 0.0), aggregationDialog.getDefaultMaxRate());
                 }
-
-                return returnval;
+            } else {
+                returnval = new SgNode(nodeIndex, currentTypeUuidStr, typeName + "_" + String.valueOf(nodeIndex), true, true, false, 0, 0, "");
+                nodeIndex++;
             }
+            
+            return returnval;
         };
 
         // Edge Factory is called whenever a user connects 2 nodes with an edge
@@ -2564,7 +2567,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     // end of 5 methods for DropTargetListener
     
     // Cause the displays to redraw, both the logical and GIS views.
-    private void refresh() {
+    public void refresh() {
         vv.repaint(); // logical refresh
         updateGISObjects(); // GIS refresh
     }

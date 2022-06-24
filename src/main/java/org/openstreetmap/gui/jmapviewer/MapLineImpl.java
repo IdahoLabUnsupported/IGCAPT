@@ -108,90 +108,46 @@ public class MapLineImpl extends MapObjectImpl implements MapLine {
         }
         // get the first and second point
         // Draw
-        //int numberOfPoints = polygon.npoints;
-        //System.out.println("number of points = " + numberOfPoints);
-        //System.out.println("start and end x,y = " + polygon.xpoints[0] + ", " + polygon.ypoints[0] + "     "  + polygon.xpoints[1] + ", " + polygon.ypoints[1]);
-        //if (numberOfPoints == 2) {
-            //g.setColor(Color.black);
-            g.setColor(getColor());
-            g.drawLine(polygon.xpoints[0], polygon.ypoints[0], polygon.xpoints[1], polygon.ypoints[1]);
-            int baseX = 0;
-            int baseY = 0;
-            int x0 = 0;
-            int x1 = 0;
-            int y0 = 0;
-            int y1 = 0;
-            
-            int x0minusX1 = Math.abs(polygon.xpoints[0] - polygon.xpoints[1]);
-            int y0minusY1 = Math.abs(polygon.ypoints[0] - polygon.ypoints[1]);
-            if (polygon.xpoints[0] > polygon.xpoints[1]) {
-                baseX = polygon.xpoints[0];
-                x0 = baseX;
-                x1 = polygon.xpoints[1];
-            }
-            else {
-                baseX = polygon.xpoints[1];
-                x0 = baseX;
-                x1 = polygon.xpoints[0];                
-            }
-            if (polygon.ypoints[0] > polygon.ypoints[1]) {
-                baseY = polygon.ypoints[0];
-                y0 = baseY;
-                y1 = polygon.ypoints[1];
-            }
-            else {
-                baseY = polygon.ypoints[1];
-                y0 = baseY;
-                y1 = polygon.ypoints[0];                
-            }
-            int distanceBetweenPoints = (int)Math.sqrt((Math.pow(x0 - x1, 2)) + (Math.pow(y0 - y1, 2)));
-            //System.out.println("distance between points = " + polygon.xpoints[0] + ", " + polygon.ypoints[0] + " and " + polygon.xpoints[1] + ", " + polygon.ypoints[1] + " = " + distanceBetweenPoints);
-            //endPt1 = (SgNode)endpoints.getFirst();
-           // endPt2 = (SgNode)endpoints.getSecond();
-            double pt1X = polygon.xpoints[0];
-            double pt1Y = polygon.ypoints[0];
-            double pt2X = polygon.xpoints[1];
-            double pt2Y = polygon.ypoints[1];
-            double slope = (pt2Y - pt1Y)/(pt2X - pt1X);
-            int newY = (int) ((pt2Y - pt1Y)/2 + pt1Y);
-            int newX = (int) ((pt2X - pt1X)/2 + pt1X);
-            g.setColor(Color.black);
-            g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, g.getFont().getSize()));
-            g.drawString(getId(), newX, newY);
+        g.setColor(getColor());
+        g.drawLine(polygon.xpoints[0], polygon.ypoints[0], polygon.xpoints[1], polygon.ypoints[1]);
+        int baseX = 0;
+        int baseY = 0;
+        int x0 = 0;
+        int x1 = 0;
+        int y0 = 0;
+        int y1 = 0;
 
-            // y = mx + b
-            // y2 - y1 = m (x2 - x1)
-            // get x,y of both endpoint         
-            /*
-            // this doesn't quite work!
-            g.setColor(Color.black);
-            g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, g.getFont().getSize()));
-            //g.drawString(getId(), x0 - (x1 + distanceBetweenPoints/2), y0 - (y1 + distanceBetweenPoints/2));
-            if (slope < 0)
-                g.drawString(getId(), x1 + distanceBetweenPoints/2, y1 + distanceBetweenPoints/2);
-            else
-                g.drawString(getId(), x1 + distanceBetweenPoints/2, y0 - distanceBetweenPoints/2);
-             */   
-            
-        //}
-    /*    g.drawPolygon(polygon);
-        if (g instanceof Graphics2D && getBackColor() != null) {
-            Graphics2D g2 = (Graphics2D) g;
-            Composite oldComposite = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-            g2.setPaint(getBackColor());
-            g2.fillPolygon(polygon);
-            g2.setComposite(oldComposite);
+        int x0minusX1 = Math.abs(polygon.xpoints[0] - polygon.xpoints[1]);
+        int y0minusY1 = Math.abs(polygon.ypoints[0] - polygon.ypoints[1]);
+        if (polygon.xpoints[0] > polygon.xpoints[1]) {
+            baseX = polygon.xpoints[0];
+            x0 = baseX;
+            x1 = polygon.xpoints[1];
         }
-        // Restore graphics
-        g.setColor(oldColor);
-        if (g instanceof Graphics2D) {
-            ((Graphics2D) g).setStroke(oldStroke);
+        else {
+            baseX = polygon.xpoints[1];
+            x0 = baseX;
+            x1 = polygon.xpoints[0];                
         }
-        Rectangle rec = polygon.getBounds();
-        Point corner = rec.getLocation();
-        Point p = new Point(corner.x+(rec.width/2), corner.y+(rec.height/2));
-        if (getLayer() == null || getLayer().isVisibleTexts()) paintText(g, p); */
+        if (polygon.ypoints[0] > polygon.ypoints[1]) {
+            baseY = polygon.ypoints[0];
+            y0 = baseY;
+            y1 = polygon.ypoints[1];
+        }
+        else {
+            baseY = polygon.ypoints[1];
+            y0 = baseY;
+            y1 = polygon.ypoints[0];                
+        }
+        double pt1X = polygon.xpoints[0];
+        double pt1Y = polygon.ypoints[0];
+        double pt2X = polygon.xpoints[1];
+        double pt2Y = polygon.ypoints[1];
+        int newY = (int) ((pt2Y - pt1Y)/2 + pt1Y);
+        int newX = (int) ((pt2X - pt1X)/2 + pt1X);
+        g.setColor(Color.black);
+        g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, g.getFont().getSize()));
+        if (getId() != null && !getId().isEmpty()) g.drawString(getId(), newX, newY);
     }
 
     public static Style getDefaultStyle() {
