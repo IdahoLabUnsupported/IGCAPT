@@ -479,8 +479,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         mperpLabelName.setVisible(false);
         mperpLabelValue.setVisible(false);
-        zoomLabel.setVisible(false);
-        zoomValue.setVisible(false);
+        zoomLabel.setVisible(true);
+        zoomValue.setVisible(true);
         xyPosition.setVisible(false);
 
         JLabel helpLabel = new JLabel("Use right mouse button to move,\n "
@@ -2458,6 +2458,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         if (command.getCommand().equals(JMVCommandEvent.COMMAND.ZOOM)
                 || command.getCommand().equals(JMVCommandEvent.COMMAND.MOVE)) {
             updateZoomParameters();
+            
+            updateGISObjects();
         }
     }
 

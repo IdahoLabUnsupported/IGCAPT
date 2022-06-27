@@ -4,6 +4,7 @@ package gov.inl.igcapt.components;
 import java.awt.Color;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
+import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
+import org.openstreetmap.gui.jmapviewer.SgNode;
 import org.openstreetmap.gui.jmapviewer.SgNodeInterface;
 
 /**
@@ -108,19 +110,44 @@ public class Heatmap {
         return returnval;
     }
         
-    private void DrawPolygon(JMapViewer map, Coordinate pt1, Coordinate pt2, Coordinate pt3, Coordinate pt4, double intensity) {
+    private void DrawPolygon(JMapViewer map, Coordinate pt1, Coordinate pt2, Coordinate pt3, Coordinate pt4, float intensity) {
         MapPolygonImpl polygon = new MapPolygonImpl(pt1, pt2, pt3, pt4, pt1);
         polygon.setColor(new Color(0, 0, 0, 0));
-        if (intensity > 1.0) intensity = 1.0;
+        if (intensity > 1.0f) intensity = 1.0f;
         
-        int alphaColor = 0x80000000;
-        int hexColor = 0x00ff00ff; // No alpha
-        hexColor = (int)(intensity * hexColor);
-        var polyColor = new Color(hexColor | alphaColor, true);
+        int rgb = Color.HSBtoRGB(0.666667f + 0.333333f*intensity, intensity, 1.0f) & 0x00FFFFFF;
         
-        polygon.setBackColor(new Color((int)((1.0 - intensity)*255), 255, 255, 64));
+        int alphaColor = (191 << 24) & 0xFF000000;
+        if (intensity < 0.1f){
+            alphaColor = 0x00000000;
+        }
+
+        int color = rgb | alphaColor;
+        var polyColor = new Color(color, true);
+        
+        polygon.setBackColor(polyColor);
         
         map.addMapPolygon(polygon);
+    }
+    
+    private int GetNodeTotalData(SgNode node) {
+        int returnval = 0;
+        
+        var component = IGCAPTgui.getComponentByUuid(node.getType());
+                    
+        if (component != null) {
+            // Add up all data elements.
+
+            var fields = component.getFields();
+
+            if (fields != null) {
+                for (var field:fields) {
+                    returnval += field.getPayload();
+                }
+            }   
+        }
+        
+        return returnval;
     }
     
     public void Draw(JMapViewer map){
@@ -147,10 +174,22 @@ public class Heatmap {
         double minLat=0.0, minLon=0.0;
         boolean first = true;
         
+        // We want the size of the heatmap for one piece of equipment to remain constant when we zoom.
+        // Each higher zoom level is twice the size of the previous.
+        double zoomLevel = map.getZoom();
+        zoomLevel = pow(2.0, zoomLevel);
+        double scaledGridSize = gridSize / zoomLevel;
+        double scaledKernelRadius = kernelRadius / zoomLevel;
+        
         for (SgNodeInterface node : nodes) {
             
             double nodeLat = node.getLat();
             double nodeLon = node.getLongit();
+            
+            // Skip the point if it is outside our viewable area.
+            if (map.getMapPosition(nodeLat, nodeLon) == null) {
+                continue;
+            }
             
             if (first) {
                 minLat = nodeLat;
@@ -179,17 +218,17 @@ public class Heatmap {
         }
         
         // We want the grid to extend outside the min and max.
-        if (kernelRadius < gridSize) {
+        if (scaledKernelRadius < scaledGridSize) {
             // Expand by gridSize
-            minLat -= gridSize;
-            maxLat += gridSize;
+            minLat -= scaledGridSize;
+            maxLat += scaledGridSize;
             
-            minLon -= gridSize;
-            maxLon += gridSize;
+            minLon -= scaledGridSize;
+            maxLon += scaledGridSize;
         }
         else {
             // Expand by ceil(kernelRadius/gridSize)*gridSize
-            double expand = ceil(kernelRadius/gridSize) * gridSize;
+            double expand = ceil(scaledKernelRadius/scaledGridSize) * scaledGridSize;
             minLat -= expand;
             maxLat += expand;
             
@@ -198,18 +237,18 @@ public class Heatmap {
         }
         
         // Make the extents an even number of gridSize elements.
-        int numLatElems = (int)(ceil((maxLat - minLat)/gridSize));
-        double latIncr = (numLatElems*gridSize - (maxLat - minLat))/2.0;
+        int numLatElems = (int)(ceil((maxLat - minLat)/scaledGridSize));
+        double latIncr = (numLatElems*scaledGridSize - (maxLat - minLat))/2.0;
         minLat -= latIncr;
-        maxLat += latIncr;
         
-        int numLonElems = (int)(ceil((maxLon - minLon)/gridSize));
-        double lonIncr = (numLonElems*gridSize - (maxLon - minLon))/2.0;
+        int numLonElems = (int)(ceil((maxLon - minLon)/scaledGridSize));
+        double lonIncr = (numLonElems*scaledGridSize - (maxLon - minLon))/2.0;
         minLon -= lonIncr;
-        maxLon += lonIncr;
         
-        double halfGridSize = gridSize/2.0;
-        double cellIntensity = 0.0;
+        double halfGridSize = scaledGridSize/2.0;
+        float cellIntensity = 0.0f;
+        float maxCellIntensity = 0.0f;
+        float cellIntensities[][] = new float[numLonElems][numLatElems];
         
         for (int i = 0; i < numLonElems; i++) {
             for (int j = 0; j < numLatElems; j++) {
@@ -219,24 +258,44 @@ public class Heatmap {
                     double nodeLat = node.getLat();
                     double nodeLon = node.getLongit();
 
-                    Coordinate cellCenter = new Coordinate(minLat + j*gridSize + halfGridSize, minLon + i*gridSize + halfGridSize);
+                    // Skip the point if it is outside our viewable area.
+                    if (map.getMapPosition(nodeLat, nodeLon) == null) {
+                        continue;
+                    }
+                    
+                    int totalPayload = 0;
+                    if (node instanceof SgNode sgNode){
+                        totalPayload = GetNodeTotalData(sgNode);                        
+                    }
+
+                    Coordinate cellCenter = new Coordinate(minLat + j*scaledGridSize + halfGridSize, minLon + i*scaledGridSize + halfGridSize);
                     Coordinate nodeCoord = new Coordinate(nodeLat, nodeLon);
                     
                     double dist = Distance(cellCenter, nodeCoord);
-                    // Need to multiply by magnitude of data value we are mapping. For now
-                    // we will just plot assuming a value of 1.0.
-                    cellIntensity += kernelFunction.evaluate(dist/kernelRadius);
+                    // Need to multiply by magnitude of data value we are mapping.
+                    cellIntensity += kernelFunction.evaluate(dist/scaledKernelRadius) * totalPayload;
                 }
+                
+                if (cellIntensity > maxCellIntensity) {
+                    maxCellIntensity = cellIntensity;
+                }
+                
+                cellIntensities[i][j] = cellIntensity;
+                cellIntensity = 0.0f;
+            }
+        }
+        
+        for (int i = 0; i < numLonElems; i++) {
+            for (int j = 0; j < numLatElems; j++) {
                 
                 // Plot grid with cells colored by Intensity.
                 // Need the four corners.
-                Coordinate pt1 = new Coordinate(minLat + j*gridSize, minLon + i*gridSize);
-                Coordinate pt2 = new Coordinate(minLat + j*gridSize, minLon + (i+1)*gridSize);
-                Coordinate pt3 = new Coordinate(minLat + (j+1)*gridSize, minLon + (i+1)*gridSize);
-                Coordinate pt4 = new Coordinate(minLat + (j+1)*gridSize, minLon + i*gridSize);
+                Coordinate pt1 = new Coordinate(minLat + j*scaledGridSize, minLon + i*scaledGridSize);
+                Coordinate pt2 = new Coordinate(minLat + j*scaledGridSize, minLon + (i+1)*scaledGridSize);
+                Coordinate pt3 = new Coordinate(minLat + (j+1)*scaledGridSize, minLon + (i+1)*scaledGridSize);
+                Coordinate pt4 = new Coordinate(minLat + (j+1)*scaledGridSize, minLon + i*scaledGridSize);
             
-               DrawPolygon(map, pt1, pt2, pt3, pt4, cellIntensity);
-               cellIntensity = 0.0;
+               DrawPolygon(map, pt1, pt2, pt3, pt4, cellIntensities[i][j]/maxCellIntensity);
             }
         }
     }

@@ -22,7 +22,7 @@ public class AddShowHeatmapMenuItem extends JMenuItem {
             // increments in x and y according to the grid size. Cells are of dimension grid_size X grid_size.
             //
             
-            igcaptGui.SetHeatmap(new Heatmap(0.01, Heatmap.KernelTypes.Quartic, 0.10));
+            igcaptGui.SetHeatmap(new Heatmap(10.0, Heatmap.KernelTypes.Quartic, 100.0));
             igcaptGui.refresh();
         });           
     }
