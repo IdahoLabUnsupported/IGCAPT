@@ -14,6 +14,7 @@ public class AddClearHeatmapMenuItem extends JMenuItem {
         this.addActionListener(ActionListener -> {
             
             igcaptGui.SetHeatmap(null);
+            igcaptGui.updateGISObjects();
         });           
     }
 }

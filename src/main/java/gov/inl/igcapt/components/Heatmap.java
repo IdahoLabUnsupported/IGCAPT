@@ -137,7 +137,6 @@ public class Heatmap {
                     
         if (component != null) {
             // Add up all data elements.
-
             var fields = component.getFields();
 
             if (fields != null) {
@@ -150,6 +149,12 @@ public class Heatmap {
         return returnval;
     }
     
+    /**
+     * Draw the heatmap polygons to the map.
+     * @param map
+     * The map to which polygons are drawn. The polygons are added to
+     * the map's polygon list and drawn in the next update.
+     */
     public void Draw(JMapViewer map){
         // Add the polygons to the map.
         // Drawing will get done by the outer class.
@@ -158,15 +163,9 @@ public class Heatmap {
 //        polygon.setColor(new Color(0, 0, 0, 0));
 //        polygon.setBackColor(new Color(Color.pink.getRed(), Color.pink.getGreen(), Color.pink.getBlue(), 64));
 //        
-//        MapPolygonImpl polygon2 = new MapPolygonImpl(new Coordinate(0.0, -10.0), new Coordinate(10.0, -10.0), new Coordinate(10.0, 0.0), new Coordinate(0.0, 0.0), new Coordinate(0.0, -10.0));
-//        polygon2.setColor(new Color(0, 0, 0, 0));
-//        polygon2.setBackColor(new Color(Color.red.getRed(), Color.red.getGreen(), Color.red.getBlue(), 64));
-//        
 //        map.addMapPolygon(polygon);
-//        map.addMapPolygon(polygon2);
 
-        // Construct grid
-        
+        // Construct grid        
         // Find limits based on current objects.
         var igcaptGui = IGCAPTgui.getInstance();
         List<SgNodeInterface> nodes = new ArrayList<>(igcaptGui.getGraph().getVertices());
