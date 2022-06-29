@@ -434,7 +434,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private Heatmap heatmap;
     
     public void SetHeatmap(Heatmap lheatmap){
-        heatmap = lheatmap;
+        
+        if (lheatmap != heatmap) {
+            heatmap = lheatmap;
+            this.updateGISObjects();            
+        }
     }
 
     /**
@@ -790,10 +794,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem newTopology = new JMenuItem("New Topology");
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
-        JMenuItem applyPayload;
-        JMenuItem analyzeTopology;
-        JMenuItem importResults;
-        JMenuItem clearResults;
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
@@ -836,6 +836,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         });
 
         loadTopology.addActionListener((ActionEvent ev) -> {
+            
             JFileChooser chooser = new JFileChooser();
             if (lastPath != null && !lastPath.isEmpty()) {
                 File lastPath1 = new File(IGCAPTgui.this.getLastPath());
@@ -844,6 +845,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 }
             }
             if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                heatmap = null; // Don't call SetHeatmap because it will redraw.
                 SwingUtilities.invokeLater(() -> {
                     openFile(chooser);
                 });
@@ -1270,7 +1272,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         if (result == 0) {
             returnval = true;
-            
+        
+            // Clear heat map
+            heatmap = null; // Don't call SetHeatmap or it will redraw.
             tempGraph = null;
             originalGraph = new SgGraph();
             vv.getGraphLayout().setGraph(originalGraph);

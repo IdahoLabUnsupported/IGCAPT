@@ -23,7 +23,6 @@ public class AddShowHeatmapMenuItem extends JMenuItem {
             //
             
             igcaptGui.SetHeatmap(new Heatmap(10.0, Heatmap.KernelTypes.Quartic, 100.0));
-            igcaptGui.refresh();
         });           
     }
 }

@@ -293,8 +293,10 @@ public class Heatmap {
                 Coordinate pt2 = new Coordinate(minLat + j*scaledGridSize, minLon + (i+1)*scaledGridSize);
                 Coordinate pt3 = new Coordinate(minLat + (j+1)*scaledGridSize, minLon + (i+1)*scaledGridSize);
                 Coordinate pt4 = new Coordinate(minLat + (j+1)*scaledGridSize, minLon + i*scaledGridSize);
-            
-               DrawPolygon(map, pt1, pt2, pt3, pt4, cellIntensities[i][j]/maxCellIntensity);
+
+                if (maxCellIntensity > 0) {
+                    DrawPolygon(map, pt1, pt2, pt3, pt4, cellIntensities[i][j]/maxCellIntensity);
+                }
             }
         }
     }
