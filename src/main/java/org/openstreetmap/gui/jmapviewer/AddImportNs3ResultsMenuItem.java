@@ -6,7 +6,7 @@ import java.io.File;
 public class AddImportNs3ResultsMenuItem extends JMenuItem {
 
     AddImportNs3ResultsMenuItem(IGCAPTgui igcaptGui) {
-        super("Component Editor...");
+        super("Import NS3 Results...");
         createImportNs3ResultsMenu(igcaptGui);
     }
 

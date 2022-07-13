@@ -273,17 +273,31 @@ public class SgNode implements SgNodeInterface {
         
         if (component != null) {
             List<SgUseCase> useCases = component.getUsecases();
+            List<SgField> componentFields = component.getFields();
         
-            if (useCases != null) {
+            if (useCases != null && componentFields != null) {
                 for (SgUseCase useCase:useCases) {
 
                     if (useCase.getName().equals(useCaseName)) {
 
                         int newPayload = 0;
-                        for (SgField field:useCase.getFields()) {
-                            if (component.getFields().contains(field)) {
-                                newPayload += field.getPayload();
-                            }
+                        List<SgField> useCaseFields = useCase.getFields();
+                        
+                        if (useCaseFields != null) {
+                            for (SgField field:useCaseFields) {
+                                boolean found = false;
+
+                                for (SgField componentField:componentFields){
+                                    if (componentField.getName().equals(field.getName())){
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (found) {
+                                    newPayload += field.getPayload();
+                                }                                   
+                            }                         
                         }
 
                         int currentLatency = getMaxLatency();

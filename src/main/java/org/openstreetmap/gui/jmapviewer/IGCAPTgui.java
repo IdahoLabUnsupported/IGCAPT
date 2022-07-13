@@ -143,6 +143,20 @@ import org.w3c.dom.NodeList;
 public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTargetListener {
 
     /**
+     * @return the payloadEditorForm
+     */
+    public PayloadEditorForm getPayloadEditorForm() {
+        return payloadEditorForm;
+    }
+
+    /**
+     * @param payloadEditorForm the payloadEditorForm to set
+     */
+    public void setPayloadEditorForm(PayloadEditorForm payloadEditorForm) {
+        this.payloadEditorForm = payloadEditorForm;
+    }
+
+    /**
      * @return the lastPath
      */
     public String getLastPath() {
@@ -483,8 +497,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         mperpLabelName.setVisible(false);
         mperpLabelValue.setVisible(false);
-        zoomLabel.setVisible(true);
-        zoomValue.setVisible(true);
+        zoomLabel.setVisible(false);
+        zoomValue.setVisible(false);
         xyPosition.setVisible(false);
 
         JLabel helpLabel = new JLabel("Use right mouse button to move,\n "
@@ -943,8 +957,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem clearHeatmapItem;
         
         analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem(this));
-        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem(null));
-        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem(null));
+        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem(this));
+        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem(this));
         analysisMenu.add(new AddClearAnalysisResultsMenuItem(this));
         analysisMenu.add(new JSeparator()); // SEPARATOR
         analysisMenu.add(showHeatmapItem = new AddShowHeatmapMenuItem(this));
