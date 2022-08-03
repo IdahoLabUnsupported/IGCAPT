@@ -18,6 +18,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 /**
  *
@@ -509,7 +510,7 @@ public class ComponentEditor extends javax.swing.JDialog {
     public boolean clickedCancel() {
         return clickedCancel;
     }
-
+    
     public boolean save() {
         try {
             for (int i = 0; i < componentGroups.size(); ++i) {
@@ -524,16 +525,13 @@ public class ComponentEditor extends javax.swing.JDialog {
             System.out.println(ignored);
             return false;
         }
-
+        IGCAPTgui.getInstance().refreshTree();
         return true;
     }
 
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
      */
-    public int getReturnStatus() {
-        return returnStatus;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
