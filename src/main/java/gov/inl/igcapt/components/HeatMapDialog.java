@@ -5,6 +5,7 @@
 package gov.inl.igcapt.components;
 
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import org.openstreetmap.gui.jmapviewer.IGCAPTproperties;
 
 /**
  *
@@ -12,8 +13,17 @@ import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
  */
 public class HeatMapDialog extends javax.swing.JDialog {
 
+    private static int GRID_SIZE_DEFAULT = 10;
+    private static int KERNEL_RADIUS_SIZE_DEFAULT = 100;
+    private static Heatmap.KernelTypes KERNEL_TYPE_DEFAULT = Heatmap.KernelTypes.Quartic;
+    private static String GRID_SIZE_PROPERTY_NAME = "heatmapGridSize";
+    private static String KERNEL_TYPE_PROPERTY_NAME = "heatmapKernelType";
+    private static String KERNEL_RADIUS_PROPERTY_NAME = "heatmapKernelRadius";
     private java.awt.Frame parent;
     private boolean modal=true;
+    private int m_savedGridSize;
+    private int m_savedKernelRadius;
+    private Heatmap.KernelTypes m_savedKernelType;
 
     /**
      * Creates new form HeatMapDialog
@@ -25,30 +35,80 @@ public class HeatMapDialog extends javax.swing.JDialog {
         initComponents();
         String[] kernelTypes = new String[Heatmap.KernelTypes.values().length];
         int index = 0;
+        // setup array for comboBox
         for (Heatmap.KernelTypes type : Heatmap.KernelTypes.values()) {
             kernelTypes[index++] = type.name();
         }
+        getProperties();
+        // Set the values to what was saved in properties
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(kernelTypes));
-        
+        jSpinner2.setValue(m_savedGridSize);
+        jSpinner1.setValue(m_savedKernelRadius);
+        jComboBox1.setSelectedIndex(m_savedKernelType.ordinal());
+        this.setTitle("Heatmap Parameters");
     }
     
+    // close the window.
     private void doClose() {
         setVisible(false);
         dispose();
     }
     
-    private void doContinue() {
-        IGCAPTgui igcaptGui = (IGCAPTgui)parent;
+    private void getProperties() {
+        String heatmapGridStr = IGCAPTproperties.getInstance().getPropertyKeyValue(GRID_SIZE_PROPERTY_NAME);
+        String heatmapKernelTypeStr = IGCAPTproperties.getInstance().getPropertyKeyValue(KERNEL_TYPE_PROPERTY_NAME);
+        String heatmapKernelRadiusStr = IGCAPTproperties.getInstance().getPropertyKeyValue(KERNEL_RADIUS_PROPERTY_NAME);
+        if (heatmapGridStr == null) {
+            m_savedGridSize = GRID_SIZE_DEFAULT;
+        }
+        else {
+            m_savedGridSize = Integer.parseInt(heatmapGridStr);
+        }
+        if (heatmapKernelTypeStr == null) {
+            m_savedKernelType = KERNEL_TYPE_DEFAULT;
+        }
+        else {
+            m_savedKernelType = Heatmap.KernelTypes.valueOf(heatmapKernelTypeStr);  
 
-        int kernelRadius = (Integer)jSpinner1.getValue();
-        Heatmap.KernelTypes kernelType = 
-                Heatmap.KernelTypes.values()[jComboBox1.getSelectedIndex()];
-        int gridSize = (Integer)jSpinner2.getValue();
+        }
+        if (heatmapKernelRadiusStr == null) {
+            m_savedKernelRadius = KERNEL_RADIUS_SIZE_DEFAULT;
+        }
+        else {
+            m_savedKernelRadius = Integer.parseInt(heatmapKernelRadiusStr);
+        }
+    }
+    
+    private void savePropertyValues() {
+        IGCAPTproperties.getInstance().setPropertyKeyValue(GRID_SIZE_PROPERTY_NAME, String.valueOf(m_savedGridSize));
+        IGCAPTproperties.getInstance().setPropertyKeyValue(KERNEL_TYPE_PROPERTY_NAME, m_savedKernelType.toString());
+        IGCAPTproperties.getInstance().setPropertyKeyValue(KERNEL_RADIUS_PROPERTY_NAME, String.valueOf(m_savedKernelRadius));
+    }
+    
+    //
+    private void doGenerate() {
+        IGCAPTgui igcaptGui = (IGCAPTgui)parent;
+        igcaptGui.SetHeatmap(null);
+        m_savedGridSize = (Integer)jSpinner2.getValue(); 
+        m_savedKernelType = Heatmap.KernelTypes.values()[jComboBox1.getSelectedIndex()];
+        m_savedKernelRadius = (Integer)jSpinner1.getValue();
         
-        igcaptGui.SetHeatmap(new Heatmap(gridSize, kernelType, kernelRadius));
-        doClose();
+        igcaptGui.SetHeatmap(new Heatmap(m_savedGridSize, m_savedKernelType, m_savedKernelRadius));
+        savePropertyValues();
+    }
+    
+    private void resetToDefaults() {
+        jSpinner2.setValue(GRID_SIZE_DEFAULT);
+        jSpinner1.setValue(KERNEL_RADIUS_SIZE_DEFAULT);
+        jComboBox1.setSelectedIndex(KERNEL_TYPE_DEFAULT.ordinal());
     }
 
+    private void resetToLastRun() {
+        jSpinner2.setValue(m_savedGridSize);
+        jSpinner1.setValue(m_savedKernelRadius);
+        jComboBox1.setSelectedIndex(m_savedKernelType.ordinal());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,6 +126,8 @@ public class HeatMapDialog extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jSpinner2 = new javax.swing.JSpinner();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -73,14 +135,16 @@ public class HeatMapDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Kernel Radius");
 
-        jButton1.setText("Continue");
+        jButton1.setText("Generate");
+        jButton1.setToolTipText("Generate the Heatmap");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonGenerateActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Cancel");
+        jButton2.setText("Close");
+        jButton2.setToolTipText("Close Parameter Dialog");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -88,6 +152,22 @@ public class HeatMapDialog extends javax.swing.JDialog {
         });
 
         jLabel3.setText("Grid Size");
+
+        jButton3.setText("Defaults");
+        jButton3.setToolTipText("Reset parameters to Defaults");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Reset");
+        jButton4.setToolTipText("Reset Parameters to last Generated heatmap");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,8 +177,12 @@ public class HeatMapDialog extends javax.swing.JDialog {
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,10 +194,12 @@ public class HeatMapDialog extends javax.swing.JDialog {
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSpinner1)
                             .addComponent(jSpinner2))))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3});
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2, jButton3, jButton4});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,27 +212,43 @@ public class HeatMapDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                        .addGap(3, 3, 3)))
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2, jButton3, jButton4});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        doContinue();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
+        doGenerate();
+    }//GEN-LAST:event_jButtonGenerateActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         doClose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        resetToDefaults();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        resetToLastRun();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,6 +295,8 @@ public class HeatMapDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
