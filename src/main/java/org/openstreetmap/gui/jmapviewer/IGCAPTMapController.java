@@ -32,6 +32,8 @@ import static org.openstreetmap.gui.jmapviewer.JMapViewer.SGNODECLICKHEIGHT;
 import static org.openstreetmap.gui.jmapviewer.JMapViewer.SGNODECLICKWIDTH;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
+import org.openstreetmap.gui.jmapviewer.interfaces.MapLine;
+
 
 /**
  *
@@ -77,6 +79,7 @@ MouseWheelListener {
     private ClickInfo _clickInfo = null;
     private Point _pastMovePoint = null;
     private IGCAPTgui _igCAPTgui;
+    private MapLine prevMapLine = null;
     private Point lastDragPoint;
     private boolean isMoving = false;
 
@@ -250,13 +253,6 @@ MouseWheelListener {
                         // add the edge to the jung graph
                         _igCAPTgui.getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
                         _igCAPTgui.edgeIndex++;                        
-                        double latitude1 = nodeToUse.getLat();
-                        double longitude1 = nodeToUse.getLongit();
-                        double latitude2 = endNodeSpecifiedByUser.getLat();
-                        double longitude2 = endNodeSpecifiedByUser.getLongit();
-                        Coordinate start = new Coordinate(latitude1, longitude1);
-                        Coordinate end = new Coordinate(latitude2, longitude2);
-
                         _igCAPTgui.graphChanged();
                     }
                 });
@@ -354,6 +350,10 @@ MouseWheelListener {
         map.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
         if (e.isShiftDown()) {
+            // Remove line drawn during the drag and set it to null for next drag
+            _igCAPTgui.currentGisMap.removeMapLine(prevMapLine);
+            prevMapLine = null;
+            
             // get the end point SgNode selected by the user (or null)
             SgNodeInterface endNodeSpecifiedByUser = ptInNode(e.getX(), e.getY());
             // if the same node was selected or no node was selected don't make edge
@@ -405,7 +405,18 @@ MouseWheelListener {
     public void mouseDragged(MouseEvent e) {
         if (_clickInfo != null) {
             if (e.isShiftDown()) {
-                // Creating an edge so do nothing during the drag
+                // Creating an edge - draw line during the drag
+                Coordinate start = new Coordinate(_clickInfo.getClickNode().getLat(), 
+                                                  _clickInfo.getClickNode().getLongit());
+                Point movePoint = new Point(e.getX(), e.getY());
+                ICoordinate end = map.getPosition(movePoint);
+                
+                MapLineImpl line = new MapLineImpl(start, end);
+                if (prevMapLine != null) {
+                    _igCAPTgui.currentGisMap.removeMapLine(prevMapLine);
+                }
+                _igCAPTgui.currentGisMap.addMapLine(line);
+                prevMapLine = line;
                 return;
             }
             if (_pastMovePoint == null) {
@@ -435,10 +446,10 @@ MouseWheelListener {
         }
         else {
             if (isMoving) {
-            if (e.isShiftDown()) {
-                // Creating an edge so do nothing during the drag
-                return;
-            }
+                if (e.isShiftDown()) {
+                    // Creating an edge so do nothing during the drag
+                    return;
+                }
                 map.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 
                 Point p = e.getPoint();
