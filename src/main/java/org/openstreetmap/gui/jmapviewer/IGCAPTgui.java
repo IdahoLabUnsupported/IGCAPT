@@ -1407,6 +1407,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     SgEdge e1 = new SgEdge(currentEdgeIndex, "e" + currentEdgeIndex,
                             1.0, 0,
                             Double.parseDouble(edgeElement.getElementsByTagName("capacity").item(0).getTextContent()));
+                    
+                    if (edgeElement.getElementsByTagName("name") != null && edgeElement.getElementsByTagName("name").item(0) != null) {
+                        e1.setName(edgeElement.getElementsByTagName("name").item(0).getTextContent());                        
+                    }
 
                     ArrayList<SgNodeInterface> nodes = new ArrayList<SgNodeInterface>(getGraph().getVertices());
 
@@ -1639,6 +1643,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             Element capacity = doc.createElement("capacity");
             capacity.appendChild(doc.createTextNode(Double.toString(sgEdge.getEdgeRate())));
             edge.appendChild(capacity);
+
+            // name element
+            Element nameElement = doc.createElement("name");
+            nameElement.appendChild(doc.createTextNode(sgEdge.getName()));
+            edge.appendChild(nameElement);
 
             edgeRoot.appendChild(edge);
         }
