@@ -1,6 +1,6 @@
 package org.openstreetmap.gui.jmapviewer;
 
-import gov.inl.igcapt.components.Heatmap;
+import gov.inl.igcapt.components.HeatMapDialog;
 import javax.swing.*;
 
 public class AddShowHeatmapMenuItem extends JMenuItem {
@@ -21,8 +21,8 @@ public class AddShowHeatmapMenuItem extends JMenuItem {
             // Find the center of each cell and save in a two dimensional array. A cell is the extent divided into
             // increments in x and y according to the grid size. Cells are of dimension grid_size X grid_size.
             //
-            
-            igcaptGui.SetHeatmap(new Heatmap(10.0, Heatmap.KernelTypes.Quartic, 100.0));
+            HeatMapDialog dialog = new HeatMapDialog(igcaptGui, true);
+            dialog.setVisible(true);
         });           
     }
 }

@@ -119,6 +119,8 @@ import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.Heatmap;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -203,12 +205,17 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;
     private String lastPath = "";
+    private DragTree7 tree = null;
 
     // When creating an aggregation, place the aggregated component at this offset
     // relative to the aggregate parent.
     private static final Point AGGREGATE_OFFSET = new Point(100, 0);
     private static final Point2D.Double AGGREGATE_LATLON_OFFSET = new Point2D.Double(0.0, 0.1);
 
+    public void refreshTree() {
+        tree.refreshTreeModel();
+     }
+    
     // Jung
     public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
     private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
@@ -852,6 +859,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         loadTopology.addActionListener((ActionEvent ev) -> {
             
             JFileChooser chooser = new JFileChooser();
+            FileFilter filter = new FileNameExtensionFilter("IGC File", "igc");
+            chooser.setFileFilter(filter);
+            
             if (lastPath != null && !lastPath.isEmpty()) {
                 File lastPath1 = new File(IGCAPTgui.this.getLastPath());
                 if (lastPath1.exists()) {
@@ -945,6 +955,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private JMenu createComponentsMenu() {
         JMenu componentsMenu = new JMenu("Components");
         componentsMenu.add(new AddComponentMenuItem(null));
+        
         return componentsMenu;
     }
 
@@ -2484,7 +2495,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 // Jung code
     private JPanel createTreePanel() {
         JPanel treePanel = new JPanel();
-        DragTree7 tree = new DragTree7(this);
+        tree = new DragTree7(this);
         tree.addTreeSelectionListener(tree);
 
         treePanel.setLayout(new BorderLayout());

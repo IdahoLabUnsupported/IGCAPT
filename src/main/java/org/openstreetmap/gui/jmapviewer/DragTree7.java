@@ -21,7 +21,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -49,7 +48,6 @@ class DragTree7 extends JTree implements DragGestureListener,
                 this); // drag gesture recognizer
 
         ComponentDao componentDao = new ComponentDao();
-        
         setModel(createTreeModel(componentDao.getComponentGroups()));
         
         myTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -126,6 +124,54 @@ class DragTree7 extends JTree implements DragGestureListener,
         return new DefaultTreeModel(root);
     }
     
+    private String getExpansionState() {
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < myTree.getRowCount(); i++) {
+            TreePath tp = myTree.getPathForRow(i);
+            if (myTree.isExpanded(i)) {
+                sb.append(tp.toString());
+                sb.append(",");
+            }
+        }
+
+        return sb.toString();
+    }
+    
+    public void refreshTreeModel() {
+        String expansionString = getExpansionState();
+        myTree.removeAll();
+                
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Smart Grid Components");
+        ComponentDao dao = new ComponentDao();
+        List<SgComponentGroupData>list = dao.getComponentGroups();
+        
+        for (SgComponentGroupData sgComponentGroup : list) {
+            if (sgComponentGroup.isDisplay()) {
+                DefaultMutableTreeNode groupTreeNode = new DefaultMutableTreeNode(sgComponentGroup.getGroupName());
+                
+                for (SgComponentData sgComponent : sgComponentGroup.getComponents()) {
+                    groupTreeNode.add(new DefaultMutableTreeNode(sgComponent));
+                }
+            
+                root.add(groupTreeNode);
+            }
+        }
+        setCellRenderer(new SGComponentTreeCellRenderer());
+        DefaultTreeModel treeModel = new DefaultTreeModel(root);
+        setModel(treeModel);
+        expandTree(expansionString);
+    }
+    
+    private void expandTree(String s) {
+        for (int i = 0; i < myTree.getRowCount(); i++) {
+            TreePath tp = myTree.getPathForRow(i);
+            if (s.contains(tp.toString())) {
+                myTree.expandRow(i);
+            }
+        }
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -140,10 +186,9 @@ class DragTree7 extends JTree implements DragGestureListener,
     public void valueChanged(TreeSelectionEvent e) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)
                            this.getLastSelectedPathComponent();
-
-        Object obj = node.getUserObject();
         
         if (node != null) {
+            Object obj = node.getUserObject();
             if (node.isLeaf()) {
                 if (obj instanceof SgComponentData) {
                     SgComponentData component = (SgComponentData)obj;

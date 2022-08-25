@@ -32,6 +32,8 @@ import static org.openstreetmap.gui.jmapviewer.JMapViewer.SGNODECLICKHEIGHT;
 import static org.openstreetmap.gui.jmapviewer.JMapViewer.SGNODECLICKWIDTH;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
+import org.openstreetmap.gui.jmapviewer.interfaces.MapLine;
+
 
 /**
  *
@@ -77,6 +79,7 @@ MouseWheelListener {
     private ClickInfo _clickInfo = null;
     private Point _pastMovePoint = null;
     private IGCAPTgui _igCAPTgui;
+    private MapLine prevMapLine = null;
     private Point lastDragPoint;
     private boolean isMoving = false;
 
@@ -130,6 +133,10 @@ MouseWheelListener {
         if (e.getButton() == MouseEvent.BUTTON1) {            
             if (clickNode != null) {
                 _clickInfo = new ClickInfo(clickNode, new Point(e.getX(), e.getY()));
+                if (e.isShiftDown()) {
+                    // Creating an edge so do nothing until the release
+                    return;
+                }
                 map.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
             }
             // Preserve default behavior of double-clicking left button to zoom in.
@@ -195,7 +202,7 @@ MouseWheelListener {
             edgeToUse = selectedEdge;
 
             if (mousePointIsOnNode) {
-                //System.out.println("Mouse button 2 or 3 pressed on a a node = " + nodeToUse.toString());
+                //System.out.println("Mouse button 2 or 3 pressed on a node = " + nodeToUse.toString());
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
                     public void actionPerformed(ActionEvent e) {
@@ -220,6 +227,8 @@ MouseWheelListener {
                         _igCAPTgui.graphChanged();
                     }
                 });
+                // Remove the menu item to remove the popup menu for adding an edge
+                // down to the end remove #EdgeMenu
                 JMenuItem addEdgeItem = popup.add(new AbstractAction("Add Edge") {
                     public void actionPerformed(ActionEvent e) {
 
@@ -244,17 +253,11 @@ MouseWheelListener {
                         // add the edge to the jung graph
                         _igCAPTgui.getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
                         _igCAPTgui.edgeIndex++;                        
-                        double latitude1 = nodeToUse.getLat();
-                        double longitude1 = nodeToUse.getLongit();
-                        double latitude2 = endNodeSpecifiedByUser.getLat();
-                        double longitude2 = endNodeSpecifiedByUser.getLongit();
-                        Coordinate start = new Coordinate(latitude1, longitude1);
-                        Coordinate end = new Coordinate(latitude2, longitude2);
-
                         _igCAPTgui.graphChanged();
                     }
                 });
                 addEdgeItem.setEnabled(nodeToUse instanceof SgNodeInterface);
+                // end remove
                 
                 JMenuItem collapseItem = popup.add(new AbstractAction("Collapse") {
                     public void actionPerformed(ActionEvent e) {
@@ -341,12 +344,33 @@ MouseWheelListener {
     public void mouseReleased(MouseEvent e) {
 
         Point releasePoint = new Point(e.getX(), e.getY());
-        
+
         isMoving = false;
         lastDragPoint = null;
         map.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
-        if (_clickInfo != null && !_clickInfo.getClickPoint().equals(releasePoint)) {
+        if (e.isShiftDown()) {
+            // Remove line drawn during the drag and set it to null for next drag
+            _igCAPTgui.currentGisMap.removeMapLine(prevMapLine);
+            prevMapLine = null;
+            
+            // get the end point SgNode selected by the user (or null)
+            SgNodeInterface endNodeSpecifiedByUser = ptInNode(e.getX(), e.getY());
+            // if the same node was selected or no node was selected don't make edge
+            if (endNodeSpecifiedByUser != _clickInfo.getClickNode() &&
+                endNodeSpecifiedByUser != null) {
+                // drawedge
+                int edgeIndex = _igCAPTgui.edgeIndex;
+                SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
+                
+                // add the edge to the jung graph
+                _igCAPTgui.getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
+                _igCAPTgui.edgeIndex++;
+                _igCAPTgui.graphChanged();
+            }
+        }
+        // no shift so move the node
+        else if (_clickInfo != null && !_clickInfo.getClickPoint().equals(releasePoint)) {
 
             ICoordinate coordinate = map.getPosition(releasePoint);
             double latitude = coordinate.getLat();
@@ -380,7 +404,21 @@ MouseWheelListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         if (_clickInfo != null) {
-
+            if (e.isShiftDown()) {
+                // Creating an edge - draw line during the drag
+                Coordinate start = new Coordinate(_clickInfo.getClickNode().getLat(), 
+                                                  _clickInfo.getClickNode().getLongit());
+                Point movePoint = new Point(e.getX(), e.getY());
+                ICoordinate end = map.getPosition(movePoint);
+                
+                MapLineImpl line = new MapLineImpl(start, end);
+                if (prevMapLine != null) {
+                    _igCAPTgui.currentGisMap.removeMapLine(prevMapLine);
+                }
+                _igCAPTgui.currentGisMap.addMapLine(line);
+                prevMapLine = line;
+                return;
+            }
             if (_pastMovePoint == null) {
                 _pastMovePoint = _clickInfo.getClickPoint();
             }
@@ -408,6 +446,10 @@ MouseWheelListener {
         }
         else {
             if (isMoving) {
+                if (e.isShiftDown()) {
+                    // Creating an edge so do nothing during the drag
+                    return;
+                }
                 map.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 
                 Point p = e.getPoint();
