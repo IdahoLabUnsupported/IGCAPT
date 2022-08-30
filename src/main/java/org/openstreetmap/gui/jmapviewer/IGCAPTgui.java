@@ -635,7 +635,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         });
 
         originalGraph = new SgGraph();
-        layout = new StaticLayout<SgNodeInterface, SgEdge>(originalGraph,
+        layout = new StaticLayout<>(originalGraph,
                 new Dimension(800, 800));
 
         vv = new VisualizationViewer<>(layout);
@@ -650,7 +650,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             // Hold the starting position of a vertex so we can detect
             // when its position changed in response to click and drag.
             double oldX, oldY;
-            boolean dragging = false;
 
             @Override
             public void graphClicked(Object v, MouseEvent me) {
@@ -673,8 +672,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             @Override
             public void graphReleased(Object v, MouseEvent me) {
 
-                if (v instanceof SgNode) {
-                    SgNode node = (SgNode) v;
+                if (v instanceof SgNode node) {
                     double newX, newY;
                     newX = layout.getX(node);
                     newY = layout.getY(node);
@@ -883,6 +881,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             if (!lastPath.isEmpty()) {
                 chooser.setCurrentDirectory(new File(getLastPath()));
             }
+            
+            chooser.setFileFilter(new FileNameExtensionFilter("IGCAP Files", "igc"));
             
             if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 SwingUtilities.invokeLater(() -> {
@@ -1408,7 +1408,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                             1.0, 0,
                             Double.parseDouble(edgeElement.getElementsByTagName("capacity").item(0).getTextContent()));
                     
-                    if (edgeElement.getElementsByTagName("name") != null && edgeElement.getElementsByTagName("name").item(0) != null) {
+                    if (edgeElement.getElementsByTagName("name") != null && edgeElement.getElementsByTagName("name").item(0) != null &&
+                            edgeElement.getElementsByTagName("name").item(0).getTextContent() != null && !edgeElement.getElementsByTagName("name").item(0).getTextContent().isEmpty()) {
                         e1.setName(edgeElement.getElementsByTagName("name").item(0).getTextContent());                        
                     }
 
