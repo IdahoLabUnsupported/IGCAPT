@@ -367,9 +367,9 @@ MouseWheelListener {
                 _igCAPTgui.getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
                 _igCAPTgui.edgeIndex++;
                 _igCAPTgui.graphChanged();
-                _clickInfo = null;
-                _pastMovePoint = null;
             }
+            _clickInfo = null;
+            _pastMovePoint = null;
         }
         // no shift so move the node
         else if (_clickInfo != null && !_clickInfo.getClickPoint().equals(releasePoint)) {
