@@ -2,7 +2,7 @@ package gov.inl.igcapt.components.DataModels;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @Entity(name = "usecase")
