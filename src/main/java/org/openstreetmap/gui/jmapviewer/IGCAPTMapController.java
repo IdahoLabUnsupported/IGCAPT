@@ -82,6 +82,9 @@ MouseWheelListener {
     private MapLine prevMapLine = null;
     private Point lastDragPoint;
     private boolean isMoving = false;
+    // Flag helps user so they don't move node when creating line if release
+    // the mouse too quickly
+    private boolean shiftDownDuringDrag = false;
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -179,6 +182,30 @@ MouseWheelListener {
                             double latitude2 = endPt2.getLat();
                             double longitude2 = endPt2.getLongit();
 
+                            // If this is a duplicate edge replace one side with midpoint
+                            if (edge.getMidPoint() != null && edge.getName() != null) {
+                                // if the id of 2 < id of 1 then swap the values
+                                // this helps alternate edge labels
+                                if (endPt2.getId() < endPt1.getId()) {
+                                    endPt1 = endpoints.getSecond();
+                                    endPt2 = endpoints.getFirst();
+                                    latitude1 = endPt1.getLat();
+                                    longitude1 = endPt1.getLongit();
+                                    latitude2 = endPt2.getLat();
+                                    longitude2 = endPt2.getLongit();
+                                }
+                                // even edges replace second point with midpoint
+                                if (edge.getId() % 2 == 0){  // even
+                                    latitude2 = edge.getMidPoint().getLat();
+                                    longitude2 = edge.getMidPoint().getLon();
+                                }
+                                // odd edges replace first point with midpoint
+                                else {
+                                    latitude1 = edge.getMidPoint().getLat();
+                                    longitude1 = edge.getMidPoint().getLon();
+                                }
+                            }
+
                             /// this helped determine that we should be using node1Point and node2Point
                             // by examining these values and the cursor position printed on top of the screen
                             Point node1Point = map.getMapPosition(latitude1, longitude1, false);
@@ -188,6 +215,8 @@ MouseWheelListener {
                             int newX = (int) ((node2Point.x - node1Point.x) / 2 + node1Point.x);
 
                             double distanceFromCenter = Math.sqrt(Math.pow((mousePoint.getX() - newX), 2) + Math.pow((mousePoint.getY() - newY), 2));
+                            if (edge.getMidPoint() != null && edge.getName() != null) {
+                           }
                             if (distanceFromCenter < circleRadius) {
                                 mousePointIsOnLine = true;
                                 selectedEdge = edge;
@@ -339,20 +368,21 @@ MouseWheelListener {
             }
         }
     }
-
+    
     @Override
     public void mouseReleased(MouseEvent e) {
 
         Point releasePoint = new Point(e.getX(), e.getY());
-
+        
         isMoving = false;
         lastDragPoint = null;
         map.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
-        if (e.isShiftDown()) {
+        if (shiftDownDuringDrag && _clickInfo != null) {
             // Remove line drawn during the drag and set it to null for next drag
             _igCAPTgui.currentGisMap.removeMapLine(prevMapLine);
             prevMapLine = null;
+            shiftDownDuringDrag = false;
             
             // get the end point SgNode selected by the user (or null)
             SgNodeInterface endNodeSpecifiedByUser = ptInNode(e.getX(), e.getY());
@@ -362,12 +392,30 @@ MouseWheelListener {
                 // drawedge
                 int edgeIndex = _igCAPTgui.edgeIndex;
                 SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
-                
+                // Always store the pair from smaller node id to greater node id so
+                // don't have to worry about which direction the user drew the edge
+                // and the pair will be found
+                Pair edgePair = null;
+                if (endNodeSpecifiedByUser.getId() < _clickInfo.getClickNode().getId()) {
+                    edgePair = new Pair(endNodeSpecifiedByUser, _clickInfo.getClickNode());
+                }
+                else {
+                    edgePair = new Pair(_clickInfo.getClickNode(), endNodeSpecifiedByUser);
+                }
+                if (_igCAPTgui.nodePairList.contains(edgePair)) {
+                    int occurrences = java.util.Collections.frequency(_igCAPTgui.nodePairList, edgePair);
+                    Coordinate mid = _igCAPTgui.calcNewMidPoint(_clickInfo._clickNode.getLat(), _clickInfo._clickNode.getLongit(),
+                        endNodeSpecifiedByUser.getLat(), endNodeSpecifiedByUser.getLongit(), occurrences);
+                    e2.setMidPoint(mid);
+                }
+                _igCAPTgui.nodePairList.add(edgePair);
                 // add the edge to the jung graph
                 _igCAPTgui.getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
                 _igCAPTgui.edgeIndex++;
                 _igCAPTgui.graphChanged();
             }
+            _clickInfo = null;
+            _pastMovePoint = null;
         }
         // no shift so move the node
         else if (_clickInfo != null && !_clickInfo.getClickPoint().equals(releasePoint)) {
@@ -405,6 +453,7 @@ MouseWheelListener {
     public void mouseDragged(MouseEvent e) {
         if (_clickInfo != null) {
             if (e.isShiftDown()) {
+                shiftDownDuringDrag = true;
                 // Creating an edge - draw line during the drag
                 Coordinate start = new Coordinate(_clickInfo.getClickNode().getLat(), 
                                                   _clickInfo.getClickNode().getLongit());

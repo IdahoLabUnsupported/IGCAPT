@@ -1,6 +1,6 @@
 package gov.inl.igcapt.components.DataModels;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 @Entity(name = "collapseIntoData")
 public class SgCollapseInto implements BaseModel {
 

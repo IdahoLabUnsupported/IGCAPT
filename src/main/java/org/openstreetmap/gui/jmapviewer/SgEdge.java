@@ -21,7 +21,8 @@ public class SgEdge {
     private double _calcTransRate;
     private double _edgeRate;
     private boolean _isEnabled = true;
-    private MapLine _mapLine = null; // MapImage that corresponds to this node.
+//    private MapLine _mapLine = null; // MapImage that corresponds to this node.
+    private Coordinate _midPoint = null;
 
     public static double defaultUtilizationHigh = 0.8;
     public static double defaultUtilizationMedium = 0.5;
@@ -38,13 +39,22 @@ public class SgEdge {
 // Constructor    
     }
     
-    public void setMapLine(MapLine mapLine) {
-        _mapLine = mapLine;
+    public void setMidPoint(Coordinate point) {
+        _midPoint = point;
     }
+    
+    public Coordinate getMidPoint() {
+        return _midPoint;
+    }
+    
+// These are never called and perhaps _mapLine should be removed from the class
+//    public void setMapLine(MapLine mapLine) {
+//        _mapLine = mapLine;
+//    }
 
-    public MapLine getMapLine() {
-        return _mapLine;
-    }
+//    public MapLine getMapLine() {
+//        return _mapLine;
+//    }
     
     public double getUtilization() {
         return ((getEdgeRate() > 0.0)?(getCalcTransRate() / getEdgeRate()):0.0);

@@ -119,6 +119,7 @@ import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.Heatmap;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Collections;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.Factory;
@@ -193,6 +194,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         this.analysisCanceled = analysisCanceled;
     }
 
+    private final double COORDINATE_ADDER = .001;
     static final IGCAPTproperties IGCAPTPROPERTIES = IGCAPTproperties.getInstance();
     private static final long serialVersionUID = 1L;
 
@@ -206,6 +208,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private final JLabel mperpLabelValue;
     private String lastPath = "";
     private DragTree7 tree = null;
+    List<Pair<SgNodeInterface>>nodePairList = new ArrayList<>();
 
     // When creating an aggregation, place the aggregated component at this offset
     // relative to the aggregate parent.
@@ -397,7 +400,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     // Redraw the GIS images based upon the current Jung graph contents.
     void updateGISObjects() {
-
         List<SgNodeInterface> nodes = new ArrayList<>(getGraph().getVertices());
 
         JMapViewer map = map();
@@ -416,34 +418,71 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         }
 
         List<SgEdge> edges = new ArrayList<>(getGraph().getEdges());
-
+        
         for (SgEdge edge : edges) {
             Pair nodePair = getGraph().getEndpoints(edge);
+            
             SgNodeInterface firstNode = (SgNodeInterface) nodePair.getFirst();
             SgNodeInterface secondNode = (SgNodeInterface) nodePair.getSecond();
-
             double latitude1 = firstNode.getLat();
             double longitude1 = firstNode.getLongit();
             double latitude2 = secondNode.getLat();
             double longitude2 = secondNode.getLongit();
-            Coordinate start = new Coordinate(latitude1, longitude1);
-            Coordinate end = new Coordinate(latitude2, longitude2);
-
-            MapLineImpl line = new MapLineImpl(start, end);
-            line.setId(edge.toString());
-
-            if (edge.isOverHighUtilizationLimit()) {
-                line.setColor(Color.red);
-            } else if (edge.isOverMidUtilizationLimit()) {
-                line.setColor(Color.orange);
-            } else if (!edge.isZeroUtilizationLimit()) {
-                line.setColor(Color.green);
-            } else {
-                line.setColor(Color.black);
+            //Always set the first node to the lower id
+            //This helps edge labels to alternate for readability
+            Coordinate start;
+            Coordinate end;
+            if (secondNode.getId() < firstNode.getId()) {
+                start = new Coordinate(latitude2, longitude2);
+                end = new Coordinate(latitude1, longitude1);
+            }
+            else {
+                start = new Coordinate(latitude1, longitude1);              
+                end = new Coordinate(latitude2, longitude2);
             }
 
-            edge.setMapLine(line);
+            Coordinate midPt = edge.getMidPoint();
+            MapLineImpl line = null;
+            MapLineImpl line2 = null;
+            if (edge.getMidPoint() != null) {
+                line = new MapLineImpl(start, midPt);
+                line2 = new MapLineImpl(midPt, end);
+                //Even ID label on line, Odd ID label on line2
+                if (edge.getId() % 2 == 0) {
+                    line.setId(edge.toString());
+                }
+                else {
+                    line2.setId(edge.toString());
+                }
+                map.addMapLine(line2);
+            }
+            else {
+                line = new MapLineImpl(start, end);
+                line.setId(edge.toString());
+            }
+              
             map.addMapLine(line);
+            if (edge.isOverHighUtilizationLimit()) {
+                line.setColor(Color.red);
+                if (line2 != null) {
+                    line2.setColor(Color.red);
+                }
+            } else if (edge.isOverMidUtilizationLimit()) {
+                line.setColor(Color.orange);
+                if (line2 != null) {
+                    line2.setColor(Color.orange);
+                }
+            } else if (!edge.isZeroUtilizationLimit()) {
+                line.setColor(Color.green);
+                if (line2 != null) {
+                    line2.setColor(Color.green);
+                }
+            } else {
+                line.setColor(Color.black);
+                if (line2 != null) {
+                    line2.setColor(Color.black);
+                }
+            }
         }
 
         // May have a heatmap that needs to be drawn.
@@ -1313,6 +1352,46 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return returnval;
     }
 
+    // Calculate the midpoint between two points specified with lat/lon (Degrees)
+    private Coordinate calcMidPoint(double latDeg1, double lonDeg1, double latDeg2, double lonDeg2) {
+        double lonDiffRad = Math.toRadians(lonDeg2 - lonDeg1);
+        
+        // convertToRadians
+        double latRad1 = Math.toRadians(latDeg1);
+        double latRad2 = Math.toRadians(latDeg2);
+        double lonRad1 = Math.toRadians(lonDeg1);
+        
+        double Bx = Math.cos(latRad2) * Math.cos(lonDiffRad);
+        double By = Math.cos(latRad2) * Math.sin(lonDiffRad);
+        // lat3,lon3 is the midpoint
+        double latRad3 = Math.atan2(Math.sin(latRad1) + Math.sin(latRad2), 
+                                 Math.sqrt((Math.cos(latRad1) + Bx) * (Math.cos(latRad1) + Bx) + By*By));
+        double lonRad3 = lonRad1 + Math.atan2(By, Math.cos(latRad1) + Bx);
+        double midPointLatDeg = Math.toDegrees(latRad3);
+        double midPointLonDeg = Math.toDegrees(lonRad3);
+        return new Coordinate(midPointLatDeg, midPointLonDeg);
+    }
+
+    // occurrences indicates how many occurrences and arbitrarily adjusts the mid point
+    public Coordinate calcNewMidPoint(double latDeg1, double lonDeg1, double latDeg2, double lonDeg2, int occurrences) {
+        Coordinate midPoint = calcMidPoint(latDeg1, lonDeg1, latDeg2, lonDeg2);
+        Coordinate newMidPoint;
+        // alternate adder / -adder for even/odd occurrences
+        double adder;
+        //occurrences = occurrences / 2 ;
+        if (occurrences % 2 == 0) {
+            adder = Math.ceil((double)occurrences / 2) * COORDINATE_ADDER;
+        }
+        else {
+            adder = Math.ceil((double)occurrences / 2) * COORDINATE_ADDER * -1;
+        }
+                
+        double newLatDeg = Math.toDegrees(Math.toRadians(midPoint.getLat()) + adder);
+        double newLonDeg = Math.toDegrees(Math.toRadians(midPoint.getLon()) + adder);
+        newMidPoint = new Coordinate(newLatDeg, newLonDeg);
+        return newMidPoint;
+    }
+
     //add code to this method to create the Logical topology diagram from xml
     void openFile(JFileChooser chooser) {
 
@@ -1413,8 +1492,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                         e1.setName(edgeElement.getElementsByTagName("name").item(0).getTextContent());                        
                     }
 
-                    ArrayList<SgNodeInterface> nodes = new ArrayList<SgNodeInterface>(getGraph().getVertices());
-
+                    ArrayList<SgNodeInterface> nodes = new ArrayList<>(getGraph().getVertices());
                     String source = edgeElement.getAttribute("source");
                     Integer sourceId = Integer.parseInt(source);
                     Integer targetId = Integer.parseInt(edgeElement.getAttribute("target"));
@@ -1442,11 +1520,26 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                         }
                     }
 
-                    // If we found both ends
+                    // If we found both ends (endPt1 != null && endPt2 != null)
                     if (foundEndPts > 1) {
-
+                        Pair currentPair = null;
+                        if (endPt1.getId() < endPt2.getId()) {
+                            currentPair = new Pair(endPt1, endPt2);
+                        }
+                        else {
+                            currentPair = new Pair(endPt2, endPt1);
+                        }
+                            
+                        // determine if an edge between these endpoints already exists
+                        if (nodePairList.contains(currentPair)) {
+                            int occurrences = Collections.frequency(nodePairList, currentPair);
+                            // set midPoint appropriately
+                            Coordinate midPoint = calcNewMidPoint(endPt1.getLat(), endPt1.getLongit(),
+                                    endPt2.getLat(), endPt2.getLongit(), occurrences);
+                            e1.setMidPoint(midPoint);
+                        }
                         getGraph().addEdge(e1, endPt1, endPt2);
-
+                        nodePairList.add(currentPair);
                         if (currentEdgeIndex > edgeIndex) {
                             edgeIndex = currentEdgeIndex;
                         }
