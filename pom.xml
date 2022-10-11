@@ -126,6 +126,7 @@
                             <goal>xsdtojava</goal>
                         </goals>
                         <configuration>
+                            <sourceRoot>${project.basedir}\src\main\java\gov\inl\igcapt\generated</sourceRoot>
                             <xsdOptions>
                                 <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\common-model-definition-main\gdtaf-core.xsd</xsd>
