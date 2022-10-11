@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--Created with Liquid Studio 2021 (https://www.liquid-technologies.com)-->
+<xs:schema xmlns:core="http://pnnl.gov/gdtaf-core" xmlns="http://pnnl.gov/gdtaf-gucs" elementFormDefault="qualified" targetNamespace="http://pnnl.gov/gdtaf-gucs" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import schemaLocation="..\common-model-definition-main\gdtaf-core.xsd" namespace="http://pnnl.gov/gdtaf-core" />
+    <xs:complexType name="GridUseCaseScenario">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="Overview">
+                        <xs:complexType>
+                            <xs:all />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Review" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:all />
+                            <xs:attribute name="Reviewer" type="xs:string" use="required" />
+                            <xs:attribute name="Date" type="xs:dateTime" />
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="app_scenarios" type="core:guid" minOccurs="1" maxOccurs="unbounded">
+                        <xs:keyref name="FKAppScenario" refer="PKApplicationScenario">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                    <xs:element name="payloads" type="core:guid" minOccurs="1" maxOccurs="unbounded">
+                        <xs:keyref name="FKPayload" refer="PKPayload">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                    <xs:element name="reqs" type="core:guid" minOccurs="1" maxOccurs="unbounded">
+                        <xs:keyref name="FKRequirements" refer="PKCommunicationsSystemRequirement">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                    <xs:element name="path_options" type="core:guid" minOccurs="1" maxOccurs="unbounded">
+                        <xs:keyref name="FKGridCommunicationPath" refer="PKGridCommunicationPath">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="MaximumLInkScore" type="core:LinkScore" />
+                <xs:attribute name="Approved" default="Not_Approved" type="ApprovedState" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="ApprovedState">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Approved" />
+            <xs:enumeration value="Not_Approved" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ApplicationScenario">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="Narrative" type="xs:anyType" />
+                    <xs:element name="objectives" type="core:guid" minOccurs="1" maxOccurs="unbounded">
+                        <xs:keyref name="FKOperationalObjective" refer="PKOperationalObjective">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="OrderedObjectives" type="xs:boolean" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="OperationalObjective">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="Attributes" type="OperationalAttribute" minOccurs="1" maxOccurs="unbounded" />
+                    <xs:element name="payload" type="core:guid" minOccurs="1">
+                        <xs:keyref name="FKOperationalObjectivePayload" refer="PKPayload">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                    <xs:element name="source" type="core:guid" minOccurs="1">
+                        <xs:keyref name="FKSourceEquip" refer="PKEquipment">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                    <xs:element name="destination" type="core:guid" minOccurs="1" maxOccurs="unbounded">
+                        <xs:keyref name="FKDestinationEquip" refer="PKEquipment">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:simpleType name="OperationalAttributeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PAP02_BASELOAD" />
+            <xs:enumeration value="PAP02_HIGHLOAD" />
+            <xs:enumeration value="RELIABILITY" />
+            <xs:enumeration value="APPLICATION_LATENCY" />
+            <xs:enumeration value="WHEN" />
+            <xs:enumeration value="DURABILITY" />
+            <xs:enumeration value="HOW_OFTEN" />
+            <xs:enumeration value="CAN_UNICAST" />
+            <xs:enumeration value="CAN_MULTICAST" />
+            <xs:enumeration value="CAN_ANYCAST" />
+            <xs:enumeration value="CAN_BROADCAST" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PayloadAttributeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CIA_RISK_VALUE" />
+            <xs:enumeration value="INTEGRITY" />
+            <xs:enumeration value="NISTIR_7628_LOGICAL_INTERFACE_CATEGORIES" />
+            <xs:enumeration value="AVAILABIITY" />
+            <xs:enumeration value="CONFIDENTIALITY" />
+            <xs:enumeration value="TYPE" />
+            <xs:enumeration value="STATIC_PAYLOAD_SIZE" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="OperationalAttribute">
+        <xs:attribute name="Type" type="OperationalAttributeType" use="required" />
+        <xs:attribute name="Value" type="xs:anySimpleType" use="required" />
+    </xs:complexType>
+    <xs:complexType name="PayloadAttribute">
+        <xs:attribute name="Type" type="PayloadAttributeType" use="required" />
+        <xs:attribute name="Value" type="xs:anySimpleType" use="required" />
+    </xs:complexType>
+    <xs:complexType name="Payload">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="Attributes" type="PayloadAttribute" minOccurs="1" maxOccurs="unbounded" />
+                    <xs:element name="data" type="core:guid">
+                        <xs:keyref name="FKPayloadData" refer="PKDataElement">
+                            <xs:selector xpath="." />
+                            <xs:field xpath="." />
+                        </xs:keyref>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="Description" type="xs:string" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="GridCommunicationPath">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="equip_node" minOccurs="1" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="req" type="core:guid" minOccurs="0" maxOccurs="unbounded">
+                                    <xs:keyref name="FKPathRequirements" refer="PKCommunicationsSystemRequirement">
+                                        <xs:selector xpath="." />
+                                        <xs:field xpath="." />
+                                    </xs:keyref>
+                                </xs:element>
+                                <xs:element name="equip" type="core:guid" minOccurs="1">
+                                    <xs:keyref name="FKPathEquip" refer="PKEquipment">
+                                        <xs:selector xpath="." />
+                                        <xs:field xpath="." />
+                                    </xs:keyref>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="Description" type="xs:string" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="CommunicationSystemRequirement">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:attribute name="Description" type="xs:string" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="GDTAF">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="GridUseCaseScenarioRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="GridUseCaseScenario" type="GridUseCaseScenario" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ApplicationScenarioRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="ApplicationScenario" type="ApplicationScenario" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="OperationalObjectiveRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="OperationalObjective" type="OperationalObjective" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="PayloadRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Payload" type="Payload" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="GridCommunicationPathRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="GridCommunicationPath" type="GridCommunicationPath" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="RequirementRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="CommunicationSystemRequirement" type="CommunicationSystemRequirement" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="EquipmentRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Equipment" type="core:Equipment" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="DataElementRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="DataElement" type="core:DataElement" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:key name="PKApplicationScenario">
+            <xs:selector xpath="ApplicationScenarioRepo/ApplicationScenario" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKOperationalObjective">
+            <xs:selector xpath="OperationalObjectiveRepo/OperationalObjective" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKPayload">
+            <xs:selector xpath="PayloadRepo/Payload" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKGridCommunicationPath">
+            <xs:selector xpath="GridCommunicationPathRepo/GridCommunicationPath" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKCommunicationsSystemRequirement">
+            <xs:selector xpath="RequirementRepo/CommunicationSystemRequirement" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKEquipment">
+            <xs:selector xpath="EquipmentRepo/Equipment" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKDataElement">
+            <xs:selector xpath="DataElementRepo/DataElement" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+    </xs:element>
+</xs:schema>
