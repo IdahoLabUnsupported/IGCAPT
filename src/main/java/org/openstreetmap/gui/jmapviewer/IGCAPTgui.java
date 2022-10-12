@@ -117,13 +117,21 @@ import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.Heatmap;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -138,6 +146,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -1797,9 +1806,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             sb.append("\n");
             
             for (SgNodeInterface graphNode : graphNodes) {
-                if (graphNode instanceof SgNode) {
+                if (graphNode instanceof SgNode sgNode) {
 
-                    SgNode sgNode = (SgNode) graphNode;
                     sb.append(sgNode.getId());
                     sb.append(",");
                     sb.append(sgNode.getName());
@@ -1927,10 +1935,39 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         writeGraphToCSV(selectedSaveFile);
     }
     
+    private void importGdtafFile(String fileToImport){
+        
+        if (fileToImport != null && !fileToImport.isEmpty() && !fileToImport.isBlank()) {
+            
+            try {
+                
+                File currentFile = new File(fileToImport);
+                try {
+                    setLastPath(currentFile.getCanonicalPath());
+                } catch (IOException ex) {
+                    setLastPath("");
+                }
+                
+//                SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//                Schema schema = sf.newSchema(new File("E:\\dev\\IGCAPT\\src\\main\\xsd\\grid-use-case-scenario-master\\gdtaf-gucs.xsd"));
+                
+                JAXBContext jaxbContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.GDTAF.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+//                jaxbUnmarshaller.setSchema(schema);
+                var gdtaf = (gov.inl.igcapt.gdtaf.GDTAF)jaxbUnmarshaller.unmarshal(currentFile);
+                
+                var scenarioRepo = gdtaf.getApplicationScenarioRepo();
+                
+            } catch (JAXBException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+    
     private void importFile(JFileChooser chooser) {
         String selectedOpenFile = chooser.getSelectedFile().toString();
         
-        
+        importGdtafFile(selectedOpenFile);
     }
     
     private void setUtilization(List<double[]> utilList) {
