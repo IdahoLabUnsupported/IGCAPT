@@ -122,6 +122,8 @@ import java.io.FileReader;
 import java.util.Collections;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -131,6 +133,7 @@ import org.openstreetmap.gui.jmapviewer.interfaces.TileLoader;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -852,12 +855,14 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem newTopology = new JMenuItem("New Topology");
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
+        JMenuItem importData = new JMenuItem("Import...");
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
         fileMenu.add(new JSeparator()); // SEPARATOR
+        fileMenu.add(importData);
         fileMenu.add(exportData);
         fileMenu.add(new JSeparator());
         fileMenu.add(exitItem);
@@ -940,6 +945,20 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
                 SwingUtilities.invokeLater(() -> {
                     exportFile(chooser);
+                });
+            }
+        });
+        
+        importData.addActionListener((ActionEvent ev) -> {
+            JFileChooser chooser = new JFileChooser();
+            
+            if (!lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(getLastPath()));
+            }
+            
+            if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
+                SwingUtilities.invokeLater(() -> {
+                    importFile(chooser);
                 });
             }
         });
@@ -1895,7 +1914,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             // Output to console for testing
             //StreamResult consoleResult = new StreamResult(System.out);
             //transformer.transform(source, consoleResult);
-        } catch (Exception xmlWrite) {
+        } catch (ParserConfigurationException | TransformerException | DOMException xmlWrite) {
             xmlWrite.printStackTrace();
         }
 
@@ -1908,9 +1927,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         writeGraphToCSV(selectedSaveFile);
     }
     
+    private void importFile(JFileChooser chooser) {
+        String selectedOpenFile = chooser.getSelectedFile().toString();
+        
+        
+    }
+    
     private void setUtilization(List<double[]> utilList) {
         Graph expandedGraph = getOriginalGraph();
-        ArrayList<SgEdge> sgEdges = new ArrayList<SgEdge>(expandedGraph.getEdges());
+        ArrayList<SgEdge> sgEdges = new ArrayList<>(expandedGraph.getEdges());
 
         for (double[] element : utilList) {
 
