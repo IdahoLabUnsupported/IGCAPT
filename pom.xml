@@ -131,17 +131,17 @@
                                 <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\common-model-definition-main\gdtaf-core.xsd</xsd>
                                     <packagename>gov.inl.igcapt.gdtaf</packagename>
-                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>
+                                    <!--<bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>-->
                                 </xsdOption>
                                 <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\common-model-definition-main\gdtaf-model.xsd</xsd>
                                     <packagename>gov.inl.igcapt.gdtaf</packagename>
-                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>
+                                    <!--<bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>-->
                                 </xsdOption>
                                 <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\grid-use-case-scenario-master\gdtaf-gucs.xsd</xsd>
                                     <packagename>gov.inl.igcapt.gdtaf</packagename>
-                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>
+<!--                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>-->
                                </xsdOption>
                             </xsdOptions>
                         </configuration>
