@@ -33,7 +33,7 @@
 			<path_options>_7e07CcBF-2be3-4cdC-8aeE-6BFFaF7ABff1</path_options>
 		</GridUseCaseScenario>
 	</GridUseCaseScenarioRepo>
-	<ApplicationScenarioRepo xmlns="">
+	<ApplicationScenarioRepo>
 		<ApplicationScenario UUID="_1C9DCbcd-49bb-ecee-D59C-d70A3FdfcFB4" Name="Feeder Capacitor Bank is Closed into Load">
 			<Narrative>
 				In this scenario, feeder capacitor bank is commanded to close the circuit breaker of the capacitor onto the LV distribution network. This capacitor will provide capacitive reactive power and neutralize the inductive reactive power generated in the system due to inductive load. In this way, the power factor of the distribution network will improve.
@@ -120,7 +120,7 @@
 			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
 		</ApplicationScenario>
 	</ApplicationScenarioRepo>
-	<OperationalObjectiveRepo xmlns="">
+	<OperationalObjectiveRepo>
 		<OperationalObjective UUID="_d80b4acd-6e08-44e1-94b5-876f8a696b7e" Name="Cap Bank Close CMD">
 			<Attributes Type="WHEN" Value="24x7" />
 			<Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
@@ -162,7 +162,7 @@
 			<destination>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</destination>
 		</OperationalObjective>
 	</OperationalObjectiveRepo>
-	<PayloadRepo xmlns="">
+	<PayloadRepo>
 		<Payload UUID="_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D" Name="FeederCapBank_close_ack">
 			<Attributes Type="TYPE" Value="ack" />
 			<Attributes Type="DESCRIPTION" Value="Feeder Capacitor Bank has performed and sent a close operation acknowledgment." />
@@ -174,7 +174,7 @@
 			<data>_d0e11DAE-4c86-DEE9-BcbC-69E3BbBce872</data>
 		</Payload>
 	</PayloadRepo>
-	<GridCommunicationPathRepo xmlns="">
+	<GridCommunicationPathRepo>
 		<GridCommunicationPath UUID="_7e07CcBF-2be3-4cdC-8aeE-6BFFaF7ABff1" Name="string">
 			<equip_node>
 				<req>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</req>
@@ -185,11 +185,11 @@
 			</equip_node>
 		</GridCommunicationPath>
 	</GridCommunicationPathRepo>
-	<RequirementRepo xmlns="">
+	<RequirementRepo>
 		<CommunicationSystemRequirement UUID="_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe" Name="VVC-01" Description="Feeder Cap Bank shall be able to send Feeder Cap Bank close command ACK to DMS." />
 		<CommunicationSystemRequirement UUID="_5ad50a2e-08d2-474b-a91f-626a3118de21" Name="VVC-12" Description="DMS shall be able to send Feeder Cap Bank close command to Distr. SCADA FEP." />
 	</RequirementRepo>
-	<EquipmentRepo xmlns="">
+	<EquipmentRepo>
 		<Equipment UUID="_290774da-b287-4ffe-aaf5-962d346606cd" Name="Distribution Ops" Description="Distribution operational center." Type="Distribution">
 			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
 			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_BACK_OFFICE_LAN</PossibleZone>
@@ -508,7 +508,7 @@
 			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
 		</Equipment>
 	</EquipmentRepo>
-	<DataElementRepo xmlns="">
+	<DataElementRepo>
 		<DataElement UUID="_47cb68e8-81e3-49f6-9ae1-157cf6d6c730" Name="Pos (C)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
 			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_cc0b6a30-9805-432d-865b-584dadb80e13</SourceID>
 		</DataElement>

@@ -1948,13 +1948,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     setLastPath("");
                 }
                 
-//                SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-//                Schema schema = sf.newSchema(new File("E:\\dev\\IGCAPT\\src\\main\\xsd\\grid-use-case-scenario-master\\gdtaf-gucs.xsd"));
-                
-                JAXBContext jaxbContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.GDTAF.class);
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-//                jaxbUnmarshaller.setSchema(schema);
-                var gdtaf = (gov.inl.igcapt.gdtaf.GDTAF)jaxbUnmarshaller.unmarshal(currentFile);
+                JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.GDTAF.class);
+                Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
+                var gdtaf = (gov.inl.igcapt.gdtaf.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
                 
                 var scenarioRepo = gdtaf.getApplicationScenarioRepo();
                 
