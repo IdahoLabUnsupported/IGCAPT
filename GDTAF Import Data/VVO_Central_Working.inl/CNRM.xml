@@ -13,6 +13,7 @@
 			<children score="1.0">_557cd8be-771e-4020-95ab-bc2989691644</children>
 			<children score="1.0">_0e7a8abf-3844-4caa-a53b-3c6221f05528</children>
 			<equipment>_0da6d3fb-a544-4a75-9937-7a851025c72f</equipment>
+			<equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
 		</TopologyNode>
 		<TopologyNode Role="ROLE_ENDPOINT" UUID="_557cd8be-771e-4020-95ab-bc2989691644" Name="Mesh Node">
 			<originators>_171f6be3-cbf3-4a13-9db6-580fa1252dc3</originators>
@@ -31,10 +32,12 @@
 	<EquipmentRepo>
 		<Equipment Description="A mesh router from X-Corp." Type="Communication+Distribution" UUID="_0da6d3fb-a544-4a75-9937-7a851025c72f" Name="X-Corp Mesh Router">
 			<ns:ConstrainingAttribute Type="MAX_PEERS" Value="0" />
-			<ns:ConstrainingAttribute Type="MAX_CHILDREN" Value="16" />
+			<ns:ConstrainingAttribute Type="MAX_CHILDREN" Value="128" />
+			<ns:ConstrainingAttribute Type="MAX_MANAGED" Value="4000" />
 			<ns:ConstrainingAttribute Type="MAX_MESH_DEPTH" Value="32" />
-			<ns:ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value="FREESPACE { LOF=902.0, HIF=928.0, CTRF=915.0, BWF=26.0, TXDB=30.0, RXDB=0.0, FLRDB=-85.0 }"/>
-			<ns:PossibleRole>ROLE_ROUTER</ns:PossibleRole>
+			<ns:ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value='{ "freespace": { "lowmhz": 902.0, "himhz": 928.0, "centermhz": 915.0, "bandwidthmhz": 26.0, "txdb":30.0, "rxdb": 0.0, "floordb": -85.0 } }'/>
+			<ns:ConstrainingAttribute Type="LATENCY_CALCULATION" Value='{ "fixed": { "ms": 0.125 } }' />
+			<ns:PossibleRole>ROLE_TAKEOUT</ns:PossibleRole>
 			<ns:PossibleZone>ZONE_WAN</ns:PossibleZone>
 			<ns:PossibleZone>ZONE_FIELD</ns:PossibleZone>
 			<ns:PossibleZone>ZONE_SUBSTATION</ns:PossibleZone>
@@ -42,21 +45,30 @@
 			<ns:possible_children>_9410bcfa-0c75-47a6-97cb-2913741126b6</ns:possible_children>
 		</Equipment>
 		<Equipment Description="A mesh node from X-Corp." Type="Communication+Distribution" UUID="_656bd7d0-7ff9-4e5c-987c-782720ed783d" Name="X-Corp Mesh Node">
-			<ns:ConstrainingAttribute Type="MAX_PARENTS" Value="4" />
-			<ns:ConstrainingAttribute Type="MAX_PEERS" Value="16" />
-			<ns:ConstrainingAttribute Type="MAX_CHILDREN" Value="16" />
-			<ns:ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value="FREESPACE { LOF=902.0, HIF=928.0, CTRF=915.0, BWF=26.0, TXDB=30.0, RXDB=0.0, FLRDB=-85.0 }"/>
+			<ns:ConstrainingAttribute Type="MAX_PARENTS" Value="128" />
+			<ns:ConstrainingAttribute Type="MAX_PEERS" Value="128" />
+			<ns:ConstrainingAttribute Type="MAX_CHILDREN" Value="128" />
+			<ns:ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value='{ "freespace": { "lowmhz": 902.0, "himhz": 928.0, "centermhz": 915.0, "bandwidthmhz": 26.0, "txdb":30.0, "rxdb": 0.0, "floordb": -85.0 } }'/>
+			<ns:ConstrainingAttribute Type="LATENCY_CALCULATION" Value='{ "fixed": { "ms": 0.125 } }' />
 			<ns:PossibleRole>ROLE_ENDPOINT</ns:PossibleRole>
 			<ns:PossibleZone>ZONE_WAN</ns:PossibleZone>
 			<ns:PossibleZone>ZONE_SUBSTATION</ns:PossibleZone>
 			<ns:PossibleZone>ZONE_FIELD</ns:PossibleZone>
 			<ns:possible_parents>_0da6d3fb-a544-4a75-9937-7a851025c72f</ns:possible_parents>
 		</Equipment>
+		<Equipment Description="A cellular node from X-Corp." Type="Communication+Distribution" UUID="_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7" Name="X-Corp Cellular Node">
+			<ns:ConstrainingAttribute Type="MAX_MANAGED" Value="1" />
+			<ns:PossibleRole>ROLE_TAKEOUT</ns:PossibleRole>
+			<ns:PossibleZone>ZONE_WAN</ns:PossibleZone>
+			<ns:PossibleZone>ZONE_SUBSTATION</ns:PossibleZone>
+			<ns:PossibleZone>ZONE_FIELD</ns:PossibleZone>
+		</Equipment>
 		<Equipment Description="A mesh range extender from X-Corp." Type="Communication+Distribution" UUID="_9410bcfa-0c75-47a6-97cb-2913741126b6" Name="X-Corp Mesh Range Extender">
-			<ns:ConstrainingAttribute Type="MAX_PARENTS" Value="4" />
-			<ns:ConstrainingAttribute Type="MAX_PEERS" Value="16" />
-			<ns:ConstrainingAttribute Type="MAX_CHILDREN" Value="16" />
-			<ns:ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value="FREESPACE { LOF=902.0, HIF=928.0, CTRF=915.0, BWF=26.0, TXDB=30.0, RXDB=0.0, FLRDB=-85.0 }"/>
+			<ns:ConstrainingAttribute Type="MAX_PARENTS" Value="128" />
+			<ns:ConstrainingAttribute Type="MAX_PEERS" Value="128" />
+			<ns:ConstrainingAttribute Type="MAX_CHILDREN" Value="128" />
+			<ns:ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value='{ "freespace": { "lowmhz": 902.0, "himhz": 928.0, "centermhz": 915.0, "bandwidthmhz": 26.0, "txdb":30.0, "rxdb": 0.0, "floordb": -85.0 } }'/>
+			<ns:ConstrainingAttribute Type="LATENCY_CALCULATION" Value='{ "fixed": { "ms": 0.125 } }' />
 			<ns:PossibleRole>ROLE_REPEATER</ns:PossibleRole>
 			<ns:PossibleZone>ZONE_WAN</ns:PossibleZone>
 			<ns:PossibleZone>ZONE_FIELD</ns:PossibleZone>

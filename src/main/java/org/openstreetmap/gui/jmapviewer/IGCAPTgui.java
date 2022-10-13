@@ -1948,9 +1948,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     setLastPath("");
                 }
                 
-                JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.GDTAF.class);
+                JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.gucs.GDTAF.class);
                 Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
-                var gdtaf = (gov.inl.igcapt.gdtaf.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
+                var gdtaf = (gov.inl.igcapt.gdtaf.gucs.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
                 
                 var scenarioRepo = gdtaf.getApplicationScenarioRepo();
                 
