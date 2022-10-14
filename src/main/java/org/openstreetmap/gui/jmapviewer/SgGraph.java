@@ -96,19 +96,23 @@ public class SgGraph extends UndirectedSparseMultigraph<SgNodeInterface, SgEdge>
         updateLayeredIcon();
         return _icon;
     }
-    
+   
+    @Override
     public double getLat() {
         return _refNode.getLat();
     }
 
+    @Override
     public void setLat(double lat) {
         _refNode.setLat(lat);
     }
 
+    @Override
     public double getLongit() {
         return _refNode.getLongit();
     }
 
+    @Override
     public void setLongit(double longit) {
         _refNode.setLongit(longit);
     }

@@ -864,14 +864,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem newTopology = new JMenuItem("New Topology");
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
-        JMenuItem importData = new JMenuItem("Import...");
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
         fileMenu.add(new JSeparator()); // SEPARATOR
-        fileMenu.add(importData);
+        fileMenu.add(new AddImportMenuItem(null));
         fileMenu.add(exportData);
         fileMenu.add(new JSeparator());
         fileMenu.add(exitItem);
@@ -957,20 +956,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 });
             }
         });
-        
-        importData.addActionListener((ActionEvent ev) -> {
-            JFileChooser chooser = new JFileChooser();
-            
-            if (!lastPath.isEmpty()) {
-                chooser.setCurrentDirectory(new File(getLastPath()));
-            }
-            
-            if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                SwingUtilities.invokeLater(() -> {
-                    importFile(chooser);
-                });
-            }
-        });
+
         modeMenu = graphMouse.getModeMenu();  // obtain mode menu from the mouse
         modeMenu.setText("Mouse Mode");
         modeMenu.setIcon(null); // using this in a main menu
@@ -1934,38 +1920,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         writeGraphToCSV(selectedSaveFile);
     }
-    
-    private void importGdtafFile(String fileToImport){
         
-        if (fileToImport != null && !fileToImport.isEmpty() && !fileToImport.isBlank()) {
-            
-            try {
-                
-                File currentFile = new File(fileToImport);
-                try {
-                    setLastPath(currentFile.getCanonicalPath());
-                } catch (IOException ex) {
-                    setLastPath("");
-                }
-                
-                JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.gucs.GDTAF.class);
-                Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
-                var gdtaf = (gov.inl.igcapt.gdtaf.gucs.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
-                
-                var scenarioRepo = gdtaf.getApplicationScenarioRepo();
-                
-            } catch (JAXBException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-    }
-    
-    private void importFile(JFileChooser chooser) {
-        String selectedOpenFile = chooser.getSelectedFile().toString();
-        
-        importGdtafFile(selectedOpenFile);
-    }
-    
     private void setUtilization(List<double[]> utilList) {
         Graph expandedGraph = getOriginalGraph();
         ArrayList<SgEdge> sgEdges = new ArrayList<>(expandedGraph.getEdges());

@@ -9,8 +9,6 @@ import edu.uci.ics.jung.visualization.LayeredIcon;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
-import org.openstreetmap.gui.jmapviewer.SgNodeInterface;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
