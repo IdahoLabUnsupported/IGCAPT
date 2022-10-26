@@ -38,11 +38,15 @@ public class Heatmap {
     private KernelFunction kernelFunction;
     private double gridSize;
     private double kernelRadius;
+    private float startColor;
+    private float endColor;
     
-    public Heatmap(double gridSize, KernelTypes kernelType, double kernelRadius) {
+    public Heatmap(double gridSize, KernelTypes kernelType, double kernelRadius, float startColor, float endColor) {
         
         this.gridSize = gridSize;
         this.kernelRadius = kernelRadius;
+        this.startColor = startColor;
+        this.endColor = endColor;
         
         switch(kernelType){
             case Uniform -> {
@@ -113,9 +117,20 @@ public class Heatmap {
     private void DrawPolygon(JMapViewer map, Coordinate pt1, Coordinate pt2, Coordinate pt3, Coordinate pt4, float intensity) {
         MapPolygonImpl polygon = new MapPolygonImpl(pt1, pt2, pt3, pt4, pt1);
         polygon.setColor(new Color(0, 0, 0, 0));
-        if (intensity > 1.0f) intensity = 1.0f;
+        if (intensity > 1.0f) {
+            intensity = 1.0f;
+        }
         
-        int rgb = Color.HSBtoRGB(0.666667f + 0.333333f*intensity, intensity, 1.0f) & 0x00FFFFFF;
+        int rgb;
+        float inverseIntensity = 1 - intensity;
+        if (startColor > endColor) {
+            // running the rainbow backwards
+            rgb = Color.HSBtoRGB((startColor * intensity) - (1-endColor * inverseIntensity), intensity, 1.0f) & 0x00FFFFFF;           
+
+        }
+        else {
+            rgb = Color.HSBtoRGB((startColor * intensity) + (endColor * inverseIntensity), intensity, 1.0f) & 0x00FFFFFF;
+        }
         
         int alphaColor = (191 << 24) & 0xFF000000;
         if (intensity < 0.1f){
@@ -126,7 +141,6 @@ public class Heatmap {
         var polyColor = new Color(color, true);
         
         polygon.setBackColor(polyColor);
-        
         map.addMapPolygon(polygon);
     }
     
