@@ -1,6 +1,7 @@
 package gov.inl.igcapt.components;
 
 import java.awt.Color;
+import javax.swing.JOptionPane;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import org.openstreetmap.gui.jmapviewer.IGCAPTproperties;
 
@@ -109,8 +110,8 @@ public class HeatMapDialog extends javax.swing.JDialog {
     //
     private void doGenerate() {
         if (jTextField1.getToolTipText() == null || jTextField2.getToolTipText() == null) {
-            //Put up an error telling user to pick color
-            System.out.println("Must select start and end colors");
+            //Put up message telling user to pick color
+            JOptionPane.showMessageDialog(this, "Start and End Colors must be selected!");
             return;
         }
         IGCAPTgui igcaptGui = (IGCAPTgui)parent;
