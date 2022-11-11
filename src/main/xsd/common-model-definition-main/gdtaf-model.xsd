@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:core="http://pnnl.gov/gdtaf-core" xmlns="http://pnnl.gov/gdtaf-model" 
+		   attributeFormDefault="unqualified" elementFormDefault="unqualified" 
+		   targetNamespace="http://pnnl.gov/gdtaf-model" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:import schemaLocation="./gdtaf-core.xsd" namespace="http://pnnl.gov/gdtaf-core" />
+	<xs:complexType name="Asset">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="SourceID" type="xs:string" minOccurs="0" />
+					<xs:element name="ConstrainingAttribute" type="core:ConstrainingAttribute" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="AtLocation" type="core:GeoLocation" />
+					<xs:element name="EndLocation" type="core:GeoLocation" minOccurs="0" maxOccurs="1" />
+					<xs:element name="EquipmentZone" type="core:CommunicationZone" />
+					<xs:element name="EquipmentRole" type="core:EquipmentRole" />
+					<xs:element name="connected_parents" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="connected_children" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="connected_peers" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="data" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="equipment" type="core:guid" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TopologyNode">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="OverridenAttributes" type="core:ConstrainingAttribute" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="layout" type="core:guid" minOccurs="0" />
+					<xs:element name="originators" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="parents" minOccurs="0" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="core:guid">
+									<xs:attribute name="score" type="core:LinkScore" use="required" />
+								</xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="peers" minOccurs="0" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="core:guid">
+									<xs:attribute name="score" type="core:LinkScore" use="required" />
+								</xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="children" minOccurs="0" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:simpleContent>
+								<xs:extension base="core:guid">
+									<xs:attribute name="score" type="core:LinkScore" use="required" />
+								</xs:extension>
+							</xs:simpleContent>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="equipment" type="core:guid" minOccurs="0" maxOccurs="unbounded">
+						<xs:keyref name="FKChildEquip" refer="PKEquipment">
+							<xs:selector xpath="EquipmentRepo/Equipment" />
+							<xs:field xpath="@UUID" />
+						</xs:keyref>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="Zone" type="core:CommunicationZone" />
+				<xs:attribute name="Role" type="core:EquipmentRole" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TopologyLayoutEngine">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CNRM">
+		<xs:complexContent>
+			<xs:extension base="TopologyNode">
+				<xs:attribute name="ObjectiveFunction" type="xs:anySimpleType" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GridUseCaseScenario">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="Overview" type="xs:string" />
+					<xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
+					<xs:element name="Review" minOccurs="0" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:all />
+							<xs:attribute name="Reviewer" type="xs:string" use="required" />
+							<xs:attribute name="Date" type="xs:dateTime" />
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="app_scenarios" type="core:guid" minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="payloads" type="core:guid" minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="reqs" type="core:guid" minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="path_options" type="core:guid" minOccurs="1" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="MaximumLinkScore" type="core:LinkScore" />
+				<xs:attribute name="Approved" default="Not_Approved" type="ApprovedState" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="ApprovedState">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Approved" />
+			<xs:enumeration value="Not_Approved" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ApplicationScenario">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="Narrative" type="xs:anyType" />
+					<xs:element name="objectives" type="core:guid" minOccurs="1" maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="OrderedObjectives" type="xs:boolean" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="OperationalObjective">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="Attributes" type="OperationalAttribute" minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="reqs" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+					<xs:element name="payload" type="core:guid" minOccurs="1" />
+					<xs:element name="source" type="core:guid" minOccurs="1" />
+					<xs:element name="destination" type="core:guid" minOccurs="1" maxOccurs="unbounded" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="OperationalAttributeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PAP02_BASELOAD" />
+			<xs:enumeration value="PAP02_HIGHLOAD" />
+			<xs:enumeration value="RELIABILITY" />
+			<xs:enumeration value="APPLICATION_LATENCY" />
+			<xs:enumeration value="WHEN" />
+			<xs:enumeration value="DURABILITY" />
+			<xs:enumeration value="HOW_OFTEN" />
+			<xs:enumeration value="CAN_UNICAST" />
+			<xs:enumeration value="CAN_MULTICAST" />
+			<xs:enumeration value="CAN_ANYCAST" />
+			<xs:enumeration value="CAN_BROADCAST" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PayloadAttributeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CIA_RISK_VALUE" />
+			<xs:enumeration value="INTEGRITY" />
+			<xs:enumeration value="NISTIR_7628_LOGICAL_INTERFACE_CATEGORIES" />
+			<xs:enumeration value="AVAILABIITY" />
+			<xs:enumeration value="CONFIDENTIALITY" />
+			<xs:enumeration value="TYPE" />
+			<xs:enumeration value="STATIC_PAYLOAD_SIZE" />
+			<xs:enumeration value="DESCRIPTION" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="OperationalAttribute">
+		<xs:attribute name="Type" type="OperationalAttributeType" use="required" />
+		<xs:attribute name="Value" type="xs:anySimpleType" use="required" />
+	</xs:complexType>
+	<xs:complexType name="PayloadAttribute">
+		<xs:attribute name="Type" type="PayloadAttributeType" use="required" />
+		<xs:attribute name="Value" type="xs:anySimpleType" use="required" />
+	</xs:complexType>
+	<xs:complexType name="Payload">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="Attributes" type="PayloadAttribute" minOccurs="1" maxOccurs="unbounded" />
+					<xs:element name="data" type="core:guid" />
+				</xs:sequence>
+				<xs:attribute name="Description" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GridCommunicationPath">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:sequence>
+					<xs:element name="equip_node" minOccurs="1" maxOccurs="unbounded">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="req" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+								<xs:element name="equip" type="core:guid" minOccurs="1" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="Description" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CommunicationSystemRequirement">
+		<xs:complexContent>
+			<xs:extension base="core:BaseBlock">
+				<xs:attribute name="Description" type="xs:string" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>	
+	<xs:element name="GDTAF">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AssetRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Asset" type="Asset" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueAsset">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="CNRMRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CNRM" type="CNRM" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="TopologyNode" type="TopologyNode" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueCNRM">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="GridUseCaseScenarioRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GridUseCaseScenario" type="GridUseCaseScenario" minOccurs="1" maxOccurs="unbounded">
+								<xs:keyref name="FKGUCSAS" refer="PKApplicationScenario">
+									<xs:selector xpath="app_scenarios" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKGUCSPay" refer="PKPayload">
+									<xs:selector xpath="payloads" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKGUCSReqs" refer="PKCommunicationsSystemRequirement">
+									<xs:selector xpath="reqs" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKGUCSPaths" refer="PKGridCommunicationPath">
+									<xs:selector xpath="path_options" />
+									<xs:field xpath="." />
+								</xs:keyref>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueGUCS">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="ApplicationScenarioRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ApplicationScenario" type="ApplicationScenario" minOccurs="1" maxOccurs="unbounded">
+								<xs:keyref name="FKASObjs" refer="PKOperationalObjective">
+									<xs:selector xpath="objectives" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:unique name="uniqueObjs">
+									<xs:selector xpath="objectives" />
+									<xs:field xpath="." />
+								</xs:unique>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueAS">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="OperationalObjectiveRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="OperationalObjective" type="OperationalObjective" minOccurs="1" maxOccurs="unbounded">
+								<xs:unique name="uniqueOOAttribute">
+									<xs:selector xpath="*" />
+									<xs:field xpath="@Type" />
+								</xs:unique>
+								<xs:keyref name="FKOOReqs" refer="PKCommunicationsSystemRequirement">
+									<xs:selector xpath="reqs" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKOOPay" refer="PKPayload">
+									<xs:selector xpath="payload" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKOOSrc" refer="PKEquipment">
+									<xs:selector xpath="source" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKOODest" refer="PKEquipment">
+									<xs:selector xpath="destination" />
+									<xs:field xpath="." />
+								</xs:keyref>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueOO">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="PayloadRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Payload" type="Payload" minOccurs="1" maxOccurs="unbounded">
+								<xs:unique name="uniquePayAttribute">
+									<xs:selector xpath="*" />
+									<xs:field xpath="@Type" />
+								</xs:unique>
+								<xs:keyref name="FKPayData" refer="PKDataElement">
+									<xs:selector xpath="data" />
+									<xs:field xpath="." />
+								</xs:keyref>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniquePayload">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="GridCommunicationPathRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GridCommunicationPath" type="GridCommunicationPath" minOccurs="1" maxOccurs="unbounded">
+								<xs:keyref name="FKGCPEquip" refer="PKEquipment">
+									<xs:selector xpath="equip_node/equip" />
+									<xs:field xpath="." />
+								</xs:keyref>
+								<xs:keyref name="FKGCPReq" refer="PKCommunicationsSystemRequirement">
+									<xs:selector xpath="equip_node/req" />
+									<xs:field xpath="." />
+								</xs:keyref>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueGCP">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="RequirementRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CommunicationSystemRequirement" type="CommunicationSystemRequirement" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueRequirement">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="EquipmentRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Equipment" type="core:Equipment" minOccurs="1" maxOccurs="unbounded">
+								<xs:unique name="uniqueRole">
+									<xs:selector xpath="core:PossibleRole" />
+									<xs:field xpath="." />
+								</xs:unique>
+								<xs:unique name="uniqueZone">
+									<xs:selector xpath="core:PossibleZone" />
+									<xs:field xpath="." />
+								</xs:unique>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueEquipment">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="DataElementRepo" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DataElement" type="core:DataElement" minOccurs="1" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+					<xs:unique name="uniqueDataElement">
+						<xs:selector xpath="*" />
+						<xs:field xpath="@UUID" />
+					</xs:unique>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:key name="PKAsset">
+			<xs:selector xpath="AssetRepo/Asset" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKCNRM">
+			<xs:selector xpath="CNRMRepo/CNRM" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKApplicationScenario">
+			<xs:selector xpath="ApplicationScenarioRepo/ApplicationScenario" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKOperationalObjective">
+			<xs:selector xpath="OperationalObjectiveRepo/OperationalObjective" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKPayload">
+			<xs:selector xpath="PayloadRepo/Payload" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKGridCommunicationPath">
+			<xs:selector xpath="GridCommunicationPathRepo/GridCommunicationPath" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKCommunicationsSystemRequirement">
+			<xs:selector xpath="RequirementRepo/CommunicationSystemRequirement" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKEquipment">
+			<xs:selector xpath="EquipmentRepo/Equipment" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+		<xs:key name="PKDataElement">
+			<xs:selector xpath="DataElementRepo/DataElement" />
+			<xs:field xpath="@UUID" />
+		</xs:key>
+	</xs:element>
+</xs:schema>

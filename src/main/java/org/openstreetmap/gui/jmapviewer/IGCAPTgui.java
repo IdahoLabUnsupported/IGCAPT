@@ -117,11 +117,21 @@ import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.Heatmap;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -131,10 +141,12 @@ import org.openstreetmap.gui.jmapviewer.interfaces.TileLoader;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -858,6 +870,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
         fileMenu.add(new JSeparator()); // SEPARATOR
+        fileMenu.add(new AddImportMenuItem(null));
         fileMenu.add(exportData);
         fileMenu.add(new JSeparator());
         fileMenu.add(exitItem);
@@ -943,6 +956,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 });
             }
         });
+
         modeMenu = graphMouse.getModeMenu();  // obtain mode menu from the mouse
         modeMenu.setText("Mouse Mode");
         modeMenu.setIcon(null); // using this in a main menu
@@ -1778,9 +1792,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             sb.append("\n");
             
             for (SgNodeInterface graphNode : graphNodes) {
-                if (graphNode instanceof SgNode) {
+                if (graphNode instanceof SgNode sgNode) {
 
-                    SgNode sgNode = (SgNode) graphNode;
                     sb.append(sgNode.getId());
                     sb.append(",");
                     sb.append(sgNode.getName());
@@ -1895,7 +1908,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             // Output to console for testing
             //StreamResult consoleResult = new StreamResult(System.out);
             //transformer.transform(source, consoleResult);
-        } catch (Exception xmlWrite) {
+        } catch (ParserConfigurationException | TransformerException | DOMException xmlWrite) {
             xmlWrite.printStackTrace();
         }
 
@@ -1907,10 +1920,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         writeGraphToCSV(selectedSaveFile);
     }
-    
+        
     private void setUtilization(List<double[]> utilList) {
         Graph expandedGraph = getOriginalGraph();
-        ArrayList<SgEdge> sgEdges = new ArrayList<SgEdge>(expandedGraph.getEdges());
+        ArrayList<SgEdge> sgEdges = new ArrayList<>(expandedGraph.getEdges());
 
         for (double[] element : utilList) {
 

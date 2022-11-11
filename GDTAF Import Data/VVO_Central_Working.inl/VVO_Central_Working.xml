@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GDTAF
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://pnnl.gov/gdtaf-gucs"
+	xsi:schemaLocation="http://pnnl.gov/gdtaf-model file://E:/dev/IGCAPT/src/main/xsd/common-model-definition-main/gdtaf-model.xsd"
+	xmlns:ns="http://pnnl.gov/gdtaf-core"
+	xmlns:model="http://pnnl.gov/gdtaf-model">
+	<GridUseCaseScenarioRepo>
+		<GridUseCaseScenario UUID="_f1ccFC2F-ec2F-e22D-Aac1-fbd5aEfFBAEb" Name="Integrated Volt/VAR Regulation in the Low Voltage (LV) Distribution Network with High Distributed Energy Resource (DER)" MaximumLinkScore="-1">
+			<Overview>
+				Integrated Volt/VAR Regulation in the distribution grid is supported through an Integrated Volt/VAR controller (IVVC) which is an integral part of distribution feeder and distribution operational SCADA. IVVC allows grid operators to closely monitor and control the voltage and power factor of the grid in a centralized or decentralized manner.  Also, the IVVC supports Volt/VAR Optimization (VVO), which increases the transmission efficiency of the existing grid by allowing grid operators to reduce transmission losses through VAR optimization. As we know, the extent of DER installations are expected to increase in the years to come. Thus, the need for voltage regulation in the LV distribution network will also increase. At the same time, more smart meters are installed at customer locations, providing more information to support voltage regulation. This use cases describe the voltage and power factor control functionality in LV distribution networks using integrated volt/VAR control strategies with high penetration DER.
+			</Overview>
+			<Description>
+				Normally, voltage control is essential for utility companies to ensure that the voltage being supplied to consumers is within an acceptable range. Any deviations from this acceptable range can damage the appliances and electric equipment of consumers. Also, utility companies use VAR regulation methods to ensure that the power factor ratio remains close to 1, meaning nearly all real power to avoid power factor penalties for customers. Maintaining the power factor near to 1, reduce power losses to utilities and increase transmission efficiency too.. Traditionally, the voltage profile and reactive power flow on a distribution feeder are controlled independently and by the transformer tap-changers (TPC), capacitor banks (CB), voltage regulators (VR), static synchronous compensators (STATCOM), static var compensators (SVC), and battery energy storage systems (BESS). Conventional VVC algorithms in the DMS or distribution remote terminal units (RTUs) are designed for controlling the on/off states of the capacitor banks at the feeder circuits and distribution substations, the substation transformer taps positions, and the voltage regulator taps at the feeder circuits, all in binary or discrete quantities. With the recent integration of microgrid and DER, the voltage and reactive power flow in the LV distribution network fluctuate more in term of faster and variance than before and require continuous adjustment within certain ranges. Sometimes, it was observed that adjusting VAR at one point/location can negatively impact the voltage level at a different point/location. This arrangement will introduce new challenges to VVC algorithms because they must handle mixed control variables, some in binary and others in continuous (adjustable) quantities. Additionally, the smart meters periodically send data every 15 minutes to warn of registered low/high voltages. This smart meter alarm/warn data can be useful for utilities when they want to regulate voltage profile and reactive power flow.
+				Integrated volt/VAR technologies and systems provide new capabilities for grid operations to automate voltage controls and reactive power management. IVVC uses a two-way communications network to coordinate the volt/VAR control actions amongst various control devices to regulate VAR without affecting the voltage. IVVC offers several benefits including higher visibility into system operating parameters, reduced emissions of greenhouse gases, and increased transmission efficiency.
+			</Description>
+			<app_scenarios>_1C9DCbcd-49bb-ecee-D59C-d70A3FdfcFB4</app_scenarios>
+			<app_scenarios>_c32e9d63-d767-4ac9-bc61-45b01134e204</app_scenarios>
+			<app_scenarios>_ab138e04-4bf7-4fde-9369-d93fa4a70aca</app_scenarios>
+			<app_scenarios>_3f82f60a-204c-4174-9699-0c241d5d5446</app_scenarios>
+			<app_scenarios>_300f4448-c24a-44fd-ae56-7ccd73a74b4d</app_scenarios>
+			<app_scenarios>_ef028ba2-f38a-435f-8787-f1f3221c3cc5</app_scenarios>
+			<app_scenarios>_4e832c52-91f6-4f50-8a5f-1ceb8f7da24b</app_scenarios>
+			<app_scenarios>_a70e037a-152c-4e36-a6d4-b8533161996b</app_scenarios>
+			<app_scenarios>_f6aa3340-fabb-482d-a6e0-3a2d529b561b</app_scenarios>
+			<app_scenarios>_9c3bfc90-d96e-4b34-b34e-f07607084ea1</app_scenarios>
+			<app_scenarios>_37372941-6859-4c29-b19e-b8b634b14577</app_scenarios>
+			<app_scenarios>_f2826c6c-493f-4ba6-92c6-db7848625335</app_scenarios>
+			<app_scenarios>_657a2653-a643-4c77-a79e-ad642d5651b6</app_scenarios>
+			<app_scenarios>_55cc8d7a-b1ed-4b1d-a0a7-4ec34256be71</app_scenarios>
+			<payloads>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payloads>
+			<reqs>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</reqs>
+			<path_options>_7e07CcBF-2be3-4cdC-8aeE-6BFFaF7ABff1</path_options>
+		</GridUseCaseScenario>
+	</GridUseCaseScenarioRepo>
+	<ApplicationScenarioRepo>
+		<ApplicationScenario UUID="_1C9DCbcd-49bb-ecee-D59C-d70A3FdfcFB4" Name="Feeder Capacitor Bank is Closed into Load">
+			<Narrative>
+				In this scenario, feeder capacitor bank is commanded to close the circuit breaker of the capacitor onto the LV distribution network. This capacitor will provide capacitive reactive power and neutralize the inductive reactive power generated in the system due to inductive load. In this way, the power factor of the distribution network will improve.
+			</Narrative>
+			<objectives>_d80b4acd-6e08-44e1-94b5-876f8a696b7e</objectives>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_c32e9d63-d767-4ac9-bc61-45b01134e204" Name="Feeder Capacitor Bank is Opened out of Load">
+			<Narrative>
+				In this scenario, feeder capacitor bank is commanded to open the circuit breaker of the capacitor from the LV distribution network. This reduces the capacitive reactive power and thus reduces the power factor.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_ab138e04-4bf7-4fde-9369-d93fa4a70aca" Name="Feeder Capacitor Bank Configuration">
+			<Narrative>
+				In this scenario, feeder capacitor bank is commanded to configure its setting. Noted that capacitor banks are designed with many configurations to meet system design constraints. How much VAR should the capacitor bank supported is determined through the bank configuration.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_3f82f60a-204c-4174-9699-0c241d5d5446" Name="Feeder Regulator Configuration">
+			<Narrative>
+				In this scenario, feeder regulator is commanded to configure its solid-state voltage-sensing circuit (VSC) setting. This new configuration maintains the fixed output voltage, irrespective of changes to the input voltage or load conditions.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_300f4448-c24a-44fd-ae56-7ccd73a74b4d" Name="Feeder Regulator Step-Down Command">
+			<Narrative>
+				In this scenario, feeder regulator is commanded to step down its VSC setting to lower the LV distribution network voltage. This step-down command is issued when the grid voltage exceeds nominal voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_ef028ba2-f38a-435f-8787-f1f3221c3cc5" Name="Feeder Regulator Step-Up Command">
+			<Narrative>
+				In this scenario, feeder regulator is commanded to step up its VSC setting to higher the LV distribution network voltage. This step-up command is issued when the grid voltage is lower than the nominal voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_4e832c52-91f6-4f50-8a5f-1ceb8f7da24b" Name="Feeder Sensor Configuration">
+			<Narrative>
+				In this scenario, feeder regulator is commanded to step up its VSC setting to higher the LV distribution network voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_a70e037a-152c-4e36-a6d4-b8533161996b" Name="Feeder Switch is Commanded to Close">
+			<Narrative>
+				In this scenario, feeder switch is commanded to close its circuit breaker to maintain the grid voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_f6aa3340-fabb-482d-a6e0-3a2d529b561b" Name="Feeder Switch is Commanded to Open">
+			<Narrative>
+				In this scenario, feeder switch is commanded to open its circuit breaker to maintain the grid voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_9c3bfc90-d96e-4b34-b34e-f07607084ea1" Name="Feeder Switch Configuration">
+			<Narrative>
+				Feeder Switch have multiple switching operations. In this scenario, feeder switch is commanded to change its operation setting based on the LV distribution network voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_37372941-6859-4c29-b19e-b8b634b14577" Name="Feeder Recloser Configuration">
+			<Narrative>
+				Just like feeder switch, feeder reclosure also have multiple operations to set the grid isolator in its position.  This isolator isolates the faulty section of the substation and maintains grid voltage. In this scenario, the feeder recloser is commanded to configure its isolator setting to maintain grid voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_f2826c6c-493f-4ba6-92c6-db7848625335" Name="Distributed Customer Storage">
+			<Narrative>
+				In this scenario, the distribution automation controller (DAC) sends the dispatch command to Dist.Cust storage for supporting voltage.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_657a2653-a643-4c77-a79e-ad642d5651b6" Name="Initiate Distribution Customer Generation">
+			<Narrative>
+				In this scenario, the distribution automation controller (DAC) sends an initiation command to Dist.Cust generation when voltage support is required.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+		<ApplicationScenario UUID="_55cc8d7a-b1ed-4b1d-a0a7-4ec34256be71" Name="Smart Meters Warn of Registered Low/High Voltage">
+			<Narrative>
+				Smart meters periodically send data every 15 minutes to warn of registered low/high voltages. If DMS identifies a voltage waring from the customer side, it will take action based on the available resource.
+			</Narrative>
+			<objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+		</ApplicationScenario>
+	</ApplicationScenarioRepo>
+	<OperationalObjectiveRepo>
+		<OperationalObjective UUID="_d80b4acd-6e08-44e1-94b5-876f8a696b7e" Name="Cap Bank Close CMD">
+			<Attributes Type="WHEN" Value="24x7" />
+			<Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
+			<Attributes Type="RELIABILITY" Value="gt 99.5%" />
+			<Attributes Type="APPLICATION_LATENCY" Value="lt 1s" />
+			<reqs>_5ad50a2e-08d2-474b-a91f-626a3118de21</reqs>
+			<payload>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payload>
+			<source>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</source>
+			<destination>_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</destination>
+		</OperationalObjective>
+		<OperationalObjective UUID="_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF" Name="Cap Bank Close ACK">
+			<Attributes Type="WHEN" Value="24x7" />
+			<Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
+			<Attributes Type="RELIABILITY" Value="gt 99.5%" />
+			<Attributes Type="APPLICATION_LATENCY" Value="lt 5s" />
+			<reqs>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</reqs>
+			<payload>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payload>
+			<source>_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</source>
+			<destination>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</destination>
+		</OperationalObjective>
+		<OperationalObjective UUID="_25627547-8811-4056-829c-36ffc2351557" Name="Cap Bank Open CMD">
+			<Attributes Type="WHEN" Value="24x7" />
+			<Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
+			<Attributes Type="RELIABILITY" Value="gt 99.5%" />
+			<Attributes Type="APPLICATION_LATENCY" Value="lt 1s" />
+			<reqs>_5ad50a2e-08d2-474b-a91f-626a3118de21</reqs>
+			<payload>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payload>
+			<source>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</source>
+			<destination>_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</destination>
+		</OperationalObjective>
+		<OperationalObjective UUID="_0e2c72f1-e036-4c5a-a931-015386e6c3d5" Name="Cap Bank Open ACK">
+			<Attributes Type="WHEN" Value="24x7" />
+			<Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
+			<Attributes Type="RELIABILITY" Value="gt 99.5%" />
+			<Attributes Type="APPLICATION_LATENCY" Value="lt 5s" />
+			<reqs>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</reqs>
+			<payload>_a7499edc-4edf-44ea-9339-57205c450a06</payload>
+			<source>_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</source>
+			<destination>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</destination>
+		</OperationalObjective>
+	</OperationalObjectiveRepo>
+	<PayloadRepo>
+		<Payload UUID="_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D" Name="FeederCapBank_close_ack">
+			<Attributes Type="TYPE" Value="ack" />
+			<Attributes Type="DESCRIPTION" Value="Feeder Capacitor Bank has performed and sent a close operation acknowledgment." />
+			<data>_d0e11DAE-4c86-DEE9-BcbC-69E3BbBce872</data>
+		</Payload>
+		<Payload UUID="_a7499edc-4edf-44ea-9339-57205c450a06" Name="FeederCapBank_open_ack">
+			<Attributes Type="TYPE" Value="ack" />
+			<Attributes Type="DESCRIPTION" Value="Feeder Capacitor Bank has performed and sent an open operation acknowledgment." />
+			<data>_d0e11DAE-4c86-DEE9-BcbC-69E3BbBce872</data>
+		</Payload>
+	</PayloadRepo>
+	<GridCommunicationPathRepo>
+		<GridCommunicationPath UUID="_7e07CcBF-2be3-4cdC-8aeE-6BFFaF7ABff1" Name="string">
+			<equip_node>
+				<req>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</req>
+				<equip>_C2cDDFFE-a7A0-DcE2-c953-37Ddf798fEbc</equip>
+			</equip_node>
+			<equip_node>
+				<equip>_C2cDDFFE-a7A0-DcE2-c953-37Ddf798fEbc</equip>
+			</equip_node>
+		</GridCommunicationPath>
+	</GridCommunicationPathRepo>
+	<RequirementRepo>
+		<CommunicationSystemRequirement UUID="_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe" Name="VVC-01" Description="Feeder Cap Bank shall be able to send Feeder Cap Bank close command ACK to DMS." />
+		<CommunicationSystemRequirement UUID="_5ad50a2e-08d2-474b-a91f-626a3118de21" Name="VVC-12" Description="DMS shall be able to send Feeder Cap Bank close command to Distr. SCADA FEP." />
+	</RequirementRepo>
+	<EquipmentRepo>
+		<Equipment UUID="_290774da-b287-4ffe-aaf5-962d346606cd" Name="Distribution Ops" Description="Distribution operational center." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_BACK_OFFICE_LAN</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_C2cDDFFE-a7A0-DcE2-c953-37Ddf798fEbc" Name="Distribution" Description="The distributors of electricity to and from customers. May also store and generate electricity." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_d87ba3a1-89fc-432d-be8f-98e6caa85134" Name="Customer" Description="s" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_NAN</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_11b6b961-3835-4f8e-9769-8d923b94cca8" Name="Utility" Description="s" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_3b750c05-8b89-43c9-95ec-6adea5030bb0" Name="AMI Network" Description="s" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_NAN</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_26d3e805-f119-4522-8a28-6f8eaebd7f23" Name="Wide Area Network" Description="s" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_8ac900bf-b674-420a-9504-6ab5770288d3" Name="Regulator" Description="These devices are deployed at critical points within the Distribution network to regulate voltage and providing system telemetry regarding the performance of the electric system." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_0c6683f8-9e4d-438b-92ea-560a1b1feb7c" Name="Capacitor Bank" Description="An Intelligent Electronic Device that provides electronic analog performance information, status, and fault information. In addition, the device can be remotely controlled to increase the voltage on a given segment of the Distribution network" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_741e911b-3c6e-4f96-ada6-d96fede10b47" Name="Field Sensor" Description="An Intelligent Electronic Device is an integrated microprocessor-based controller that provides electronic digital performance information, status, and fault information." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_f3156f4d-98e4-41f1-939d-47832b1cd354" Name="Distribution Customer Storage" Description="Distributed Customer Storage is a storage device sized to meet typical distribution substation circuit loads and is typically located at or near a distribution substation or in smaller capacities out in customer/premise neighborhoods." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_9808ad3f-297a-4aee-9fe2-14dd96e772ee" Name="Distribution Customer Generation" Description="Distributed Customer Generation is a generation source sized to meet typical distribution substation circuit loads and is typically located at or near a distribution substation." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_a4435071-1fc4-49f5-b1c7-2f852055c359" Name="RTU" Description="An RTU is a microprocessor-controlled electronic device that interfaces equipments between field device and SCADA. RTU transmit telemetry data and receiving control messages to control connected equipment. This device also supports PID, alarming, filtering, etc." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_54f79eab-d5e1-46eb-9bc8-f33e3a64f2fc" Name="Distributed Storage" Description="Storage co-located at the substation." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_4466ae77-cc95-4e9e-8e43-6a7040462ada" Name="Distributed Generation" Description="Generation co-located at the substation." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_b59960a2-1214-4f23-a198-b2e8df7703ef" Name="DAC-Ops" Description="Distribution Application Control system hosted in a Utilities Regional Operation Center to run a specific Distribution application." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_ddfcf34c-a510-456e-84bb-e01b3acaa7eb" Name="DAC-Sub" Description="Distribution Application Control system hosted in a Distribution Substation to run a specific Distribution application." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_b906ca18-be79-4429-af0d-b306d0d1a141" Name="Data Aggregation Point" Description="This is the Data Aggregation Point on the NAN. It is essentially the point of convergence for all communication between smart grid devices and utility back-office systems. In this specific use case, it captures the information from the 2-way meter, distributed customer storage, and distributed customer generation." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_aec18aa1-156f-4668-8b30-a457185cc361" Name="2-Way Meter" Description="A bi-directional communication device is used to measure electrical energy usage for residential use." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_41d6bd45-2ae6-419f-a86d-990f1ed6d684" Name="DMS" Description="Distribution Management System - A system that monitors, manages and controls the electric distribution system." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_0503b03e-1b5c-4bd8-9869-8a14731dbaea" Name="DERMS" Description="Distributed Energy Resources Management System - A system that monitors, manages and controls the DER located on the electric distribution system." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_c10146d4-ced7-4dec-8f6a-49a86e045755" Name="LMS" Description="Load management system - System that controls load by sending messages directly to the device (e.g., On/Off)." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_e1edc487-e609-453b-9f52-678b45e09662" Name="Distribution SCADA FEP" Description="This device serves as the primary conduit for issuing commands from DMS/SCADA and receiving information from field devices deployed within the Distribution network. FEP stands for Front End Processor." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_3b52c41d-567f-40f1-bc45-4f48e4abb7c8" Name="AMI Head-End" Description="The AMI head end is responsible for the operation and coordination of AMI system components. It represents the central nervous system of the AMI system." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_a1745b26-b48e-4d05-973c-d3ad0177fecb" Name="Operational Data Warehouse" Description="Utility’s Operational Data Warehouse." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_c3cef924-067a-47f2-b539-28787996582e" Name="IEC CIM Equipment" Description="A piece of equipment discovered during parsing of an IEC CIM RDF XML file." Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+		</Equipment>
+		<Equipment UUID="_016ce265-c513-4e1b-84f8-277fdaae37ae" Name="ACLineSegmentPhase" Description="ACLineSegmentPhase" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_95472996-475a-439a-9e39-a997a480c51f" Name="TransformerTank" Description="TransformerTank" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_22a36d23-d721-48fb-ae88-c950bfb64386" Name="PowerElectronicsConnectionPhase" Description="PowerElectronicsConnectionPhase" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_24024819-da32-48ec-81f5-d8b24bd2f169" Name="ACLineSegment" Description="ACLineSegment" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONDUCTOR</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_741e911b-3c6e-4f96-ada6-d96fede10b47</derived_from>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_d2997e81-6cf2-4544-bfc3-ab63fa7492d1</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_84fcb7ec-d778-4869-b213-64face84c7fd</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_116a15b2-8a6e-4a12-825d-32f2df225891</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e51d7244-a770-4c52-85e1-c5373a422d68</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_cce9e383-2424-428f-a35e-f92b0c318541</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3dad4100-f044-4391-92ae-a382b7a28712</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5cb7117a-64c4-411b-b8e7-0e28dd1a975d</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_0304dbba-e9d4-44c2-b971-00abed1e3299</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e4e7c1bb-d0e4-4dc2-8b89-8290cadbd821</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3542985f-64d8-4b6c-bbc5-aab45c0227f9</available_data>
+		</Equipment>
+		<Equipment UUID="_a2f923ac-cfda-418c-9afb-9a85c2d74a5a" Name="PowerTransformer" Description="PowerTransformer" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_78342c11-4c5c-46a0-97bb-a3d624409337</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_4b989046-da6e-4a47-a677-a2ec54f5d7b6</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e4e7c1bb-d0e4-4dc2-8b89-8290cadbd821</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_0304dbba-e9d4-44c2-b971-00abed1e3299</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_84fcb7ec-d778-4869-b213-64face84c7fd</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_d2997e81-6cf2-4544-bfc3-ab63fa7492d1</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5cb7117a-64c4-411b-b8e7-0e28dd1a975d</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3542985f-64d8-4b6c-bbc5-aab45c0227f9</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_bf52bbcf-1d1b-4fac-9b43-89c4cbdb5394</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_29e4d490-9399-4e29-b687-9186d6b9a345</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_47cb68e8-81e3-49f6-9ae1-157cf6d6c730</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5f6a67b0-85c2-436c-b58a-04bb91a85345</available_data>
+		</Equipment>
+		<Equipment UUID="_8485f9a0-940d-42fd-b777-4b6448fc9035" Name="EnergyConsumer" Description="EnergyConsumer" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e51d7244-a770-4c52-85e1-c5373a422d68</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3dad4100-f044-4391-92ae-a382b7a28712</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_116a15b2-8a6e-4a12-825d-32f2df225891</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_cce9e383-2424-428f-a35e-f92b0c318541</available_data>
+		</Equipment>
+		<Equipment UUID="_cac5e85e-c57c-4356-87a7-68953f2fef23" Name="EnergyConsumerPhase" Description="EnergyConsumerPhase" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_9c043af6-2db0-42bb-aa2d-1f9708cec66c" Name="PhotovoltaicUnit" Description="PhotovoltaicUnit" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_30136fc2-846c-4a83-b24b-36f29367a79e" Name="PowerElectronicsConnection" Description="PowerElectronicsConnection" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_cce9e383-2424-428f-a35e-f92b0c318541</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3dad4100-f044-4391-92ae-a382b7a28712</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e51d7244-a770-4c52-85e1-c5373a422d68</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_116a15b2-8a6e-4a12-825d-32f2df225891</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_0304dbba-e9d4-44c2-b971-00abed1e3299</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_84fcb7ec-d778-4869-b213-64face84c7fd</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_d2997e81-6cf2-4544-bfc3-ab63fa7492d1</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5cb7117a-64c4-411b-b8e7-0e28dd1a975d</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3542985f-64d8-4b6c-bbc5-aab45c0227f9</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_afe01c6b-7128-425d-9ceb-b5a3431a24bb</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e4e7c1bb-d0e4-4dc2-8b89-8290cadbd821</available_data>
+		</Equipment>
+		<Equipment UUID="_a541cac4-19c2-45ec-ad34-22ead7ae33b4" Name="LoadBreakSwitch" Description="LoadBreakSwitch" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_47cb68e8-81e3-49f6-9ae1-157cf6d6c730</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_bf52bbcf-1d1b-4fac-9b43-89c4cbdb5394</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_78342c11-4c5c-46a0-97bb-a3d624409337</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_7eb6bbdf-40b9-45b7-8847-e047d11300eb</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3542985f-64d8-4b6c-bbc5-aab45c0227f9</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5cb7117a-64c4-411b-b8e7-0e28dd1a975d</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_d2997e81-6cf2-4544-bfc3-ab63fa7492d1</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_243fdac1-e538-4c90-89b8-ee335cd5141c</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_c44b17ff-bc1a-425b-91bd-99fa3d89ac1a</available_data>
+		</Equipment>
+		<Equipment UUID="_07cb98be-1c03-4192-a84f-0c777afd78a9" Name="SwitchPhase" Description="SwitchPhase" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_7d3ad49f-56f3-4adf-937b-2e53a17584d6" Name="LinearShuntCompensatorPhase" Description="LinearShuntCompensatorPhase" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_53d10602-9e81-42e7-aadb-1319c8504cd9" Name="RatioTapChanger" Description="RatioTapChanger" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_d6f86e48-3a66-4ca6-af77-3aa3fc59a45c" Name="TapChangerControl" Description="TapChangerControl" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_e98ed581-e23a-487c-a86c-656ec6f495f3" Name="SynchronousMachine" Description="SynchronousMachine" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_d2997e81-6cf2-4544-bfc3-ab63fa7492d1</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3542985f-64d8-4b6c-bbc5-aab45c0227f9</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_84fcb7ec-d778-4869-b213-64face84c7fd</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_0304dbba-e9d4-44c2-b971-00abed1e3299</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e4e7c1bb-d0e4-4dc2-8b89-8290cadbd821</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5cb7117a-64c4-411b-b8e7-0e28dd1a975d</available_data>
+		</Equipment>
+		<Equipment UUID="_3175d8b6-d5ec-4039-aea2-250bb8c04523" Name="RegulatingControl" Description="RegulatingControl" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_347c7437-9cb4-434b-b72d-47d20d857d9a" Name="BatteryUnit" Description="BatteryUnit" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_7aefa1fe-ab41-4851-b7e9-1ae741ab9586" Name="LinearShuntCompensator" Description="LinearShuntCompensator" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_47cb68e8-81e3-49f6-9ae1-157cf6d6c730</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5cb7117a-64c4-411b-b8e7-0e28dd1a975d</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_0304dbba-e9d4-44c2-b971-00abed1e3299</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_f4d2dddc-0bb2-4538-a18c-181d7f97ff7f</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_78342c11-4c5c-46a0-97bb-a3d624409337</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_84fcb7ec-d778-4869-b213-64face84c7fd</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_d2997e81-6cf2-4544-bfc3-ab63fa7492d1</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_405cfb16-423b-4ba7-b48e-37cf70f6924b</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_bf52bbcf-1d1b-4fac-9b43-89c4cbdb5394</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_e4e7c1bb-d0e4-4dc2-8b89-8290cadbd821</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_3542985f-64d8-4b6c-bbc5-aab45c0227f9</available_data>
+			<available_data xmlns="http://pnnl.gov/gdtaf-core">_5dfc53a1-3f84-4d5f-8f00-e670f2aad1a9</available_data>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</derived_from>
+		</Equipment>
+		<Equipment UUID="_0b35edf7-b05e-4d01-82d0-99385dee5a0f" Name="EnergySource" Description="EnergySource" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_b0b21e06-e1c2-4c0f-b2d9-687f97852338" Name="SeriesCompensator" Description="SeriesCompensator" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+		<Equipment UUID="_05e3950c-a100-42ae-98ac-8417f48ba61a" Name="Feeder" Description="Feeder" Type="Distribution">
+			<PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+			<PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+			<derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+		</Equipment>
+	</EquipmentRepo>
+	<DataElementRepo>
+		<DataElement UUID="_47cb68e8-81e3-49f6-9ae1-157cf6d6c730" Name="Pos (C)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_cc0b6a30-9805-432d-865b-584dadb80e13</SourceID>
+		</DataElement>
+		<DataElement UUID="_78342c11-4c5c-46a0-97bb-a3d624409337" Name="Pos (A)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_42ab596c-8690-40e2-a657-44d12ab8188d</SourceID>
+		</DataElement>
+		<DataElement UUID="_bf52bbcf-1d1b-4fac-9b43-89c4cbdb5394" Name="Pos (B)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_7d53b391-54e9-46a5-8a60-b610c8f8f49d</SourceID>
+		</DataElement>
+		<DataElement UUID="_3dad4100-f044-4391-92ae-a382b7a28712" Name="PNV (s2)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_83550af4-d1f1-4d1a-9b6a-5181ed282ad9</SourceID>
+		</DataElement>
+		<DataElement UUID="_cce9e383-2424-428f-a35e-f92b0c318541" Name="PNV (s1)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_388f7b19-eb9d-40d2-b2f8-1fde95fc326e</SourceID>
+		</DataElement>
+		<DataElement UUID="_0304dbba-e9d4-44c2-b971-00abed1e3299" Name="VA (C)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_7477dfca-106b-4b3f-8070-5c7d4d9bb6ec</SourceID>
+		</DataElement>
+		<DataElement UUID="_3542985f-64d8-4b6c-bbc5-aab45c0227f9" Name="PNV (B)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_d28ad432-faca-4ff3-9e13-e9e5f9413446</SourceID>
+		</DataElement>
+		<DataElement UUID="_5cb7117a-64c4-411b-b8e7-0e28dd1a975d" Name="PNV (C)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_bcb7d81c-95fc-4e8d-9c5b-9c5c34655104</SourceID>
+		</DataElement>
+		<DataElement UUID="_e51d7244-a770-4c52-85e1-c5373a422d68" Name="VA (s2)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_ea57060b-8568-4d39-8ad0-b742fd86222f</SourceID>
+		</DataElement>
+		<DataElement UUID="_116a15b2-8a6e-4a12-825d-32f2df225891" Name="VA (s1)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_af89246f-3de6-46c4-804a-25ed28b27009</SourceID>
+		</DataElement>
+		<DataElement UUID="_d2997e81-6cf2-4544-bfc3-ab63fa7492d1" Name="PNV (A)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_f2eab7d3-22d8-4c73-a536-73d6e8cff02a</SourceID>
+		</DataElement>
+		<DataElement UUID="_e4e7c1bb-d0e4-4dc2-8b89-8290cadbd821" Name="VA (B)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_25897faf-a881-4cfa-a266-5f8a2744929c</SourceID>
+		</DataElement>
+		<DataElement UUID="_84fcb7ec-d778-4869-b213-64face84c7fd" Name="VA (A)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_d1776c5a-74d9-4a5f-9def-30a4baddb8cd</SourceID>
+		</DataElement>
+		<DataElement UUID="_c44b17ff-bc1a-425b-91bd-99fa3d89ac1a" Name="A (B)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_2d9fc10f-8b63-4d89-b0f6-32cc96a37570</SourceID>
+		</DataElement>
+		<DataElement UUID="_7eb6bbdf-40b9-45b7-8847-e047d11300eb" Name="A (A)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_5577503d-1ff0-4f1d-8920-bb02b082b7ca</SourceID>
+		</DataElement>
+		<DataElement UUID="_243fdac1-e538-4c90-89b8-ee335cd5141c" Name="A (C)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_5ba67d37-54d3-4d96-95fc-8da3c50bb662</SourceID>
+		</DataElement>
+		<DataElement UUID="_afe01c6b-7128-425d-9ceb-b5a3431a24bb" Name="SoC (none)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_8e98d57f-4938-45bc-ad02-5b1c73fa4cd9</SourceID>
+		</DataElement>
+		<DataElement UUID="_29e4d490-9399-4e29-b687-9186d6b9a345" Name="voltage (B)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_4A7EE47E-9767-4EF8-92FF-59B31700F1AF</SourceID>
+		</DataElement>
+		<DataElement UUID="_4b989046-da6e-4a47-a677-a2ec54f5d7b6" Name="voltage (A)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_60B3F363-EA45-4719-9D9D-090463A96523</SourceID>
+		</DataElement>
+		<DataElement UUID="_5f6a67b0-85c2-436c-b58a-04bb91a85345" Name="voltage (C)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_140072F4-54CA-427E-A71C-2938B44F3492</SourceID>
+		</DataElement>
+		<DataElement UUID="_405cfb16-423b-4ba7-b48e-37cf70f6924b" Name="reactivePower (A)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_C7F0E128-520F-4562-8466-C0DCFBD68FFA</SourceID>
+		</DataElement>
+		<DataElement UUID="_5dfc53a1-3f84-4d5f-8f00-e670f2aad1a9" Name="reactivePower (B)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_B4397AEB-4BD3-4E10-ABDD-BF6A3876AFEB</SourceID>
+		</DataElement>
+		<DataElement UUID="_f4d2dddc-0bb2-4538-a18c-181d7f97ff7f" Name="reactivePower (C)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+			<SourceID xmlns="http://pnnl.gov/gdtaf-core">_C7E3BE97-A7B9-4F7E-9C84-333BCA961CFD</SourceID>
+		</DataElement>
+	</DataElementRepo>
+</GDTAF>
