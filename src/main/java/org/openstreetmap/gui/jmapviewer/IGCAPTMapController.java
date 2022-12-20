@@ -404,8 +404,12 @@ MouseWheelListener {
                 }
                 if (_igCAPTgui.nodePairList.contains(edgePair)) {
                     int occurrences = java.util.Collections.frequency(_igCAPTgui.nodePairList, edgePair);
-                    Coordinate mid = _igCAPTgui.calcNewMidPoint(_clickInfo._clickNode.getLat(), _clickInfo._clickNode.getLongit(),
-                        endNodeSpecifiedByUser.getLat(), endNodeSpecifiedByUser.getLongit(), occurrences);
+                    //SgNode p1 = (SgNode)edgePair.getFirst();
+                    //SgNode p2 = (SgNode) edgePair.getSecond();
+                    SgNodeInterface p1 = (SgNodeInterface)edgePair.getFirst();
+                    SgNodeInterface p2 = (SgNodeInterface) edgePair.getSecond();
+                    Coordinate mid = _igCAPTgui.calcNewMidPoint(p1.getLat(), p1.getLongit(),
+                        p2.getLat(), p2.getLongit(), occurrences);
                     e2.setMidPoint(mid);
                 }
                 _igCAPTgui.nodePairList.add(edgePair);

@@ -117,25 +117,18 @@ import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.Heatmap;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileLoader;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
@@ -146,7 +139,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -206,7 +198,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         this.analysisCanceled = analysisCanceled;
     }
 
-    private final double COORDINATE_ADDER = .001;
+    private final double NEW_LINE_ADDER = 10;  //2;
     static final IGCAPTproperties IGCAPTPROPERTIES = IGCAPTproperties.getInstance();
     private static final long serialVersionUID = 1L;
 
@@ -1365,45 +1357,58 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         
         return returnval;
     }
-
-    // Calculate the midpoint between two points specified with lat/lon (Degrees)
-    private Coordinate calcMidPoint(double latDeg1, double lonDeg1, double latDeg2, double lonDeg2) {
-        double lonDiffRad = Math.toRadians(lonDeg2 - lonDeg1);
-        
-        // convertToRadians
-        double latRad1 = Math.toRadians(latDeg1);
-        double latRad2 = Math.toRadians(latDeg2);
-        double lonRad1 = Math.toRadians(lonDeg1);
-        
-        double Bx = Math.cos(latRad2) * Math.cos(lonDiffRad);
-        double By = Math.cos(latRad2) * Math.sin(lonDiffRad);
-        // lat3,lon3 is the midpoint
-        double latRad3 = Math.atan2(Math.sin(latRad1) + Math.sin(latRad2), 
-                                 Math.sqrt((Math.cos(latRad1) + Bx) * (Math.cos(latRad1) + Bx) + By*By));
-        double lonRad3 = lonRad1 + Math.atan2(By, Math.cos(latRad1) + Bx);
-        double midPointLatDeg = Math.toDegrees(latRad3);
-        double midPointLonDeg = Math.toDegrees(lonRad3);
-        return new Coordinate(midPointLatDeg, midPointLonDeg);
+    
+    // Caclulate the midpoint between two points
+    private Point calcMidPoint(Point p1, Point p2) {
+        double newX = (p2.getX() + p1.getX()) / 2;
+        double newY = (p2.getY() + p1.getY()) / 2;
+        Point midpoint = new Point();
+        midpoint.setLocation(newX, newY);
+        return midpoint;
     }
 
     // occurrences indicates how many occurrences and arbitrarily adjusts the mid point
     public Coordinate calcNewMidPoint(double latDeg1, double lonDeg1, double latDeg2, double lonDeg2, int occurrences) {
-        Coordinate midPoint = calcMidPoint(latDeg1, lonDeg1, latDeg2, lonDeg2);
-        Coordinate newMidPoint;
-        // alternate adder / -adder for even/odd occurrences
+
+        // checkOutside - when false calculate even if not displayed
+        boolean checkOutside = false;
+        // Convert lat/lon to point
+        Point p1 = map().getMapPosition(latDeg1, lonDeg1, checkOutside);
+        Point p2 = map().getMapPosition(latDeg2, lonDeg2, checkOutside);
+        // If both nodes are same location return null
+        if (p1.equals(p2)) {
+            return null;
+        }
+        // get the midpoint of the two points
+        Point midPoint = calcMidPoint(p1, p2);
+        double slope = ((double)p2.y - (double)p1.y) / ((double)p2.x - (double)p1.x);
+        double perpendicular_slope = -1 * (1 / slope);
+
+        // y = mx + b (solve for b using the midPoint)
+        double b = midPoint.getY() - (perpendicular_slope * midPoint.getX());
+        
+        // calculate a new x with the adder 
+        // alternate adder / - adder for even/odd occurrences
         double adder;
-        //occurrences = occurrences / 2 ;
         if (occurrences % 2 == 0) {
-            adder = Math.ceil((double)occurrences / 2) * COORDINATE_ADDER;
+            adder = Math.ceil((double)occurrences / 2) * NEW_LINE_ADDER;
         }
         else {
-            adder = Math.ceil((double)occurrences / 2) * COORDINATE_ADDER * -1;
+            adder = Math.ceil((double)occurrences / 2) * NEW_LINE_ADDER * -1;
         }
-                
-        double newLatDeg = Math.toDegrees(Math.toRadians(midPoint.getLat()) + adder);
-        double newLonDeg = Math.toDegrees(Math.toRadians(midPoint.getLon()) + adder);
-        newMidPoint = new Coordinate(newLatDeg, newLonDeg);
-        return newMidPoint;
+
+        double newX = midPoint.getX() + adder;
+        // calculate a new y with the equation y = mx + b
+        double newY = (perpendicular_slope * newX) + b;
+        Point newMidPoint = new Point();
+        newMidPoint.setLocation(newX, newY);
+        
+        // Convert back to coordinate
+        Coordinate c = new Coordinate(0.0, 0.0);
+        ICoordinate ic = map().getPosition(newMidPoint.x, newMidPoint.y);
+        c.setLat(ic.getLat());
+        c.setLon(ic.getLon());
+        return c;
     }
 
     //add code to this method to create the Logical topology diagram from xml
@@ -1547,10 +1552,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                         // determine if an edge between these endpoints already exists
                         if (nodePairList.contains(currentPair)) {
                             int occurrences = Collections.frequency(nodePairList, currentPair);
-                            // set midPoint appropriately
+                            
+                            // send the endPts in the order of the pair
+                            endPt1 = (SgNode)currentPair.getFirst();
+                            endPt2 = (SgNode)currentPair.getSecond();
                             Coordinate midPoint = calcNewMidPoint(endPt1.getLat(), endPt1.getLongit(),
                                     endPt2.getLat(), endPt2.getLongit(), occurrences);
-                            e1.setMidPoint(midPoint);
+                            if (midPoint != null) {
+                                e1.setMidPoint(midPoint);
+                            }
                         }
                         getGraph().addEdge(e1, endPt1, endPt2);
                         nodePairList.add(currentPair);
