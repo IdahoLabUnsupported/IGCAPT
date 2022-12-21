@@ -28,6 +28,8 @@ public class HeatMapDialog extends javax.swing.JDialog {
     private Heatmap.KernelTypes m_savedKernelType;
     private int m_savedStartColor;
     private int m_savedEndColor;
+    private int m_startColor = -1;
+    private int m_endColor = -1;
 
     /**
      * Creates new form HeatMapDialog
@@ -50,6 +52,7 @@ public class HeatMapDialog extends javax.swing.JDialog {
         jSpinner2.setValue(m_savedGridSize);
         jSpinner1.setValue(m_savedKernelRadius);
         jComboBox1.setSelectedIndex(m_savedKernelType.ordinal());
+        jButton1.setEnabled(false);
         this.setTitle("Heatmap Parameters");
     }
     
@@ -109,7 +112,7 @@ public class HeatMapDialog extends javax.swing.JDialog {
     
     //
     private void doGenerate() {
-        if (jTextField1.getToolTipText() == null || jTextField2.getToolTipText() == null) {
+        if (m_startColor == -1 || m_endColor == -1) {
             //Put up message telling user to pick color
             JOptionPane.showMessageDialog(this, "Start and End Colors must be selected!");
             return;
@@ -121,11 +124,9 @@ public class HeatMapDialog extends javax.swing.JDialog {
         m_savedKernelRadius = (Integer)jSpinner1.getValue();
         
         igcaptGui.SetHeatmap(new Heatmap(m_savedGridSize, m_savedKernelType, m_savedKernelRadius, 
-               Float.valueOf(jTextField1.getToolTipText()), Float.valueOf(jTextField2.getToolTipText()) ));
-        float startColor = Float.parseFloat(jTextField1.getToolTipText());
-        float endColor = Float.parseFloat(jTextField2.getToolTipText());
-        m_savedStartColor = Math.round(startColor*360);
-        m_savedEndColor = Math.round(endColor*360);
+               Float.valueOf(m_startColor)/360f, Float.valueOf(m_endColor)/360f));
+        m_savedStartColor = m_startColor;
+        m_savedEndColor = m_endColor;
         
         savePropertyValues();
     }
@@ -134,24 +135,29 @@ public class HeatMapDialog extends javax.swing.JDialog {
         jSpinner2.setValue(GRID_SIZE_DEFAULT);
         jSpinner1.setValue(KERNEL_RADIUS_SIZE_DEFAULT);
         jComboBox1.setSelectedIndex(KERNEL_TYPE_DEFAULT.ordinal());
-        jTextField1.setToolTipText(Float.toString(START_COLOR_DEFAULT/360));
-        jTextField2.setToolTipText(Float.toString(END_COLOR_DEFAULT/360));
-        
+        m_startColor = START_COLOR_DEFAULT;
+        m_endColor = END_COLOR_DEFAULT;
         // saturation & intensity always 1
         jTextField1.setBackground(new Color(Color.HSBtoRGB(START_COLOR_DEFAULT/360f, 1, 1)));
         jTextField2.setBackground(new Color(Color.HSBtoRGB(END_COLOR_DEFAULT/360f, 1, 1)));
+        jButton1.setEnabled(true);
     }
 
     private void resetToLastRun() {
         jSpinner2.setValue(m_savedGridSize);
         jSpinner1.setValue(m_savedKernelRadius);
         jComboBox1.setSelectedIndex(m_savedKernelType.ordinal());
-        jTextField1.setToolTipText(Float.toString(m_savedStartColor/360));
-        jTextField2.setToolTipText(Float.toString(m_savedEndColor/360));
-        jTextField1.setBackground(new Color(Color.HSBtoRGB(m_savedStartColor/360f, 1, 1)));
-        jTextField2.setBackground(new Color(Color.HSBtoRGB(m_savedEndColor/360f, 1, 1)));
+        if (m_savedStartColor > -1) {
+            jTextField1.setBackground(new Color(Color.HSBtoRGB(m_savedStartColor/360f, 1, 1)));
+            jTextField2.setBackground(new Color(Color.HSBtoRGB(m_savedEndColor/360f, 1, 1)));
+            jButton1.setEnabled(true);
+        }
+        else {
+            jButton1.setEnabled(false);
+        }
+        
     }
-    
+       
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -174,14 +180,15 @@ public class HeatMapDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
-        hsvColorPanel2 = new gov.inl.igcapt.components.HsvColorPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(402, 508));
+        setPreferredSize(new java.awt.Dimension(380, 390));
+        setResizable(false);
 
         jLabel1.setText("Kernel Type");
 
@@ -189,13 +196,14 @@ public class HeatMapDialog extends javax.swing.JDialog {
 
         jButton1.setText("Generate");
         jButton1.setToolTipText("Generate the Heatmap");
+        jButton1.setActionCommand("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonGenerateActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Close");
+        jButton2.setText("Cancel");
         jButton2.setToolTipText("Close Parameter Dialog");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,7 +213,7 @@ public class HeatMapDialog extends javax.swing.JDialog {
 
         jLabel3.setText("Grid Size");
 
-        jButton3.setText("Defaults");
+        jButton3.setText("Restore Defaults");
         jButton3.setToolTipText("Reset parameters to Defaults");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,7 +221,7 @@ public class HeatMapDialog extends javax.swing.JDialog {
             }
         });
 
-        jButton4.setText("Reset");
+        jButton4.setText("Reset to last run");
         jButton4.setToolTipText("Reset Parameters to last Generated heatmap");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,72 +235,64 @@ public class HeatMapDialog extends javax.swing.JDialog {
 
         jLabel6.setText("(Default: 10)");
 
-        jButton5.setLabel("Set Start Color");
-        jButton5.setMargin(new java.awt.Insets(1, 1, 1, 1));
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
         jTextField1.setEditable(false);
         jTextField1.setColumns(4);
 
-        jButton6.setLabel("Set End Color");
-        jButton6.setMargin(new java.awt.Insets(1, 1, 1, 1));
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
-
         jTextField2.setEditable(false);
         jTextField2.setColumns(4);
+
+        jLabel7.setText("Start Color");
+
+        jLabel8.setText("End Color");
+
+        jButton7.setText("Select Colors");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton7)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton2)
-                                    .addComponent(jButton4)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(25, 25, 25)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jSpinner1)
-                                    .addComponent(jSpinner2))
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6)))))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSpinner1)
+                            .addComponent(jSpinner2))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(hsvColorPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)))
+                .addGap(66, 66, 66))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(51, 51, 51))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel1, jLabel2, jLabel3});
@@ -302,7 +302,7 @@ public class HeatMapDialog extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -318,32 +318,30 @@ public class HeatMapDialog extends javax.swing.JDialog {
                         .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel6))
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
-                .addGap(21, 21, 21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addGap(26, 26, 26)
+                .addComponent(jButton7)
+                .addGap(1, 1, 1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(hsvColorPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2, jButton3, jButton4});
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jComboBox1, jLabel1, jLabel2, jLabel3, jSpinner1, jSpinner2});
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton5, jButton6});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -364,21 +362,18 @@ public class HeatMapDialog extends javax.swing.JDialog {
         resetToLastRun();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        float hue = hsvColorPanel2.getSelectedHueValue();
-
-        jTextField1.setToolTipText(Float.toString(hue));
-        // Use 1 for saturation and intensity
-        jTextField1.setBackground(new Color(Color.HSBtoRGB(hue, 1, 1)));
-        
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        float hue = hsvColorPanel2.getSelectedHueValue();
-        jTextField2.setToolTipText(Float.toString(hue));
-        // Use 1 for satruation and intensity
-        jTextField2.setBackground(new Color(Color.HSBtoRGB(hue, 1, 1)));
-    }//GEN-LAST:event_jButton6ActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        ColorPickDialog colorPickDialog = new ColorPickDialog(parent, true);
+        if (!colorPickDialog.cancelled()) {
+            m_startColor = colorPickDialog.getStartColor();
+            m_endColor = colorPickDialog.getEndColor();
+            jTextField1.setBackground(new Color(Color.HSBtoRGB(m_startColor/360f, 1, 1)));
+            jTextField2.setBackground(new Color(Color.HSBtoRGB(m_endColor/360f, 1, 1)));
+        }
+        if (m_startColor > -1 && m_endColor > -1) {
+            jButton1.setEnabled(true);
+        }       
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -423,13 +418,11 @@ public class HeatMapDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gov.inl.igcapt.components.HsvColorPanel hsvColorPanel2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -437,6 +430,8 @@ public class HeatMapDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTextField jTextField1;
