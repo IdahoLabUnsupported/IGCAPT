@@ -60,6 +60,7 @@ public class ColorPickDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(402, 508));
+        setResizable(false);
 
         jButton1.setText("OK");
         jButton1.setToolTipText("Set the Color selection");
