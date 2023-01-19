@@ -5,7 +5,7 @@
  */
 package org.openstreetmap.gui.jmapviewer;
 
-import org.openstreetmap.gui.jmapviewer.interfaces.MapLine;
+import gov.inl.igcapt.properties.IGCAPTproperties;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

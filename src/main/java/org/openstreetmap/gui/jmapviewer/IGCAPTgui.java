@@ -124,6 +124,9 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import gov.inl.igcapt.controllers.IgcaptGraphMousePlugin;
+import gov.inl.igcapt.properties.IGCAPTproperties;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -212,7 +215,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private final JLabel mperpLabelValue;
     private String lastPath = "";
     private DragTree7 tree = null;
-    List<Pair<SgNodeInterface>>nodePairList = new ArrayList<>();
+    public List<Pair<SgNodeInterface>>nodePairList = new ArrayList<>();
 
     // When creating an aggregation, place the aggregated component at this offset
     // relative to the aggregate parent.
@@ -226,14 +229,39 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     // Jung
     public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
     private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
+    public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
+        return layout;
+    }
 
     int edgeIndex = 0;  // edge index in the graph
+
+    public void setEdgeIndex(int val){
+        edgeIndex = val;
+    }
+    public int getEdgeIndex(){
+        return edgeIndex;
+    }
+
     int nodeIndex = 0;  // node index in the graph
+
+    public void setNodeIndex(int val){
+        nodeIndex = val;
+    }
+    public int getNodeIndex(){
+        return nodeIndex;
+    }
+
 
     private JTabbedPane jtp;
     
     JMapViewer currentGisMap;
+    public JMapViewer getCurrentGisMap(){
+        return currentGisMap;
+    }
     boolean toolTipsEnabled = true;
+    public boolean isToolTipsEnabled(){
+        return toolTipsEnabled;
+    }
     boolean showAllAnalysisResults = false;
 
     // Drop Targets - only one can be active at a time
@@ -302,13 +330,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     //private boolean analysisCompleted = false;
-    private static IGCAPTgui _IGCAPTgui = null;
+    private static final IGCAPTgui _IGCAPTgui = new IGCAPTgui();
 
     public static IGCAPTgui getInstance() {
-
-        if (_IGCAPTgui == null) {
-            _IGCAPTgui = new IGCAPTgui();
-        }
         return _IGCAPTgui;
     }
 
@@ -403,7 +427,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     // Redraw the GIS images based upon the current Jung graph contents.
-    void updateGISObjects() {
+    public void updateGISObjects() {
         List<SgNodeInterface> nodes = new ArrayList<>(getGraph().getVertices());
 
         JMapViewer map = map();
@@ -514,7 +538,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         
         lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue("LastPath");
 
-        treeMap = new JSGMapViewer("Components", this);
+        treeMap = new JSGMapViewer("Components");
 
         // Listen to the map viewer for user operations so components will
         // receive events and update
@@ -984,7 +1008,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         vv.setGraphMouse(graphMouse);
         vv.addKeyListener(graphMouse.getModeKeyListener());
 
-        graphMouse.add(new MyGraphMousePlugin());
+        graphMouse.add(myGraphMousePlugin);
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
 
         // Get the pickedState and add a listener that will decorate the
@@ -1071,7 +1095,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
      * Get percentOfNodes percent nodes from nodeList. Exclude those nodes listed in the exclusion list.
      * @param nodeList
      * @param percentOfNodes
-     * @param exlusionList
+     * @param exclusionList
      * @return 
      */
     public List<SgNode> getPercentNodes(List<SgNode> nodeList, int percentOfNodes, List<SgNode> exclusionList) {
@@ -2323,233 +2347,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return _layerIconMap.get(iconName);
     }
 
-    protected class MyGraphMousePlugin extends TranslatingGraphMousePlugin implements MouseListener {
-
-        @Override
-        public void mouseMoved(final MouseEvent e) {
-
-            SwingUtilities.invokeLater(
-                    new Runnable() {
-                public void run() {
-                    VisualizationViewer<SgNodeInterface, SgEdge> vv
-                            = (VisualizationViewer<SgNodeInterface, SgEdge>) e.getSource();
-                    GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
-                    Point2D ivp = e.getPoint();
-                    //graph.getVertices();
-
-                    SgNodeInterface vertex = pickSupport.getVertex(layout, ivp.getX(), ivp.getY());
-                    SgEdge edge = pickSupport.getEdge(layout, ivp.getX(), ivp.getY());
-
-                    Border border = BorderFactory.createLineBorder(new Color(0, 0, 0)); // The color is #4c4f53.
-                    UIManager.put("ToolTip.border", border);
-                    if (vertex != null && toolTipsEnabled) {
-
-                        SgNode sgNode = vertex.getRefNode();
-                        SgComponentData sgComponent = getComponentByUuid(sgNode.getType());
-
-                        String ttText = "<html>";
-                        ttText += "<table width='100%' border='0' cellpadding='0'>"
-                                + "<tr>"
-                                + "<th align='left'>ID: </th>"
-                                + "<th align='left'><font color='#ffffff'>" + sgNode.getId() + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Type: </th>"
-                                + "<th align='left'><font color='#ffffff'>" + ((sgComponent != null) ? sgComponent.getName() : "&lt;Unknown&gt;") + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Payload (bytes): </th>"
-                                + "<th align='left'><font color='#ffffff'>" + sgNode.getDataToSend() + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Interval (sec): </th>"
-                                + "<th align='left'><font color='#ffffff'>" + sgNode.getMaxLatency() + "</font></th>"
-                                + "</tr>";
-
-                        // If the tooltip is for a collapsed node (an SgGraph node) then display the list of collapsed nodes.
-                        if (vertex instanceof SgGraph) {
-                            SgGraph sgGraph = (SgGraph) vertex;
-
-                            ArrayList<SgNodeInterface> vertices = new ArrayList<>(sgGraph.getVertices());
-
-                            if (vertices.size() > 0) {
-                                ttText += "<tr/><tr>"
-                                        + "<th align='left'>" + "Collapsed Nodes" + "</font></th>"
-                                        + "</tr>";
-                            }
-
-                            for (SgNodeInterface vtx : vertices) {
-                                ttText += "<tr>"
-                                        + "<th align='left'><font color='#ffffff'>" + vtx.getName() + "</font></th>"
-                                        + "</tr>";
-                            }
-                        }
-                        ttText += "</table>"
-                                + "<html>";
-
-                        vv.setToolTipText(ttText);
-
-                    } else if (edge != null & toolTipsEnabled) {
-
-                        // Format the calculated transfer rate.
-                        DecimalFormat formatter = new DecimalFormat("#.0####", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-                        formatter.setRoundingMode(RoundingMode.DOWN);
-                        String s = formatter.format(edge.getCalcTransRate());
-
-                        Graph<SgNodeInterface, SgEdge> graph = getGraph();
-                        SgNodeInterface endPt1 = graph.getEndpoints(edge).getFirst();
-                        SgNodeInterface endPt2 = graph.getEndpoints(edge).getSecond();
-                        String endPt1Str = "";
-                        String endPt2Str = "";
-
-                        if (endPt1 != null) {
-                            if (endPt1 instanceof SgGraph) {
-                                endPt1 = ((SgGraph) endPt1).getRefNode();
-                            }
-                            endPt1Str = endPt1.toString();
-                        }
-                        if (endPt2 != null) {
-                            if (endPt2 instanceof SgGraph) {
-                                endPt2 = ((SgGraph) endPt2).getRefNode();
-                            }
-                            endPt2Str = endPt2.toString();
-                        }
-
-                        vv.setToolTipText(
-                                "<html>"
-                                + "<table width='100%' border='0' cellpadding='0'>"
-                                + "<tr>"
-                                + "<th align='left' width='70'>ID: </th>"
-                                + "<th align='left'><font color='#ffffff'>" + edge.getId() + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Weight: </th>"
-                                + "<th align='left'><font color='#ffffff'>" + edge.getWeight() + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Max Rate (Kbits/sec): </th>"
-                                + "<th align='left'><font color='#ffffff'>" + edge.getEdgeRate() + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>End Points: </th>"
-                                + "<th align='left'><font color='#ffffff'>" + endPt1Str + ", " + endPt2Str + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Calculated Rate (Kbits/sec): </th>"
-                                + "<th align='left'><font color='#ffffff'>" + " " + String.format("%.4f", edge.getCalcTransRate()) + "</font></th>"
-                                + "</tr>"
-                                + "<tr>"
-                                + "<th align='left'>Calculated Utilization: </th>"
-                                + "<th align='left'><font color='#ffffff'>" + " " + String.format("%.2f", edge.getUtilization() * 100.0) + "%" + "</font></th>"
-                                + "</tr>"
-                                + "</table>"
-                                + "<html>"
-                        );
-                    } else {
-                        vv.setToolTipText(null);
-                    }
-                }
-            }
-            );
-        }
-
-        public MyGraphMousePlugin(int modifiers) {
-            super(modifiers);
-        }
-
-        public MyGraphMousePlugin() {
-            super();
-        }
-
-        @Override
-        public void mouseClicked(final MouseEvent e) {
-            e.consume();
-            //super.mouseClicked(e);
-            //System.out.println("mouseClicked-MyGraphMousePlugin x,y = " + e.getX() + ", " + e.getY());
-        }
-
-        @Override
-        public void mouseEntered(final MouseEvent e) {
-            super.mouseEntered(e);
-            //System.out.println("mouseEntered-MyGraphMousePlugin x,y = " + e.getX() + ", " + e.getY());
-        }
-
-        @Override
-        public void mouseExited(final MouseEvent e) {
-            //super.mouseExited(e);
-            //System.out.println("mouseExited-MyGraphMousePlugin x,y = " + e.getX() + ", " + e.getY());
-            /*Point2D p = e.getPoint();
-                    double x = p.getX();
-                    xMouseLocation = x;
-                    double y = p.getY();
-                    yMouseLocation = y; */
-        }
-
-        @Override
-        public void mouseDragged(final MouseEvent e) {
-            // do not call super; this will disable drawing of the links between nodes!
-            //super.mouseDragged(e);
-
-            // Highlight the target node and remove the target when the mouse moves out.
-            VisualizationViewer<SgNodeInterface, SgEdge> vv
-                    = (VisualizationViewer<SgNodeInterface, SgEdge>) e.getSource();
-            GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
-            Point2D ivp = e.getPoint();
-
-            IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
-            SgNodeInterface vertex = pickSupport.getVertex(layout, ivp.getX(), ivp.getY());
-            if (vertex != null && vertex instanceof SgNodeInterface && getMode() == Mode.EDITING) {
-//            if (vertex != null && vertex instanceof SgNode && getMode() == Mode.EDITING) {
-                igcaptInstance.setContextClickNode((SgNodeInterface) vertex);
-                Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
-                Icon currentIcon = vertex.getIcon();
-                if (selectionIcon != null && currentIcon != null && currentIcon instanceof LayeredIcon) {
-                    LayeredIcon currentLayeredIcon = (LayeredIcon) currentIcon;
-                    currentLayeredIcon.add(selectionIcon);
-                }
-            } else {
-                SgNodeInterface oldSelectedNode = igcaptInstance.getContextClickNode();
-
-                if (oldSelectedNode != null) {
-                    Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
-                    ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-                    igcaptInstance.setContextClickNode(null);
-                }
-            }
-        }
-
-        @Override
-        public void mouseReleased(final MouseEvent e) {
-            super.mouseReleased(e);
-
-            // We had a selection icon showing for the target node, so remove it.
-            IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
-            SgNodeInterface oldSelectedNode = igcaptInstance.getContextClickNode();
-
-            if (oldSelectedNode != null) {
-                Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
-                ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-                igcaptInstance.setContextClickNode(null);
-                vv.repaint();
-            }
-        }
-
-        @Override
-        public void mousePressed(final MouseEvent e) {
-            //super.mousePressed(e);
-            //System.out.println("mousePressed-MyGraphMousePlugin x,y = " + e.getX() + ", " + e.getY());
-            VisualizationViewer<SgNodeInterface, SgEdge> vv
-                    = (VisualizationViewer<SgNodeInterface, SgEdge>) e.getSource();
-            GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
-            Point2D ivp = e.getPoint();
-
-            SgNodeInterface vertex = pickSupport.getVertex(layout, ivp.getX(), ivp.getY());
-
-            if (vertex instanceof SgNode) {
-                IGCAPTgui.getInstance().setContextClickNode((SgNode) vertex);
-            }
-        }
-    }
+    protected IgcaptGraphMousePlugin myGraphMousePlugin;
 
     public class PickWithIconListener implements ItemListener {
 
