@@ -6,7 +6,6 @@
 package org.openstreetmap.gui.jmapviewer;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
@@ -19,7 +18,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMouseListener;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
-import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.decorators.DefaultVertexIconTransformer;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
@@ -59,7 +57,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -67,9 +64,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -77,7 +71,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 import javax.imageio.ImageIO;
@@ -104,7 +97,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -125,7 +117,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import gov.inl.igcapt.controllers.IgcaptGraphMousePlugin;
+import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
@@ -2347,7 +2339,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         return _layerIconMap.get(iconName);
     }
 
-    protected IgcaptGraphMousePlugin myGraphMousePlugin;
+    protected IGCAPTGraphMousePlugin myGraphMousePlugin;
 
     public class PickWithIconListener implements ItemListener {
 

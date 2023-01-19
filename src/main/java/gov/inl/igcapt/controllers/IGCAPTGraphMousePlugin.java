@@ -21,7 +21,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class IgcaptGraphMousePlugin extends TranslatingGraphMousePlugin implements MouseListener{
+public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implements MouseListener{
 
     @Override
     public void mouseMoved(final MouseEvent e) {
@@ -151,11 +151,11 @@ public class IgcaptGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         );
     }
 
-    public IgcaptGraphMousePlugin(int modifiers) {
+    public IGCAPTGraphMousePlugin(int modifiers) {
         super(modifiers);
     }
 
-    public IgcaptGraphMousePlugin() {
+    public IGCAPTGraphMousePlugin() {
         super();
     }
 
