@@ -1,5 +1,7 @@
 package org.openstreetmap.gui.jmapviewer;
 
+import gov.inl.igcapt.view.FieldPanel;
+
 import javax.swing.*;
 
 public class AddFieldMenuItem extends JMenuItem {

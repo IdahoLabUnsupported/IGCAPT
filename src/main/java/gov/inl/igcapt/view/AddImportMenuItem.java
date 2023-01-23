@@ -1,12 +1,10 @@
 package org.openstreetmap.gui.jmapviewer;
 
-import edu.uci.ics.jung.visualization.LayeredIcon;
-import gov.inl.igcapt.components.SgLayeredIcon;
-import gov.inl.igcapt.components.SgMapImage;
+import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;

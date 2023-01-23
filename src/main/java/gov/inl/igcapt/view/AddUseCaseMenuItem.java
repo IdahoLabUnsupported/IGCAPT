@@ -1,5 +1,7 @@
 package org.openstreetmap.gui.jmapviewer;
 
+import gov.inl.igcapt.view.UsecasePanel;
+
 import javax.swing.*;
 
 public class AddUseCaseMenuItem extends JMenuItem {
