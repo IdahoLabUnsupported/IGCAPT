@@ -1,18 +1,20 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
+
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import javax.swing.*;
 
 public class AddClearAnalysisResultsMenuItem extends JMenuItem {
 
-    AddClearAnalysisResultsMenuItem(IGCAPTgui igcaptGui) {
+    public AddClearAnalysisResultsMenuItem() {
         super("Clear Analysis Results");
-        createClearAnalysisMenu(igcaptGui);
+        createClearAnalysisMenu();
     }
 
-    private void createClearAnalysisMenu(IGCAPTgui igcaptGui) {
+    private void createClearAnalysisMenu() {
         
         this.addActionListener(ActionListener -> {
-            igcaptGui.clearEdgeUtilization();
+            IGCAPTgui.getInstance().clearEdgeUtilization();
         });           
     }
 }

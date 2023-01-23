@@ -7,6 +7,10 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
+import gov.inl.igcapt.graph.SgEdge;
+import gov.inl.igcapt.graph.SgGraph;
+import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.graph.SgNodeInterface;
 import org.openstreetmap.gui.jmapviewer.*;
 
 import javax.swing.*;

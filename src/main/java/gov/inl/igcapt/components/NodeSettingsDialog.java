@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
-import org.openstreetmap.gui.jmapviewer.SgGraph;
-import org.openstreetmap.gui.jmapviewer.SgNode;
+import gov.inl.igcapt.graph.SgGraph;
+import gov.inl.igcapt.graph.SgNode;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

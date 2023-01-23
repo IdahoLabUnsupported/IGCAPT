@@ -15,6 +15,8 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
+import gov.inl.igcapt.graph.SGComponentTreeCellRenderer;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;

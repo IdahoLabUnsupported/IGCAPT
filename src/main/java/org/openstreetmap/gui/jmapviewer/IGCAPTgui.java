@@ -118,7 +118,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
+import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.view.*;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
@@ -1028,13 +1030,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem showHeatmapItem;
         JMenuItem clearHeatmapItem;
         
-        analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem(this));
-        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem(this));
-        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem(this));
-        analysisMenu.add(new AddClearAnalysisResultsMenuItem(this));
+        analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem());
+        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem());
+        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem());
+        analysisMenu.add(new AddClearAnalysisResultsMenuItem());
         analysisMenu.add(new JSeparator()); // SEPARATOR
-        analysisMenu.add(showHeatmapItem = new AddShowHeatmapMenuItem(this));
-        analysisMenu.add(clearHeatmapItem = new AddClearHeatmapMenuItem(this));
+        analysisMenu.add(showHeatmapItem = new AddShowHeatmapMenuItem());
+        analysisMenu.add(clearHeatmapItem = new AddClearHeatmapMenuItem());
         
         analysisMenu.addMenuListener(new MenuListener() {
             @Override
@@ -2027,7 +2029,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         private Graph<SgNodeInterface, SgEdge> _graph;
         private volatile boolean _running = true;
 
-        AnalysisTask(Graph<SgNodeInterface, SgEdge> graph) {
+        public AnalysisTask(Graph<SgNodeInterface, SgEdge> graph) {
             _graph = graph;
         }
 
@@ -2379,12 +2381,17 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public static void main(String[] args) {
         //final String dir = System.getProperty("user.dir");
         //System.out.println("current dir = " + dir);
-        UIManager.getLookAndFeelDefaults()
-                .put("defaultFont", new Font("Arial", Font.BOLD, 16));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                UIManager.getLookAndFeelDefaults()
+                        .put("defaultFont", new Font("Arial", Font.BOLD, 16));
+                IGCAPTgui igCAPTgui = IGCAPTgui.getInstance();
+                igCAPTgui.Initialize();
+                igCAPTgui.setVisible(true);
+            }
+        });
 
-        IGCAPTgui igCAPTgui = IGCAPTgui.getInstance();
-        igCAPTgui.Initialize();
-        igCAPTgui.setVisible(true);
     }
 
     private void updateZoomParameters() {

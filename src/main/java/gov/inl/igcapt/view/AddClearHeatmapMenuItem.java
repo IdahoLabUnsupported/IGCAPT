@@ -1,19 +1,21 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
+
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import javax.swing.*;
 
 public class AddClearHeatmapMenuItem extends JMenuItem {
 
-    public AddClearHeatmapMenuItem(IGCAPTgui igcaptGui) {
+    public AddClearHeatmapMenuItem() {
         super("Clear Heatmap");
-        createClearHeatmapMenu(igcaptGui);
+        createClearHeatmapMenu();
     }
 
-    private void createClearHeatmapMenu(IGCAPTgui igcaptGui) {
+    private void createClearHeatmapMenu() {
         
         this.addActionListener(ActionListener -> {
             
-            igcaptGui.SetHeatmap(null);
+            IGCAPTgui.getInstance().SetHeatmap(null);
         });           
     }
 }

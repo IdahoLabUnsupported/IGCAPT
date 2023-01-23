@@ -3,7 +3,7 @@ package gov.inl.igcapt.components;
 
 import java.awt.image.BufferedImage;
 import org.openstreetmap.gui.jmapviewer.MapImageImpl;
-import org.openstreetmap.gui.jmapviewer.SgNodeInterface;
+import gov.inl.igcapt.graph.SgNodeInterface;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

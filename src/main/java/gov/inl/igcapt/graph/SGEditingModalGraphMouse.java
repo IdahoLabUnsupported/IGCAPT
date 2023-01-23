@@ -1,4 +1,4 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -39,6 +39,7 @@ import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.RotatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ShearingGraphMousePlugin;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 public class SGEditingModalGraphMouse<V, E> extends AbstractModalGraphMouse
         implements ModalGraphMouse, ItemSelectable {

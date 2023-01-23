@@ -1,8 +1,10 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
 import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.components.AnalysisProgress;
 import gov.inl.igcapt.components.ButtonTabComponent;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.text.SimpleDateFormat;
@@ -15,28 +17,28 @@ import javax.swing.*;
 
 public class AddAnalyzeTopologyMenuItem extends JMenuItem {
 
-    AddAnalyzeTopologyMenuItem(IGCAPTgui igcaptGui) {
+    public AddAnalyzeTopologyMenuItem() {
         super("Analyze Topology...");
-        createAnalyzeTopologyMenu(igcaptGui);
+        createAnalyzeTopologyMenu();
     }
 
-    private void createAnalyzeTopologyMenu(IGCAPTgui igcaptGui) {
+    private void createAnalyzeTopologyMenu() {
         
         this.addActionListener(ActionListener -> {
 
             SwingUtilities.invokeLater(() -> {
                 AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
 
-                Graph expandedGraph = igcaptGui.getOriginalGraph();
-                IGCAPTgui.AnalysisTask analysisTask = igcaptGui.new AnalysisTask(expandedGraph);
-                igcaptGui.setAnalysisCanceled(false);
+                Graph expandedGraph = IGCAPTgui.getInstance().getOriginalGraph();
+                IGCAPTgui.AnalysisTask analysisTask = IGCAPTgui.getInstance().new AnalysisTask(expandedGraph);
+                IGCAPTgui.getInstance().setAnalysisCanceled(false);
 
                 analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
                     if ("progress".equals(evt.getPropertyName())) {
                         analysisProgress.setProgress((Integer) evt.getNewValue());
                     } else if ("status".equals(evt.getPropertyName())) {
                         analysisProgress.addStatus((String) evt.getNewValue());
-                    } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !igcaptGui.isAnalysisCanceled()) {
+                    } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !IGCAPTgui.getInstance().isAnalysisCanceled()) {
                         JEditorPane ep1;
                         try {
                             ep1 = new JEditorPane("text/html", analysisTask.get());
@@ -48,11 +50,11 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
 
                             String label = "Analysis Results" + newTabStringLabel;
 
-                            Component add = igcaptGui.getJtp().add(label, analysisResultsText);
-                            igcaptGui.getJtp().setTabComponentAt(igcaptGui.getJtp().indexOfComponent(add), new ButtonTabComponent(igcaptGui.getJtp()));
+                            Component add = IGCAPTgui.getInstance().getJtp().add(label, analysisResultsText);
+                            IGCAPTgui.getInstance().getJtp().setTabComponentAt(IGCAPTgui.getInstance().getJtp().indexOfComponent(add), new ButtonTabComponent(IGCAPTgui.getInstance().getJtp()));
 
-                            int count = igcaptGui.getJtp().getTabCount();
-                            igcaptGui.getJtp().setSelectedIndex(count - 1);
+                            int count = IGCAPTgui.getInstance().getJtp().getTabCount();
+                            IGCAPTgui.getInstance().getJtp().setSelectedIndex(count - 1);
 
                         } catch (InterruptedException | ExecutionException ex) {
                             Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,7 +67,7 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                 analysisProgress.addPropertyChangeListener("abort", (PropertyChangeEvent evt) -> {
                     try {
                         analysisTask.terminate();
-                        igcaptGui.setAnalysisCanceled(true);
+                        IGCAPTgui.getInstance().setAnalysisCanceled(true);
                     } catch (CancellationException ex) {
                         // Don't do anything here.  This exception always is
                         // thrown when a running task is cancelled.

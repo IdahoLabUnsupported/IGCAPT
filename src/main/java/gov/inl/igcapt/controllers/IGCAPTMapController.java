@@ -31,6 +31,10 @@ import javax.swing.border.Border;
 import static org.openstreetmap.gui.jmapviewer.JMapViewer.SGNODECLICKHEIGHT;
 import static org.openstreetmap.gui.jmapviewer.JMapViewer.SGNODECLICKWIDTH;
 
+import gov.inl.igcapt.graph.SgEdge;
+import gov.inl.igcapt.graph.SgGraph;
+import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.graph.SgNodeInterface;
 import org.openstreetmap.gui.jmapviewer.*;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;

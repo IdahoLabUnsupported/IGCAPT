@@ -12,8 +12,8 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
-import org.openstreetmap.gui.jmapviewer.SgNode;
-import org.openstreetmap.gui.jmapviewer.SgNodeInterface;
+import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.graph.SgNodeInterface;
 
 /**
  *

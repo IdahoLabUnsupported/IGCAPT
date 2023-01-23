@@ -1,12 +1,13 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
 import javax.swing.*;
 import gov.inl.igcapt.components.ComponentEditor;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 public class AddComponentMenuItem extends JMenuItem {
     private ComponentEditor componentEditor = null;
 
-    AddComponentMenuItem(java.awt.Frame parent) {
+    public AddComponentMenuItem(java.awt.Frame parent) {
         super("Component Editor...");
         createComponentsEditorMenu(parent);
     }

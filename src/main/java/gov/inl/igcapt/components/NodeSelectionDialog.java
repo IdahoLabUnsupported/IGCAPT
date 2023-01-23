@@ -8,8 +8,8 @@ package gov.inl.igcapt.components;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
-import org.openstreetmap.gui.jmapviewer.SgNode;
-import org.openstreetmap.gui.jmapviewer.SgNodeInterface;
+
+import gov.inl.igcapt.graph.SgNodeInterface;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

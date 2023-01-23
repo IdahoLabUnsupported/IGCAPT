@@ -39,6 +39,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 import gov.inl.igcapt.controllers.IGCAPTMapController;
+import gov.inl.igcapt.graph.SgEdge;
+import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.graph.SgNodeInterface;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent.COMMAND;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
