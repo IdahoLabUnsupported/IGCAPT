@@ -117,6 +117,7 @@ import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.components.Heatmap;
+import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Collections;
@@ -856,11 +857,14 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem newTopology = new JMenuItem("New Topology");
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
+        JMenuItem newScenario = new JMenuItem("New Scenario");
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
+        fileMenu.add(new JSeparator()); // SEPARATOR
+        fileMenu.add(newScenario);
         fileMenu.add(new JSeparator()); // SEPARATOR
         fileMenu.add(new AddImportMenuItem(null));
         fileMenu.add(exportData);
@@ -896,6 +900,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 graphChanged();
                 fileDirty = false;
             }
+        });
+        
+        newScenario.addActionListener((ActionEvent ev) -> {
+            CreateScenarioWizard createScenarioWizard = new CreateScenarioWizard(this, true);
         });
 
         loadTopology.addActionListener((ActionEvent ev) -> {
