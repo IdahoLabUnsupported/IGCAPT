@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Vector;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openstreetmap.gui.jmapviewer.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties;
 /**
  *
  * @author CHE
