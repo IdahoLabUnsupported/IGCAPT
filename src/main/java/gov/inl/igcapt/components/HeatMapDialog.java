@@ -3,7 +3,7 @@ package gov.inl.igcapt.components;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
-import org.openstreetmap.gui.jmapviewer.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties;
 
 /**
  *

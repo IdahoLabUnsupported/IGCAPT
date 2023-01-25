@@ -1,4 +1,4 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -22,6 +22,8 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JMenuItem;

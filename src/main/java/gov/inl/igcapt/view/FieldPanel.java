@@ -1,8 +1,9 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
+import gov.inl.igcapt.graph.SgPanel;
 
 import javax.swing.*;
 import java.util.List;
@@ -25,7 +26,7 @@ public class FieldPanel extends SgPanel {
     }
 
     @Override
-    void setupForm() {
+    protected void setupForm() {
         this.initializePanel();
 
         addNameTextBox();
@@ -82,7 +83,7 @@ public class FieldPanel extends SgPanel {
     }
 
     @Override
-    boolean save() {
+    public boolean save() {
         clearValidationText();
 
         String enteredName = name.getText().trim();
@@ -120,11 +121,11 @@ public class FieldPanel extends SgPanel {
     }
 
     @Override
-    void reset() {
+    protected void reset() {
 
     }
 
-    List<SgComponentData> getAllComponents() {
+    protected List<SgComponentData> getAllComponents() {
         return componentDao.getComponents();
     }
 }

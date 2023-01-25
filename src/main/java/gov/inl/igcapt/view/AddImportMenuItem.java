@@ -1,19 +1,18 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
-import edu.uci.ics.jung.visualization.LayeredIcon;
-import gov.inl.igcapt.components.SgLayeredIcon;
-import gov.inl.igcapt.components.SgMapImage;
+import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import java.awt.image.BufferedImage;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
 
 public class AddImportMenuItem extends JMenuItem {
     
-    AddImportMenuItem(java.awt.Frame parent) {
+    public AddImportMenuItem(java.awt.Frame parent) {
         super("Import...");
         createImportMenuItem(parent);
     }

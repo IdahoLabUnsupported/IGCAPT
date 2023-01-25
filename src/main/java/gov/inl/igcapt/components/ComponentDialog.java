@@ -6,7 +6,7 @@
 package gov.inl.igcapt.components;
 
 import gov.inl.igcapt.components.DataModels.*;
-import org.openstreetmap.gui.jmapviewer.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -122,12 +122,12 @@ public class ComponentDialog extends javax.swing.JDialog {
         CollapseIntoFld.setModel(collapseIntos);
     }
     private void initializeIcon() {
-        iconPathFld.disable();
+        iconPathFld.setEnabled(false); //disable();
         File file = new File(DEFAULT_ICON);
         iconPathFld.setText(file.getPath());
     }
     private void initializeGuid() {
-        guidFld.disable();
+        guidFld.setEnabled(false); //disable();
         guidFld.setText(UUID.randomUUID().toString());
     }
     private void initializeFields() {

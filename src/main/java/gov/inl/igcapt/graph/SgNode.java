@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.LayeredIcon;
@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.Icon;
+
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
 
 /**

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import org.openstreetmap.gui.jmapviewer.SgEdge;
-import org.openstreetmap.gui.jmapviewer.SgNode;
-import org.openstreetmap.gui.jmapviewer.SgNodeInterface;
+import gov.inl.igcapt.graph.SgEdge;
+import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.graph.SgNodeInterface;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

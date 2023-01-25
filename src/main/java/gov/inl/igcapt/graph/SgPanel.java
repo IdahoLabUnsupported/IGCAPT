@@ -1,6 +1,7 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
 import gov.inl.igcapt.components.DataModels.*;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import javax.swing.*;
 import java.util.List;
@@ -36,22 +37,22 @@ public abstract class SgPanel extends JPanel {
         }
     }
 
-    abstract boolean save();
-    abstract void reset();
+    public abstract boolean save();
+    protected abstract void reset();
 
-    abstract void setupForm();
+    protected abstract void setupForm();
 
     public void create() {
         setupForm();
         addValidationLabel();
     }
 
-    void addValidationLabel() {
+    public  void addValidationLabel() {
         validationLabel = new JLabel();
         this.add(validationLabel);
     }
 
-    void addValidationText(String newText) {
+    public void addValidationText(String newText) {
         String currentText = validationLabel.getText();
         if (!currentText.isEmpty()) {
             currentText = currentText + ", ";
@@ -61,13 +62,13 @@ public abstract class SgPanel extends JPanel {
         System.out.println("Added Validation text: " + newText);
     }
 
-    void clearValidationText() {
+    public void clearValidationText() {
         validationLabel.setText("");
     }
 
-    boolean formIsValid() { return validationLabel.getText().isEmpty(); }
+    public boolean formIsValid() { return validationLabel.getText().isEmpty(); }
 
-    void showErrorMessage() {
+    public void showErrorMessage() {
         JLabel label = new JLabel("An error occured when trying to connect to the database.\n please try again later");
 
         this.add(label);
@@ -77,7 +78,7 @@ public abstract class SgPanel extends JPanel {
         return componentDao.getFirstComponentList().getSgComponentGroupData();
     }
 
-    List<SgComponentData> getAllComponents() {
+    protected List<SgComponentData> getAllComponents() {
         return componentDao.getComponents();
     }
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.properties;
 
 import java.util.Enumeration;
 import java.util.Properties;

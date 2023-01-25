@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
-import org.openstreetmap.gui.jmapviewer.interfaces.MapLine;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

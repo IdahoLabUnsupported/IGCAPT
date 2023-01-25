@@ -1,11 +1,13 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
+
+import gov.inl.igcapt.view.UsecasePanel;
 
 import javax.swing.*;
 
 public class AddUseCaseMenuItem extends JMenuItem {
     private UsecasePanel panel;
 
-    AddUseCaseMenuItem() {
+    public AddUseCaseMenuItem() {
         super("Add new Use Case");
         panel = new UsecasePanel();
         createUseCaseMenu();

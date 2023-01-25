@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import java.awt.Component;
@@ -31,7 +31,7 @@ public class SGComponentTreeCellRenderer implements TreeCellRenderer {
 
     private JLabel label;
 
-    SGComponentTreeCellRenderer() {
+    public SGComponentTreeCellRenderer() {
         label = new JLabel();
     }
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.graph;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import org.apache.commons.collections15.Factory;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

@@ -1,10 +1,11 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
 
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
+import gov.inl.igcapt.graph.SgPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,7 @@ public class UsecasePanel extends SgPanel {
     }
 
     @Override
-    boolean save() {
+    public boolean save() {
 
         if(name.getText().isEmpty()) {
             addValidationText("Empty name field");
@@ -80,7 +81,7 @@ public class UsecasePanel extends SgPanel {
     }
 
     @Override
-    void reset() {
+    protected void reset() {
         this.name.setText("");
         this.latency.setText("");
         try {
@@ -121,7 +122,7 @@ public class UsecasePanel extends SgPanel {
     }
 
     @Override
-    void setupForm() {
+    protected void setupForm() {
         initialize();
 
         try {

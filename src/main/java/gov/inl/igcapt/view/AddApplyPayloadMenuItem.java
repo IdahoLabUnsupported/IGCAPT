@@ -1,34 +1,36 @@
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
 import gov.inl.igcapt.components.PayloadEditorForm;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 public class AddApplyPayloadMenuItem extends JMenuItem {
 
-    AddApplyPayloadMenuItem(IGCAPTgui igcaptGui) {
+    public AddApplyPayloadMenuItem() {
         super("Apply Payload...");
-        createApplyPayloadMenu(igcaptGui);
+        createApplyPayloadMenu();
     }
 
-    private void createApplyPayloadMenu(IGCAPTgui igcaptGui) {
+    private void createApplyPayloadMenu() {
         
         this.addActionListener((ActionEvent ev) -> {
-            PayloadEditorForm payloadEditorForm = igcaptGui.getPayloadEditorForm();
+            PayloadEditorForm payloadEditorForm = IGCAPTgui.getInstance().getPayloadEditorForm();
             if (payloadEditorForm == null) {
-                igcaptGui.setPayloadEditorForm(payloadEditorForm = new PayloadEditorForm(igcaptGui.getPayload()));
+                IGCAPTgui.getInstance().setPayloadEditorForm(payloadEditorForm = new PayloadEditorForm(IGCAPTgui.getInstance().getPayload()));
                 payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
                 payloadEditorForm.setVisible(true);
                 
                 // Closed the Payload Editor dialog with Ok.
                 if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                    igcaptGui.setPayload(payloadEditorForm.getPayload());
+                    IGCAPTgui.getInstance().setPayload(payloadEditorForm.getPayload());
                     
                     // Apply the payload
-                    igcaptGui.applyPayload();
+                    IGCAPTgui.getInstance().applyPayload();
                 }
                 
-                igcaptGui.setPayloadEditorForm(payloadEditorForm = null);
+                IGCAPTgui.getInstance().setPayloadEditorForm(payloadEditorForm = null);
             }
             else {
                 payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
@@ -37,10 +39,10 @@ public class AddApplyPayloadMenuItem extends JMenuItem {
                 
                 // Closed the Payload Editor dialog with Ok.
                 if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                    igcaptGui.setPayload(payloadEditorForm.getPayload());
+                    IGCAPTgui.getInstance().setPayload(payloadEditorForm.getPayload());
                     
                     // Apply the payload
-                    igcaptGui.applyPayload();
+                    IGCAPTgui.getInstance().applyPayload();
                 }
             }
         });            

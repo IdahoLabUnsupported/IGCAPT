@@ -23,15 +23,15 @@ public class JSGMapViewer extends JPanel {
     private JMapViewer map;
     private JSplitPane splitPane;
 
-    public JSGMapViewer(String name, IGCAPTgui igCAPTgui) {
-        this(name, false, igCAPTgui);
+    public JSGMapViewer(String name) {
+        this(name, false);
     }
 
-    public JSGMapViewer(String name, boolean treeVisible, IGCAPTgui igCAPTgui) {
+    public JSGMapViewer(String name, boolean treeVisible) {
         super();
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
-        map = new JMapViewer(igCAPTgui);
+        map = new JMapViewer();
         map.initialize();
 
         splitPane.setOneTouchExpandable(true);

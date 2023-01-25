@@ -10,11 +10,13 @@ package org.openstreetmap.gui.jmapviewer;
  *ALL RIGHTS RESERVED 
  *
  * @author kur
- */
+ **/
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
+import gov.inl.igcapt.graph.SGComponentTreeCellRenderer;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -190,12 +192,10 @@ class DragTree7 extends JTree implements DragGestureListener,
         if (node != null) {
             Object obj = node.getUserObject();
             if (node.isLeaf()) {
-                if (obj instanceof SgComponentData) {
-                    SgComponentData component = (SgComponentData)obj;
-                    
+                if (obj instanceof SgComponentData component) {
                     IGCAPTgui.getInstance().setCurrentType(component.getUuid());
                 }
             }
         }
     }
-};
+}
