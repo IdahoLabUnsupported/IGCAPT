@@ -41,9 +41,9 @@ public interface MapImage extends MapObject, ICoordinate {
      * Paints the map marker on the map. The <code>position</code> specifies the
      * coordinates within <code>g</code>
      *
-     * @param g graphics
-     * @param position coordinates
-     * @param radius radius
+     * @param g Graphics
+     * @param position Point
+     * @param img BufferedImage
      */
     void paint(Graphics g, Point position, BufferedImage img);
 }

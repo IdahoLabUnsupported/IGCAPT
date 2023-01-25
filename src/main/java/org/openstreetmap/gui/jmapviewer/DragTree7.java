@@ -11,23 +11,24 @@ package org.openstreetmap.gui.jmapviewer;
  *
  * @author kur
  **/
+
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgComponentGroupData;
 import gov.inl.igcapt.graph.SGComponentTreeCellRenderer;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.dnd.*;
+import java.util.List;
 
 class DragTree7 extends JTree implements DragGestureListener,
         DragSourceListener, TreeSelectionListener {
