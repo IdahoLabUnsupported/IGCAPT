@@ -909,7 +909,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         loadTopology.addActionListener((ActionEvent ev) -> {
             
             JFileChooser chooser = new JFileChooser();
-            FileFilter filter = new FileNameExtensionFilter("IGC File", "igc");
+            FileFilter filter = new FileNameExtensionFilter("IGCAP Files", "igc");
             chooser.setFileFilter(filter);
             
             if (lastPath != null && !lastPath.isEmpty()) {
