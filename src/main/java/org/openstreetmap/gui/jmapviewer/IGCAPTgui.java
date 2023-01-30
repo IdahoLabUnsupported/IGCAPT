@@ -200,7 +200,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     static final IGCAPTproperties IGCAPTPROPERTIES = IGCAPTproperties.getInstance();
     private static final long serialVersionUID = 1L;
 
-    private final JSGMapViewer treeMap;
+    private final JSGMapViewer treeMap; 
 
     private final JLabel zoomLabel;
     private final JLabel zoomValue;

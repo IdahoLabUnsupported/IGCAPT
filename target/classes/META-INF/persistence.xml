@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    <persistence-unit name="IGCAPT" transaction-type="RESOURCE_LOCAL">
+        <!-- Persistence provider -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- Entity classes -->
+        <class>gov.inl.igcapt.components.DataModels.SgComponentData</class>
+        <class>gov.inl.igcapt.components.DataModels.SgCollapseInto</class>
+        <!--        <class>gov.inl.igcapt.components.generated.SgComponentDataElement</class>-->
+        <class>gov.inl.igcapt.components.DataModels.SgComponentListData</class>
+        <class>gov.inl.igcapt.components.DataModels.SgComponentGroupData</class>
+        <!--        <class>gov.inl.igcapt.components.generated.SgComponentUseCaseData</class>-->
+        <class>gov.inl.igcapt.components.DataModels.SgEndPoint</class>
+        <properties>
+          <!--            <property name="hibernate.default_schema" value="IGCAPT"/>-->
+          <property name="hibernate.dialect" value="org.hibernate.community.dialect.SQLiteDialect"/>
+          <property name="hibernate.connection.driver_class" value="org.sqlite.JDBC"/>
+          <!-- The JDBC URL to the database instance -->
+          <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:SGComponents.db"/>
+          <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+          <!--            <property name="hibernate.hbm2ddl.auto" value="update" />-->
+        </properties>
+    </persistence-unit>
+</persistence>
