@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!--Created with Liquid Studio 2021 (https://www.liquid-technologies.com)-->
-<xs:schema xmlns="http://pnnl.gov/gdtaf-core" elementFormDefault="qualified" targetNamespace="http://pnnl.gov/gdtaf-core" 
-           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!--Created with Liquid Studio (https://www.liquid-technologies.com)-->
+<xs:schema xmlns="http://pnnl.gov/gdtaf-core" elementFormDefault="qualified" targetNamespace="http://pnnl.gov/gdtaf-core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:complexType name="BaseBlock">
         <xs:attribute name="UUID" type="guid" use="required" />
         <xs:attribute name="Name" type="xs:string" use="required" />
+    </xs:complexType>
+    <xs:complexType name="TimeContractType">
+        <xs:complexContent>
+            <xs:extension base="xs:anyType" />
+        </xs:complexContent>
     </xs:complexType>
     <xs:simpleType name="guid">
         <xs:restriction base="xs:string">
@@ -24,11 +28,16 @@
                     <xs:element name="possible_peers" type="guid" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="derived_from" type="guid" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="available_data" type="guid" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="available_stacks" type="guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
                 <xs:attribute name="Description" type="xs:string" use="required" />
                 <xs:attribute name="Type" type="EquipmentType" use="required" />
             </xs:extension>
         </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="TimeBasedOverhead">
+        <xs:attribute name="Schedule" type="xs:string" />
+        <xs:attribute name="FixedByteOverhead" type="xs:integer" />
     </xs:complexType>
     <xs:simpleType name="EquipmentType">
         <xs:restriction base="xs:string">
@@ -41,8 +50,8 @@
     </xs:simpleType>
     <xs:simpleType name="EquipmentRole">
         <xs:restriction base="xs:string">
-			<xs:enumeration value="ROLE_UNKNOWN" />
-			<xs:enumeration value="ROLE_ENDPOINT" />
+            <xs:enumeration value="ROLE_UNKNOWN" />
+            <xs:enumeration value="ROLE_ENDPOINT" />
             <xs:enumeration value="ROLE_REPEATER" />
             <xs:enumeration value="ROLE_TAKEOUT" />
             <xs:enumeration value="ROLE_HEADEND" />
@@ -55,13 +64,13 @@
             <xs:enumeration value="ROLE_TOWER" />
             <xs:enumeration value="ROLE_SUBSTATION" />
             <xs:enumeration value="ROLE_CONTAINER" />
-			<xs:enumeration value="ROLE_CONDUCTOR" />
-		</xs:restriction>
+            <xs:enumeration value="ROLE_CONDUCTOR" />
+        </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="CommunicationZone">
         <xs:restriction base="xs:string">
-			<xs:enumeration value="ZONE_UNKNOWN" />
-			<xs:enumeration value="ZONE_BACK_OFFICE_LAN" />
+            <xs:enumeration value="ZONE_UNKNOWN" />
+            <xs:enumeration value="ZONE_BACK_OFFICE_LAN" />
             <xs:enumeration value="ZONE_WAN" />
             <xs:enumeration value="ZONE_SUBSTATION" />
             <xs:enumeration value="ZONE_FIELD" />
@@ -83,7 +92,9 @@
             <xs:enumeration value="MAX_CHILDREN" />
             <xs:enumeration value="MAX_PEERS" />
             <xs:enumeration value="MAX_PARENTS" />
+            <xs:enumeration value="MAX_MANAGED" />
             <xs:enumeration value="PATH_LOSS_CALCULATION" />
+            <xs:enumeration value="LATENCY_CALCULATION" />
             <xs:enumeration value="MIN_PATH_THRESHOLD" />
             <xs:enumeration value="COST_FACTOR" />
             <xs:enumeration value="IMPLEMENTATION_FACTOR" />
@@ -107,8 +118,8 @@
         <xs:complexContent>
             <xs:extension base="BaseBlock">
                 <xs:sequence>
-					<xs:element name="SourceID" type="xs:string" minOccurs="0" />
-					<xs:element name="Time" type="TimeContractType" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="SourceID" type="xs:string" minOccurs="0" />
+                    <xs:element name="Time" type="TimeContractType" minOccurs="0" maxOccurs="1" />
                 </xs:sequence>
                 <xs:attribute name="Description" type="xs:string" use="required" />
                 <xs:attribute name="Group" type="DataGroup" use="required" />
@@ -124,15 +135,13 @@
             <xs:enumeration value="COMMAND" />
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType name="TimeContractType">
-        <xs:complexContent>
-            <xs:extension base="xs:anyType" />
-        </xs:complexContent>
-    </xs:complexType>
     <xs:simpleType name="LinkScore">
         <xs:restriction base="xs:double" />
     </xs:simpleType>
     <xs:simpleType name="guidList">
         <xs:list itemType="guid" />
+    </xs:simpleType>
+    <xs:simpleType name="indexList">
+        <xs:list itemType="xs:integer" />
     </xs:simpleType>
 </xs:schema>

@@ -10,6 +10,13 @@
             <xs:enumeration value="ADDED" />
         </xs:restriction>
     </xs:simpleType>
+    <xs:complexType name="EdgeIndexType">
+        <xs:simpleContent>
+            <xs:extension base="core:guid">
+                <xs:attribute name="EdgeIndexList" type="core:indexList" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
     <xs:complexType name="Asset">
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">
@@ -42,9 +49,9 @@
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">
                 <xs:sequence>
-                    <xs:element name="parents" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="children" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="peers" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="parents" type="EdgeIndexType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="children" type="EdgeIndexType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="peers" type="EdgeIndexType" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -54,7 +61,7 @@
             <xs:extension base="PlanningAsset">
                 <xs:sequence>
                     <xs:element name="Views" type="SolutionAssetView" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="associated_gucs" type="core:guid" />
+                    <xs:element name="associated_gucs" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -114,6 +121,7 @@
         <xs:complexContent>
             <xs:extension base="TopologyNode">
                 <xs:attribute name="ObjectiveFunction" type="xs:anySimpleType" />
+                <xs:attribute name="Description" type="xs:string" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -210,7 +218,7 @@
             <xs:extension base="core:BaseBlock">
                 <xs:sequence>
                     <xs:element name="Attributes" type="PayloadAttribute" minOccurs="1" maxOccurs="unbounded" />
-                    <xs:element name="data" type="core:guid" />
+                    <xs:element name="data" type="core:guid" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="Description" type="xs:string" />
             </xs:extension>
@@ -269,6 +277,17 @@
         <xs:attribute name="Detail" type="xs:string" />
         <xs:attribute name="SourceOption" type="core:guid" />
     </xs:complexType>
+    <xs:simpleType name="SolutionEdgeAttributeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PACKET_SIZE_BYTES" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="SolutionEdgeAttribute">
+        <xs:attribute name="Type" type="SolutionEdgeAttributeType" use="required" />
+        <xs:attribute name="Value" type="xs:anySimpleType" use="required" />
+        <xs:attribute name="Schedule" type="xs:string" />
+        <xs:attribute name="reference" type="core:guid" />
+    </xs:complexType>
     <xs:complexType name="SolutionOption">
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">
@@ -277,6 +296,7 @@
                     <xs:element name="SolutionAsset" type="SolutionAsset" minOccurs="1" maxOccurs="unbounded" />
                     <xs:element name="Exception" type="SolutionException" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="Node" type="TopologyNode" minOccurs="1" maxOccurs="unbounded" />
+                    <xs:element name="Edge" type="SolutionEdgeAttribute" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="cnrm_head" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="gucs_head" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
@@ -307,6 +327,7 @@
                     <xs:element name="selected_gucs" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="selected_cnrm" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
+                <xs:attribute name="Description" type="xs:string" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -324,6 +345,48 @@
                     <xs:element name="State" type="PlanningModelState" />
                     <xs:element name="PlanningAsset" type="PlanningAsset" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="total_available_data" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="CommunicationStack">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="PossibleZone" type="core:CommunicationZone" minOccurs="1" maxOccurs="unbounded" />
+                    <xs:element name="application_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="presentation_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="session_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="transport_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="network_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="datalink_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                    <xs:element name="physical_layer" type="core:guid" minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="Protocol">
+        <xs:complexContent>
+            <xs:extension base="core:BaseBlock">
+                <xs:sequence>
+                    <xs:element name="TimedBasedOverhead" type="core:TimeBasedOverhead" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+                <xs:attribute name="FixedByteOverhead" type="xs:integer" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="LowerLayerProtocol">
+        <xs:complexContent>
+            <xs:extension base="Protocol">
+                <xs:attribute name="VariableByteOverhead" type="xs:decimal" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="ApplicationProtocol">
+        <xs:complexContent>
+            <xs:extension base="Protocol">
+                <xs:sequence>
+                    <xs:element name="packet_gen" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -527,6 +590,40 @@
                         <xs:field xpath="@UUID" />
                     </xs:unique>
                 </xs:element>
+                <xs:element name="CommunicationStackRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="CommunicationStack" type="CommunicationStack" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="uniqueStack">
+                        <xs:selector xpath="*" />
+                        <xs:field xpath="@UUID" />
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="ApplicationProtocolRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="ApplicationProtocol" type="ApplicationProtocol" minOccurs="1" maxOccurs="unbounded">
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="uniqueApplicationProtocol">
+                        <xs:selector xpath="*" />
+                        <xs:field xpath="@UUID" />
+                    </xs:unique>
+                </xs:element>
+                <xs:element name="LowerLevelProtocolRepo" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="LowerLayerProtocol" type="LowerLayerProtocol" minOccurs="1" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:unique name="uniqueLowerLevelProtocol">
+                        <xs:selector xpath="*" />
+                        <xs:field xpath="@UUID" />
+                    </xs:unique>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
         <xs:key name="PKAsset">
@@ -567,6 +664,18 @@
         </xs:key>
         <xs:key name="PKScenario">
             <xs:selector xpath="ScenarioRepo/Scenario" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKCommunicationStack">
+            <xs:selector xpath="CommunicationStackRepo/CommunicationStack" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKApplicationProtocol">
+            <xs:selector xpath="ApplicationProtocolRepo/ApplicationProtocol" />
+            <xs:field xpath="@UUID" />
+        </xs:key>
+        <xs:key name="PKLowerLevelProtocol">
+            <xs:selector xpath="LowerLevelProtocolRepo/LowerLevelProtocol" />
             <xs:field xpath="@UUID" />
         </xs:key>
     </xs:element>
