@@ -232,7 +232,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
         return layout;
     }
-
+    
     private JTabbedPane jtp;
     
     boolean toolTipsEnabled = true;

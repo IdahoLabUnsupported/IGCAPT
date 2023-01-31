@@ -6,6 +6,7 @@ package gov.inl.igcapt.graph;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -62,7 +63,26 @@ public class GraphManager {
     private static GraphManager instance;
    
     // private constructor
-    private GraphManager() {      
+    private GraphManager() {  
+        
+        //clickpoint?
+        
+        originalGraph = new SgGraph();
+
+        layout = new StaticLayout<>(originalGraph,
+                new Dimension(800, 800));
+
+
+        vv = new VisualizationViewer<>(layout);
+        
+        treeMap = new JSGMapViewer("Components");
+        
+        collapser = new GraphCollapser(originalGraph);
+        
+        currentGisMap = map();
+        
+        //contectclicknode?
+         
     }
 
     // Static method to create instance of GraphManager class
@@ -176,8 +196,9 @@ public class GraphManager {
     private GraphCollapser collapser;
     private SgGraph tempGraph = null;
     private SgGraph originalGraph = null;
-    private Heatmap heatmap = IGCAPTgui.getInstance().getHeatmap();
     
+    //private Heatmap heatmap = IGCAPTgui.getInstance().getHeatmap();
+    private Heatmap heatmap;
     
     // private final JSGMapViewer treeMap;
 
