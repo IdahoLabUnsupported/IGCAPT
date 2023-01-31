@@ -39,6 +39,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
 import gov.inl.igcapt.controllers.IGCAPTMapController;
+import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
@@ -147,7 +148,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
             boolean canCollapse = (collapseableNodes != null && collapseableNodes.size() > 1);
 
             if (canCollapse) {
-                IGCAPTgui.getInstance().setContextClickNode(node);
+                GraphManager.getInstance().setContextClickNode(node);
 
                 // Get the component corresponding to this node.
                 SgComponentData sgComponent = IGCAPTgui.getComponentByUuid(node.getType());
@@ -170,8 +171,8 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                     pickState.pick(collapseNode, true);
                 }
 
-                IGCAPTgui.getInstance().collapse();
-                IGCAPTgui.getInstance().setContextClickNode(null);
+                GraphManager.getInstance().collapse();
+                GraphManager.getInstance().setContextClickNode(null);
             }
         }
     }
@@ -1704,14 +1705,14 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     
     private void setNodeLogicalPosition(SgNode node) {
         // Use the expanded graph and not the collapsed graph.
-        Graph expandedGraph = IGCAPTgui.getInstance().getGraph();
+        Graph expandedGraph = GraphManager.getInstance().getGraph();
 
         // Set the logical coordinate position to the average position of the existing vertices.
         Collection<SgNodeInterface> nodeList = expandedGraph.getVertices();
         double avgX = 0.0, avgY = 0.0;
         int nodeListSize = nodeList.size();
         
-        AbstractLayout<SgNodeInterface, SgEdge> layout = IGCAPTgui.getInstance().getLocalLayout();
+        AbstractLayout<SgNodeInterface, SgEdge> layout = GraphManager.getInstance().getLocalLayout();
         
         if (nodeList != null && nodeListSize > 0) {
             for (SgNodeInterface otherNode : nodeList) {
@@ -1756,26 +1757,26 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                             ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig = aggregationDialog.getAggregateConfiguration();
                             SgComponentData selectedAggregateComponent = aggregationDialog.getSelectedComponent();
 
-                            SgNodeInterface aggregateNode = IGCAPTgui.getInstance().createAggregation(aggregateConfig, selectedAggregateComponent, point, c, aggregationDialog.getDefaultMaxRate());
+                            SgNodeInterface aggregateNode = GraphManager.getInstance().createAggregation(aggregateConfig, selectedAggregateComponent, point, c, aggregationDialog.getDefaultMaxRate());
                             IGCAPTgui.getInstance().currentTypeUuidStr = uuidStr;
                             setNodeLogicalPosition((SgNode)aggregateNode);
                             aggregateNode.setLat(c.getLat());
                             aggregateNode.setLongit(c.getLon());
-                            IGCAPTgui.getInstance().graphChanged();
+                            GraphManager.getInstance().graphChanged();
                         }
                     }
                     else {
 
-                        SgNode n1 = new SgNode(IGCAPTgui.getInstance().getNodeIndex(), uuidStr, sgComponent.getName() + "_" + String.valueOf(IGCAPTgui.getInstance().getNodeIndex()), true, sgComponent.isPassthrough(),sgComponent.isAggregate(), 0, 0, "");
-                        IGCAPTgui.getInstance().setNodeIndex(IGCAPTgui.getInstance().getNodeIndex() + 1);
+                        SgNode n1 = new SgNode(GraphManager.getInstance().getNodeIndex(), uuidStr, sgComponent.getName() + "_" + String.valueOf(GraphManager.getInstance().getNodeIndex()), true, sgComponent.isPassthrough(),sgComponent.isAggregate(), 0, 0, "");
+                        GraphManager.getInstance().setNodeIndex(GraphManager.getInstance().getNodeIndex() + 1);
                         n1.setLat(c.getLat());
                         n1.setLongit(c.getLon());
 
                         // Set the logical coordinate position to the average position of the existing vertices.
                         setNodeLogicalPosition(n1);
 
-                        IGCAPTgui.getInstance().getGraph().addVertex(n1);
-                        IGCAPTgui.getInstance().graphChanged();
+                        GraphManager.getInstance().getGraph().addVertex(n1);
+                        GraphManager.getInstance().graphChanged();
                     }
                 }
                 

@@ -6,6 +6,7 @@
 package gov.inl.igcapt.components;
 
 import gov.inl.igcapt.components.DataModels.SgComponentData;
+import gov.inl.igcapt.graph.GraphManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -367,7 +368,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
             List<Integer> endPoints = endPointListDialog.getSelectedEndPointIds();
             
             for (Integer endPoint : endPoints) {
-                m_EndPointListModel.addElement(IGCAPTgui.getInstance().getNode(endPoint).getName());
+                m_EndPointListModel.addElement(GraphManager.getInstance().getNode(endPoint).getName());
                 m_EndpointList.add(endPoint);
             }
         }
@@ -429,7 +430,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         
         m_EndPointListModel.clear();
         for (int i : m_EndpointList) {
-            m_EndPointListModel.addElement(IGCAPTgui.getInstance().getNode(i).getName());
+            m_EndPointListModel.addElement(GraphManager.getInstance().getNode(i).getName());
         }
         
         endPointList.setModel(m_EndPointListModel);

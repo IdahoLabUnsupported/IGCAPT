@@ -1,5 +1,6 @@
 package gov.inl.igcapt.view;
 
+import gov.inl.igcapt.graph.GraphManager;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class AddClearAnalysisResultsMenuItem extends JMenuItem {
     private void createClearAnalysisMenu() {
         
         this.addActionListener(ActionListener -> {
-            IGCAPTgui.getInstance().clearEdgeUtilization();
+            GraphManager.getInstance().clearEdgeUtilization();
         });           
     }
 }

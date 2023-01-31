@@ -141,10 +141,10 @@ public class SgGraph extends UndirectedSparseMultigraph<SgNodeInterface, SgEdge>
     public ArrayList<SgNodeInterface> getConnectedNodes(boolean recursive, ArrayList<SgNodeInterface> existingNodeList) {
         
         ArrayList<SgNodeInterface> returnval = new ArrayList<>(existingNodeList);      
-        List<SgEdge> connectedEdges = new ArrayList<>(IGCAPTgui.getInstance().getGraph().getIncidentEdges(this));
+        List<SgEdge> connectedEdges = new ArrayList<>(GraphManager.getInstance().getGraph().getIncidentEdges(this));
 
         for (SgEdge edge : connectedEdges) {
-            Pair<SgNodeInterface> endPointPair = IGCAPTgui.getInstance().getGraph().getEndpoints(edge);
+            Pair<SgNodeInterface> endPointPair = GraphManager.getInstance().getGraph().getEndpoints(edge);
 
             SgNodeInterface first = endPointPair.getFirst();
             SgNodeInterface second = endPointPair.getSecond();
@@ -178,7 +178,7 @@ public class SgGraph extends UndirectedSparseMultigraph<SgNodeInterface, SgEdge>
     @Override
     public boolean addVertex(SgNodeInterface vertex) {
         boolean returnval = false;
-        SgGraph originalGraph = IGCAPTgui.getInstance().getOriginalGraph();
+        SgGraph originalGraph = GraphManager.getInstance().getOriginalGraph();
         
         // Make sure to only add if not there and be sure to only add SgNodes to the original graph.
         if (this != originalGraph && !originalGraph.containsVertex(vertex) && vertex instanceof SgNode) {
@@ -193,7 +193,7 @@ public class SgGraph extends UndirectedSparseMultigraph<SgNodeInterface, SgEdge>
     public boolean addEdge(SgEdge edge, SgNodeInterface v1, SgNodeInterface v2) {
         boolean returnval = false;
         
-        SgGraph originalGraph = IGCAPTgui.getInstance().getOriginalGraph();
+        SgGraph originalGraph = GraphManager.getInstance().getOriginalGraph();
         if (this != originalGraph) {
             
             SgNodeInterface v1Node = v1.getRefNode();

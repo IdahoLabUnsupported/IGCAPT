@@ -51,7 +51,7 @@ public class SGEditingGraphMousePlugin<V, E> extends EditingGraphMousePlugin<V, 
     @Override
     public void mousePressed(MouseEvent e) {
         
-        IGCAPTgui.getInstance().setClickPoint(e.getPoint());
+        GraphManager.getInstance().setClickPoint(e.getPoint());
         super.mousePressed(e);
     }
 
@@ -80,7 +80,7 @@ public class SGEditingGraphMousePlugin<V, E> extends EditingGraphMousePlugin<V, 
                     E edge = edgeFactory.create();
                     graph.addEdge(edge,startVertex, vertex);
 
-                    IGCAPTgui.getInstance().updateGISObjects();
+                    GraphManager.getInstance().updateGISObjects();
                 }
             }
             

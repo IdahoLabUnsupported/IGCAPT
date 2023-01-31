@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import javax.swing.JLabel;
+import java.util.Random;
 import javax.swing.JOptionPane;
 import org.apache.commons.collections15.Predicate;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -44,6 +44,7 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.JSGMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapImageImpl;
 import org.openstreetmap.gui.jmapviewer.MapLineImpl;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -76,11 +77,11 @@ public class GraphManager {
         return instance;
     }
     
-    // map viewer object call to it from IGCAPT 
+    // TODO map viewer object call to it from IGCAPT 
     private JSGMapViewer treeMap;
     
-    // get and set edge index
-    int edgeIndex = 0;  // edge index in the graph
+    // get and set edge index in the graph
+    int edgeIndex = 0;  
 
     public void setEdgeIndex(int val){
         edgeIndex = val;
@@ -89,8 +90,8 @@ public class GraphManager {
         return edgeIndex;
     }
     
-    // get and set node index
-    int nodeIndex = 0;  // node index in the graph
+    // get and set node index in the graph
+    int nodeIndex = 0;  
 
     public void setNodeIndex(int val){
         nodeIndex = val;
@@ -175,7 +176,7 @@ public class GraphManager {
     private GraphCollapser collapser;
     private SgGraph tempGraph = null;
     private SgGraph originalGraph = null;
-    private Heatmap heatmap;
+    private Heatmap heatmap = IGCAPTgui.getInstance().getHeatmap();
     
     
     // private final JSGMapViewer treeMap;
@@ -186,6 +187,18 @@ public class GraphManager {
     
     public SgGraph getOriginalGraph() {
         return originalGraph;
+    }
+    
+    public SgGraph getTempGraph() {
+        return tempGraph;
+    }
+    
+    public GraphCollapser getCollapser() {
+        return collapser;
+    } 
+    
+    public boolean getFileDirty() {
+        return fileDirty;
     }
     
     // Redraw the GIS images based upon the current Jung graph contents.
@@ -301,19 +314,12 @@ public class GraphManager {
 
         refresh();
     }
+    
     public void graphChanged() {
         fileDirty = true;
 
         clearEdgeUtilization();
         refresh();
-    }
-    
-    public void SetHeatmap(Heatmap lheatmap){
-        
-        if (lheatmap != heatmap) {
-            heatmap = lheatmap;
-            this.updateGISObjects();            
-        }
     }
     
     public void collapse() {
@@ -377,18 +383,67 @@ public class GraphManager {
         updateGISObjects();
     }
     
-    //TODO does this need to be called from igcaptgui?
-//    private final JLabel xyPosition;
-//    
-//    public String getXyPosition() {
-//        return xyPosition.getText();
-//    }
-//
-//    public void setXyPosition(String newtext) {
-//        xyPosition.setText("x,y = " + newtext);
-//    } 
+    /**
+     * Get the percent nodes from the entire graph, excluding aggregate nodes.
+     * @param percentOfNodes
+     * @param exclusionList
+     * @return 
+     */
+    public List<SgNode> getPercentNodes(int percentOfNodes, List<SgNode> exclusionList) {
+        
+        // Create a set of all nodes excluding aggregate nodes.
+        SgGraph graph = getOriginalGraph();
+        List<SgNode> nodesWOAggregates = new ArrayList<>();
+        List<SgNodeInterface> allNodes = new ArrayList<>(graph.getVertices());
+        
+        for (SgNodeInterface node:allNodes) {
+            
+            if (!node.getRefNode().getIsAggregate()) {
+                nodesWOAggregates.add(node.getRefNode());
+            }
+        }
+        
+        return getPercentNodes(nodesWOAggregates, percentOfNodes, exclusionList);
+    }
     
-    private <V, E> void doNotPaintInvisibleVertices(
+    /**
+     * Get percentOfNodes percent nodes from nodeList. Exclude those nodes listed in the exclusion list.
+     * @param nodeList
+     * @param percentOfNodes
+     * @param exclusionList
+     * @return 
+     */
+    public List<SgNode> getPercentNodes(List<SgNode> nodeList, int percentOfNodes, List<SgNode> exclusionList) {
+        List<SgNode> returnval = new ArrayList<>();
+        int listSize = nodeList.size();
+        
+        // Get a set of N unique random nodes
+        int numRandomNumbers = (int)Math.floor(nodeList.size() * (percentOfNodes / 100.0));
+        Random rand = new Random();
+        
+        int i = 0;
+        while(i<numRandomNumbers) {
+            int randNum = rand.nextInt(listSize);
+            SgNode randNode = nodeList.get(randNum);
+            
+            boolean isExcluded = false;
+            if (exclusionList != null) {
+                isExcluded = exclusionList.contains(randNode);
+            }
+            
+            boolean isAlreadyInList = returnval.contains(randNode);
+            
+            if (!isExcluded && !isAlreadyInList) {
+                returnval.add(randNode);
+                i++;
+            }
+        }
+        
+        return returnval;
+    }
+    
+    // Jung Visualization Veiwer code
+    public <V, E> void doNotPaintInvisibleVertices(
             VisualizationViewer<V, E> vv) {
         Predicate<Context<Graph<V, E>, V>> vertexIncludePredicate
                 = new Predicate<Context<Graph<V, E>, V>>() {
@@ -422,7 +477,7 @@ public class GraphManager {
     }
     
     // See note at end of "doNotPaintInvisibleVertices"
-    private <V, E> void doPaintEdgesAtLeastOneVertexIsVisible(
+    public <V, E> void doPaintEdgesAtLeastOneVertexIsVisible(
             VisualizationViewer<V, E> vv) {
         vv.getRenderer().setEdgeRenderer(new BasicEdgeRenderer<V, E>() {
             @Override
@@ -459,7 +514,7 @@ public class GraphManager {
             }
         });
     }
-       
+    
     // The simplest way to clear the graph is to create a new instance.
     public boolean clearGraph() {
 
@@ -490,6 +545,61 @@ public class GraphManager {
         }
         
         return returnval;
+    }
+    
+     // Caclulate the midpoint between two points
+    private final double NEW_LINE_ADDER = 10;  //2;
+    
+    private Point calcMidPoint(Point p1, Point p2) {
+        double newX = (p2.getX() + p1.getX()) / 2;
+        double newY = (p2.getY() + p1.getY()) / 2;
+        Point midpoint = new Point();
+        midpoint.setLocation(newX, newY);
+        return midpoint;
+    }
+
+    // occurrences indicates how many occurrences and arbitrarily adjusts the mid point
+    public Coordinate calcNewMidPoint(double latDeg1, double lonDeg1, double latDeg2, double lonDeg2, int occurrences) {
+
+        // checkOutside - when false calculate even if not displayed
+        boolean checkOutside = false;
+        // Convert lat/lon to point
+        Point p1 = map().getMapPosition(latDeg1, lonDeg1, checkOutside);
+        Point p2 = map().getMapPosition(latDeg2, lonDeg2, checkOutside);
+        // If both nodes are same location return null
+        if (p1.equals(p2)) {
+            return null;
+        }
+        // get the midpoint of the two points
+        Point midPoint = calcMidPoint(p1, p2);
+        double slope = ((double)p2.y - (double)p1.y) / ((double)p2.x - (double)p1.x);
+        double perpendicular_slope = -1 * (1 / slope);
+
+        // y = mx + b (solve for b using the midPoint)
+        double b = midPoint.getY() - (perpendicular_slope * midPoint.getX());
+        
+        // calculate a new x with the adder 
+        // alternate adder / - adder for even/odd occurrences
+        double adder;
+        if (occurrences % 2 == 0) {
+            adder = Math.ceil((double)occurrences / 2) * NEW_LINE_ADDER;
+        }
+        else {
+            adder = Math.ceil((double)occurrences / 2) * NEW_LINE_ADDER * -1;
+        }
+
+        double newX = midPoint.getX() + adder;
+        // calculate a new y with the equation y = mx + b
+        double newY = (perpendicular_slope * newX) + b;
+        Point newMidPoint = new Point();
+        newMidPoint.setLocation(newX, newY);
+        
+        // Convert back to coordinate
+        Coordinate c = new Coordinate(0.0, 0.0);
+        ICoordinate ic = map().getPosition(newMidPoint.x, newMidPoint.y);
+        c.setLat(ic.getLat());
+        c.setLon(ic.getLon());
+        return c;
     }
     
     void writeGraphToDOM(Document doc, Element nodeRoot, Element edgeRoot) {
@@ -741,7 +851,7 @@ public class GraphManager {
         setCursor(Cursor.getDefaultCursor());
     }
     
-    private void setUtilization(List<double[]> utilList) {
+    public void setUtilization(List<double[]> utilList) {
         Graph expandedGraph = getOriginalGraph();
         ArrayList<SgEdge> sgEdges = new ArrayList<>(expandedGraph.getEdges());
 

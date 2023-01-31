@@ -337,13 +337,13 @@ public class SgNode implements SgNodeInterface {
     public ArrayList<SgNodeInterface> getConnectedNodes(boolean recursive, ArrayList<SgNodeInterface> existingNodeList) {
         
         ArrayList<SgNodeInterface> returnval = new ArrayList<>(existingNodeList);
-        Collection<SgEdge> incidentEdges = IGCAPTgui.getInstance().getGraph().getIncidentEdges(this);
+        Collection<SgEdge> incidentEdges = GraphManager.getInstance().getGraph().getIncidentEdges(this);
         
         if (incidentEdges != null) {
             List<SgEdge> connectedEdges = new ArrayList<>(incidentEdges);
 
             for (SgEdge edge : connectedEdges) {
-                Pair<SgNodeInterface> endPointPair = IGCAPTgui.getInstance().getGraph().getEndpoints(edge);
+                Pair<SgNodeInterface> endPointPair = GraphManager.getInstance().getGraph().getEndpoints(edge);
 
                 SgNodeInterface first = endPointPair.getFirst();
                 SgNodeInterface second = endPointPair.getSecond();

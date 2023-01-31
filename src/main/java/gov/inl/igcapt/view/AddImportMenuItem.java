@@ -1,5 +1,6 @@
 package gov.inl.igcapt.view;
 
+import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -75,7 +76,8 @@ public class AddImportMenuItem extends JMenuItem {
         // Comprised of nodes and edges. Loop through assets to create nodes. Each asset contains parent or children.
         // Use these to construct the edges.
         var igcapt = IGCAPTgui.getInstance();
-        var igcaptGraph = igcapt.getGraph();
+        var graphmanager = GraphManager.getInstance();
+        var igcaptGraph = graphmanager.getGraph();
         
         var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
         
@@ -117,6 +119,6 @@ public class AddImportMenuItem extends JMenuItem {
             }
         }
         
-        igcapt.refresh();   
+        graphmanager.refresh();   
     }
 }

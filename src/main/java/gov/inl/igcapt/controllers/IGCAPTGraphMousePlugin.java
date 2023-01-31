@@ -7,6 +7,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
+import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
@@ -98,7 +99,7 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
                             formatter.setRoundingMode(RoundingMode.DOWN);
                             String s = formatter.format(edge.getCalcTransRate());
 
-                            Graph<SgNodeInterface, SgEdge> graph = IGCAPTgui.getInstance().getGraph();
+                            Graph<SgNodeInterface, SgEdge> graph = GraphManager.getInstance().getGraph();
                             SgNodeInterface endPt1 = graph.getEndpoints(edge).getFirst();
                             SgNodeInterface endPt2 = graph.getEndpoints(edge).getSecond();
                             String endPt1Str = "";
@@ -199,10 +200,11 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         Point2D ivp = e.getPoint();
 
         IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
+        GraphManager graphManagerInstance = GraphManager.getInstance();
         SgNodeInterface vertex = pickSupport.getVertex(igcaptInstance.getAbstractLayout(), ivp.getX(), ivp.getY());
         if (vertex != null && vertex instanceof SgNodeInterface && IGCAPTgui.getInstance().getMode() == ModalGraphMouse.Mode.EDITING) {
 //            if (vertex != null && vertex instanceof SgNode && getMode() == Mode.EDITING) {
-            igcaptInstance.setContextClickNode((SgNodeInterface) vertex);
+            graphManagerInstance.setContextClickNode((SgNodeInterface) vertex);
             Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
             Icon currentIcon = vertex.getIcon();
             if (selectionIcon != null && currentIcon != null && currentIcon instanceof LayeredIcon) {
@@ -210,12 +212,12 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
                 currentLayeredIcon.add(selectionIcon);
             }
         } else {
-            SgNodeInterface oldSelectedNode = igcaptInstance.getContextClickNode();
+            SgNodeInterface oldSelectedNode = graphManagerInstance.getContextClickNode();
 
             if (oldSelectedNode != null) {
                 Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
                 ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-                igcaptInstance.setContextClickNode(null);
+                graphManagerInstance.setContextClickNode(null);
             }
         }
     }
@@ -226,12 +228,13 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
 
         // We had a selection icon showing for the target node, so remove it.
         IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
-        SgNodeInterface oldSelectedNode = igcaptInstance.getContextClickNode();
+        GraphManager graphManagerInstance = GraphManager.getInstance();
+        SgNodeInterface oldSelectedNode = graphManagerInstance.getContextClickNode();
 
         if (oldSelectedNode != null) {
             Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
             ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-            igcaptInstance.setContextClickNode(null);
+            graphManagerInstance.setContextClickNode(null);
             IGCAPTgui.getInstance().vv.repaint();
         }
     }
@@ -248,7 +251,7 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         SgNodeInterface vertex = pickSupport.getVertex(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
 
         if (vertex instanceof SgNode) {
-            IGCAPTgui.getInstance().setContextClickNode((SgNode) vertex);
+            GraphManager.getInstance().setContextClickNode((SgNode) vertex);
         }
     }
 }

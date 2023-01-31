@@ -1,5 +1,6 @@
 package gov.inl.igcapt.components;
 
+import gov.inl.igcapt.graph.GraphManager;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
@@ -134,6 +135,7 @@ public class HeatMapDialog extends javax.swing.JDialog {
             return;
         }
         IGCAPTgui igcaptGui = (IGCAPTgui)parent;
+        GraphManager graphManager = GraphManager.getInstance();
         igcaptGui.SetHeatmap(null);       
         saveValues();
         igcaptGui.SetHeatmap(new Heatmap(m_savedGridSize, m_savedKernelType, m_savedKernelRadius, 
