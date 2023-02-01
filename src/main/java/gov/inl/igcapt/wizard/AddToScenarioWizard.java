@@ -18,9 +18,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JFileChooser;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import javax.swing.JOptionPane;
 /**
  *
  * @author CHE
@@ -29,21 +32,77 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     private List<GucsInformation>m_gucsList;
     private List<CnrmInformation>m_cnrmList;
     private final ScenarioInformation m_newScenarioInfo;
+    private String m_webServiceHost;
+    private String m_webServiceKey;
+    enum ButtonStages {
+        LINE1,   // GUCS first line
+        LINE2,   // CNRM Second line
+        LINE3,   // Location Third line
+        LINE4    // Save - cancel fourth line
+    }
+    
     /**
      * Creates new form ScenarioWizard
      */
     public AddToScenarioWizard(java.awt.Frame parent, boolean modal, ScenarioInformation newScenario) {
         super(parent, modal);
+        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceHost");
+        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceKey");
         m_newScenarioInfo = newScenario;
+        
         initComponents();
-        initComboBoxes();
-        if (!m_gucsList.isEmpty() && !m_cnrmList.isEmpty()) {
-            jButton2.setEnabled(true);
-        }
-        else {
-            jButton2.setEnabled(false);
-        }
+        initGucsComboBox();
+        disableEnableButtons(ButtonStages.LINE1);
         this.setVisible(true);
+    }
+        
+    private void enableLine(ButtonStages stage, boolean state) {
+        switch(stage) {
+            case LINE1 -> {
+                jButton2.setEnabled(state);  // Next
+                jComboBox1.setEnabled(state);  // GUCS list
+            }
+            case LINE2 -> {
+                jButton4.setEnabled(state);   // Next
+                jComboBox2.setEnabled(state);  // CNRM list
+            }
+            case LINE3 -> {
+                jButton3.setEnabled(state);  // Browse
+                jTextField1.setEnabled(state);  // location
+            }
+            case LINE4 -> {
+                jButton5.setEnabled(state);   // Save
+            }
+        }
+    }
+    
+    private void disableEnableButtons(ButtonStages stage) {
+        switch (stage) {
+            case LINE1 -> {
+                enableLine(ButtonStages.LINE1, true);
+                enableLine(ButtonStages.LINE2, false);
+                enableLine(ButtonStages.LINE3, false);
+                enableLine(ButtonStages.LINE4, false);
+            }
+            case LINE2 -> {
+                enableLine(ButtonStages.LINE1, false);
+                enableLine(ButtonStages.LINE2, true);
+                enableLine(ButtonStages.LINE3, false);
+                enableLine(ButtonStages.LINE4, false);
+            }
+            case LINE3 -> {
+                enableLine(ButtonStages.LINE1, false);
+                enableLine(ButtonStages.LINE2, false);
+                enableLine(ButtonStages.LINE3, true);
+                enableLine(ButtonStages.LINE4, false);
+            }
+            case LINE4 -> {
+                enableLine(ButtonStages.LINE1, false);
+                enableLine(ButtonStages.LINE2, false);
+                enableLine(ButtonStages.LINE3, true);
+                enableLine(ButtonStages.LINE4, true);
+            }
+        }
     }
 
     /**
@@ -60,6 +119,12 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         jButton2 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Update Scenario with GUCS/CNRM");
@@ -76,6 +141,38 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         });
 
+        jButton1.setText("Cancel");
+        jButton1.setToolTipText("Delete scenario and quit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Save Location");
+        jLabel3.setToolTipText("Select Location for the Scenario file");
+
+        jButton3.setText("Browse");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Next");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Save");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,17 +181,24 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, 0, 303, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(78, 78, 78))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                            .addComponent(jTextField1)
+                            .addComponent(jComboBox1, 0, 299, Short.MAX_VALUE)
+                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -103,41 +207,56 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton5))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void initComboBoxes() {
+    // Initialize the GUCS combo box with the retrieved GUCS List
+    private void initGucsComboBox() {
         m_gucsList = getGucsList();
-        m_cnrmList = getCnrmList();
         String[] stringArray = new String[m_gucsList.size()];
         int count=0;
         for (GucsInformation gucs : m_gucsList) {
             stringArray[count++] = gucs.getName();
         }
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(stringArray));        
-        stringArray = new String[m_cnrmList.size()];
-        count=0;
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(stringArray));                
+    }
+    
+    // Initialize the CNRM combo box with the retrieved CNRM List
+    private void initCnrmComboBox() {
+        m_cnrmList = getCnrmList();
+        String[] stringArray = new String[m_cnrmList.size()];
+        int count=0;
         for (CnrmInformation cnrm : m_cnrmList) {
             stringArray[count++] = cnrm.getName();
         }
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(stringArray));
-        
     }
     
+    // Call the web service for the GUCS List
     private List<GucsInformation> getGucsList() {
         String output;
         try {
-            URL url = new URL("https://gdtafserviceapi.azure-api.net/core/gucs?subscription-key=f25aca8b0567432592271335d31851d7");
+            URL url = new URL("https://" + m_webServiceHost + 
+                    "/core/gucs?subscription-key=" + m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -162,10 +281,12 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         return m_gucsList;
     }
     
+    // Call the web service for the CNRM List
     private List<CnrmInformation> getCnrmList() {
         String output;
         try {
-            URL url = new URL("https://gdtafserviceapi.azure-api.net/core/cnrm?subscription-key=f25aca8b0567432592271335d31851d7");
+            URL url = new URL("https://" + m_webServiceHost + 
+                    "/core/cnrm?subscription-key=" + m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -190,6 +311,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         return m_cnrmList;
     }
     
+    // Call the web service to add the GUCS list to the scenario 
+    // Currently this is single select
     private void updateScenarioGucsList() {
         JSONArray jsonArray = new JSONArray();
         // This will need to be updated to pick multiples but for now just one
@@ -199,8 +322,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         String scenarioId = m_newScenarioInfo.getId();
 
         try {
-            String urlString = "https://gdtafserviceapi.azure-api.net/core/scenarios/" + scenarioId +
-                               "/gucs?subscription-key=f25aca8b0567432592271335d31851d7"; 
+            String urlString = "https://" + m_webServiceHost + 
+                    "/core/scenarios/" + scenarioId + "/gucs?subscription-key=" +
+                    m_webServiceKey; 
             URL url = new URL(urlString);
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -235,6 +359,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
     }
     
+    // Call the web service to add the CNRM list to the scenario 
+    // Currently this is single select
     private void updateScenarioCnrmList() {
         JSONArray jsonArray = new JSONArray();
         // This will need to be updated to pick multiples but for now just one
@@ -244,8 +370,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         String scenarioId = m_newScenarioInfo.getId();
 
         try {
-            String urlString = "https://gdtafserviceapi.azure-api.net/core/scenarios/" + scenarioId +
-                               "/cnrm?subscription-key=f25aca8b0567432592271335d31851d7"; 
+            String urlString = "https://" + m_webServiceHost + 
+                    "/core/scenarios/" + scenarioId + "/cnrm?subscription-key=" + 
+                    m_webServiceKey;
             URL url = new URL(urlString);
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -280,14 +407,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
     }
 
-    // For now write the scenario file to the "LastPath" property locations
     // Name the file scenarioInformation.getName()
+    // Write the file to the selected path
     private void writeScenarioFile(ScenarioDetails scenarioDetails) {
-        String lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue("LastPath");
-        // strip off the filename
-        int index = lastPath.lastIndexOf(File.separator);
-        lastPath = lastPath.substring(0, index);
-        String scenarioFile = lastPath + File.separator + 
+        String path = jTextField1.getText();
+        String scenarioFile = path + File.separator + 
             scenarioDetails.getScenarioInformation().getName() + ".xml";
         try {
             
@@ -300,12 +424,14 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
     }
     
+    // Get the scenario file through the web service and call the write method
     private void getTheScenarioFile() {
         String output;
         ScenarioDetails scenarioDetails = null;
         try {
-            URL url = new URL("https://gdtafserviceapi.azure-api.net/core/scenarios/" +
-                              m_newScenarioInfo.getId() + "?subscription-key=f25aca8b0567432592271335d31851d7");
+            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios/" +
+                    m_newScenarioInfo.getId() + "?subscription-key=" + 
+                    m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -330,19 +456,131 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             //return e2.getMessage();
         }
     }
+       
+    /*private void cleanupScenarios() {
+        String output;
+        List<ScenarioInformation>scenarioList = null;
+        ScenarioInformation scenarioInformation = null;
+        try {
+            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios" +
+                              "?subscription-key=" + m_webServiceKey);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+            }
+            
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+            BufferedReader br = new BufferedReader(in);
+            ObjectMapper objMapper = new ObjectMapper();
+            TypeFactory typeFactory = objMapper.getTypeFactory();
+            CollectionType collectionType = typeFactory.constructCollectionType(List.class, ScenarioInformation.class);
+            while ((output = br.readLine()) != null) {
+                scenarioList = objMapper.readValue(output, collectionType);
+            }
+            conn.disconnect();
+            // at this point need to parse the results and add to the combo
+        }
+        catch (Exception e2) {
+            System.out.println("Exception!"+e2.getMessage());
+            //return e2.getMessage();
+        }
+        if (scenarioList != null) {
+            for (ScenarioInformation scenario : scenarioList) {
+                if (scenario.getName().startsWith("Test")) {
+                    System.out.println("Delete scenario named:"+scenario.getName());
+                    deleteScenario(scenario.getId());
+                }
+            }
+        }
+    }*/
 
-    // Next button in the wizard
-    // PUT to update the list of GUCS for the scenario  -- need scneario id and gucs id(s)
-    // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
-    // Get to get the scenario file and write it to file system.
+    // delete scenario due to cancelling wizard
+    private void deleteScenario(String id) {
+        JSONObject json = new JSONObject();
+        json.put("id", id);
+        HttpURLConnection conn = null;
+        
+        try {
+            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios/"
+                + id + "?subscription-key=" + m_webServiceKey);
+            
+            conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+            
+            OutputStream os = conn.getOutputStream();
+            byte[] input = json.toString().getBytes("utf-8");
+            os.write(input, 0, input.length);
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed: HTTP Error code:"+conn.getResponseCode());
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Exception::"+e.getMessage());
+        }
+        if (conn != null) {
+            conn.disconnect();
+        }
+    }
+
+    // Next button - Select GUCS
+    // PUT to update the list of GUCS for the scenario  -- need scenario id and gucs id(s)
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         updateScenarioGucsList();
-        updateScenarioCnrmList();
-        //System.out.println("Skip the puts and do the get");
-        getTheScenarioFile();
-        //cleanupScenarios(); -- this is test code
-        dispose();
+        initCnrmComboBox();
+        disableEnableButtons(ButtonStages.LINE2);
+        //cleanupScenarios(); //-- this is test code
     }//GEN-LAST:event_jButton2ActionPerformed
+    
+    // Cancel - delete the scenario and close form
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        deleteScenario(m_newScenarioInfo.getId());
+        //deleteScenario("_b0c23cec-16b5-4a31-9046-1cdb1e49a6b3");
+       
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    // Browse button
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        String lastPath = IGCAPTgui.getInstance().getLastPath(); 
+        if (lastPath != null && !lastPath.isEmpty()) {
+            File lastPath1 = new File(lastPath);
+            if (lastPath1.exists()) {
+                chooser.setCurrentDirectory(lastPath1);
+            }
+        }
+        
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            jTextField1.setText(chooser.getSelectedFile().toString());
+            if (jTextField1.getText() != null) {
+                disableEnableButtons(ButtonStages.LINE4);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    // Next button - Selected CNRM
+    // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        updateScenarioCnrmList();
+        disableEnableButtons(ButtonStages.LINE3);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    // Save button
+    // Get to get the scenario file and write it to file system.
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if (jTextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Location cannot be Empty!");
+            return;
+        }
+        getTheScenarioFile();
+        dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -392,10 +630,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
