@@ -15,6 +15,10 @@ import java.util.Base64;
 import javax.swing.JFileChooser;
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import javax.swing.JOptionPane;
+import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.properties.IGCAPTproperties;
 
 /**
  *
@@ -22,13 +26,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CreateScenarioWizard extends javax.swing.JDialog {
 
-    Frame localParent;
+    private Frame localParent;
+    private String m_webServiceHost;
+    private String m_webServiceKey;
     /**
      * Creates new form ScenarioWizard
      */
     public CreateScenarioWizard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         localParent = parent;
+        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceHost");
+        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceKey");
+        if (m_webServiceHost == null || m_webServiceKey == null) {
+            JOptionPane.showMessageDialog(this, "You must Initialize the Web Service Connection" +
+                    " before running the wizard!\n (File->Initialize Connection)");
+            return;
+        }
         initComponents();
         jButton2.setEnabled(false);
         this.setVisible(true);
@@ -49,9 +62,12 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("New Scenario");
+        setTitle("New Scenario Wizard");
 
         jLabel1.setText("Specify CIM/RDF:");
         jLabel1.setToolTipText("");
@@ -64,6 +80,11 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         });
 
         jTextField1.setName(""); // NOI18N
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jLabel2.setText("Specify Scenario name:");
 
@@ -80,6 +101,21 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             }
         });
 
+        jButton3.setText("Cancel");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Description:");
+
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,20 +124,22 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField1)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -117,29 +155,50 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // check the three text fields and enable/disable Next
+    private void enableNext() {
+        if (!jTextField2.getText().isEmpty() && !jTextField1.getText().isEmpty() && 
+            !jTextField3.getText().isEmpty()) {
+            jButton2.setEnabled(true);
+        }
+        else {
+            jButton2.setEnabled(false);
+        }
+    }
+    
     // Select the CNRM file
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         JFileChooser chooser = new JFileChooser();
-
+        String lastPath = IGCAPTgui.getInstance().getLastPath(); 
+        if (lastPath != null && !lastPath.isEmpty()) {
+            File lastPath1 = new File(lastPath);
+            if (lastPath1.exists()) {
+                chooser.setCurrentDirectory(lastPath1);
+            }
+        }
+        
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             jTextField1.setText(chooser.getSelectedFile().toString());
-            if (jTextField2.getText() != null) {
-                jButton2.setEnabled(true);
-            }
+            enableNext();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    // Scenario name text field
     private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
-        if (jTextField2.getText() != null && jTextField1.getText() != null) {
-            jButton2.setEnabled(true);
-        }
+        enableNext();
     }//GEN-LAST:event_jTextField2KeyTyped
 
     private String getCimrdf(String filename) {
@@ -163,11 +222,14 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         JSONObject json = new JSONObject();
         json.put("name", jTextField2.getText());
         json.put("topology", getCimrdf(jTextField1.getText()));
+        if (jTextField3.getText() != null && jTextField3.getText().trim().length() > 0) {
+            json.put("description", jTextField3.getText().trim());
+        }
         
         ScenarioInformation scenInfo;
         try {
             
-            URL url = new URL("https://gdtafserviceapi.azure-api.net/core/scenarios?subscription-key=f25aca8b0567432592271335d31851d7");
+            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios?subscription-key="+m_webServiceKey);
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -202,6 +264,21 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         new AddToScenarioWizard(localParent, true, scenInfo);
 
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    // Cancel button - do nothing close window
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+ 
+    // Description text field - currently not allowing empty but web service will accept empty
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        enableNext();
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    // CIM/RDF filepath text field
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        enableNext();
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     /**
      * @param args the command line arguments
@@ -248,9 +325,12 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
