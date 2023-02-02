@@ -40,13 +40,12 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
     protected Factory<V> vertexFactory;
     protected Factory<E> edgeFactory;
     protected JPopupMenu popup;
-    private IGCAPTgui _IGCAPTgui;
     private GraphManager _GraphManager;
 
-    public SGEditingPopupGraphMousePlugin1(Factory<V> vertexFactory, Factory<E> edgeFactory, IGCAPTgui igcaptGui) {
+    public SGEditingPopupGraphMousePlugin1(Factory<V> vertexFactory, Factory<E> edgeFactory) {
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
-        _IGCAPTgui = igcaptGui;
+        _GraphManager = GraphManager.getInstance();
     }
     
     // Recursively remove the graphNodes from the baseGraph.
@@ -136,7 +135,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                                 }
                             }
 
-                            PickedState<SgNodeInterface> pickState = IGCAPTgui.getInstance().vv.getPickedVertexState();
+                            PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                             pickState.clear();
                             for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                                 pickState.pick(collapseNode, true);
@@ -158,7 +157,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                             SgGraph graph = (SgGraph) vertex;
                             
                             if (graph.canExpand()) {
-                                PickedState<SgNodeInterface> pickState = _IGCAPTgui.vv.getPickedVertexState();
+                                PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                                 pickState.clear();
                                 pickState.pick(graph, true);
 
@@ -179,11 +178,11 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
 
                         if (vertex instanceof SgNode) {
                             SgNode node = (SgNode) vertex;
-                            _IGCAPTgui.showDialog(node);
+                            IGCAPTgui.getInstance().showDialog(node);
                         }
                         else if(vertex instanceof SgGraph) {
                             SgNode node = (SgNode)((SgGraph) vertex).getRefNode();
-                            _IGCAPTgui.showDialog(node);
+                            IGCAPTgui.getInstance().showDialog(node);
                         }
                     }
                 });
@@ -214,14 +213,14 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                     public void actionPerformed(ActionEvent e) {
                         if (edge instanceof SgEdge) {
                             SgEdge connection = (SgEdge) edge;
-                            _IGCAPTgui.showDialog(connection);
+                            IGCAPTgui.getInstance().showDialog(connection);
                         }
                     }
                 });
             }
 
             if (popup != null && popup.getComponentCount() > 0) {
-                popup.show(vv, e.getX(), e.getY());
+                popup.show(GraphManager.getInstance().getVisualizationViewer(), e.getX(), e.getY());
             }
             
             popup = null;

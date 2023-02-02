@@ -75,7 +75,7 @@ public class GraphManager {
 
         vv = new VisualizationViewer<>(layout);
         
-        treeMap = new JSGMapViewer("Components");
+        this.treeMap = new JSGMapViewer("Components");
         
         collapser = new GraphCollapser(originalGraph);
         
@@ -98,7 +98,7 @@ public class GraphManager {
     }
     
     // TODO map viewer object call to it from IGCAPT 
-    private JSGMapViewer treeMap;
+    private final JSGMapViewer treeMap;
     
     // get and set edge index in the graph
     int edgeIndex = 0;  
@@ -137,7 +137,7 @@ public class GraphManager {
     }
     
     // Jung Objects 
-    public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
+    private VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
     private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
     public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
         return layout;
@@ -200,12 +200,23 @@ public class GraphManager {
     //private Heatmap heatmap = IGCAPTgui.getInstance().getHeatmap();
     private Heatmap heatmap;
     
-    // private final JSGMapViewer treeMap;
+    //private final JSGMapViewer treeMap;
 
-    private JMapViewer map() {
+    public JMapViewer map() {
         return treeMap.getViewer();
     }
+
+    public JSGMapViewer getTreeMap(){
+        return treeMap;
+    }
+    public VisualizationViewer getVisualizationViewer(){
+        return vv;
+    }
     
+    public void setVisualizationViewer(VisualizationViewer viewer){
+        vv = viewer;
+    } 
+
     public SgGraph getOriginalGraph() {
         return originalGraph;
     }

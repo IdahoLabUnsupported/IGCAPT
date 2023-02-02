@@ -235,7 +235,7 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
             Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
             ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
             graphManagerInstance.setContextClickNode(null);
-            IGCAPTgui.getInstance().vv.repaint();
+            GraphManager.getInstance().getVisualizationViewer().repaint();
         }
     }
 
@@ -245,10 +245,10 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         //System.out.println("mousePressed-MyGraphMousePlugin x,y = " + e.getX() + ", " + e.getY());
         VisualizationViewer<SgNodeInterface, SgEdge> vv
                 = (VisualizationViewer<SgNodeInterface, SgEdge>) e.getSource();
-        GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
+        GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = GraphManager.getInstance().getVisualizationViewer().getPickSupport();
         Point2D ivp = e.getPoint();
 
-        SgNodeInterface vertex = pickSupport.getVertex(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+        SgNodeInterface vertex = pickSupport.getVertex(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
 
         if (vertex instanceof SgNode) {
             GraphManager.getInstance().setContextClickNode((SgNode) vertex);

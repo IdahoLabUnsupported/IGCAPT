@@ -52,15 +52,14 @@ public class SGEditingModalGraphMouse<V, E> extends AbstractModalGraphMouse
     protected AnnotatingGraphMousePlugin<V, E> annotatingPlugin;
     protected MultiLayerTransformer basicTransformer;
     protected RenderContext<V, E> rc;
-    private IGCAPTgui _graph;
 
     /**
      * create an instance with default values
      *
      */
     public SGEditingModalGraphMouse(RenderContext<V, E> rc,
-            Factory<V> vertexFactory, Factory<E> edgeFactory, IGCAPTgui igCAPTgui) {
-        this(rc, vertexFactory, edgeFactory, 1 / 1.1f, 1.1f, igCAPTgui);
+            Factory<V> vertexFactory, Factory<E> edgeFactory) {
+        this(rc, vertexFactory, edgeFactory, 1 / 1.1f, 1.1f);
     }
 
     /**
@@ -70,13 +69,13 @@ public class SGEditingModalGraphMouse<V, E> extends AbstractModalGraphMouse
      * @param out override value for scale out
      */
     public SGEditingModalGraphMouse(RenderContext<V, E> rc,
-            Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out, IGCAPTgui igCAPTgui) {
+            Factory<V> vertexFactory, Factory<E> edgeFactory, float in, float out) {
         super(in, out);
         this.vertexFactory = vertexFactory;
         this.edgeFactory = edgeFactory;
         this.rc = rc;
         this.basicTransformer = rc.getMultiLayerTransformer();
-        this._graph = igCAPTgui;
+
         
         loadPlugins();
         setModeKeyListener(new ModeKeyAdapter(this));
@@ -97,7 +96,7 @@ public class SGEditingModalGraphMouse<V, E> extends AbstractModalGraphMouse
         editingPlugin = new SGEditingGraphMousePlugin<V, E>(vertexFactory, edgeFactory);
         labelEditingPlugin = new LabelEditingGraphMousePlugin<V, E>();
         annotatingPlugin = new AnnotatingGraphMousePlugin<V, E>(rc);
-        popupEditingPlugin = new SGEditingPopupGraphMousePlugin1<V, E>(vertexFactory, edgeFactory, _graph);
+        popupEditingPlugin = new SGEditingPopupGraphMousePlugin1<V, E>(vertexFactory, edgeFactory);
         add(scalingPlugin);
         setMode(Mode.EDITING);
     }
@@ -125,7 +124,7 @@ public class SGEditingModalGraphMouse<V, E> extends AbstractModalGraphMouse
             }
             fireItemStateChanged(new ItemEvent(this, ItemEvent.ITEM_STATE_CHANGED, mode, ItemEvent.SELECTED));
             
-            _graph.setMode(mode);
+            IGCAPTgui.getInstance().setMode(mode);
         }
     }
 

@@ -189,11 +189,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     static final IGCAPTproperties IGCAPTPROPERTIES = IGCAPTproperties.getInstance();
     private static final long serialVersionUID = 1L;
 
-    private final JSGMapViewer treeMap; 
+  //  private final JSGMapViewer treeMap;
 
     private final JLabel zoomLabel;
     private final JLabel zoomValue;
     private final JLabel xyPosition;
+    
+    private JPanel panel;
+    private JPanel panelTop;
+    private JPanel panelBottom;
+    private JPanel helpPanel;
 
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;
@@ -227,7 +232,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
      }
     
     // Jung
-    public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
+    //public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
     private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
     public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
         return layout;
@@ -366,14 +371,130 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public IGCAPTgui() {
         super("Intelligent Grid Communications & Analysis Planning Tool");
         setSize(400, 400);
-        
-        lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue("LastPath");
+        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panelTop = new JPanel();
+        JPanel panelBottom = new JPanel();
+        JPanel helpPanel = new JPanel();
 
-        treeMap = new JSGMapViewer("Components");
+        mperpLabelName = new JLabel("Meters/Pixels: ");
+        mperpLabelValue = new JLabel(String.format("%s", GraphManager.getInstance().map().getMeterPerPixel()));
+
+        zoomLabel = new JLabel("Zoom: ");
+        zoomValue = new JLabel(String.format("%s", GraphManager.getInstance().map().getZoom()));
+        xyPosition = new JLabel("x,y = ");
+    }
+
+    private JMenu createComponentsMenu() {
+        JMenu componentsMenu = new JMenu("Components");
+        componentsMenu.add(new AddComponentMenuItem(null));
+        
+        return componentsMenu;
+    }
+
+    private JMenu createAnalysisMenu() {
+        JMenu analysisMenu = new JMenu("Analysis");
+        JMenuItem applyPayloadItem;
+        JMenuItem analyzeTopologyItem;
+        JMenuItem importResultsItem;
+        JMenuItem showHeatmapItem;
+        JMenuItem clearHeatmapItem;
+        
+        analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem());
+        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem());
+        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem());
+        analysisMenu.add(new AddClearAnalysisResultsMenuItem());
+        analysisMenu.add(new JSeparator()); // SEPARATOR
+        analysisMenu.add(showHeatmapItem = new AddShowHeatmapMenuItem());
+        analysisMenu.add(clearHeatmapItem = new AddClearHeatmapMenuItem());
+        
+        analysisMenu.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent ev) {
+
+                boolean isGraphPresent = GraphManager.getInstance().getOriginalGraph().getVertexCount() > 0;
+                analyzeTopologyItem.setEnabled(isGraphPresent);
+                applyPayloadItem.setEnabled(isGraphPresent);
+                importResultsItem.setEnabled(isGraphPresent);
+                showHeatmapItem.setEnabled(isGraphPresent);
+                clearHeatmapItem.setEnabled(heatmap != null);
+            }
+            
+            @Override
+            public void menuCanceled(MenuEvent ev) {
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+            }
+        });
+        
+        return analysisMenu;
+    }
+
+    public void applyPayload() {
+        
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+        // Clear all existing payloads.
+        for (SgNodeInterface node : GraphManager.getInstance().getOriginalGraph().getVertices()) {
+            if (node instanceof SgNode sgNode) {
+
+                sgNode.setMaxLatency(0);
+                sgNode.setDataToSend(0);
+                sgNode.clearUseCaseUserData();
+                
+                // This gets set according to the element found in the SGComponents.xml
+                // sgNode.getEndPointList().clear();
+            }
+        }
+        
+        // Get percent of all nodes (exclude aggregate nodes)
+        for(UseCaseEntry entry:payload.payloadUseCaseList) {
+            int percentToApply = entry.getPercentToApply();
+            
+            List<SgNode> percentNodes = GraphManager.getInstance().getPercentNodes(percentToApply, null);
+            
+            for (SgNode node:percentNodes) {
+                node.applyUseCase(entry.getUseCaseName());
+            }
+        }
+        
+        for (DependentUseCaseEntry entry:payload.payloadDependentUseCaseList) {
+            int percentToApply = entry.getPercentToApply();
+            
+            // Get the original set from which we will choose the dependent set.
+            List<SgNode> percentNodes = GraphManager.getInstance().getPercentNodes(percentToApply, null);
+            List<SgNode> exclusionSet = new ArrayList<>();
+            
+            for (UseCaseEntry depEntry:entry.useCases) {
+                int depPercentToApply = depEntry.getPercentToApply();
+                List<SgNode> depNodesToApply = GraphManager.getInstance().getPercentNodes(percentNodes, depPercentToApply, exclusionSet);
+                
+                for (SgNode node:depNodesToApply) {
+                    node.applyUseCase(depEntry.getUseCaseName());
+                }
+                
+                exclusionSet.addAll(depNodesToApply);
+            }
+        }
+        
+        setCursor(Cursor.getDefaultCursor());
+   }
+
+    public String getXyPosition() {
+        return xyPosition.getText();
+    }
+
+    public void setXyPosition(String newtext) {
+        xyPosition.setText("x,y = " + newtext);
+    }
+
+    public void Initialize() {
+         lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue("LastPath");
 
         // Listen to the map viewer for user operations so components will
         // receive events and update
-        map().addJMVListener(this);
+        GraphManager.getInstance().map().addJMVListener(this);
 
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -384,17 +505,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         });
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        JPanel panel = new JPanel(new BorderLayout());
-        JPanel panelTop = new JPanel();
-        JPanel panelBottom = new JPanel();
-        JPanel helpPanel = new JPanel();
-
-        mperpLabelName = new JLabel("Meters/Pixels: ");
-        mperpLabelValue = new JLabel(String.format("%s", map().getMeterPerPixel()));
-
-        zoomLabel = new JLabel("Zoom: ");
-        zoomValue = new JLabel(String.format("%s", map().getZoom()));
-        xyPosition = new JLabel("x,y = ");
+      
         add(panel, BorderLayout.NORTH);
         add(helpPanel, BorderLayout.SOUTH);
         panel.add(panelTop, BorderLayout.NORTH);
@@ -414,17 +525,17 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             new OsmTileSource.CycleMap(),
             new BingAerialTileSource(),});
         tileSourceSelector.addItemListener((ItemEvent e) -> {
-            map().setTileSource((TileSource) e.getItem());
+            GraphManager.getInstance().map().setTileSource((TileSource) e.getItem());
         });
 
         tileSourceSelector.setVisible(false);
 
         JComboBox<TileLoader> tileLoaderSelector;
-        tileLoaderSelector = new JComboBox<>(new TileLoader[]{new OsmTileLoader(map())});
+        tileLoaderSelector = new JComboBox<>(new TileLoader[]{new OsmTileLoader(GraphManager.getInstance().map())});
         tileLoaderSelector.addItemListener((ItemEvent e) -> {
-            map().setTileLoader((TileLoader) e.getItem());
+            GraphManager.getInstance().map().setTileLoader((TileLoader) e.getItem());
         });
-        map().setTileLoader((TileLoader) tileLoaderSelector.getSelectedItem());
+        GraphManager.getInstance().map().setTileLoader((TileLoader) tileLoaderSelector.getSelectedItem());
         panelTop.add(tileSourceSelector);
         panelTop.add(tileLoaderSelector);
 
@@ -434,7 +545,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         final JCheckBox gisEnabled = new JCheckBox("GIS", true);
         gisEnabled.addActionListener((ActionEvent e) -> {
             if (gisEnabled.isSelected()) {
-                currentGisMap = map();
+                currentGisMap = GraphManager.getInstance().map();
                 jtp.add("Geographical Model", currentGisMap);
                 jtp.setSelectedIndex(1);
                 logicalModelDropTarget.setActive(false);
@@ -483,7 +594,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     collapse.setText("Swap Graphs*");
                 }
 
-                vv.repaint();
+                GraphManager.getInstance().getVisualizationViewer().repaint();
             }
         });
         collapse.setVisible(false);
@@ -491,16 +602,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JButton expand = new JButton("Expand");
         expand.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
+                Collection picked = new HashSet(GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().getPicked());
                 for (Object v : picked) {
                     if (v instanceof Graph) {
 
                         Graph g = collapser.expand(GraphManager.getInstance().getGraph(), (Graph) v);
-                        vv.getRenderContext().getParallelEdgeIndexFunction().reset();
+                        GraphManager.getInstance().getVisualizationViewer().getRenderContext().getParallelEdgeIndexFunction().reset();
                         layout.setGraph(g);
                     }
-                    vv.getPickedVertexState().clear();
-                    vv.repaint();
+                    GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().clear();
+                    GraphManager.getInstance().getVisualizationViewer().repaint();
                 }
             }
         });
@@ -518,16 +629,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         panelTop.add(mperpLabelValue);
         panelTop.add(xyPosition);
 
-        add(treeMap, BorderLayout.CENTER);
+        add(GraphManager.getInstance().getVisualizationViewer(), BorderLayout.CENTER);
 
         // set initial map location or position
-        map().setDisplayPosition(new Coordinate(43.5203489, -112.0452956), 5); // WCB INL
+        GraphManager.getInstance().map().setDisplayPosition(new Coordinate(43.5203489, -112.0452956), 5); // WCB INL
 
-        map().addMouseListener(new MouseAdapter() {
+        GraphManager.getInstance().map().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    map().getAttribution().handleAttribution(e.getPoint(), true);
+                    GraphManager.getInstance().map().getAttribution().handleAttribution(e.getPoint(), true);
                 }
             }
         });
@@ -536,14 +647,14 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         layout = new StaticLayout<>(originalGraph,
                 new Dimension(800, 800));
 
-        vv = new VisualizationViewer<>(layout);
+        GraphManager.getInstance().setVisualizationViewer( new VisualizationViewer<>(layout));
 
         collapser = new GraphCollapser(originalGraph);
 
         // This class GraphMouseListener is used to snoop mouse interactions
         // with the graph. It is used here to detect when the graph has 
         // changed.
-        vv.addGraphMouseListener(new GraphMouseListener() {
+        GraphManager.getInstance().getVisualizationViewer().addGraphMouseListener(new GraphMouseListener() {
 
             // Hold the starting position of a vertex so we can detect
             // when its position changed in response to click and drag.
@@ -596,15 +707,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
             return returnval;
         };
-        vv.getRenderContext().setEdgeDrawPaintTransformer(colorTransformer);
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setEdgeDrawPaintTransformer(colorTransformer);
 
         //jmy
-        vv.getRenderingHints().remove(RenderingHints.KEY_ANTIALIASING);
-        GraphManager.getInstance().doNotPaintInvisibleVertices(vv);
-        vv.setBackground(Color.white);
+        GraphManager.getInstance().getVisualizationViewer().getRenderingHints().remove(RenderingHints.KEY_ANTIALIASING);
+        GraphManager.getInstance().doNotPaintInvisibleVertices(GraphManager.getInstance().getVisualizationViewer());
+        GraphManager.getInstance().getVisualizationViewer().setBackground(Color.white);
 
-        vv.getRenderContext().setEdgeLabelTransformer(e -> e.getName());
-        vv.getRenderContext().setVertexLabelTransformer(v -> v.getName());
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setEdgeLabelTransformer(e -> e.getClass().getName());
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setVertexLabelTransformer(v -> v.getClass().getName());
 
         // try to transform the nodes to icons -- this did NOT draw the icons!
         // Return the shape that is appropriate for this node.
@@ -621,7 +732,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         };
 
-        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setVertexIconTransformer(vertexIconFunction);
 
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
@@ -629,13 +740,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 createTabbedPane());
 
         // Set up DROP Target for Logical Model as active
-        logicalModelDropTarget = new DropTarget(vv, DnDConstants.ACTION_COPY_OR_MOVE, this);
+        logicalModelDropTarget = new DropTarget(GraphManager.getInstance().getVisualizationViewer(), DnDConstants.ACTION_COPY_OR_MOVE, this);
         // Set up DROP Target for GIS Model as inactive
-        gisModelDropTarget = new DropTarget(map(), DnDConstants.ACTION_COPY_OR_MOVE, map(), false);
+        gisModelDropTarget = new DropTarget(GraphManager.getInstance().map(), DnDConstants.ACTION_COPY_OR_MOVE, GraphManager.getInstance().map(), false);
 
         // create the GIS view so that when we load a topology file, the icons can be placed there
         gisEnabled.setSelected(true);
-        currentGisMap = map();
+        currentGisMap = GraphManager.getInstance().map();
         jtp.add("Geographical Model", currentGisMap);
         jtp.setSelectedIndex(1);
         logicalModelDropTarget.setActive(false);
@@ -679,7 +790,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig = aggregationDialog.getAggregateConfiguration();
                     SgComponentData selectedAggregateComponent = aggregationDialog.getSelectedComponent();
                     
-                    returnval = GraphManager.getInstance().createAggregation(aggregateConfig, selectedAggregateComponent, GraphManager.getInstance().getClickPoint(), new Coordinate(0.0, 0.0), aggregationDialog.getDefaultMaxRate());
+                    returnval = GraphManager.getInstance().createAggregation(aggregateConfig,
+                            selectedAggregateComponent,
+                            GraphManager.getInstance().getClickPoint(),
+                            new Coordinate(0.0, 0.0),
+                            aggregationDialog.getDefaultMaxRate());
                 }
             } else {
                 returnval = new SgNode(nodeIndex, currentTypeUuidStr, typeName + "_" + String.valueOf(nodeIndex), true, true, false, 0, 0, "");
@@ -703,7 +818,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         };
 
         final SGEditingModalGraphMouse<SgNodeInterface, SgEdge> graphMouse
-                = new SGEditingModalGraphMouse<>(vv.getRenderContext(), sgvertexFactory, sgedgeFactory, this);
+                = new SGEditingModalGraphMouse<>(GraphManager.getInstance().getVisualizationViewer().getRenderContext(), 
+                        sgvertexFactory, 
+                        sgedgeFactory);
 
         // allow user to switch between different mouse modes
         JMenuBar menuBar = new JMenuBar();
@@ -844,128 +961,20 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
         // they are created
-        vv.setGraphMouse(graphMouse);
-        vv.addKeyListener(graphMouse.getModeKeyListener());
+        GraphManager.getInstance().getVisualizationViewer().setGraphMouse(graphMouse);
+        GraphManager.getInstance().getVisualizationViewer().addKeyListener(graphMouse.getModeKeyListener());
 
         graphMouse.add(myGraphMousePlugin);
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
 
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
-        PickedState<SgNodeInterface> ps = vv.getPickedVertexState();
+        PickedState<SgNodeInterface> ps = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
 
         loadLayerIcons();
 
         pack();
-    }
-
-    private JMenu createComponentsMenu() {
-        JMenu componentsMenu = new JMenu("Components");
-        componentsMenu.add(new AddComponentMenuItem(null));
-        
-        return componentsMenu;
-    }
-
-    private JMenu createAnalysisMenu() {
-        JMenu analysisMenu = new JMenu("Analysis");
-        JMenuItem applyPayloadItem;
-        JMenuItem analyzeTopologyItem;
-        JMenuItem importResultsItem;
-        JMenuItem showHeatmapItem;
-        JMenuItem clearHeatmapItem;
-        
-        analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem());
-        analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem());
-        analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem());
-        analysisMenu.add(new AddClearAnalysisResultsMenuItem());
-        analysisMenu.add(new JSeparator()); // SEPARATOR
-        analysisMenu.add(showHeatmapItem = new AddShowHeatmapMenuItem());
-        analysisMenu.add(clearHeatmapItem = new AddClearHeatmapMenuItem());
-        
-        analysisMenu.addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent ev) {
-
-                boolean isGraphPresent = GraphManager.getInstance().getOriginalGraph().getVertexCount() > 0;
-                analyzeTopologyItem.setEnabled(isGraphPresent);
-                applyPayloadItem.setEnabled(isGraphPresent);
-                importResultsItem.setEnabled(isGraphPresent);
-                showHeatmapItem.setEnabled(isGraphPresent);
-                clearHeatmapItem.setEnabled(heatmap != null);
-            }
-            
-            @Override
-            public void menuCanceled(MenuEvent ev) {
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {
-            }
-        });
-        
-        return analysisMenu;
-    }
-
-    public void applyPayload() {
-        
-        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-        // Clear all existing payloads.
-        for (SgNodeInterface node : GraphManager.getInstance().getOriginalGraph().getVertices()) {
-            if (node instanceof SgNode sgNode) {
-
-                sgNode.setMaxLatency(0);
-                sgNode.setDataToSend(0);
-                sgNode.clearUseCaseUserData();
-                
-                // This gets set according to the element found in the SGComponents.xml
-                // sgNode.getEndPointList().clear();
-            }
-        }
-        
-        // Get percent of all nodes (exclude aggregate nodes)
-        for(UseCaseEntry entry:payload.payloadUseCaseList) {
-            int percentToApply = entry.getPercentToApply();
-            
-            List<SgNode> percentNodes = GraphManager.getInstance().getPercentNodes(percentToApply, null);
-            
-            for (SgNode node:percentNodes) {
-                node.applyUseCase(entry.getUseCaseName());
-            }
-        }
-        
-        for (DependentUseCaseEntry entry:payload.payloadDependentUseCaseList) {
-            int percentToApply = entry.getPercentToApply();
-            
-            // Get the original set from which we will choose the dependent set.
-            List<SgNode> percentNodes = GraphManager.getInstance().getPercentNodes(percentToApply, null);
-            List<SgNode> exclusionSet = new ArrayList<>();
-            
-            for (UseCaseEntry depEntry:entry.useCases) {
-                int depPercentToApply = depEntry.getPercentToApply();
-                List<SgNode> depNodesToApply = GraphManager.getInstance().getPercentNodes(percentNodes, depPercentToApply, exclusionSet);
-                
-                for (SgNode node:depNodesToApply) {
-                    node.applyUseCase(depEntry.getUseCaseName());
-                }
-                
-                exclusionSet.addAll(depNodesToApply);
-            }
-        }
-        
-        setCursor(Cursor.getDefaultCursor());
-   }
-
-    public String getXyPosition() {
-        return xyPosition.getText();
-    }
-
-    public void setXyPosition(String newtext) {
-        xyPosition.setText("x,y = " + newtext);
-    }
-
-    public void Initialize() {
     } 
 
     public void setMode(Mode mode) {
@@ -1189,7 +1198,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                         }
                     }
 
-                    PickedState<SgNodeInterface> pickState = vv.getPickedVertexState();
+                    PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                     pickState.clear();
                     for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                         pickState.pick(collapseNode, true);
@@ -1203,7 +1212,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         GraphManager.getInstance().setContextClickNode(null);
 
         // Redraw the graph
-        vv.repaint();
+        GraphManager.getInstance().getVisualizationViewer().repaint();
         
         GraphManager.getInstance().graphChanged();
         setCursor(Cursor.getDefaultCursor());
@@ -1856,10 +1865,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         }
     }
 
-    private JMapViewer map() {
-        return treeMap.getViewer();
-    }
-
     private Coordinate c(double lat, double lon) {
         return new Coordinate(lat, lon);
     }
@@ -1885,11 +1890,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     private void updateZoomParameters() {
         if (mperpLabelValue != null) {
-            mperpLabelValue.setText(String.format("%s", map().getMeterPerPixel()));
+            mperpLabelValue.setText(String.format("%s", GraphManager.getInstance().map().getMeterPerPixel()));
             //mperpLabelValue.setText(String.format("%s", map().getMeterPerPixel()) + "     x=" + map().getMouseX() + ", y = " + map().getMouseY() );
         }
         if (zoomValue != null) {
-            zoomValue.setText(String.format("%s", map().getZoom()));
+            zoomValue.setText(String.format("%s", GraphManager.getInstance().map().getZoom()));
         }
     }
 
@@ -1923,7 +1928,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private JTabbedPane createTabbedPane() {
         jtp = new JTabbedPane();
         getJtp().setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-        getJtp().add("Logical Model", vv);
+        getJtp().add("Logical Model", GraphManager.getInstance().getVisualizationViewer());
         return getJtp();
     }
 
@@ -1975,7 +1980,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 Point point = e.getLocation();
 
-                MultiLayerTransformer transformer = vv.getRenderContext().getMultiLayerTransformer();
+                MultiLayerTransformer transformer = GraphManager.getInstance().getVisualizationViewer().getRenderContext().getMultiLayerTransformer();
                 Point2D d = transformer.inverseTransform(point);
                 Point newPoint = new Point((int) d.getX(), (int) d.getY());
 
@@ -2033,7 +2038,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     // -------------------------------------------------------------------------
     public void showDialog(SgNode node) {
         NodeSettingsDialog nodeSettingsDlg = new NodeSettingsDialog(null, (SgGraph) GraphManager.getInstance().getGraph(), node);
-        nodeSettingsDlg.setLocation((int) vv.getCenter().getX(), (int) vv.getCenter().getY());
+        nodeSettingsDlg.setLocation((int) GraphManager.getInstance().getVisualizationViewer().getCenter().getX(), (int) GraphManager.getInstance().getVisualizationViewer().getCenter().getY());
         nodeSettingsDlg.setVisible(true);
 
         if (nodeSettingsDlg.getReturnValue() == NodeSettingsDialog.ReturnValue.OK) {

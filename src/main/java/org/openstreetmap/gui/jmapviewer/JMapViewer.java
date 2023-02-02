@@ -43,6 +43,7 @@ import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import gov.inl.igcapt.graph.GraphManager;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent.COMMAND;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -165,7 +166,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                     }
                 }
 
-                PickedState<SgNodeInterface> pickState = IGCAPTgui.getInstance().vv.getPickedVertexState();
+                PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                 pickState.clear();
                 for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                     pickState.pick(collapseNode, true);
