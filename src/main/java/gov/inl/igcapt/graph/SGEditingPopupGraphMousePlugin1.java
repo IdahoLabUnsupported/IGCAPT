@@ -107,7 +107,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                         }
 
                         vv.repaint();
-                        _GraphManager.graphChanged();
+                        _IGCAPTgui.graphChanged();
                     }
                 });
                 
@@ -142,9 +142,9 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                                 pickState.pick(collapseNode, true);
                             }
                             
-                            _GraphManager.collapse();
+                            _IGCAPTgui.collapse();
                             _GraphManager.setContextClickNode(null);
-                            _GraphManager.graphChanged();
+                            _IGCAPTgui.graphChanged();
                         }
                     }
                 });
@@ -162,8 +162,8 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                                 pickState.clear();
                                 pickState.pick(graph, true);
 
-                                _GraphManager.expand();
-                                _GraphManager.graphChanged();
+                                _IGCAPTgui.expand();
+                                _IGCAPTgui.graphChanged();
                             }
                         }
                     }
@@ -207,7 +207,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                         }                      
 
                         vv.repaint();
-                        _GraphManager.graphChanged();
+                        _IGCAPTgui.graphChanged();
                     }
                 });
                 popup.add(new AbstractAction("Line Settings") {

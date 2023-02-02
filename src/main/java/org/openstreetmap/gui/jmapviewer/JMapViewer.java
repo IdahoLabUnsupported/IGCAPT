@@ -171,7 +171,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                     pickState.pick(collapseNode, true);
                 }
 
-                GraphManager.getInstance().collapse();
+                IGCAPTgui.getInstance().collapse();
                 GraphManager.getInstance().setContextClickNode(null);
             }
         }
@@ -1757,12 +1757,12 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                             ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig = aggregationDialog.getAggregateConfiguration();
                             SgComponentData selectedAggregateComponent = aggregationDialog.getSelectedComponent();
 
-                            SgNodeInterface aggregateNode = GraphManager.getInstance().createAggregation(aggregateConfig, selectedAggregateComponent, point, c, aggregationDialog.getDefaultMaxRate());
+                            SgNodeInterface aggregateNode = IGCAPTgui.getInstance().createAggregation(aggregateConfig, selectedAggregateComponent, point, c, aggregationDialog.getDefaultMaxRate());
                             IGCAPTgui.getInstance().currentTypeUuidStr = uuidStr;
                             setNodeLogicalPosition((SgNode)aggregateNode);
                             aggregateNode.setLat(c.getLat());
                             aggregateNode.setLongit(c.getLon());
-                            GraphManager.getInstance().graphChanged();
+                            IGCAPTgui.getInstance().graphChanged();
                         }
                     }
                     else {
@@ -1776,7 +1776,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                         setNodeLogicalPosition(n1);
 
                         GraphManager.getInstance().getGraph().addVertex(n1);
-                        GraphManager.getInstance().graphChanged();
+                        IGCAPTgui.getInstance().graphChanged();
                     }
                 }
                 

@@ -80,7 +80,7 @@ public class SGEditingGraphMousePlugin<V, E> extends EditingGraphMousePlugin<V, 
                     E edge = edgeFactory.create();
                     graph.addEdge(edge,startVertex, vertex);
 
-                    GraphManager.getInstance().updateGISObjects();
+                    IGCAPTgui.getInstance().updateGISObjects();
                 }
             }
             

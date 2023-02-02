@@ -12,39 +12,25 @@ import edu.uci.ics.jung.graph.util.Context;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
-import gov.inl.igcapt.components.DataModels.SgComponentData;
-import gov.inl.igcapt.components.Heatmap;
-import gov.inl.igcapt.components.SgLayeredIcon;
-import gov.inl.igcapt.components.SgMapImage;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.dnd.DropTarget;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import javax.swing.JOptionPane;
 import org.apache.commons.collections15.Predicate;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
-import static org.openstreetmap.gui.jmapviewer.IGCAPTgui.getComponentByUuid;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.JSGMapViewer;
-import org.openstreetmap.gui.jmapviewer.MapImageImpl;
-import org.openstreetmap.gui.jmapviewer.MapLineImpl;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -65,14 +51,11 @@ public class GraphManager {
     // private constructor
     private GraphManager() {  
         
-        //clickpoint?
-        
         originalGraph = new SgGraph();
 
         layout = new StaticLayout<>(originalGraph,
                 new Dimension(800, 800));
-
-
+        
         vv = new VisualizationViewer<>(layout);
         
         treeMap = new JSGMapViewer("Components");
@@ -80,8 +63,6 @@ public class GraphManager {
         collapser = new GraphCollapser(originalGraph);
         
         currentGisMap = map();
-        
-        //contectclicknode?
          
     }
 
@@ -126,7 +107,7 @@ public class GraphManager {
         return currentGisMap;
     }
     
-    // TODO figure out what click point is
+    // clickpoint
     private Point clickPoint = null;
     public Point getClickPoint() {
         return clickPoint;
@@ -136,7 +117,7 @@ public class GraphManager {
         this.clickPoint = clickPoint;
     }
     
-    // Jung Objects 
+    // Jung Objects (some may not need to be here)
     public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
     private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
     public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
@@ -169,7 +150,7 @@ public class GraphManager {
         return returnval;
     }
     
-    // get local layouts (?)
+    // get local layouts
     public AbstractLayout<SgNodeInterface, SgEdge> getLocalLayout() {
         return layout;
     }
@@ -187,7 +168,7 @@ public class GraphManager {
         return contextClickNode;
     }
     
-      public void setContextClickNode(SgNodeInterface contextClickNode) {
+    public void setContextClickNode(SgNodeInterface contextClickNode) {
         this.contextClickNode = contextClickNode;
     }
       
@@ -197,12 +178,9 @@ public class GraphManager {
     private SgGraph tempGraph = null;
     private SgGraph originalGraph = null;
     
-    //private Heatmap heatmap = IGCAPTgui.getInstance().getHeatmap();
-    private Heatmap heatmap;
-    
     // private final JSGMapViewer treeMap;
 
-    private JMapViewer map() {
+    public JMapViewer map() {
         return treeMap.getViewer();
     }
     
@@ -221,189 +199,7 @@ public class GraphManager {
     public boolean getFileDirty() {
         return fileDirty;
     }
-    
-    // Redraw the GIS images based upon the current Jung graph contents.
-    public void updateGISObjects() {
-        List<SgNodeInterface> nodes = new ArrayList<>(getGraph().getVertices());
-
-        JMapViewer map = map();
-        map.removeAllMapImages();
-        map.removeAllMapPolygons();
-        map.removeAllMapLines();
-
-        for (SgNodeInterface node : nodes) {
-            BufferedImage theImage;
-            SgLayeredIcon icon = (SgLayeredIcon) node.getIcon();
-            theImage = (BufferedImage) icon.getCompositeImage();
-            MapImageImpl myimage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
-            myimage.setId(node.getName());
-            node.setMapImage(myimage);
-            map.addMapImage(myimage);
-        }
-
-        List<SgEdge> edges = new ArrayList<>(getGraph().getEdges());
-        
-        for (SgEdge edge : edges) {
-            Pair nodePair = getGraph().getEndpoints(edge);
-            
-            SgNodeInterface firstNode = (SgNodeInterface) nodePair.getFirst();
-            SgNodeInterface secondNode = (SgNodeInterface) nodePair.getSecond();
-            double latitude1 = firstNode.getLat();
-            double longitude1 = firstNode.getLongit();
-            double latitude2 = secondNode.getLat();
-            double longitude2 = secondNode.getLongit();
-            //Always set the first node to the lower id
-            //This helps edge labels to alternate for readability
-            Coordinate start;
-            Coordinate end;
-            if (secondNode.getId() < firstNode.getId()) {
-                start = new Coordinate(latitude2, longitude2);
-                end = new Coordinate(latitude1, longitude1);
-            }
-            else {
-                start = new Coordinate(latitude1, longitude1);              
-                end = new Coordinate(latitude2, longitude2);
-            }
-
-            Coordinate midPt = edge.getMidPoint();
-            MapLineImpl line = null;
-            MapLineImpl line2 = null;
-            if (edge.getMidPoint() != null) {
-                line = new MapLineImpl(start, midPt);
-                line2 = new MapLineImpl(midPt, end);
-                //Even ID label on line, Odd ID label on line2
-                if (edge.getId() % 2 == 0) {
-                    line.setId(edge.toString());
-                }
-                else {
-                    line2.setId(edge.toString());
-                }
-                map.addMapLine(line2);
-            }
-            else {
-                line = new MapLineImpl(start, end);
-                line.setId(edge.toString());
-            }
-              
-            map.addMapLine(line);
-            if (edge.isOverHighUtilizationLimit()) {
-                line.setColor(Color.red);
-                if (line2 != null) {
-                    line2.setColor(Color.red);
-                }
-            } else if (edge.isOverMidUtilizationLimit()) {
-                line.setColor(Color.orange);
-                if (line2 != null) {
-                    line2.setColor(Color.orange);
-                }
-            } else if (!edge.isZeroUtilizationLimit()) {
-                line.setColor(Color.green);
-                if (line2 != null) {
-                    line2.setColor(Color.green);
-                }
-            } else {
-                line.setColor(Color.black);
-                if (line2 != null) {
-                    line2.setColor(Color.black);
-                }
-            }
-        }
-
-        // May have a heatmap that needs to be drawn.
-        if (heatmap != null) {
-            heatmap.Draw(map);
-        }
-    }
-    
    
-    // Cause the displays to redraw, both the logical and GIS views.
-    public void refresh() {
-        vv.repaint(); // logical refresh
-        updateGISObjects(); // GIS refresh
-    }
-
-    public void clearEdgeUtilization() {
-
-        // Reset utilization on all SgNodes.  Need to expand the graph
-        // in case some are collapsed.
-        Graph graph = getOriginalGraph();
-
-        ArrayList<SgEdge> sgEdges = new ArrayList<>(graph.getEdges());
-        for (SgEdge sgEdge : sgEdges) {
-            sgEdge.setCalcTransRate(0.0);
-        }
-
-        refresh();
-    }
-    
-    public void graphChanged() {
-        fileDirty = true;
-
-        clearEdgeUtilization();
-        refresh();
-    }
-    
-    public void collapse() {
-
-        Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
-        if (picked.size() > 1) {
-            Graph inGraph = getGraph();
-
-            SgNodeInterface ctextClickNode = getContextClickNode();
-
-            // Get the selected nodes that comprise the sub-graph.
-            Graph clusterGraph = collapser.getClusterGraph(inGraph, picked);
-            if (clusterGraph instanceof SgGraph && ctextClickNode instanceof SgNode) {
-                SgGraph sgGraph = (SgGraph) clusterGraph;
-                sgGraph.setRefNode((SgNode) ctextClickNode);
-            }
-
-            Graph collapseGraph = collapser.collapse(getGraph(), clusterGraph);
-
-            // If available, use the contextClickNode position.
-            Point2D cp;
-
-            if (ctextClickNode != null) {
-                cp = (Point2D) layout.transform(ctextClickNode);
-            } else {
-                double sumx = 0;
-                double sumy = 0;
-                for (Object v : picked) {
-                    Point2D p = (Point2D) layout.transform((SgNodeInterface) v);
-                    sumx += p.getX();
-                    sumy += p.getY();
-                }
-                cp = new Point2D.Double(sumx / picked.size(), sumy / picked.size());
-            }
-            vv.getRenderContext().getParallelEdgeIndexFunction().reset();
-            layout.setGraph(collapseGraph);
-
-            // This will always be the case...unless something goes wrong, of course.
-            if (clusterGraph instanceof SgNodeInterface) {
-                layout.setLocation((SgNodeInterface) clusterGraph, cp);
-            }
-            vv.getPickedVertexState().clear();
-            
-            refresh();
-        }
-    }
-    
-    public void expand() {
-        Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
-        for (Object v : picked) {
-            if (v instanceof Graph) {
-
-                Graph g = collapser.expand(getGraph(), (Graph) v);
-                vv.getRenderContext().getParallelEdgeIndexFunction().reset();
-                layout.setGraph(g);
-            }
-            vv.getPickedVertexState().clear();
-            vv.repaint();
-        }
-
-        updateGISObjects();
-    }
-    
     /**
      * Get the percent nodes from the entire graph, excluding aggregate nodes.
      * @param percentOfNodes
@@ -536,39 +332,7 @@ public class GraphManager {
         });
     }
     
-    // The simplest way to clear the graph is to create a new instance.
-    public boolean clearGraph() {
-
-        boolean returnval = false;
-        int result = 0;
-
-        edgeIndex = 0;
-        nodeIndex = 0;
-        
-        if (getGraph().getVertexCount() > 0) {
-            result = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), "Are you sure you want to clear the current graph?",
-                    "alert", JOptionPane.OK_CANCEL_OPTION);
-        }
-
-        if (result == 0) {
-            returnval = true;
-        
-            // Clear heat map
-            heatmap = null; // Don't call SetHeatmap or it will redraw.
-            tempGraph = null;
-            originalGraph = new SgGraph();
-            vv.getGraphLayout().setGraph(originalGraph);
-
-            // There does not appear to be a way to clear the collapser's state other than creating a new one.
-            collapser = new GraphCollapser(originalGraph);
-
-            vv.repaint();
-        }
-        
-        return returnval;
-    }
-    
-     // Caclulate the midpoint between two points
+    // Caclulate the midpoint between two points
     private final double NEW_LINE_ADDER = 10;  //2;
     
     private Point calcMidPoint(Point p1, Point p2) {
@@ -623,7 +387,7 @@ public class GraphManager {
         return c;
     }
     
-    void writeGraphToDOM(Document doc, Element nodeRoot, Element edgeRoot) {
+    public void writeGraphToDOM(Document doc, Element nodeRoot, Element edgeRoot) {
 
         // Mark collapsed nodes
         SgGraph graph = (SgGraph)getGraph();
@@ -769,7 +533,7 @@ public class GraphManager {
         }
     }
     
-    void writeGraphToCSV(String fileName) {
+    public void writeGraphToCSV(String fileName) {
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -872,28 +636,6 @@ public class GraphManager {
         setCursor(Cursor.getDefaultCursor());
     }
     
-    public void setUtilization(List<double[]> utilList) {
-        Graph expandedGraph = getOriginalGraph();
-        ArrayList<SgEdge> sgEdges = new ArrayList<>(expandedGraph.getEdges());
-
-        for (double[] element : utilList) {
-
-            for (SgEdge edge : sgEdges) {
-                Pair<SgNodeInterface> endNodes = expandedGraph.getEndpoints(edge);
-
-                if ((endNodes.getFirst().getId() == (int)element[0] && endNodes.getSecond().getId() == (int)element[1]) ||
-                    (endNodes.getFirst().getId() == (int)element[1] && endNodes.getSecond().getId() == (int)element[0])) {
-
-                    edge.setEdgeRate(element[2]);
-                    edge.setCalcTransRate(element[3]*element[2]*0.01);
-                    break;
-                }
-            }
-        }
-        
-        refresh();
-    }
-    
     // Get Node and Edge
     public SgNodeInterface getNode(Graph graph, int nodeID) {
         return ((SgGraph) graph).getVertices().stream().filter(node -> node.getId() == nodeID).findFirst().get();
@@ -937,81 +679,4 @@ public class GraphManager {
         return (getEdge(getGraph(), edgeID));
     }
     
-    
-    // When creating an aggregation, place the aggregated component at this offset
-    // relative to the aggregate parent.
-    private static final Point AGGREGATE_OFFSET = new Point(100, 0);
-    private static final Point2D.Double AGGREGATE_LATLON_OFFSET = new Point2D.Double(0.0, 0.1);
-    
-    public SgNodeInterface createAggregation(ArrayList<gov.inl.igcapt.components.Pair<String, Integer>> aggregateConfig,
-            SgComponentData selectedAggregateComponent, Point point, Coordinate latLongCoord, double defaultMaxRate) {
-
-        SgNodeInterface returnval = null;
-
-        // Create the aggregate node of the type specified.
-        SgNode aggregateNode = new SgNode(nodeIndex, selectedAggregateComponent.getUuid().toString(),
-                selectedAggregateComponent.getName() + "_" + String.valueOf(nodeIndex),
-                true, selectedAggregateComponent.isPassthrough(), true, 0, 0, "");
-        returnval = aggregateNode;
-
-        getGraph().addVertex(aggregateNode);
-        layout.setLocation(aggregateNode, point);
-        aggregateNode.setLat(latLongCoord.getLat());
-        aggregateNode.setLongit(latLongCoord.getLon());
-        nodeIndex++;
-
-        // Now create all the aggregated nodes
-        ArrayList<SgNode> aggregateNodeList = new ArrayList<>(); // Need this for collapsing.
-        for (gov.inl.igcapt.components.Pair<String, Integer> entry : aggregateConfig) {
-            String key = entry.first;
-            Integer value = entry.second;
-            int numComponents = value;
-
-            if (numComponents > 0) {
-                SgComponentData compToCreate = getComponentByUuid(key);
-
-                for (int i = 0; i < numComponents; ++i) {
-                    SgNode node = new SgNode(nodeIndex, compToCreate.getUuid().toString(),
-                            compToCreate.getName() + "_" + String.valueOf(nodeIndex),
-                            true, compToCreate.isPassthrough(), false, 0, 0, "");
-
-                    aggregateNodeList.add(node);
-
-                    Point newPoint = new Point(point.x + AGGREGATE_OFFSET.x, point.y + AGGREGATE_OFFSET.y);
-                    getGraph().addVertex(node);
-                    layout.setLocation(node, newPoint);
-                    node.setLat(latLongCoord.getLat() + AGGREGATE_LATLON_OFFSET.x);
-                    node.setLongit(latLongCoord.getLon() + AGGREGATE_LATLON_OFFSET.y);
-
-                    // Connect components with edges
-                    // Need to get edgerate from the AggregationDialog.
-                    SgEdge edge = new SgEdge(edgeIndex, "e" + edgeIndex,
-                            1.0, 0, defaultMaxRate);
-                    getGraph().addEdge(edge, aggregateNode, node);
-                    getOriginalGraph().addEdge(edge, aggregateNode, node);
-
-                    edgeIndex++;
-                    nodeIndex++;
-                }
-            }
-        }
-
-        // Collapse around the aggregate node.
-        setContextClickNode(aggregateNode);
-
-        // Pick all the nodes including the aggregating node.
-        PickedState<SgNodeInterface> pickState = vv.getPickedVertexState();
-        pickState.clear();
-        pickState.pick(aggregateNode, true);
-        for (SgNodeInterface collapseNode : aggregateNodeList) {
-            pickState.pick(collapseNode, true);
-        }
-
-        collapse();
-        setContextClickNode(null);
-
-        refresh();
-
-        return returnval;
-    }
 }

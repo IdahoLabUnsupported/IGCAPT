@@ -258,7 +258,7 @@ MouseWheelListener {
                             }
                         }
 
-                        GraphManager.getInstance().graphChanged();
+                        IGCAPTgui.getInstance().graphChanged();
                     }
                 });
                 // Remove the menu item to remove the popup menu for adding an edge
@@ -287,7 +287,7 @@ MouseWheelListener {
                         // add the edge to the jung graph
                         GraphManager.getInstance().getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
                         GraphManager.getInstance().setEdgeIndex(GraphManager.getInstance().getEdgeIndex() + 1);
-                        GraphManager.getInstance().graphChanged();
+                        IGCAPTgui.getInstance().graphChanged();
                     }
                 });
                 addEdgeItem.setEnabled(nodeToUse instanceof SgNodeInterface);
@@ -317,7 +317,7 @@ MouseWheelListener {
                             pickState.clear();
                             pickState.pick(graph, true);
                             
-                            GraphManager.getInstance().expand();
+                            IGCAPTgui.getInstance().expand();
                         }
                     }
                 });
@@ -352,7 +352,7 @@ MouseWheelListener {
                         if (currentGraph != GraphManager.getInstance().getOriginalGraph()) {
                             GraphManager.getInstance().getOriginalGraph().removeEdge(edgeToUse);
                         }
-                        GraphManager.getInstance().graphChanged();
+                        IGCAPTgui.getInstance().graphChanged();
                     }
                 });
                 
@@ -421,7 +421,7 @@ MouseWheelListener {
                 // add the edge to the jung graph
                 GraphManager.getInstance().getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
                 GraphManager.getInstance().setEdgeIndex(GraphManager.getInstance().getEdgeIndex() + 1);
-                GraphManager.getInstance().graphChanged();
+                IGCAPTgui.getInstance().graphChanged();
             }
             _clickInfo = null;
             _pastMovePoint = null;
@@ -496,7 +496,7 @@ MouseWheelListener {
                     mapImage.setLon(longitude);
                     // Need to clear out old image before drawing new image.
                     map.paintImage(map.getGraphics(), mapImage);
-                    GraphManager.getInstance().updateGISObjects();
+                    IGCAPTgui.getInstance().updateGISObjects();
                 }
 
                 _pastMovePoint = movePoint;

@@ -15,7 +15,7 @@ public class AddClearAnalysisResultsMenuItem extends JMenuItem {
     private void createClearAnalysisMenu() {
         
         this.addActionListener(ActionListener -> {
-            GraphManager.getInstance().clearEdgeUtilization();
+            IGCAPTgui.getInstance().clearEdgeUtilization();
         });           
     }
 }

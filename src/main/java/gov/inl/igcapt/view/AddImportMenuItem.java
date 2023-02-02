@@ -119,6 +119,6 @@ public class AddImportMenuItem extends JMenuItem {
             }
         }
         
-        graphmanager.refresh();   
+        igcapt.refresh();   
     }
 }
