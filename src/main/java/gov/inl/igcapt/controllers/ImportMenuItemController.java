@@ -10,15 +10,14 @@ import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import java.io.File;
 import java.io.IOException;
-import javax.swing.*;
 
-public class ImportMenuItemController extends JMenuItem {
+public class ImportMenuItemController {
     
     public ImportMenuItemController() {
         
     }
     
-    private void importGdtafFile(String fileToImport){
+    public void importGdtafFile(String fileToImport){
         
         if (fileToImport != null && !fileToImport.isEmpty() && !fileToImport.isBlank()) {
             
@@ -42,7 +41,6 @@ public class ImportMenuItemController extends JMenuItem {
             }
         }
     }
-    
     
     private String stripUnderscoreFromUUID(String uuidStr) {
         
