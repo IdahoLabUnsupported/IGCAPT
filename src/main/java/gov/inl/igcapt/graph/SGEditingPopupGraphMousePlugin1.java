@@ -136,7 +136,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                                 }
                             }
 
-                            PickedState<SgNodeInterface> pickState = IGCAPTgui.getInstance().vv.getPickedVertexState();
+                            PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                             pickState.clear();
                             for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                                 pickState.pick(collapseNode, true);
@@ -158,7 +158,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                             SgGraph graph = (SgGraph) vertex;
                             
                             if (graph.canExpand()) {
-                                PickedState<SgNodeInterface> pickState = _IGCAPTgui.vv.getPickedVertexState();
+                                PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                                 pickState.clear();
                                 pickState.pick(graph, true);
 

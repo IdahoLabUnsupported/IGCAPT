@@ -40,8 +40,8 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
                         Point2D ivp = e.getPoint();
                         //graph.getVertices();
 
-                        SgNodeInterface vertex = pickSupport.getVertex(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
-                        SgEdge edge = pickSupport.getEdge(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+                        SgNodeInterface vertex = pickSupport.getVertex(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+                        SgEdge edge = pickSupport.getEdge(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
 
                         Border border = BorderFactory.createLineBorder(new Color(0, 0, 0)); // The color is #4c4f53.
                         UIManager.put("ToolTip.border", border);
@@ -199,25 +199,25 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
         Point2D ivp = e.getPoint();
 
-        IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
-        GraphManager graphManagerInstance = GraphManager.getInstance();
-        SgNodeInterface vertex = pickSupport.getVertex(igcaptInstance.getAbstractLayout(), ivp.getX(), ivp.getY());
+       
+        GraphManager gmi = GraphManager.getInstance();
+        SgNodeInterface vertex = pickSupport.getVertex(gmi.getAbstractLayout(), ivp.getX(), ivp.getY());
         if (vertex != null && vertex instanceof SgNodeInterface && IGCAPTgui.getInstance().getMode() == ModalGraphMouse.Mode.EDITING) {
 //            if (vertex != null && vertex instanceof SgNode && getMode() == Mode.EDITING) {
-            graphManagerInstance.setContextClickNode((SgNodeInterface) vertex);
-            Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
+            gmi.setContextClickNode((SgNodeInterface) vertex);
+            Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
             Icon currentIcon = vertex.getIcon();
             if (selectionIcon != null && currentIcon != null && currentIcon instanceof LayeredIcon) {
                 LayeredIcon currentLayeredIcon = (LayeredIcon) currentIcon;
                 currentLayeredIcon.add(selectionIcon);
             }
         } else {
-            SgNodeInterface oldSelectedNode = graphManagerInstance.getContextClickNode();
+            SgNodeInterface oldSelectedNode = gmi.getContextClickNode();
 
             if (oldSelectedNode != null) {
-                Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
+                Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
                 ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-                graphManagerInstance.setContextClickNode(null);
+                gmi.setContextClickNode(null);
             }
         }
     }
@@ -235,7 +235,7 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
             Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
             ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
             graphManagerInstance.setContextClickNode(null);
-            IGCAPTgui.getInstance().vv.repaint();
+            graphManagerInstance.getVisualizationViewer().repaint();
         }
     }
 
@@ -248,7 +248,7 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
         Point2D ivp = e.getPoint();
 
-        SgNodeInterface vertex = pickSupport.getVertex(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+        SgNodeInterface vertex = pickSupport.getVertex(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
 
         if (vertex instanceof SgNode) {
             GraphManager.getInstance().setContextClickNode((SgNode) vertex);

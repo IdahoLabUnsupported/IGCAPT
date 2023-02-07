@@ -320,7 +320,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     
     // Cause the displays to redraw, both the logical and GIS views.
     public void refresh() {
-        vv.repaint(); // logical refresh
+        GraphManager.getInstance().getVisualizationViewer().repaint(); // logical refresh
         updateGISObjects(); // GIS refresh
     }
     
@@ -339,11 +339,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
     
     // Jung
-    public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
-    private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
-    public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
-        return layout;
-    }
+    //public VisualizationViewer<SgNodeInterface, SgEdge> GraphManager.getInstance().getVisualizationViewer() = null;
+    //private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
+    //public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
+    //    return layout;
+   // }
     
     private JTabbedPane jtp;
     
@@ -587,15 +587,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             public void actionPerformed(ActionEvent e) {
 
                 if (GraphManager.getInstance().getGraph() != originalGraph) {
-                    tempGraph = (SgGraph) layout.getGraph();
-                    layout.setGraph(originalGraph);
+                    tempGraph = (SgGraph) GraphManager.getInstance().getLayout().getGraph();
+                    GraphManager.getInstance().getLayout().setGraph(originalGraph);
                     collapse.setText("Swap Graphs");
                 } else if (tempGraph != null) {
-                    layout.setGraph(tempGraph);
+                    GraphManager.getInstance().getLayout().setGraph(tempGraph);
                     collapse.setText("Swap Graphs*");
                 }
 
-                vv.repaint();
+                GraphManager.getInstance().getVisualizationViewer().repaint();
             }
         });
         collapse.setVisible(false);
@@ -603,16 +603,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JButton expand = new JButton("Expand");
         expand.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
+                Collection picked = new HashSet(GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().getPicked());
                 for (Object v : picked) {
                     if (v instanceof Graph) {
 
                         Graph g = collapser.expand(GraphManager.getInstance().getGraph(), (Graph) v);
-                        vv.getRenderContext().getParallelEdgeIndexFunction().reset();
-                        layout.setGraph(g);
+                        GraphManager.getInstance().getVisualizationViewer().getRenderContext().getParallelEdgeIndexFunction().reset();
+                        GraphManager.getInstance().getLayout().setGraph(g);
                     }
-                    vv.getPickedVertexState().clear();
-                    vv.repaint();
+                    GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().clear();
+                    GraphManager.getInstance().getVisualizationViewer().repaint();
                 }
             }
         });
@@ -644,18 +644,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         });
 
-        originalGraph = new SgGraph();
-        layout = new StaticLayout<>(originalGraph,
-                new Dimension(800, 800));
-
-        vv = new VisualizationViewer<>(layout);
-
+        
         collapser = new GraphCollapser(originalGraph);
 
         // This class GraphMouseListener is used to snoop mouse interactions
         // with the graph. It is used here to detect when the graph has 
         // changed.
-        vv.addGraphMouseListener(new GraphMouseListener() {
+        GraphManager.getInstance().getVisualizationViewer().addGraphMouseListener(new GraphMouseListener() {
 
             // Hold the starting position of a vertex so we can detect
             // when its position changed in response to click and drag.
@@ -674,8 +669,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             public void graphPressed(Object v, MouseEvent me) {
                 if (v instanceof SgNode) {
                     SgNode node = (SgNode) v;
-                    oldX = layout.getX(node);
-                    oldY = layout.getY(node);
+                    oldX = GraphManager.getInstance().getLayout().getX(node);
+                    oldY = GraphManager.getInstance().getLayout().getY(node);
                 }
             }
 
@@ -684,8 +679,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
                 if (v instanceof SgNode node) {
                     double newX, newY;
-                    newX = layout.getX(node);
-                    newY = layout.getY(node);
+                    newX = GraphManager.getInstance().getLayout().getX(node);
+                    newY = GraphManager.getInstance().getLayout().getY(node);
 
                     if (newX != oldX || newY != oldY) {
                         fileDirty = true;
@@ -708,15 +703,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
             return returnval;
         };
-        vv.getRenderContext().setEdgeDrawPaintTransformer(colorTransformer);
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setEdgeDrawPaintTransformer(colorTransformer);
 
         //jmy
-        vv.getRenderingHints().remove(RenderingHints.KEY_ANTIALIASING);
-        GraphManager.getInstance().doNotPaintInvisibleVertices(vv);
-        vv.setBackground(Color.white);
+        GraphManager.getInstance().getVisualizationViewer().getRenderingHints().remove(RenderingHints.KEY_ANTIALIASING);
+        GraphManager.getInstance().doNotPaintInvisibleVertices(GraphManager.getInstance().getVisualizationViewer());
+        GraphManager.getInstance().getVisualizationViewer().setBackground(Color.white);
 
-        vv.getRenderContext().setEdgeLabelTransformer(e -> e.getName());
-        vv.getRenderContext().setVertexLabelTransformer(v -> v.getName());
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setEdgeLabelTransformer(e -> e.getName());
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setVertexLabelTransformer(v -> v.getName());
 
         // try to transform the nodes to icons -- this did NOT draw the icons!
         // Return the shape that is appropriate for this node.
@@ -733,7 +728,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         };
 
-        vv.getRenderContext().setVertexIconTransformer(vertexIconFunction);
+        GraphManager.getInstance().getVisualizationViewer().getRenderContext().setVertexIconTransformer(vertexIconFunction);
 
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT,
@@ -741,7 +736,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 createTabbedPane());
 
         // Set up DROP Target for Logical Model as active
-        logicalModelDropTarget = new DropTarget(vv, DnDConstants.ACTION_COPY_OR_MOVE, this);
+        logicalModelDropTarget = new DropTarget(GraphManager.getInstance().getVisualizationViewer(), DnDConstants.ACTION_COPY_OR_MOVE, this);
         // Set up DROP Target for GIS Model as inactive
         gisModelDropTarget = new DropTarget(GraphManager.getInstance().map(), DnDConstants.ACTION_COPY_OR_MOVE, GraphManager.getInstance().map(), false);
 
@@ -815,7 +810,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         };
 
         final SGEditingModalGraphMouse<SgNodeInterface, SgEdge> graphMouse
-                = new SGEditingModalGraphMouse<>(vv.getRenderContext(), sgvertexFactory, sgedgeFactory, this);
+                = new SGEditingModalGraphMouse<>(GraphManager.getInstance().getVisualizationViewer().getRenderContext(), sgvertexFactory, sgedgeFactory, this);
 
         // allow user to switch between different mouse modes
         JMenuBar menuBar = new JMenuBar();
@@ -956,15 +951,15 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         // the EditingGraphMouse will pass mouse event coordinates to the
         // vertexLocations function to set the locations of the vertices as
         // they are created
-        vv.setGraphMouse(graphMouse);
-        vv.addKeyListener(graphMouse.getModeKeyListener());
+        GraphManager.getInstance().getVisualizationViewer().setGraphMouse(graphMouse);
+        GraphManager.getInstance().getVisualizationViewer().addKeyListener(graphMouse.getModeKeyListener());
 
         graphMouse.add(myGraphMousePlugin);
         graphMouse.setMode(ModalGraphMouse.Mode.TRANSFORMING);
 
         // Get the pickedState and add a listener that will decorate the
         // Vertex images with a checkmark icon when they are picked
-        PickedState<SgNodeInterface> ps = vv.getPickedVertexState();
+        PickedState<SgNodeInterface> ps = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
         ps.addItemListener(new PickWithIconListener(vertexIconFunction));
 
         loadLayerIcons();
@@ -1090,12 +1085,12 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             heatmap = null; // Don't call SetHeatmap or it will redraw.
             tempGraph = null;
             originalGraph = new SgGraph();
-            vv.getGraphLayout().setGraph(originalGraph);
+            GraphManager.getInstance().getVisualizationViewer().getGraphLayout().setGraph(originalGraph);
 
             // There does not appear to be a way to clear the collapser's state other than creating a new one.
             collapser = new GraphCollapser(originalGraph);
 
-            vv.repaint();
+            GraphManager.getInstance().getVisualizationViewer().repaint();
         }
         
         return returnval;
@@ -1148,16 +1143,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     public void expand() {
-        Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
+        Collection picked = new HashSet(GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().getPicked());
         for (Object v : picked) {
             if (v instanceof Graph) {
 
                 Graph g = collapser.expand(GraphManager.getInstance().getGraph(), (Graph) v);
-                vv.getRenderContext().getParallelEdgeIndexFunction().reset();
-                layout.setGraph(g);
+                GraphManager.getInstance().getVisualizationViewer().getRenderContext().getParallelEdgeIndexFunction().reset();
+                GraphManager.getInstance().getLayout().setGraph(g);
             }
-            vv.getPickedVertexState().clear();
-            vv.repaint();
+            GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().clear();
+            GraphManager.getInstance().getVisualizationViewer().repaint();
         }
 
         updateGISObjects();
@@ -1165,7 +1160,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     
     public void collapse() {
 
-        Collection picked = new HashSet(vv.getPickedVertexState().getPicked());
+        Collection picked = new HashSet(GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().getPicked());
         if (picked.size() > 1) {
             Graph inGraph = GraphManager.getInstance().getGraph();
 
@@ -1184,25 +1179,25 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             Point2D cp;
 
             if (ctextClickNode != null) {
-                cp = (Point2D) layout.transform(ctextClickNode);
+                cp = (Point2D) GraphManager.getInstance().getLayout().transform(ctextClickNode);
             } else {
                 double sumx = 0;
                 double sumy = 0;
                 for (Object v : picked) {
-                    Point2D p = (Point2D) layout.transform((SgNodeInterface) v);
+                    Point2D p = (Point2D) GraphManager.getInstance().getLayout().transform((SgNodeInterface) v);
                     sumx += p.getX();
                     sumy += p.getY();
                 }
                 cp = new Point2D.Double(sumx / picked.size(), sumy / picked.size());
             }
-            vv.getRenderContext().getParallelEdgeIndexFunction().reset();
-            layout.setGraph(collapseGraph);
+            GraphManager.getInstance().getVisualizationViewer().getRenderContext().getParallelEdgeIndexFunction().reset();
+            GraphManager.getInstance().getLayout().setGraph(collapseGraph);
 
             // This will always be the case...unless something goes wrong, of course.
             if (clusterGraph instanceof SgNodeInterface) {
-                layout.setLocation((SgNodeInterface) clusterGraph, cp);
+                GraphManager.getInstance().getLayout().setLocation((SgNodeInterface) clusterGraph, cp);
             }
-            vv.getPickedVertexState().clear();
+            GraphManager.getInstance().getVisualizationViewer().getPickedVertexState().clear();
             
             refresh();
         }
@@ -1282,7 +1277,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     
                     GraphManager.getInstance().getGraph().addVertex(n1);
                     
-                    layout.setLocation(n1, xPos, yPos);
+                    GraphManager.getInstance().getLayout().setLocation(n1, xPos, yPos);
                     if (currentNodeIndex > nodeIndex) {
                         nodeIndex = currentNodeIndex;
                     }
@@ -1401,7 +1396,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                         }
                     }
 
-                    PickedState<SgNodeInterface> pickState = vv.getPickedVertexState();
+                    PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                     pickState.clear();
                     for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                         pickState.pick(collapseNode, true);
@@ -1415,7 +1410,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         GraphManager.getInstance().setContextClickNode(null);
 
         // Redraw the graph
-        vv.repaint();
+        GraphManager.getInstance().getVisualizationViewer().repaint();
         
         graphChanged();
         setCursor(Cursor.getDefaultCursor());
@@ -1903,7 +1898,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private JTabbedPane createTabbedPane() {
         jtp = new JTabbedPane();
         getJtp().setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-        getJtp().add("Logical Model", vv);
+        getJtp().add("Logical Model", GraphManager.getInstance().getVisualizationViewer());
         return getJtp();
     }
 
@@ -1955,7 +1950,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
                 Point point = e.getLocation();
 
-                MultiLayerTransformer transformer = vv.getRenderContext().getMultiLayerTransformer();
+                MultiLayerTransformer transformer = GraphManager.getInstance().getVisualizationViewer().getRenderContext().getMultiLayerTransformer();
                 Point2D d = transformer.inverseTransform(point);
                 Point newPoint = new Point((int) d.getX(), (int) d.getY());
 
@@ -2006,7 +2001,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         returnval = aggregateNode;
 
         GraphManager.getInstance().getGraph().addVertex(aggregateNode);
-        layout.setLocation(aggregateNode, point);
+        GraphManager.getInstance().getLayout().setLocation(aggregateNode, point);
         aggregateNode.setLat(latLongCoord.getLat());
         aggregateNode.setLongit(latLongCoord.getLon());
         nodeIndex++;
@@ -2030,7 +2025,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
                     Point newPoint = new Point(point.x + AGGREGATE_OFFSET.x, point.y + AGGREGATE_OFFSET.y);
                     GraphManager.getInstance().getGraph().addVertex(node);
-                    layout.setLocation(node, newPoint);
+                    GraphManager.getInstance().getLayout().setLocation(node, newPoint);
                     node.setLat(latLongCoord.getLat() + AGGREGATE_LATLON_OFFSET.x);
                     node.setLongit(latLongCoord.getLon() + AGGREGATE_LATLON_OFFSET.y);
 
@@ -2051,7 +2046,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         GraphManager.getInstance().setContextClickNode(aggregateNode);
 
         // Pick all the nodes including the aggregating node.
-        PickedState<SgNodeInterface> pickState = vv.getPickedVertexState();
+        PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
         pickState.clear();
         pickState.pick(aggregateNode, true);
         for (SgNodeInterface collapseNode : aggregateNodeList) {
@@ -2078,7 +2073,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             SgNode n1 = new SgNode(nodeIndex, uuidStr, typeName + "_" + String.valueOf(nodeIndex), true, passThru, false, 0, 0, "");
 
             GraphManager.getInstance().getGraph().addVertex(n1);
-            layout.setLocation(n1, point);
+            GraphManager.getInstance().getLayout().setLocation(n1, point);
 
             nodeIndex++;
             currentTypeUuidStr = uuidStr;
@@ -2091,7 +2086,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     // -------------------------------------------------------------------------
     public void showDialog(SgNode node) {
         NodeSettingsDialog nodeSettingsDlg = new NodeSettingsDialog(null, (SgGraph) GraphManager.getInstance().getGraph(), node);
-        nodeSettingsDlg.setLocation((int) vv.getCenter().getX(), (int) vv.getCenter().getY());
+        nodeSettingsDlg.setLocation((int) GraphManager.getInstance().getVisualizationViewer().getCenter().getX(), (int) GraphManager.getInstance().getVisualizationViewer().getCenter().getY());
         nodeSettingsDlg.setVisible(true);
 
         if (nodeSettingsDlg.getReturnValue() == NodeSettingsDialog.ReturnValue.OK) {

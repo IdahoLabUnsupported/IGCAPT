@@ -118,8 +118,19 @@ public class GraphManager {
     }
     
     // Jung Objects (some may not need to be here)
-    public VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
+    private VisualizationViewer<SgNodeInterface, SgEdge> vv = null;
+    
+    public VisualizationViewer<SgNodeInterface, SgEdge> getVisualizationViewer(){
+        return vv;
+    }
+    
+  
     private AbstractLayout<SgNodeInterface, SgEdge> layout = null;
+    
+    public AbstractLayout<SgNodeInterface, SgEdge> getLayout(){
+        return layout;
+    }
+    
     public AbstractLayout<SgNodeInterface, SgEdge> getAbstractLayout(){
         return layout;
     }

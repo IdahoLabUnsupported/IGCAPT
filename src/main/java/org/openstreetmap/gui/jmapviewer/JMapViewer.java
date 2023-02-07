@@ -165,7 +165,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                     }
                 }
 
-                PickedState<SgNodeInterface> pickState = IGCAPTgui.getInstance().vv.getPickedVertexState();
+                PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                 pickState.clear();
                 for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                     pickState.pick(collapseNode, true);
