@@ -7,6 +7,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
+import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
@@ -39,8 +40,8 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
                         Point2D ivp = e.getPoint();
                         //graph.getVertices();
 
-                        SgNodeInterface vertex = pickSupport.getVertex(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
-                        SgEdge edge = pickSupport.getEdge(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+                        SgNodeInterface vertex = pickSupport.getVertex(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+                        SgEdge edge = pickSupport.getEdge(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
 
                         Border border = BorderFactory.createLineBorder(new Color(0, 0, 0)); // The color is #4c4f53.
                         UIManager.put("ToolTip.border", border);
@@ -98,7 +99,7 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
                             formatter.setRoundingMode(RoundingMode.DOWN);
                             String s = formatter.format(edge.getCalcTransRate());
 
-                            Graph<SgNodeInterface, SgEdge> graph = IGCAPTgui.getInstance().getGraph();
+                            Graph<SgNodeInterface, SgEdge> graph = GraphManager.getInstance().getGraph();
                             SgNodeInterface endPt1 = graph.getEndpoints(edge).getFirst();
                             SgNodeInterface endPt2 = graph.getEndpoints(edge).getSecond();
                             String endPt1Str = "";
@@ -198,24 +199,25 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
         Point2D ivp = e.getPoint();
 
-        IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
-        SgNodeInterface vertex = pickSupport.getVertex(igcaptInstance.getAbstractLayout(), ivp.getX(), ivp.getY());
+       
+        GraphManager gmi = GraphManager.getInstance();
+        SgNodeInterface vertex = pickSupport.getVertex(gmi.getAbstractLayout(), ivp.getX(), ivp.getY());
         if (vertex != null && vertex instanceof SgNodeInterface && IGCAPTgui.getInstance().getMode() == ModalGraphMouse.Mode.EDITING) {
 //            if (vertex != null && vertex instanceof SgNode && getMode() == Mode.EDITING) {
-            igcaptInstance.setContextClickNode((SgNodeInterface) vertex);
-            Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
+            gmi.setContextClickNode((SgNodeInterface) vertex);
+            Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
             Icon currentIcon = vertex.getIcon();
             if (selectionIcon != null && currentIcon != null && currentIcon instanceof LayeredIcon) {
                 LayeredIcon currentLayeredIcon = (LayeredIcon) currentIcon;
                 currentLayeredIcon.add(selectionIcon);
             }
         } else {
-            SgNodeInterface oldSelectedNode = igcaptInstance.getContextClickNode();
+            SgNodeInterface oldSelectedNode = gmi.getContextClickNode();
 
             if (oldSelectedNode != null) {
-                Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
+                Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
                 ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-                igcaptInstance.setContextClickNode(null);
+                gmi.setContextClickNode(null);
             }
         }
     }
@@ -226,13 +228,14 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
 
         // We had a selection icon showing for the target node, so remove it.
         IGCAPTgui igcaptInstance = IGCAPTgui.getInstance();
-        SgNodeInterface oldSelectedNode = igcaptInstance.getContextClickNode();
+        GraphManager graphManagerInstance = GraphManager.getInstance();
+        SgNodeInterface oldSelectedNode = graphManagerInstance.getContextClickNode();
 
         if (oldSelectedNode != null) {
             Icon selectionIcon = igcaptInstance.getLayerIcon("selectionIcon");
             ((LayeredIcon) oldSelectedNode.getIcon()).remove(selectionIcon);
-            igcaptInstance.setContextClickNode(null);
-            IGCAPTgui.getInstance().vv.repaint();
+            graphManagerInstance.setContextClickNode(null);
+            graphManagerInstance.getVisualizationViewer().repaint();
         }
     }
 
@@ -245,10 +248,10 @@ public class IGCAPTGraphMousePlugin extends TranslatingGraphMousePlugin implemen
         GraphElementAccessor<SgNodeInterface, SgEdge> pickSupport = vv.getPickSupport();
         Point2D ivp = e.getPoint();
 
-        SgNodeInterface vertex = pickSupport.getVertex(IGCAPTgui.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
+        SgNodeInterface vertex = pickSupport.getVertex(GraphManager.getInstance().getAbstractLayout(), ivp.getX(), ivp.getY());
 
         if (vertex instanceof SgNode) {
-            IGCAPTgui.getInstance().setContextClickNode((SgNode) vertex);
+            GraphManager.getInstance().setContextClickNode((SgNode) vertex);
         }
     }
 }

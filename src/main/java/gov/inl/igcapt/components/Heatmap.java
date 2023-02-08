@@ -1,6 +1,7 @@
 
 package gov.inl.igcapt.components;
 
+import gov.inl.igcapt.graph.GraphManager;
 import java.awt.Color;
 import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
@@ -182,7 +183,7 @@ public class Heatmap {
         // Construct grid        
         // Find limits based on current objects.
         var igcaptGui = IGCAPTgui.getInstance();
-        List<SgNodeInterface> nodes = new ArrayList<>(igcaptGui.getGraph().getVertices());
+        List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
         double maxLat=0.0, maxLon=0.0;
         double minLat=0.0, minLon=0.0;
         boolean first = true;

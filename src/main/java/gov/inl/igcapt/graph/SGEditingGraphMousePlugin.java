@@ -51,7 +51,7 @@ public class SGEditingGraphMousePlugin<V, E> extends EditingGraphMousePlugin<V, 
     @Override
     public void mousePressed(MouseEvent e) {
         
-        IGCAPTgui.getInstance().setClickPoint(e.getPoint());
+        GraphManager.getInstance().setClickPoint(e.getPoint());
         super.mousePressed(e);
     }
 

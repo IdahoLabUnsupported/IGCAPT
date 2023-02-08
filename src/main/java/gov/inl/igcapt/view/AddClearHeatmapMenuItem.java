@@ -1,5 +1,6 @@
 package gov.inl.igcapt.view;
 
+import gov.inl.igcapt.graph.GraphManager;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import javax.swing.*;

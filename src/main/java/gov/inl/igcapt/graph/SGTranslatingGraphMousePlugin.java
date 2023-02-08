@@ -30,7 +30,7 @@ public class SGTranslatingGraphMousePlugin extends TranslatingGraphMousePlugin {
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
         
-        IGCAPTgui.getInstance().fileDirty = true;
+        GraphManager.getInstance().fileDirty = true;
     }
 
 }

@@ -1,4 +1,5 @@
-package gov.inl.igcapt.view;
+
+package gov.inl.igcapt.controllers;
 
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgNode;
@@ -9,15 +10,14 @@ import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import java.io.File;
 import java.io.IOException;
-import javax.swing.*;
 
-public class AddImportMenuItem extends JMenuItem {
+public class ImportMenuItemController {
     
-    public AddImportMenuItem(java.awt.Frame parent) {
-        super("Import...");
-        createImportMenuItem(parent);
+    public ImportMenuItemController() {
+        
     }
-    private void importGdtafFile(String fileToImport){
+    
+    public void importGdtafFile(String fileToImport){
         
         if (fileToImport != null && !fileToImport.isEmpty() && !fileToImport.isBlank()) {
             
@@ -40,28 +40,6 @@ public class AddImportMenuItem extends JMenuItem {
                 System.out.println(ex.getMessage());
             }
         }
-    }
-    
-    private void importFile(JFileChooser chooser) {
-        String selectedOpenFile = chooser.getSelectedFile().toString();
-        
-        importGdtafFile(selectedOpenFile);
-    }
-
-    private void createImportMenuItem(java.awt.Frame parent) {
-        this.addActionListener(ActionListener -> {
-            JFileChooser chooser = new JFileChooser();
-            
-            if (!IGCAPTgui.getInstance().getLastPath().isEmpty()) {
-                chooser.setCurrentDirectory(new File(IGCAPTgui.getInstance().getLastPath()));
-            }
-            
-            if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
-                SwingUtilities.invokeLater(() -> {
-                    importFile(chooser);
-                });
-            }
-        });
     }
     
     private String stripUnderscoreFromUUID(String uuidStr) {

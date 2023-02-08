@@ -41,6 +41,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
     protected Factory<E> edgeFactory;
     protected JPopupMenu popup;
     private IGCAPTgui _IGCAPTgui;
+    private GraphManager _GraphManager;
 
     public SGEditingPopupGraphMousePlugin1(Factory<V> vertexFactory, Factory<E> edgeFactory, IGCAPTgui igcaptGui) {
         this.vertexFactory = vertexFactory;
@@ -85,22 +86,22 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
                     public void actionPerformed(ActionEvent e) {
-                        IGCAPTgui.getInstance().fileDirty = true;
+                        GraphManager.getInstance().fileDirty = true;
                         
                         pickedVertexState.pick(vertex, false);
                         
                         if (vertex instanceof SgNodeInterface) {
                             SgNodeInterface node = (SgNodeInterface)vertex;
 
-                            Graph currentGraph = _IGCAPTgui.getGraph();
+                            Graph currentGraph = _GraphManager.getGraph();
                             currentGraph.removeVertex(node);
-                            if (currentGraph != _IGCAPTgui.getOriginalGraph()) {
+                            if (currentGraph != _GraphManager.getOriginalGraph()) {
                                 
                                 if (node instanceof SgGraph) {
-                                    removeNodes((SgGraph)node, _IGCAPTgui.getOriginalGraph());
+                                    removeNodes((SgGraph)node, _GraphManager.getOriginalGraph());
                                 }
                                 else {
-                                    _IGCAPTgui.getOriginalGraph().removeVertex(node);
+                                    _GraphManager.getOriginalGraph().removeVertex(node);
                                 }
                             }
                         }
@@ -118,7 +119,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
 
                         if (vertex instanceof SgNode) {
                             SgNode node = (SgNode) vertex;
-                            IGCAPTgui.getInstance().setContextClickNode(node);
+                            GraphManager.getInstance().setContextClickNode(node);
                             
                             // Get the component corresponding to this node.
                             SgComponentData sgComponent = IGCAPTgui.getComponentByUuid(node.getType());
@@ -135,14 +136,14 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                                 }
                             }
 
-                            PickedState<SgNodeInterface> pickState = IGCAPTgui.getInstance().vv.getPickedVertexState();
+                            PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                             pickState.clear();
                             for (SgNodeInterface collapseNode : collapseableNeighborNodes) {
                                 pickState.pick(collapseNode, true);
                             }
                             
                             _IGCAPTgui.collapse();
-                            _IGCAPTgui.setContextClickNode(null);
+                            _GraphManager.setContextClickNode(null);
                             _IGCAPTgui.graphChanged();
                         }
                     }
@@ -157,7 +158,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                             SgGraph graph = (SgGraph) vertex;
                             
                             if (graph.canExpand()) {
-                                PickedState<SgNodeInterface> pickState = _IGCAPTgui.vv.getPickedVertexState();
+                                PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                                 pickState.clear();
                                 pickState.pick(graph, true);
 
@@ -192,16 +193,16 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Edge") {
                     public void actionPerformed(ActionEvent e) {
-                        _IGCAPTgui.fileDirty = true;
+                        _GraphManager.fileDirty = true;
                         pickedEdgeState.pick(edge, false);
                         
                         if (edge instanceof SgEdge) {
                             SgEdge connection = (SgEdge) edge;
 
-                            Graph currentGraph = _IGCAPTgui.getGraph();
+                            Graph currentGraph = _GraphManager.getGraph();
                             currentGraph.removeEdge(connection);
-                            if (currentGraph != _IGCAPTgui.getOriginalGraph()) {
-                                _IGCAPTgui.getOriginalGraph().removeEdge(connection);
+                            if (currentGraph != _GraphManager.getOriginalGraph()) {
+                                _GraphManager.getOriginalGraph().removeEdge(connection);
                             }
                         }                      
 

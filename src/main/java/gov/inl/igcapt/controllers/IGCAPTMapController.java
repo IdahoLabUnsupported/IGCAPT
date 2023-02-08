@@ -9,6 +9,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.NodeSelectionDialog;
+import gov.inl.igcapt.graph.GraphManager;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -97,7 +98,7 @@ MouseWheelListener {
     private SgNodeInterface ptInNode(int x, int y) {
         SgNodeInterface returnval = null;
         
-        List<SgNodeInterface> nodes = new ArrayList<>(IGCAPTgui.getInstance().getGraph().getVertices());
+        List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
 
         for (SgNodeInterface node : nodes) {
             double latitude = node.getLat();
@@ -163,8 +164,8 @@ MouseWheelListener {
             SgNodeInterface endPt1;
             SgNodeInterface endPt2;
             Point mousePoint = e.getPoint();
-            List<SgNodeInterface> nodes = new ArrayList<>(IGCAPTgui.getInstance().getGraph().getVertices());
-            List<SgEdge> edges = new ArrayList<>(IGCAPTgui.getInstance().getGraph().getEdges());
+            List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+            List<SgEdge> edges = new ArrayList<>(GraphManager.getInstance().getGraph().getEdges());
 
             if (clickNode != null) {
                 mousePointIsOnNode = true;
@@ -175,7 +176,7 @@ MouseWheelListener {
                 // check to see if the mouse is on an edge
                 for (SgEdge edge : edges) {
                     if (edge instanceof SgEdge) {
-                        Pair<SgNodeInterface> endpoints = IGCAPTgui.getInstance().getGraph().getEndpoints(edge);
+                        Pair<SgNodeInterface> endpoints = GraphManager.getInstance().getGraph().getEndpoints(edge);
 
                         if (endpoints.getFirst() instanceof SgNodeInterface && endpoints.getSecond() instanceof SgNodeInterface) {
                             endPt1 = endpoints.getFirst();
@@ -239,20 +240,20 @@ MouseWheelListener {
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
                     public void actionPerformed(ActionEvent e) {
-                        IGCAPTgui.getInstance().fileDirty = true;
+                        GraphManager.getInstance().fileDirty = true;
                         
                         if (nodeToUse instanceof SgNodeInterface) {
                             SgNodeInterface node = nodeToUse;
 
-                            Graph currentGraph = IGCAPTgui.getInstance().getGraph();
+                            Graph currentGraph = GraphManager.getInstance().getGraph();
                             currentGraph.removeVertex(node);
-                            if (currentGraph != IGCAPTgui.getInstance().getOriginalGraph()) {
+                            if (currentGraph != GraphManager.getInstance().getOriginalGraph()) {
                                 
                                 if (node instanceof SgGraph sgGraph) {
-                                    removeNodes(sgGraph, IGCAPTgui.getInstance().getOriginalGraph());
+                                    removeNodes(sgGraph, GraphManager.getInstance().getOriginalGraph());
                                 }
                                 else {
-                                    IGCAPTgui.getInstance().getOriginalGraph().removeVertex(node);
+                                    GraphManager.getInstance().getOriginalGraph().removeVertex(node);
                                 }
                             }
                         }
@@ -273,7 +274,7 @@ MouseWheelListener {
                         nsd.setVisible(true);
                         int idNumber = nsd.getToNodeIdNumber();
 
-                        int edgeIndex = IGCAPTgui.getInstance().getEdgeIndex();
+                        int edgeIndex = GraphManager.getInstance().getEdgeIndex();
                         SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
                         // get the end point SgNode selected by the user
                         SgNodeInterface endNodeSpecifiedByUser = null;
@@ -284,8 +285,8 @@ MouseWheelListener {
                             }
                         }
                         // add the edge to the jung graph
-                        IGCAPTgui.getInstance().getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
-                        IGCAPTgui.getInstance().setEdgeIndex(IGCAPTgui.getInstance().getEdgeIndex() + 1);
+                        GraphManager.getInstance().getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
+                        GraphManager.getInstance().setEdgeIndex(GraphManager.getInstance().getEdgeIndex() + 1);
                         IGCAPTgui.getInstance().graphChanged();
                     }
                 });
@@ -312,7 +313,7 @@ MouseWheelListener {
 
                         if (nodeToUse instanceof SgGraph graph) {
                             
-                            PickedState<SgNodeInterface> pickState = IGCAPTgui.getInstance().vv.getPickedVertexState();
+                            PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
                             pickState.clear();
                             pickState.pick(graph, true);
                             
@@ -346,10 +347,10 @@ MouseWheelListener {
                 popup.add(new AbstractAction("Delete Edge") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Graph currentGraph = IGCAPTgui.getInstance().getGraph();
+                        Graph currentGraph = GraphManager.getInstance().getGraph();
                         currentGraph.removeEdge(edgeToUse);
-                        if (currentGraph != IGCAPTgui.getInstance().getOriginalGraph()) {
-                            IGCAPTgui.getInstance().getOriginalGraph().removeEdge(edgeToUse);
+                        if (currentGraph != GraphManager.getInstance().getOriginalGraph()) {
+                            GraphManager.getInstance().getOriginalGraph().removeEdge(edgeToUse);
                         }
                         IGCAPTgui.getInstance().graphChanged();
                     }
@@ -384,7 +385,7 @@ MouseWheelListener {
 
         if (shiftDownDuringDrag && _clickInfo != null) {
             // Remove line drawn during the drag and set it to null for next drag
-            IGCAPTgui.getInstance().getCurrentGisMap().removeMapLine(prevMapLine);
+            GraphManager.getInstance().getCurrentGisMap().removeMapLine(prevMapLine);
             prevMapLine = null;
             shiftDownDuringDrag = false;
             
@@ -394,7 +395,7 @@ MouseWheelListener {
             if (endNodeSpecifiedByUser != _clickInfo.getClickNode() &&
                 endNodeSpecifiedByUser != null) {
                 // drawedge
-                int edgeIndex = IGCAPTgui.getInstance().getEdgeIndex();
+                int edgeIndex = GraphManager.getInstance().getEdgeIndex();
                 SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
                 // Always store the pair from smaller node id to greater node id so
                 // don't have to worry about which direction the user drew the edge
@@ -412,14 +413,14 @@ MouseWheelListener {
                     //SgNode p2 = (SgNode) edgePair.getSecond();
                     SgNodeInterface p1 = (SgNodeInterface)edgePair.getFirst();
                     SgNodeInterface p2 = (SgNodeInterface) edgePair.getSecond();
-                    Coordinate mid = IGCAPTgui.getInstance().calcNewMidPoint(p1.getLat(), p1.getLongit(),
+                    Coordinate mid = GraphManager.getInstance().calcNewMidPoint(p1.getLat(), p1.getLongit(),
                         p2.getLat(), p2.getLongit(), occurrences);
                     e2.setMidPoint(mid);
                 }
                 IGCAPTgui.getInstance().nodePairList.add(edgePair);
                 // add the edge to the jung graph
-                IGCAPTgui.getInstance().getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
-                IGCAPTgui.getInstance().setEdgeIndex(IGCAPTgui.getInstance().getEdgeIndex() + 1);
+                GraphManager.getInstance().getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
+                GraphManager.getInstance().setEdgeIndex(GraphManager.getInstance().getEdgeIndex() + 1);
                 IGCAPTgui.getInstance().graphChanged();
             }
             _clickInfo = null;
@@ -470,9 +471,9 @@ MouseWheelListener {
                 
                 MapLineImpl line = new MapLineImpl(start, end);
                 if (prevMapLine != null) {
-                    IGCAPTgui.getInstance().getCurrentGisMap().removeMapLine(prevMapLine);
+                    GraphManager.getInstance().getCurrentGisMap().removeMapLine(prevMapLine);
                 }
-                IGCAPTgui.getInstance().getCurrentGisMap().addMapLine(line);
+                GraphManager.getInstance().getCurrentGisMap().addMapLine(line);
                 prevMapLine = line;
                 return;
             }
@@ -520,7 +521,7 @@ MouseWheelListener {
         }
 
         e.consume();
-        IGCAPTgui.getInstance().fileDirty = true;
+        GraphManager.getInstance().fileDirty = true;
         
         map.repaint(); // KD; eliminates the trail of a dragged object.
     }
@@ -542,14 +543,14 @@ MouseWheelListener {
             String ttText = "<html>";
             Border border = BorderFactory.createLineBorder(new Color(0, 0, 0)); // The color is #4c4f53.
             UIManager.put("ToolTip.border", border);
-            List<SgNodeInterface> nodes = new ArrayList<>(IGCAPTgui.getInstance().getGraph().getVertices());
-            List<SgEdge> edges = new ArrayList<>(IGCAPTgui.getInstance().getGraph().getEdges());
+            List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+            List<SgEdge> edges = new ArrayList<>(GraphManager.getInstance().getGraph().getEdges());
             SgComponentData sgComponent = null;
 
             // check to see if the mouse is on an edge
             for (SgEdge edge : edges) {
                 if (edge instanceof SgEdge) {
-                    Pair<SgNodeInterface> endpoints = IGCAPTgui.getInstance().getGraph().getEndpoints(edge);
+                    Pair<SgNodeInterface> endpoints = GraphManager.getInstance().getGraph().getEndpoints(edge);
 
                     if (endpoints.getFirst() instanceof SgNodeInterface && endpoints.getSecond() instanceof SgNodeInterface) {
                         endPt1 = endpoints.getFirst();
