@@ -113,6 +113,8 @@ import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
 import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.view.*;
+import gov.inl.igcapt.wizard.CreateScenarioWizard;
+import gov.inl.igcapt.wizard.RestSvcConnection;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
@@ -820,12 +822,14 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
         JMenuItem newScenario = new JMenuItem("New Scenario");
+        JMenuItem initConnection = new JMenuItem("Initialize Connection");
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
         fileMenu.add(new JSeparator()); // SEPARATOR
+        fileMenu.add(initConnection);
         fileMenu.add(newScenario);
         fileMenu.add(new JSeparator()); // SEPARATOR
         fileMenu.add(new AddImportMenuItem(null));
@@ -866,6 +870,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         
         newScenario.addActionListener((ActionEvent ev) -> {
             CreateScenarioWizard createScenarioWizard = new CreateScenarioWizard(this, true);
+        });
+        
+        initConnection.addActionListener((ActionEvent ev) -> {
+            RestSvcConnection createConnection = new RestSvcConnection(this, true); 
         });
 
         loadTopology.addActionListener((ActionEvent ev) -> {
