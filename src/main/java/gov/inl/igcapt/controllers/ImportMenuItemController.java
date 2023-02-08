@@ -47,56 +47,87 @@ public class ImportMenuItemController {
         return uuidStr.replace("_", "");
     }
     
-    private void createTopology(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
-        
+      private void createTopology(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
+
         var assetRepo = gdtafData.getAssetRepo();
-   
+        var scenarioRepo = gdtafData.getScenarioRepo();
+        var crnmRepo = gdtafData.getCNRMRepo();
+        for (gov.inl.igcapt.gdtaf.model.CNRM crnm : crnmRepo.getCNRM()) {
+            System.out.println("CRNM Layout: " + crnm.getLayout());
+        }
+
         // Comprised of nodes and edges. Loop through assets to create nodes. Each asset contains parent or children.
         // Use these to construct the edges.
-        var igcapt = IGCAPTgui.getInstance();
-        var graphmanager = GraphManager.getInstance();
-        var igcaptGraph = graphmanager.getGraph();
-        
+      //  var igcapt = IGCAPTgui.getInstance();
+        var igcaptGraph = GraphManager.getInstance().getGraph();
+
         var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
-        
-        int id=0;
-        for (gov.inl.igcapt.gdtaf.model.Asset asset : assetRepo.getAsset()) {
-        
+
+        int id = 0;
+        for (gov.inl.igcapt.gdtaf.model.Scenario scenario : scenarioRepo.getScenario()) {
             try {
-                var location = asset.getAtLocation();
-                if (location != null) {
-                    String equipmentId = asset.getEquipment();
-                    var equipmentInstance = assetEquipment.stream()
-                        .filter(equipment -> equipmentId.equals(equipment.getUUID()))
-                        .findAny()
-                        .orElse(null);
-                    String name=(equipmentInstance != null)?equipmentInstance.getName():"";
+                var plan_mod = scenario.getPlanningModel();
+             
+                for (gov.inl.igcapt.gdtaf.model.PlanningAsset passet : plan_mod.getPlanningAsset()) {
 
-                    SgNode sgNode = new SgNode(id, "78bf0ae2-1a27-462d-b8af-39156e80b75c", name, true, true, false, false, 0, 10, "");
+                    var location = passet.getAtLocation();
+                    if (location != null) {
+                        String equipmentId = passet.getEquipment();
+                        var equipmentInstance = assetEquipment.stream()
+                                .filter(equipment -> equipmentId.equals(equipment.getUUID()) &&
+                                        isCommEquipment(equipment))
+                                .findAny()
+                                .orElse(null);
+                        if(equipmentInstance != null){
+                            
+                        
+                        String name = (equipmentInstance != null) ? equipmentInstance.getName() : "";
 
-                    if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
-                        sgNode.setType(stripUnderscoreFromUUID(equipmentId));
+                        SgNode sgNode = new SgNode(id, "78bf0ae2-1a27-462d-b8af-39156e80b75c", name, true, true, false, false, 0, 10, "");
+
+                        if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
+                            sgNode.setType(stripUnderscoreFromUUID(equipmentId));
+                        } else {
+                            System.out.println("Asset (id: " + passet.getUUID() + ") contains no equipment.");
+                        }
+
+                        sgNode.setLat(location.getY());
+                        sgNode.setLongit(location.getX());
+
+                        igcaptGraph.addVertex(sgNode);
+
+                        id++;
+                        }
+                    } else {
+                        System.out.println("Asset (id: " + passet.getUUID() + ") contains no location.");
                     }
-                    else {
-                        System.out.println("Asset (id: " + asset.getUUID() + ") contains no equipment.");
-                    }
-
-                    sgNode.setLat(location.getY());
-                    sgNode.setLongit(location.getX());
-
-                    igcaptGraph.addVertex(sgNode);
-
-                    id++;
                 }
-                else {
-                    System.out.println("Asset (id: " + asset.getUUID() + ") contains no location.");
-                }
-            }
-            catch(Exception e) {
-                System.out.println("Exception thrown in processing asset (" + asset.getUUID() + ").");
+            } catch (Exception e) {
+                System.out.println("Exception thrown in processing scenario planning model (" + scenario.getName() + ").");
             }
         }
-        
-        igcapt.refresh();   
+        IGCAPTgui.getInstance().refresh();
+    }
+
+    private boolean isCommEquipment(gov.inl.igcapt.gdtaf.model.Equipment equipment){
+        boolean retval = false;
+        var equipRoleList = equipment.getPossibleRole();
+        for( var role : equipRoleList){
+            if(role.value() == role.ROLE_COMMS_LINK.toString() ||
+               role.value() == role.ROLE_FIREWALL.toString() ||
+               role.value() == role.ROLE_HEADEND.toString()  ||
+               role.value() == role.ROLE_REPEATER.toString() ||
+               role.value() == role.ROLE_ROUTER.toString()   ||
+               role.value() == role.ROLE_SWITCH.toString()   ||
+               role.value() == role.ROLE_TOWER.toString()    ||
+               role.value() == role.ROLE_TAKEOUT.toString()){
+               retval = true; 
+            }
+            System.out.println("Equipment ID: " + equipment.getUUID());
+            System.out.println("Equipment Desc: " + equipment.getDescription());
+            System.out.println("Equipment Role: " + role.value() );
+            System.out.println(" ");
+        }
+        return retval;
     }
 }
