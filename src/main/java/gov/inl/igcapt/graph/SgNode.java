@@ -11,6 +11,7 @@ import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
 import gov.inl.igcapt.components.KeyValueManager;
+import gov.inl.igcapt.gdtaf.model.Equipment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,11 +29,62 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
  */
 public class SgNode implements SgNodeInterface {
 
-    public SgNode(int id, String typeUuid, String name, boolean enableDataSending, boolean enableDataPassThrough, boolean isAggregate, int dataToSend, int maxInterval, String userData) {
-        this(id, typeUuid, name, enableDataSending, enableDataPassThrough, isAggregate, false, dataToSend, maxInterval, userData);
+    public SgNode(int id, 
+            String typeUuid, 
+            String name, 
+            boolean enableDataSending, 
+            boolean enableDataPassThrough, 
+            boolean isAggregate, 
+            int dataToSend, 
+            int maxInterval, 
+            String userData) {
+        this(id, 
+                typeUuid, 
+                name, 
+                enableDataSending, 
+                enableDataPassThrough, 
+                isAggregate, 
+                false, 
+                dataToSend, 
+                maxInterval, 
+                userData);
     }
-
-    public SgNode(int id, String typeUuid, String name, boolean enableDataSending, boolean enableDataPassThrough, boolean isAggregate, boolean isCollapsed, int dataToSend, int maxInterval, String userData) {
+    
+ 
+    public SgNode(int id,
+            Equipment gdtaf_equip,
+            String typeUuid,
+            String name,
+            boolean enableDataSending,
+            boolean enableDataPassThrough,
+            boolean isAggregate,
+            boolean isCollapsed,
+            int dataToSend,
+            int maxInterval,
+            String userData){
+        this(id, 
+                typeUuid, 
+                name, 
+                enableDataSending, 
+                enableDataPassThrough, 
+                isAggregate,
+                isCollapsed,  //why was this hardcoded to false? 
+                dataToSend, 
+                maxInterval, 
+                userData);
+         _gdtafEquip = gdtaf_equip;
+    }
+        
+    public SgNode(int id, 
+            String typeUuid, 
+            String name, 
+            boolean enableDataSending, 
+            boolean enableDataPassThrough, 
+            boolean isAggregate, 
+            boolean isCollapsed, 
+            int dataToSend, 
+            int maxInterval, 
+            String userData) {
         
         _name = name;
         _id = id;
@@ -66,6 +118,7 @@ public class SgNode implements SgNodeInterface {
     String _name;
     int _id = -1;
     UUID _type = null;
+    Equipment _gdtafEquip = null;
     boolean _enableDataSending = true;
     boolean _enableDataPassThrough = true;
     boolean _isAggregate = false;
@@ -93,7 +146,9 @@ public class SgNode implements SgNodeInterface {
         this._isCollapsed = _isCollapsed;
     }
                                   
-
+    public Equipment getGDTAFEquipmentModel(){
+        return _gdtafEquip;
+    }
     
     public SgComponentData getAssociatedComponent() {
         return _component;
