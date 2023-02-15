@@ -9,6 +9,7 @@ package gov.inl.igcapt.wizard;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import gov.inl.igcapt.controllers.ImportMenuItemController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -17,12 +18,12 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.JFileChooser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
  *
@@ -32,8 +33,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     private List<GucsInformation>m_gucsList;
     private List<CnrmInformation>m_cnrmList;
     private final ScenarioInformation m_newScenarioInfo;
-    private String m_webServiceHost;
-    private String m_webServiceKey;
+    private final String m_webServiceHost;
+    private final String m_webServiceKey;
     enum ButtonStages {
         LINE1,   // GUCS first line
         LINE2,   // CNRM Second line
@@ -51,20 +52,19 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         m_newScenarioInfo = newScenario;
         
         initComponents();
-        initGucsComboBox();
-        disableEnableButtons(ButtonStages.LINE1);
+        disableAllButtons();
+        initGucsList();
+        setTitle("Update Scenario - " + m_newScenarioInfo.getName() + " - with GUCS/CNRM");
         this.setVisible(true);
     }
-        
+           
     private void enableLine(ButtonStages stage, boolean state) {
         switch(stage) {
             case LINE1 -> {
-                jButton2.setEnabled(state);  // Next
-                jComboBox1.setEnabled(state);  // GUCS list
+                jList1.setEnabled(state);  // GUCS list
             }
             case LINE2 -> {
-                jButton4.setEnabled(state);   // Next
-                jComboBox2.setEnabled(state);  // CNRM list
+                jList2.setEnabled(state);  // CNRM list
             }
             case LINE3 -> {
                 jButton3.setEnabled(state);  // Browse
@@ -76,20 +76,17 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
     }
     
+    private void disableAllButtons() {
+        enableLine(ButtonStages.LINE1, false);
+        jButton2.setEnabled(false);
+        enableLine(ButtonStages.LINE2, false);
+        jButton4.setEnabled(false);
+        enableLine(ButtonStages.LINE3, false);
+        enableLine(ButtonStages.LINE4, false);
+    }
+    
     private void disableEnableButtons(ButtonStages stage) {
         switch (stage) {
-            case LINE1 -> {
-                enableLine(ButtonStages.LINE1, true);
-                enableLine(ButtonStages.LINE2, false);
-                enableLine(ButtonStages.LINE3, false);
-                enableLine(ButtonStages.LINE4, false);
-            }
-            case LINE2 -> {
-                enableLine(ButtonStages.LINE1, false);
-                enableLine(ButtonStages.LINE2, true);
-                enableLine(ButtonStages.LINE3, false);
-                enableLine(ButtonStages.LINE4, false);
-            }
             case LINE3 -> {
                 enableLine(ButtonStages.LINE1, false);
                 enableLine(ButtonStages.LINE2, false);
@@ -117,14 +114,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Update Scenario with GUCS/CNRM");
@@ -149,9 +148,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jLabel3.setText("Save Location");
         jLabel3.setToolTipText("Select Location for the Scenario file");
 
+        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jButton3.setText("Browse");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,89 +167,110 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         });
 
-        jButton5.setText("Save");
+        jButton5.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        jButton5.setText(" Save ");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
 
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        jList2.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList2ValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jList2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
+                        .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jComboBox1, 0, 299, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton4)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jButton2)
+                        .addComponent(jLabel2))
+                    .addComponent(jButton4)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton5))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
     // Initialize the GUCS combo box with the retrieved GUCS List
-    private void initGucsComboBox() {
+    private void initGucsList() {
         m_gucsList = getGucsList();
-        String[] stringArray = new String[m_gucsList.size()];
-        int count=0;
+        DefaultListModel listModel = new DefaultListModel();
         for (GucsInformation gucs : m_gucsList) {
-            stringArray[count++] = gucs.getName();
+            listModel.addElement(gucs.getName());
         }
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(stringArray));                
+        jList1.setModel(listModel);
+        jList1.setEnabled(true);
     }
     
     // Initialize the CNRM combo box with the retrieved CNRM List
-    private void initCnrmComboBox() {
+    private void initCnrmList() {
         m_cnrmList = getCnrmList();
-        String[] stringArray = new String[m_cnrmList.size()];
-        int count=0;
+        DefaultListModel listModel = new DefaultListModel();
+        
         for (CnrmInformation cnrm : m_cnrmList) {
-            stringArray[count++] = cnrm.getName();
+            listModel.addElement(cnrm.getName());
         }
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(stringArray));
+        jList2.setModel(listModel);
+        jList2.setEnabled(true);
     }
     
     // Call the web service for the GUCS List
@@ -256,7 +278,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         String output;
         try {
             URL url = new URL("https://" + m_webServiceHost + 
-                    "/core/gucs?subscription-key=" + m_webServiceKey);
+                    "/gucs?subscription-key=" + m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -286,7 +308,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         String output;
         try {
             URL url = new URL("https://" + m_webServiceHost + 
-                    "/core/cnrm?subscription-key=" + m_webServiceKey);
+                    "/cnrm?subscription-key=" + m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -312,18 +334,19 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     }
     
     // Call the web service to add the GUCS list to the scenario 
-    // Currently this is single select
     private void updateScenarioGucsList() {
         JSONArray jsonArray = new JSONArray();
-        // This will need to be updated to pick multiples but for now just one
-        int index = jComboBox1.getSelectedIndex();
-        GucsInformation selectedGucs = m_gucsList.get(index);
-        jsonArray.put(selectedGucs.getId());
+        GucsInformation selectedGucs;
+        for (int i : jList1.getSelectedIndices()) {
+            selectedGucs = m_gucsList.get(i);
+            jsonArray.put(selectedGucs.getId());
+        }       
+        
         String scenarioId = m_newScenarioInfo.getId();
 
         try {
             String urlString = "https://" + m_webServiceHost + 
-                    "/core/scenarios/" + scenarioId + "/gucs?subscription-key=" +
+                    "/scenarios/" + scenarioId + "/gucs?subscription-key=" +
                     m_webServiceKey; 
             URL url = new URL(urlString);
             
@@ -360,18 +383,18 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     }
     
     // Call the web service to add the CNRM list to the scenario 
-    // Currently this is single select
     private void updateScenarioCnrmList() {
         JSONArray jsonArray = new JSONArray();
-        // This will need to be updated to pick multiples but for now just one
-        int index = jComboBox2.getSelectedIndex();
-        CnrmInformation selectedCnrm = m_cnrmList.get(index);
-        jsonArray.put(selectedCnrm.getId());
+        CnrmInformation selectedCnrm;
+        for (int i : jList2.getSelectedIndices()) {
+            selectedCnrm = m_cnrmList.get(i);
+            jsonArray.put(selectedCnrm.getId());
+        }       
         String scenarioId = m_newScenarioInfo.getId();
 
         try {
             String urlString = "https://" + m_webServiceHost + 
-                    "/core/scenarios/" + scenarioId + "/cnrm?subscription-key=" + 
+                    "/scenarios/" + scenarioId + "/cnrm?subscription-key=" + 
                     m_webServiceKey;
             URL url = new URL(urlString);
             
@@ -409,7 +432,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
 
     // Name the file scenarioInformation.getName()
     // Write the file to the selected path
-    private void writeScenarioFile(ScenarioDetails scenarioDetails) {
+    private String writeScenarioFile(ScenarioDetails scenarioDetails) {
         String path = jTextField1.getText();
         String scenarioFile = path + File.separator + 
             scenarioDetails.getScenarioInformation().getName() + ".xml";
@@ -422,14 +445,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         catch (Exception e) {
             System.out.println("Exception:"+e.getMessage());
         }
+        return scenarioFile;
     }
     
     // Get the scenario file through the web service and call the write method
     private void getTheScenarioFile() {
         String output;
+        String fileName = null;
         ScenarioDetails scenarioDetails = null;
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios/" +
+            URL url = new URL("https://" + m_webServiceHost + "/scenarios/" +
                     m_newScenarioInfo.getId() + "?subscription-key=" + 
                     m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -446,10 +471,17 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
                 scenarioDetails = objMapper.readValue(output, ScenarioDetails.class);
             }
             if (scenarioDetails != null) {
-                writeScenarioFile(scenarioDetails);
+                fileName = writeScenarioFile(scenarioDetails);
             }
             conn.disconnect();
-            // at this point need to parse the results and add to the combo
+            
+            if (!(fileName == null) && !fileName.isEmpty() &&
+                JOptionPane.showConfirmDialog(this, "Do you want to import the Scenario now?",
+                        "Import Scenario?", JOptionPane.YES_NO_OPTION) ==
+                    JOptionPane.YES_OPTION) {
+                ImportMenuItemController importController = new ImportMenuItemController();
+                importController.importGdtafFile(fileName);
+            }
         }
         catch (Exception e2) {
             System.out.println("Exception!"+e2.getMessage());
@@ -457,12 +489,21 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
     }
        
-    /*private void cleanupScenarios() {
+    // This is test code
+    private void cleanupScenarios() {
         String output;
-        List<ScenarioInformation>scenarioList = null;
+        String[] idArray = {"_06eff38d-0820-42cb-8213-3f6adc80c579",
+    "_e16188a0-772e-4f8b-82ad-68ac096a7e8f", 
+    "_c2c8bbc0-d603-49dc-b987-ff7dd22c2e22",
+    "_977bcb93-1348-4f09-bf16-3d22dfaa8906",
+    "_77854f63-63fe-45ad-893f-3e973b6e894e",
+    "_54e127e3-2415-44c0-b6b0-f0a7876b4f18", 
+    "_707a080d-1ded-414b-a764-3ad80fa05fd9",
+        "_b42eae6d-c1e4-4474-b612-04c9ec666ff0"};
+        /*List<ScenarioInformation>scenarioList = null;
         ScenarioInformation scenarioInformation = null;
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios" +
+            URL url = new URL("https://" + m_webServiceHost + "/scenarios" +
                               "?subscription-key=" + m_webServiceKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -493,8 +534,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
                     deleteScenario(scenario.getId());
                 }
             }
+        }*/
+        for (String id : idArray) {
+            deleteScenario(id);
         }
-    }*/
+    }
 
     // delete scenario due to cancelling wizard
     private void deleteScenario(String id) {
@@ -503,7 +547,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         HttpURLConnection conn = null;
         
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios/"
+            URL url = new URL("https://" + m_webServiceHost + "/scenarios/"
                 + id + "?subscription-key=" + m_webServiceKey);
             
             conn = (HttpURLConnection)url.openConnection();
@@ -529,17 +573,19 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Select GUCS
     // PUT to update the list of GUCS for the scenario  -- need scenario id and gucs id(s)
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (jList1.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select at least one GUCS!");
+            return;
+        }
         updateScenarioGucsList();
-        initCnrmComboBox();
-        disableEnableButtons(ButtonStages.LINE2);
+        disableAllButtons();
+        initCnrmList();
         //cleanupScenarios(); //-- this is test code
     }//GEN-LAST:event_jButton2ActionPerformed
     
-    // Cancel - delete the scenario and close form
+    // Cancel - close form
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        deleteScenario(m_newScenarioInfo.getId());
-        //deleteScenario("_b0c23cec-16b5-4a31-9046-1cdb1e49a6b3");
-       
+        //cleanupScenarios();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -567,6 +613,10 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Selected CNRM
     // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        if (jList2.isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select at least one CNRM!");
+            return;
+        }        
         updateScenarioCnrmList();
         disableEnableButtons(ButtonStages.LINE3);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -581,6 +631,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         getTheScenarioFile();
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    // As soon as user makes selection, enable the Next button
+    private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
+        jButton4.setEnabled(true);
+    }//GEN-LAST:event_jList2ValueChanged
+
+    // As soon as user makes selection, enable the Next button
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        jButton2.setEnabled(true);
+    }//GEN-LAST:event_jList1ValueChanged
 
     /**
      * @param args the command line arguments
@@ -614,9 +674,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             public void run() {
                 // Scenario hard coded for testing
                 ScenarioInformation scenario = new ScenarioInformation();
-                scenario.setId("_1ee34d83-8fe3-4ad2-9757-d718b4218040");
-                scenario.setName("newTest1");
-                scenario.setSourceId("_1ee34d83-8fe3-4ad2-9757-d718b4218040");
+                scenario.setId("_0f39c303-9794-41c7-a9c2-f798e5f8a9b2");
+                scenario.setName("ForDougStaging");
+                scenario.setSourceId("_0f39c303-9794-41c7-a9c2-f798e5f8a9b2");
                 AddToScenarioWizard dialog = new AddToScenarioWizard(new javax.swing.JFrame(), true, scenario);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -635,11 +695,13 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
