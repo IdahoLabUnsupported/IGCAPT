@@ -229,7 +229,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         ScenarioInformation scenInfo;
         try {
             
-            URL url = new URL("https://" + m_webServiceHost + "/core/scenarios?subscription-key="+m_webServiceKey);
+            URL url = new URL("https://" + m_webServiceHost + "/scenarios?subscription-key="+m_webServiceKey);
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
