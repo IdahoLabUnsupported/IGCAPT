@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ImportMenuItemController {
 
@@ -56,6 +57,12 @@ public class ImportMenuItemController {
             } catch (JAXBException ex) {
                 System.out.println(ex.getMessage());
             }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,
+            "fileToImport == null OR fileToImport.isEmpty() OR fileToImport.isBlank().",
+            "Attention",
+            JOptionPane.WARNING_MESSAGE);        
         }
     }
     
@@ -167,8 +174,32 @@ public class ImportMenuItemController {
                                                                     m_edgeList.add(new Pair<SgNode, String>(sgNode, child.getValue()));
                                                                 }
                                                             }
+                                                            else {
+                                                                JOptionPane.showMessageDialog(null,
+                                                                "children == null OR children.isEmpty().",
+                                                                "Attention",
+                                                                JOptionPane.WARNING_MESSAGE);
+                                                            }
                                                         }
-                                                    }                                                   
+                                                        else {
+                                                            JOptionPane.showMessageDialog(null,
+                                                            "topologyView == null.",
+                                                            "Attention",
+                                                            JOptionPane.WARNING_MESSAGE);
+                                                        }
+                                                    }
+                                                    else {
+                                                        JOptionPane.showMessageDialog(null,
+                                                        "views == null OR views.isEmpty().",
+                                                        "Attention",
+                                                        JOptionPane.WARNING_MESSAGE);
+                                                    }
+                                                }
+                                                else {
+                                                    JOptionPane.showMessageDialog(null,
+                                                    "equiptmentInstance == null.",
+                                                    "Attention",
+                                                    JOptionPane.WARNING_MESSAGE);
                                                 }
                                             }
                                             else {
@@ -176,11 +207,54 @@ public class ImportMenuItemController {
                                             }
                                         }
                                     }
+                                    else {
+                                        JOptionPane.showMessageDialog(null,
+                                        "solutionAssetList == null OR solutionAssetList.isEmpty().",
+                                        "Attention",
+                                        JOptionPane.WARNING_MESSAGE);
+                                    }
+                                }
+                                else {
+                                    JOptionPane.showMessageDialog(null,
+                                    "option == null.",
+                                    "Attention",
+                                    JOptionPane.WARNING_MESSAGE);
                                 }
                             }
+                            else {
+                                JOptionPane.showMessageDialog(null,
+                                "optionList == null OR optionList.isEmpty().",
+                                "Attention",
+                                JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(null,
+                            "solution == null.",
+                            "Attention",
+                            JOptionPane.WARNING_MESSAGE);
                         }
                     }
+                    else {
+                        JOptionPane.showMessageDialog(null,
+                        "solutionList == null OR solutionList.isEmpty().",
+                        "Attention",
+                        JOptionPane.WARNING_MESSAGE);
+                    }
                 }
+                else {
+                    JOptionPane.showMessageDialog(null,
+                    "scenario == null.",
+                    "Attention",
+                    JOptionPane.WARNING_MESSAGE);
+                }
+            } 
+            else {
+                JOptionPane.showMessageDialog(null,
+                    "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty().",
+                    "Attention",
+                    JOptionPane.WARNING_MESSAGE);
+
             }
         }
         catch(Exception ex) {
@@ -208,6 +282,7 @@ public class ImportMenuItemController {
                 if (childNode != null) {
                     GraphManager.getInstance().getGraph().addEdge(e1, edge.first, childNode);                   
                 }
+                
             }            
         }
         catch (Exception ex) {
