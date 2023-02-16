@@ -2,6 +2,7 @@
 package gov.inl.igcapt.controllers;
 
 import gov.inl.igcapt.components.Pair;
+import gov.inl.igcapt.gdtaf.model.EdgeIndexType;
 import gov.inl.igcapt.gdtaf.model.EquipmentRole;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgNode;
@@ -149,17 +150,25 @@ public class ImportMenuItemController {
                                                     // construction of the edges we will need the two Nodes that comprise
                                                     // the edge. We will have the one and can look up the other using the 
                                                     // m_assetGuidToNodeMap.
-                                                    var connectedChildren = solutionAsset.getConnectedChildren();
-
-                                                    if (connectedChildren != null && !connectedChildren.isEmpty()) {
-
-                                                        for (var child : connectedChildren) {
-
-                                                            if (child != null && !child.isBlank() && !child.isEmpty()) {
-                                                                m_edgeList.add(new Pair<SgNode, String>(sgNode, child));                                                            
+                                                    var views = solutionAsset.getViews();
+                                                    
+                                                    if (views != null && !views.isEmpty()) {
+                                                        var topologyView = views.stream()
+                                                                .filter(view -> view.getName().equals("Topology"))
+                                                                .findAny()
+                                                                .orElse(null);
+                                                        
+                                                        if (topologyView != null) {
+                                                            List<EdgeIndexType> children = topologyView.getChildren();
+                                                            
+                                                            if (children != null && !children.isEmpty()) {
+                                                                
+                                                                for (var child : children) {
+                                                                    m_edgeList.add(new Pair<SgNode, String>(sgNode, child.getValue()));
+                                                                }
                                                             }
                                                         }
-                                                    }
+                                                    }                                                   
                                                 }
                                             }
                                             else {
