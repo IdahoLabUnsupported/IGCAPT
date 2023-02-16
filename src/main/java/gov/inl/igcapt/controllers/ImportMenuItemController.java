@@ -1,28 +1,27 @@
 
 package gov.inl.igcapt.controllers;
 
-import gov.inl.igcapt.gdtaf.model.Equipment;
+import gov.inl.igcapt.components.Pair;
 import gov.inl.igcapt.gdtaf.model.EquipmentRole;
 import gov.inl.igcapt.graph.GraphManager;
-import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.gdtaf.model.Equipment;
+import gov.inl.igcapt.graph.SgEdge;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportMenuItemController {
-    
-    public ImportMenuItemController() {
-        m_gdtaf2igcaptIDMap = new HashMap<>();
-    }
 
-    private Map<String, Integer> m_gdtaf2igcaptIDMap;
+    private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
+    private final List<Pair<SgNode,String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
     
     public void importGdtafFile(String fileToImport){
         
@@ -41,7 +40,16 @@ public class ImportMenuItemController {
                 Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
                 var gdtaf = (gov.inl.igcapt.gdtaf.model.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
                 
-                createCommsVertices(gdtaf);
+                // Clear the graph
+                IGCAPTgui.getInstance().clearGraph();
+                GraphManager.getInstance().setNodeIndex(-1);
+                GraphManager.getInstance().setEdgeIndex(-1);
+                
+                // Clear utility maps and lists. They will be populated when the vertices are created for the graph.
+                m_assetGuidToNodeMap.clear();
+                m_edgeList.clear();
+                
+                createGraphVertices(gdtaf);
                 createGraphEdges();
                 
             } catch (JAXBException ex) {
@@ -55,103 +63,148 @@ public class ImportMenuItemController {
         return uuidStr.replace("_", "");
     }
     
-      private void createCommsVertices(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
+      private void createGraphVertices(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
 
-        var assetRepo = gdtafData.getAssetRepo();
         var scenarioRepo = gdtafData.getScenarioRepo();
+        
         var crnmRepo = gdtafData.getCNRMRepo();
         for (gov.inl.igcapt.gdtaf.model.CNRM crnm : crnmRepo.getCNRM()) {
             System.out.println("CRNM Layout: " + crnm.getLayout());
         }
         
-
-        // Comprised of nodes and edges. Loop through assets to create nodes. Each asset contains parent or children.
+        // Comprised of nodes and edges. Loop through assets to create nodes. Each asset contains parent and/or children.
         // Use these to construct the edges.
-      //  var igcapt = IGCAPTgui.getInstance();
         var igcaptGraph = GraphManager.getInstance().getGraph();
-
+        
+        // Get the first scenario, first solution, first option
+        var scenarioList = scenarioRepo.getScenario();
         var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
+        
+        try {
+            if (scenarioList != null && !scenarioList.isEmpty() && assetEquipment != null && !assetEquipment.isEmpty()) {
 
-        int id = 0;
-        for (gov.inl.igcapt.gdtaf.model.Scenario scenario : scenarioRepo.getScenario()) {
-            try {
-                var plan_mod = scenario.getPlanningModel();
-             
-                for (gov.inl.igcapt.gdtaf.model.PlanningAsset passet : plan_mod.getPlanningAsset()) {
+                var scenario = scenarioList.get(0);
 
-                    var location = passet.getAtLocation();
-                    if (location != null) {
-                        String equipmentId = passet.getEquipment();
-                        Equipment equipmentInstance = assetEquipment.stream()
-                                .filter(equipment -> equipmentId.equals(equipment.getUUID()) &&
-                                        isCommEquipment(equipment))
-                                .findAny()
-                                .orElse(null);
-                        if(equipmentInstance != null){
+                if (scenario != null) {
+                    var solutionList = scenario.getSolution();
 
+                    if (solutionList != null && !solutionList.isEmpty()) {
+                        var solution = solutionList.get(0);
 
-                        String name = (equipmentInstance != null) ? equipmentInstance.getName() : "";
-                        m_gdtaf2igcaptIDMap.put(equipmentInstance.getUUID(), id);
-                        SgNode sgNode = new SgNode(id,
-                                    equipmentInstance, 
-                                    "78bf0ae2-1a27-462d-b8af-39156e80b75c", 
-                                    equipmentInstance.getName(), 
-                                    true, 
-                                    true, 
-                                    false, 
-                                    false, 
-                                    0, 
-                                    10, 
-                                    "");
+                        if (solution != null) {
+                            var optionList = solution.getOption();
 
-                        if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
-                            sgNode.setType(stripUnderscoreFromUUID(equipmentId));
-                        } else {
-                            System.out.println("Asset (id: " + passet.getUUID() + ") contains no equipment.");
+                            if (optionList != null && !optionList.isEmpty()) {
+                                var option = optionList.get(0);
+
+                                if (option != null) {
+                                    var solutionAssetList = option.getSolutionAsset();
+
+                                    if (solutionAssetList != null && !solutionAssetList.isEmpty()) {
+
+                                        for (var solutionAsset : solutionAssetList) {
+
+                                            var location = solutionAsset.getAtLocation();
+
+                                            if (location != null) {
+                                                String equipmentId = solutionAsset.getEquipment();
+                                                Equipment equipmentInstance = assetEquipment.stream()
+                                                        .filter(equipment -> equipmentId.equals(equipment.getUUID())
+                                                        && isCommEquipment(equipment))
+                                                        .findAny()
+                                                        .orElse(null);
+
+                                                if (equipmentInstance != null) {
+
+                                                    int nodeId = GraphManager.getInstance().getNodeIndex() + 1;
+                                                    String name = (equipmentInstance != null) ? equipmentInstance.getName() : "";
+                                                    SgNode sgNode = new SgNode(nodeId,
+                                                            equipmentInstance,
+                                                            "78bf0ae2-1a27-462d-b8af-39156e80b75c",
+                                                            name,
+                                                            true,
+                                                            true,
+                                                            false,
+                                                            false,
+                                                            0,
+                                                            10,
+                                                            "assetGuid:"+stripUnderscoreFromUUID(solutionAsset.getUUID()));
+
+                                                    m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
+
+                                                    if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
+                                                        sgNode.setType(stripUnderscoreFromUUID(equipmentId));
+                                                    } else {
+                                                        System.out.println("Asset (id: " + solutionAsset.getUUID() + ") contains no equipment.");
+                                                    }
+
+                                                    sgNode.setLat(location.getY());
+                                                    sgNode.setLongit(location.getX());
+
+                                                    igcaptGraph.addVertex(sgNode);
+                                                    GraphManager.getInstance().setNodeIndex(nodeId);
+
+                                                    // We have access to the asset so grab the children at this point.
+                                                    // Save the current Node instance and the child GUID. In the
+                                                    // construction of the edges we will need the two Nodes that comprise
+                                                    // the edge. We will have the one and can look up the other using the 
+                                                    // m_assetGuidToNodeMap.
+                                                    var connectedChildren = solutionAsset.getConnectedChildren();
+
+                                                    if (connectedChildren != null && !connectedChildren.isEmpty()) {
+
+                                                        for (var child : connectedChildren) {
+
+                                                            if (child != null && !child.isBlank() && !child.isEmpty()) {
+                                                                m_edgeList.add(new Pair<SgNode, String>(sgNode, child));                                                            
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                System.out.println("Asset (id: " + solutionAsset.getUUID() + ") contains no location.");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-
-                        sgNode.setLat(location.getY());
-                        sgNode.setLongit(location.getX());
-
-                        igcaptGraph.addVertex(sgNode);
-                        id++;
-                        }
-                    } else {
-                        System.out.println("Asset (id: " + passet.getUUID() + ") contains no location.");
                     }
                 }
-                
-            } catch (Exception e) {
-                System.out.println("Exception thrown in processing scenario planning model (" + scenario.getName() + ").");
             }
         }
-        
+        catch(Exception ex) {
+            System.out.println("Exception thrown in processing scenario.");
+        }
+
         IGCAPTgui.getInstance().refresh();
     }
 
     private void createGraphEdges(){
-        var vertexList = GraphManager.getInstance().getOriginalGraph().getVertices();
-        for (var vertex: vertexList){
-            gov.inl.igcapt.gdtaf.model.Equipment equipModel = vertex.getRefNode().getGDTAFEquipmentModel();
-           for(var child: equipModel.getPossibleChildren()){
-               for (String key : m_gdtaf2igcaptIDMap.keySet()) {
-                   System.out.println(key + " - " + m_gdtaf2igcaptIDMap.get(key));
-               }
-               System.out.println();
+        
+        try {
+            for (var edge : m_edgeList) {
 
-               if(m_gdtaf2igcaptIDMap.containsKey(child)){
-                   var childId = m_gdtaf2igcaptIDMap.get(child);
-                   var childNode = GraphManager.getInstance().getNode(GraphManager.getInstance().getGraph(),childId);
-                   SgEdge e1 = new SgEdge(GraphManager.getInstance().getEdgeIndex()+1,
-                           "e" + GraphManager.getInstance().getEdgeIndex()+1,
-                           1.0,
-                           0,
-                           128.0);
-                   GraphManager.getInstance().getGraph().addEdge(e1, vertex, childNode.getRefNode());
-               }
+                int edgeId = GraphManager.getInstance().getEdgeIndex()+1;
+                SgEdge e1 = new SgEdge(edgeId,
+                        "e" + edgeId,
+                        1.0,
+                        0,
+                        128.0);
+                GraphManager.getInstance().setEdgeIndex(edgeId); // Increment the edgeId.
 
-           }
+                var childNode = m_assetGuidToNodeMap.get(edge.second);
+                
+                if (childNode != null) {
+                    GraphManager.getInstance().getGraph().addEdge(e1, edge.first, childNode);                   
+                }
+            }            
         }
+        catch (Exception ex) {
+            System.out.println("Exception thrown while creating edges.");
+        }
+        
         IGCAPTgui.getInstance().refresh();
     }
       
