@@ -1,0 +1,2423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GDTAF xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://pnnl.gov/gdtaf-model">
+  <AssetRepo xmlns="">
+    <Asset UUID="_97efdf40-25d4-470e-9144-e34fc2548c50" Name="611">
+      <SourceID>_60B55036-DD71-40CE-ADDA-97B8CE7447DC</SourceID>
+      <AtLocation X="-100.48129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_e2284711-220d-4478-83de-d223893d0b81" Name="cap2">
+      <SourceID>_9D725810-BFD6-44C6-961A-2BC027F6FC95</SourceID>
+      <AtLocation X="-100.48129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <equipment>_22ea0051-503d-4022-83c7-c5b3cd07f29a</equipment>
+    </Asset>
+    <Asset UUID="_e4267225-2fb9-4836-8315-0f7acb382e0f" Name="sub3">
+      <SourceID>_259E820F-B4AF-4E1A-8271-687534EDAECC</SourceID>
+      <AtLocation X="-100.44087" Y="41.867096" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+    </Asset>
+    <Asset UUID="_f2953e63-608c-4620-8d59-095f8459a549" Name="reg3">
+      <SourceID>_5B8EA691-0051-4CF2-9A03-140171317E4D</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_611916b6-3dbc-449c-b76e-0dc8471a6e32</equipment>
+    </Asset>
+    <Asset UUID="_edc5b95d-3a72-459d-84a2-852b8448db52" Name="Reg">
+      <SourceID>_67B57539-590B-4158-9CBB-9DBA2FE6C1F0</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+      <data>_fdb3a69e-aaee-4d7b-8dab-535c44b96110</data>
+      <data>_91b67da8-3263-4ff8-b378-5e3c7b640fdc</data>
+      <data>_4b9910f1-9ae6-47e3-ad63-2601c9aba249</data>
+      <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+    </Asset>
+    <Asset UUID="_b4b046d7-57fb-4939-ab29-c7dc982c51c3" Name="school">
+      <SourceID>_7B671984-4C56-4FF1-9733-B4B6FCA5F2AA</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_381dcaf6-1983-47eb-a486-c89f736d836d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+    </Asset>
+    <Asset UUID="_44e36047-783c-48aa-9366-95cded38f18c" Name="645_B">
+      <SourceID>_82D805E6-CDB2-4E37-8D33-C5977DB1C353</SourceID>
+      <AtLocation X="-100.465294" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_9b628656-62a4-4be3-bb9e-685c868b9603" Name="house">
+      <SourceID>_CEC0FC3A-0FD1-4F1C-9C51-7D9BEF4D8222</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_05d3ff2e-a254-4298-bfd4-2e5341f9d876</data>
+      <data>_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</data>
+      <data>_cd82e885-5922-4648-a1b7-94620ea245ef</data>
+      <data>_0548f07b-d871-4b89-beef-5687087dcacf</data>
+      <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+    </Asset>
+    <Asset UUID="_85eb841d-e2b6-4c0c-9a98-330264d2abcf" Name="670a_A">
+      <SourceID>_3E50274E-3137-48AB-85FA-471EB9259187</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_c56631c8-9042-4a5a-878d-deb9ef286460" Name="646">
+      <SourceID>_0BC9183A-9067-4E06-AA5B-48DC2AB30C80</SourceID>
+      <AtLocation X="-100.48129" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_6952c586-5275-4424-bfb7-ec3169f1ee30" Name="675a_A">
+      <SourceID>_8437A355-7ECB-4309-B4F0-31A534F0709E</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_3bce4d2b-ef12-41ee-adb3-7dafe7040716" Name="brkr1">
+      <SourceID>_52DE9189-20DC-4C73-BDEE-E960FE1F9493</SourceID>
+      <AtLocation X="-100.44087" Y="41.859566" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+      <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_d853f1f6-fd65-4beb-ba19-e88060039479</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <equipment>_3e13401c-6ff5-4c3f-af83-198f2bd9a2aa</equipment>
+    </Asset>
+    <Asset UUID="_8c1ac480-b50e-474e-b0f6-160f34d3804b" Name="692_C">
+      <SourceID>_B9D37118-F065-45FA-8CC5-12A62B060379</SourceID>
+      <AtLocation X="-100.44129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_453d0aa7-75b7-4dea-a29a-52ab9759e9a8" Name="634c">
+      <SourceID>_3B2021A7-4BFC-418D-9C20-BD6838E52CF8</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_6b64ea5a-dd96-4dca-b50d-f1bc48457796" Name="school">
+      <SourceID>_15EEE173-CC90-4888-B9B8-43916D56890C</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_494f633f-420a-438f-953a-a81988ce6169</equipment>
+    </Asset>
+    <Asset UUID="_99c9c905-2a81-476d-9018-5e23cdd5ff47" Name="cap2_C">
+      <SourceID>_F0354E54-66FE-4ED2-BF73-0E9BA72DC51F</SourceID>
+      <AtLocation X="-100.48129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_f782c3f2-2ab9-4b74-bfca-5a1c1a567a6f</equipment>
+    </Asset>
+    <Asset UUID="_207e2d14-a74f-4b7d-b17c-c47e8e986ee0" Name="reg2">
+      <SourceID>_C03B9EC2-DD5F-4C39-A4A7-E212CBBC9940</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_611916b6-3dbc-449c-b76e-0dc8471a6e32</equipment>
+    </Asset>
+    <Asset UUID="_bedc55f7-516f-4d4c-9ed4-8b6139d58690" Name="rec1">
+      <SourceID>_CE5D0651-676B-4AF3-8D67-41BF1B33E30C</SourceID>
+      <AtLocation X="-100.44087" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+      <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+      <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_d853f1f6-fd65-4beb-ba19-e88060039479</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <equipment>_6f452976-c638-4ea9-b34e-6b433967638c</equipment>
+    </Asset>
+    <Asset UUID="_b4c6f3fd-9dc8-4c4e-9b8c-841105e64fd1" Name="692">
+      <SourceID>_8CA46F28-84C0-4FE2-B228-EC4080777865</SourceID>
+      <AtLocation X="-100.44129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_127ec519-b96a-498b-a628-a79664d58394" Name="671692">
+      <SourceID>_517413CB-6977-46FA-8911-C82332E42884</SourceID>
+      <AtLocation X="-100.44087" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+      <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_d853f1f6-fd65-4beb-ba19-e88060039479</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</data>
+      <equipment>_189f1a0a-9781-4bb2-99e9-8c48deca8df8</equipment>
+    </Asset>
+    <Asset UUID="_d00963bd-a20d-4415-812e-5c8a80a89031" Name="cap1">
+      <SourceID>_A9DE8829-58CB-4750-B2A2-672846A89753</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <equipment>_22ea0051-503d-4022-83c7-c5b3cd07f29a</equipment>
+    </Asset>
+    <Asset UUID="_72ec6287-1451-4dfd-bd5e-8f590e80859a" Name="house_s1">
+      <SourceID>_780517F3-5A91-48DC-86C3-5576BC7F1035</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_bbdfb134-b982-47bf-978c-31b55fbb6c4c" Name="house_s2">
+      <SourceID>_93759898-98F2-4D75-97E3-C57F3F7B20FF</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+    </Asset>
+    <Asset UUID="_017c4228-b1ec-40be-b1fc-b4c0a759d187" Name="ieee13nodeckt">
+      <SourceID>_49AD8E07-3BF9-A4E2-CB8F-C3722F837B62</SourceID>
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_dc789e71-f2ea-4674-9c3f-be3f8cf3db38</equipment>
+    </Asset>
+    <Asset UUID="_614db9ab-8903-4bbb-9911-bfcac99f423f" Name="632645">
+      <SourceID>_1C6781A2-5B9D-4525-8A9B-F9B32C4C4AC0</SourceID>
+      <AtLocation X="-100.44087" Y="41.854523" />
+      <EndLocation X="-100.465294" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_2c6bbee5-b470-4a08-96af-ea018182ab44" Name="632670">
+      <SourceID>_ABF53597-A808-422A-B7EE-552F24D83A5F</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EndLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_5f5294fd-4608-4411-9b7b-13d5c235171a" Name="670c_C">
+      <SourceID>_31B9EF18-90F8-4409-9A10-B47C84D92A7E</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_07c31571-38a4-47ef-b7b0-7e03020d0b68" Name="634a_A">
+      <SourceID>_12B7E46B-C0D5-4F7C-890C-8C468AA0651C</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_4896b07c-31c1-4e35-a9ae-d837cbfdd58c" Name="670c">
+      <SourceID>_E503BBF8-3C82-4DF7-B6E9-2488ECFCC847</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_173a5dd7-5227-4fb9-a4ae-6a05c4f47c94" Name="645">
+      <SourceID>_47E52220-4596-4AF0-9724-0167B72A4DB8</SourceID>
+      <AtLocation X="-100.465294" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_326bf4cc-8f50-49ec-8eb7-5df02aedda89" Name="reg3_Ctrl">
+      <SourceID>_B0B5ADE1-E0B8-4038-BE0A-15AA0E864015</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_c69a7344-549c-4bad-b6c9-045cf9d96791</equipment>
+    </Asset>
+    <Asset UUID="_b93cdeb4-b77e-4ef9-b9fb-5bccfae67e97" Name="house">
+      <SourceID>_D26D2D54-A267-4FC0-B86F-5FC93983784C</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_36344660-3da6-435f-8045-a3e7498df30f</equipment>
+    </Asset>
+    <Asset UUID="_86f54d83-5b14-41f0-88b4-dadd8f04e008" Name="684611">
+      <SourceID>_8E180773-2A9B-4136-BC9A-132A52C8E276</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EndLocation X="-100.48129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_4e1b42e4-7df2-41b8-bfe9-8c1b5d1207aa" Name="652_A">
+      <SourceID>_F208DA06-18F7-4EEB-AB28-135ED86B7858</SourceID>
+      <AtLocation X="-100.465294" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_d45b2944-a697-4ca3-8fa5-721ad7a0f1ae" Name="684652">
+      <SourceID>_ABF877D7-DAC2-4BF0-AB58-9A8A02E92EB3</SourceID>
+      <AtLocation X="-100.465294" Y="41.850365" />
+      <EndLocation X="-100.465294" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_be9085f9-273c-4230-bc66-b37e9d277f39" Name="sect1">
+      <SourceID>_2858B6C2-0886-4269-884C-06FA8B887319</SourceID>
+      <AtLocation X="-100.465294" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+      <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <equipment>_189f1a0a-9781-4bb2-99e9-8c48deca8df8</equipment>
+    </Asset>
+    <Asset UUID="_79392790-3379-4e16-88d5-4428872a54f7" Name="source">
+      <SourceID>_8B452737-CA3D-4C10-A99D-6865506437C8</SourceID>
+      <AtLocation X="-100.44087" Y="41.867096" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_33382e8e-36cd-41d1-a51a-d35614fe6f5f</equipment>
+    </Asset>
+    <Asset UUID="_a6866a39-4158-458f-a03e-cc5f8a004807" Name="634c_C">
+      <SourceID>_487611D2-1BBF-4B65-8FA0-AE3B8637E32C</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_3434cdcd-2806-4b90-8f2f-982223222b1e" Name="house">
+      <SourceID>_32F02D2B-EE6E-4D3F-8486-1B5CAEF70204</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_cd82e885-5922-4648-a1b7-94620ea245ef</data>
+      <data>_05d3ff2e-a254-4298-bfd4-2e5341f9d876</data>
+      <data>_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</data>
+      <data>_0548f07b-d871-4b89-beef-5687087dcacf</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_b28fd2d3-83d3-447b-b95e-c1e968a9a448" Name="reg2_Ctrl">
+      <SourceID>_C54237A0-62E4-42C7-852B-8B2326490F14</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_c69a7344-549c-4bad-b6c9-045cf9d96791</equipment>
+    </Asset>
+    <Asset UUID="_45dda783-a0f7-4754-a133-ede3b9b58278" Name="671684">
+      <SourceID>_D34B0D01-B082-4081-A3CC-B68B9B8313A4</SourceID>
+      <AtLocation X="-100.44087" Y="41.850365" />
+      <EndLocation X="-100.465294" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_c5fba78c-712c-4e6f-9e52-3af55cfdc966" Name="675b_B">
+      <SourceID>_5E6C5F22-92B8-4943-9DFE-2B2F0635A5AC</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_6eb828c5-5d5c-447f-8817-c32deb0f53d6" Name="675c_C">
+      <SourceID>_18869CD3-ED88-4FAD-A138-8CB47AA5A779</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_b279f745-dbbf-4fe8-9adf-5714e8900402" Name="611_C">
+      <SourceID>_F7A295B8-655E-4C2C-95BA-0F52F81EB404</SourceID>
+      <AtLocation X="-100.48129" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_ed7f511d-bb6d-4aad-b142-c8cdf41c5bb9" Name="645646">
+      <SourceID>_0BBD0EA3-F665-465B-86FD-FC8B8466AD53</SourceID>
+      <AtLocation X="-100.465294" Y="41.854523" />
+      <EndLocation X="-100.48129" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_f88ef775-c96e-4374-a12d-ebd35b2202f3" Name="675a">
+      <SourceID>_9CAAF741-BE1E-4893-8044-1E507B7DDC38</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_37ffdfaf-f507-4d0d-88b9-82d0d60a0dd9" Name="632633">
+      <SourceID>_FBE26B35-13AB-457D-9795-DF58B28E309D</SourceID>
+      <AtLocation X="-100.44087" Y="41.854523" />
+      <EndLocation X="-100.442726" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_92dbd0c3-be66-432d-a0cb-aff175780cea" Name="tpoletop">
+      <SourceID>_7FF12CEF-1C4D-4CD2-8FCC-662530A7BA33</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+    </Asset>
+    <Asset UUID="_1b5842d6-13b4-47ce-92a1-bb070036b329" Name="671">
+      <SourceID>_E26D83A0-D29D-41EF-9528-02C882FFCC0D</SourceID>
+      <AtLocation X="-100.44087" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_1578ca5a-9f69-4d62-80ed-aa58589bede9" Name="school">
+      <SourceID>_D2E930A7-B136-4ACA-A996-8DB5C60AADF3</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+    </Asset>
+    <Asset UUID="_aff0282b-650e-46ca-95ac-3e42e5e1a422" Name="634b_B">
+      <SourceID>_F7278CAA-7C0F-40DC-B5A5-63365101F7C4</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_f2b09ac0-abd8-4aa8-9f5d-6c9475417929" Name="house_s1">
+      <SourceID>_85512A8C-BBA9-414A-B652-5A66FF9511CF</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+    </Asset>
+    <Asset UUID="_93c1f0bd-6770-4865-9560-dc1014f40012" Name="xfm1">
+      <SourceID>_1E6B5C97-C4E8-4CED-B9A5-6E69F389DA93</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+    </Asset>
+    <Asset UUID="_9c038fd6-e4d7-4ef3-bc8d-4cd68fc04a64" Name="650632">
+      <SourceID>_A04CDFB1-E951-4FC4-8882-0323CD70AE3C</SourceID>
+      <AtLocation X="-100.44087" Y="41.859554" />
+      <EndLocation X="-100.44087" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_00e176ae-3464-4962-ba78-480da97749a9" Name="634a">
+      <SourceID>_C39149DE-3451-4D33-B4C2-B1E6C6FC9AAB</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_ddf60212-3d25-4754-beba-79275266d2f0" Name="670b">
+      <SourceID>_70188FF4-04F0-48D2-8706-698D1FD086E6</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_5d7beaf4-fd39-41b5-bdb7-c46b725ce18b" Name="house_s2">
+      <SourceID>_4416AF89-168B-4E3D-A0A9-ED52D8209B97</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_6eb12924-d64d-4099-b196-f37a1b1799b3" Name="675c">
+      <SourceID>_3FFFB3F7-A7AF-49E1-ACEE-449FC73D3CD6</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_2dd93588-7a54-45b5-ac15-68d0a92fa256" Name="fuse1">
+      <SourceID>_43EF8365-F932-409B-A51E-FBED3F6DFFAA</SourceID>
+      <AtLocation X="-100.442726" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_721448fe-e95f-4c4e-aa0c-8afadb50a5f6</equipment>
+    </Asset>
+    <Asset UUID="_f372fa62-7e5a-4946-86f0-7bd39b37423d" Name="house">
+      <SourceID>_682AB7A9-4FBF-4204-BDE1-27EAB3425DA0</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_0548f07b-d871-4b89-beef-5687087dcacf</data>
+      <data>_381dcaf6-1983-47eb-a486-c89f736d836d</data>
+      <data>_cd82e885-5922-4648-a1b7-94620ea245ef</data>
+      <data>_05d3ff2e-a254-4298-bfd4-2e5341f9d876</data>
+      <data>_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</data>
+      <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+    </Asset>
+    <Asset UUID="_63aeae40-ed2f-4868-ac0a-bcef4bbc0ea9" Name="house_s2">
+      <SourceID>_9D5E51F9-1424-4085-AA82-9B4253F8DA16</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+    </Asset>
+    <Asset UUID="_394bcfd5-54a5-4583-bfec-baeebd157702" Name="652">
+      <SourceID>_572BCFC9-E1D6-4419-9A33-EDD284806AF3</SourceID>
+      <AtLocation X="-100.465294" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_6ba72673-4508-4284-bc6e-187be1569e4d" Name="reg1">
+      <SourceID>_6CFE3829-3905-42FD-A9AD-5C70D3D835EF</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_611916b6-3dbc-449c-b76e-0dc8471a6e32</equipment>
+    </Asset>
+    <Asset UUID="_789d090a-08e4-4f6a-83d4-879ba1674b29" Name="670671">
+      <SourceID>_45395C84-F20A-4F5A-977F-B80348256421</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EndLocation X="-100.44087" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_9f9a11aa-8174-457f-be28-012a7e493a66" Name="sect1_C">
+      <SourceID>_A2E04F97-1878-4979-9BAF-9B89A1E3C5C4</SourceID>
+      <AtLocation X="-100.465294" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_d3559f63-e7c1-4919-ab63-65d23855211b</equipment>
+    </Asset>
+    <Asset UUID="_7669e270-bbec-4792-bd45-c89bed26dfa3" Name="670a">
+      <SourceID>_91A37B4C-C38B-4269-8467-F40870934386</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_66cf45bc-3ffb-4418-92db-382508b35f53" Name="675b">
+      <SourceID>_8E34333C-2BB8-4631-B072-383F1CA38F60</SourceID>
+      <AtLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_d2c3f96c-3929-4417-b8fa-cdf6b1b6c1b0" Name="692675">
+      <SourceID>_7060D0BB-B30D-4932-8FA1-40820A0FC4D0</SourceID>
+      <AtLocation X="-100.44129" Y="41.850365" />
+      <EndLocation X="-100.4173" Y="41.850365" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+    <Asset UUID="_7d1b9b79-7c30-495c-8ec2-9917c0115da5" Name="634b">
+      <SourceID>_B21C5599-1D00-4FCF-904B-58D9D4CAC49A</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+    </Asset>
+    <Asset UUID="_e1b2b463-0beb-455b-aa6a-314de270761f" Name="house_s1">
+      <SourceID>_CCB76658-7775-4B97-95C8-9003986F20C3</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+    </Asset>
+    <Asset UUID="_b9c93574-9cf6-4868-837c-610ad0005990" Name="house">
+      <SourceID>_1E58BE0E-7D37-46A5-A8A2-04B56C78E50A</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_494f633f-420a-438f-953a-a81988ce6169</equipment>
+    </Asset>
+    <Asset UUID="_18ca9ae6-9da7-440f-9672-6998ded6181a" Name="reg1_Ctrl">
+      <SourceID>_E94DDC59-1F18-4621-A172-4726383AED2C</SourceID>
+      <AtLocation X="-100.48129" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_c69a7344-549c-4bad-b6c9-045cf9d96791</equipment>
+    </Asset>
+    <Asset UUID="_a91062bb-cb88-4c0b-b45d-cf82d0f3f7c9" Name="school">
+      <SourceID>_9E931F3B-0D9D-4CBE-B771-9400202B20E8</SourceID>
+      <AtLocation X="-100.4173" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_36344660-3da6-435f-8045-a3e7498df30f</equipment>
+    </Asset>
+    <Asset UUID="_bb3702d8-3589-4074-a6c6-ca3a77ba9f28" Name="670b_B">
+      <SourceID>_BF87E722-BF18-4C41-AB13-328C9072AFA2</SourceID>
+      <AtLocation X="-100.44087" Y="41.85353" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_4d137eaa-5edb-4336-a765-c12666fe9a0c" Name="646_B">
+      <SourceID>_C163738E-2A54-4886-9741-76C6E6FAB350</SourceID>
+      <AtLocation X="-100.48129" Y="41.854523" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+      <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+    </Asset>
+    <Asset UUID="_09948d80-4d23-4add-876c-5e21a0ac456d" Name="671680">
+      <SourceID>_4C04F838-62AA-475E-AEFA-A63B7C889C13</SourceID>
+      <AtLocation X="-100.44087" Y="41.850365" />
+      <EndLocation X="-100.44087" Y="41.827316" />
+      <EquipmentZone>ZONE_FIELD</EquipmentZone>
+      <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+      <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+      <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+      <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+      <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+      <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+      <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+      <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+    </Asset>
+  </AssetRepo>
+  <CNRMRepo xmlns="">
+    <CNRM UUID="_171f6be3-cbf3-4a13-9db6-580fa1252dc3" Name="Mesh Network" Zone="ZONE_WAN" Role="ROLE_CONTAINER">
+      <layout>_e8dcc277-bab1-498b-ad63-4782d7cfe04d</layout>
+    </CNRM>
+    <TopologyNode UUID="_b076b7db-8066-445e-9d71-9cb9f06dbf6d" Name="Mesh Router" Role="ROLE_TAKEOUT">
+      <originators>_171f6be3-cbf3-4a13-9db6-580fa1252dc3</originators>
+      <children score="1">_557cd8be-771e-4020-95ab-bc2989691644</children>
+      <children score="1">_0e7a8abf-3844-4caa-a53b-3c6221f05528</children>
+      <equipment>_0da6d3fb-a544-4a75-9937-7a851025c72f</equipment>
+      <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+    </TopologyNode>
+    <TopologyNode UUID="_557cd8be-771e-4020-95ab-bc2989691644" Name="Mesh Node" Role="ROLE_ENDPOINT">
+      <originators>_171f6be3-cbf3-4a13-9db6-580fa1252dc3</originators>
+      <parents score="1">_b076b7db-8066-445e-9d71-9cb9f06dbf6d</parents>
+      <peers score="1">_0e7a8abf-3844-4caa-a53b-3c6221f05528</peers>
+      <equipment>_656bd7d0-7ff9-4e5c-987c-782720ed783d</equipment>
+    </TopologyNode>
+    <TopologyNode UUID="_0e7a8abf-3844-4caa-a53b-3c6221f05528" Name="Mesh Repeater" Role="ROLE_REPEATER">
+      <originators>_171f6be3-cbf3-4a13-9db6-580fa1252dc3</originators>
+      <parents score="1">_b076b7db-8066-445e-9d71-9cb9f06dbf6d</parents>
+      <peers score="1">_557cd8be-771e-4020-95ab-bc2989691644</peers>
+      <children score="1">_557cd8be-771e-4020-95ab-bc2989691644</children>
+      <equipment>_9410bcfa-0c75-47a6-97cb-2913741126b6</equipment>
+    </TopologyNode>
+  </CNRMRepo>
+  <GridUseCaseScenarioRepo xmlns="">
+    <GridUseCaseScenario UUID="_f1ccFC2F-ec2F-e22D-Aac1-fbd5aEfFBAEb" Name="Centralized VVO" MaximumLinkScore="-1">
+      <Overview>
+                Integrated Volt/VAR Regulation in the distribution grid is supported through an Integrated Volt/VAR controller (IVVC) which is an integral part of distribution feeder and distribution operational SCADA. IVVC allows grid operators to closely monitor and control the voltage and power factor of the grid in a centralized or decentralized manner.  Also, the IVVC supports Volt/VAR Optimization (VVO), which increases the transmission efficiency of the existing grid by allowing grid operators to reduce transmission losses through VAR optimization. As we know, the extent of DER installations are expected to increase in the years to come. Thus, the need for voltage regulation in the LV distribution network will also increase. At the same time, more smart meters are installed at customer locations, providing more information to support voltage regulation. This use cases describe the voltage and power factor control functionality in LV distribution networks using integrated volt/VAR control strategies with high penetration DER.
+            </Overview>
+      <Description>
+                Normally, voltage control is essential for utility companies to ensure that the voltage being supplied to consumers is within an acceptable range. Any deviations from this acceptable range can damage the appliances and electric equipment of consumers. Also, utility companies use VAR regulation methods to ensure that the power factor ratio remains close to 1, meaning nearly all real power to avoid power factor penalties for customers. Maintaining the power factor near to 1, reduce power losses to utilities and increase transmission efficiency too.. Traditionally, the voltage profile and reactive power flow on a distribution feeder are controlled independently and by the transformer tap-changers (TPC), capacitor banks (CB), voltage regulators (VR), static synchronous compensators (STATCOM), static var compensators (SVC), and battery energy storage systems (BESS). Conventional VVC algorithms in the DMS or distribution remote terminal units (RTUs) are designed for controlling the on/off states of the capacitor banks at the feeder circuits and distribution substations, the substation transformer taps positions, and the voltage regulator taps at the feeder circuits, all in binary or discrete quantities. With the recent integration of microgrid and DER, the voltage and reactive power flow in the LV distribution network fluctuate more in term of faster and variance than before and require continuous adjustment within certain ranges. Sometimes, it was observed that adjusting VAR at one point/location can negatively impact the voltage level at a different point/location. This arrangement will introduce new challenges to VVC algorithms because they must handle mixed control variables, some in binary and others in continuous (adjustable) quantities. Additionally, the smart meters periodically send data every 15 minutes to warn of registered low/high voltages. This smart meter alarm/warn data can be useful for utilities when they want to regulate voltage profile and reactive power flow.
+                Integrated volt/VAR technologies and systems provide new capabilities for grid operations to automate voltage controls and reactive power management. IVVC uses a two-way communications network to coordinate the volt/VAR control actions amongst various control devices to regulate VAR without affecting the voltage. IVVC offers several benefits including higher visibility into system operating parameters, reduced emissions of greenhouse gases, and increased transmission efficiency.
+            </Description>
+      <app_scenarios>_1C9DCbcd-49bb-ecee-D59C-d70A3FdfcFB4</app_scenarios>
+      <app_scenarios>_c32e9d63-d767-4ac9-bc61-45b01134e204</app_scenarios>
+      <app_scenarios>_ab138e04-4bf7-4fde-9369-d93fa4a70aca</app_scenarios>
+      <app_scenarios>_3f82f60a-204c-4174-9699-0c241d5d5446</app_scenarios>
+      <app_scenarios>_300f4448-c24a-44fd-ae56-7ccd73a74b4d</app_scenarios>
+      <app_scenarios>_ef028ba2-f38a-435f-8787-f1f3221c3cc5</app_scenarios>
+      <app_scenarios>_4e832c52-91f6-4f50-8a5f-1ceb8f7da24b</app_scenarios>
+      <app_scenarios>_a70e037a-152c-4e36-a6d4-b8533161996b</app_scenarios>
+      <app_scenarios>_f6aa3340-fabb-482d-a6e0-3a2d529b561b</app_scenarios>
+      <app_scenarios>_9c3bfc90-d96e-4b34-b34e-f07607084ea1</app_scenarios>
+      <app_scenarios>_37372941-6859-4c29-b19e-b8b634b14577</app_scenarios>
+      <app_scenarios>_f2826c6c-493f-4ba6-92c6-db7848625335</app_scenarios>
+      <app_scenarios>_657a2653-a643-4c77-a79e-ad642d5651b6</app_scenarios>
+      <app_scenarios>_55cc8d7a-b1ed-4b1d-a0a7-4ec34256be71</app_scenarios>
+      <payloads>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payloads>
+      <reqs>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</reqs>
+      <path_options>_7e07CcBF-2be3-4cdC-8aeE-6BFFaF7ABff1</path_options>
+    </GridUseCaseScenario>
+  </GridUseCaseScenarioRepo>
+  <ApplicationScenarioRepo xmlns="">
+    <ApplicationScenario UUID="_1C9DCbcd-49bb-ecee-D59C-d70A3FdfcFB4" Name="Feeder Capacitor Bank is Closed into Load">
+      <Narrative>
+                In this scenario, feeder capacitor bank is commanded to close the circuit breaker of the capacitor onto the LV distribution network. This capacitor will provide capacitive reactive power and neutralize the inductive reactive power generated in the system due to inductive load. In this way, the power factor of the distribution network will improve.
+            </Narrative>
+      <objectives>_d80b4acd-6e08-44e1-94b5-876f8a696b7e</objectives>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_c32e9d63-d767-4ac9-bc61-45b01134e204" Name="Feeder Capacitor Bank is Opened out of Load">
+      <Narrative>
+                In this scenario, feeder capacitor bank is commanded to open the circuit breaker of the capacitor from the LV distribution network. This reduces the capacitive reactive power and thus reduces the power factor.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_ab138e04-4bf7-4fde-9369-d93fa4a70aca" Name="Feeder Capacitor Bank Configuration">
+      <Narrative>
+                In this scenario, feeder capacitor bank is commanded to configure its setting. Noted that capacitor banks are designed with many configurations to meet system design constraints. How much VAR should the capacitor bank supported is determined through the bank configuration.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_3f82f60a-204c-4174-9699-0c241d5d5446" Name="Feeder Regulator Configuration">
+      <Narrative>
+                In this scenario, feeder regulator is commanded to configure its solid-state voltage-sensing circuit (VSC) setting. This new configuration maintains the fixed output voltage, irrespective of changes to the input voltage or load conditions.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_300f4448-c24a-44fd-ae56-7ccd73a74b4d" Name="Feeder Regulator Step-Down Command">
+      <Narrative>
+                In this scenario, feeder regulator is commanded to step down its VSC setting to lower the LV distribution network voltage. This step-down command is issued when the grid voltage exceeds nominal voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_ef028ba2-f38a-435f-8787-f1f3221c3cc5" Name="Feeder Regulator Step-Up Command">
+      <Narrative>
+                In this scenario, feeder regulator is commanded to step up its VSC setting to higher the LV distribution network voltage. This step-up command is issued when the grid voltage is lower than the nominal voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_4e832c52-91f6-4f50-8a5f-1ceb8f7da24b" Name="Feeder Sensor Configuration">
+      <Narrative>
+                In this scenario, feeder regulator is commanded to step up its VSC setting to higher the LV distribution network voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_a70e037a-152c-4e36-a6d4-b8533161996b" Name="Feeder Switch is Commanded to Close">
+      <Narrative>
+                In this scenario, feeder switch is commanded to close its circuit breaker to maintain the grid voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_f6aa3340-fabb-482d-a6e0-3a2d529b561b" Name="Feeder Switch is Commanded to Open">
+      <Narrative>
+                In this scenario, feeder switch is commanded to open its circuit breaker to maintain the grid voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_9c3bfc90-d96e-4b34-b34e-f07607084ea1" Name="Feeder Switch Configuration">
+      <Narrative>
+                Feeder Switch have multiple switching operations. In this scenario, feeder switch is commanded to change its operation setting based on the LV distribution network voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_37372941-6859-4c29-b19e-b8b634b14577" Name="Feeder Recloser Configuration">
+      <Narrative>
+                Just like feeder switch, feeder reclosure also have multiple operations to set the grid isolator in its position.  This isolator isolates the faulty section of the substation and maintains grid voltage. In this scenario, the feeder recloser is commanded to configure its isolator setting to maintain grid voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_f2826c6c-493f-4ba6-92c6-db7848625335" Name="Distributed Customer Storage">
+      <Narrative>
+                In this scenario, the distribution automation controller (DAC) sends the dispatch command to Dist.Cust storage for supporting voltage.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_657a2653-a643-4c77-a79e-ad642d5651b6" Name="Initiate Distribution Customer Generation">
+      <Narrative>
+                In this scenario, the distribution automation controller (DAC) sends an initiation command to Dist.Cust generation when voltage support is required.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+    <ApplicationScenario UUID="_55cc8d7a-b1ed-4b1d-a0a7-4ec34256be71" Name="Smart Meters Warn of Registered Low/High Voltage">
+      <Narrative>
+                Smart meters periodically send data every 15 minutes to warn of registered low/high voltages. If DMS identifies a voltage waring from the customer side, it will take action based on the available resource.
+            </Narrative>
+      <objectives>_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF</objectives>
+    </ApplicationScenario>
+  </ApplicationScenarioRepo>
+  <OperationalObjectiveRepo xmlns="">
+    <OperationalObjective UUID="_d80b4acd-6e08-44e1-94b5-876f8a696b7e" Name="Cap Bank Close CMD">
+      <Attributes Type="WHEN" Value="24x7" />
+      <Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
+      <Attributes Type="RELIABILITY" Value="gt 99.5%" />
+      <Attributes Type="APPLICATION_LATENCY" Value="{ &quot;operation&quot;: &quot;lt&quot;, &quot;value&quot;: 1.0, &quot;units&quot;: &quot;second&quot; }" />
+      <reqs>_5ad50a2e-08d2-474b-a91f-626a3118de21</reqs>
+      <payload>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payload>
+      <source>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</source>
+      <destination>_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</destination>
+    </OperationalObjective>
+    <OperationalObjective UUID="_AC8Fc52c-cb0E-C2De-Dbcf-EebBcca276AF" Name="Cap Bank Close ACK">
+      <Attributes Type="WHEN" Value="24x7" />
+      <Attributes Type="HOW_OFTEN" Value="1 per 12hr" />
+      <Attributes Type="RELIABILITY" Value="gt 99.5%" />
+      <Attributes Type="APPLICATION_LATENCY" Value="{ &quot;operation&quot;: &quot;lt&quot;, &quot;value&quot;: 5.0, &quot;units&quot;: &quot;second&quot; }" />
+      <reqs>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</reqs>
+      <payload>_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D</payload>
+      <source>_0c6683f8-9e4d-438b-92ea-560a1b1feb7c</source>
+      <destination>_41d6bd45-2ae6-419f-a86d-990f1ed6d684</destination>
+    </OperationalObjective>
+  </OperationalObjectiveRepo>
+  <PayloadRepo xmlns="">
+    <Payload UUID="_87aA6F30-f33c-0cF4-BACa-6eB7ecDaa26D" Name="FeederCapBank_close_ack">
+      <Attributes Type="TYPE" Value="ack" />
+      <Attributes Type="DESCRIPTION" Value="Feeder Capacitor Bank has performed and sent a close operation acknowledgment." />
+      <data>_d0e11DAE-4c86-DEE9-BcbC-69E3BbBce872</data>
+    </Payload>
+  </PayloadRepo>
+  <GridCommunicationPathRepo xmlns="">
+    <GridCommunicationPath UUID="_7e07CcBF-2be3-4cdC-8aeE-6BFFaF7ABff1" Name="string">
+      <equip_node>
+        <req>_E3dC4ac3-b8Ba-bbE0-6aEc-FbF60D8fDaBe</req>
+        <equip>_C2cDDFFE-a7A0-DcE2-c953-37Ddf798fEbc</equip>
+      </equip_node>
+      <equip_node>
+        <equip>_C2cDDFFE-a7A0-DcE2-c953-37Ddf798fEbc</equip>
+      </equip_node>
+    </GridCommunicationPath>
+  </GridCommunicationPathRepo>
+  <EquipmentRepo xmlns="">
+    <Equipment UUID="_c3cef924-067a-47f2-b539-28787996582e" Name="IEC CIM Equipment" Description="A piece of equipment discovered during parsing of an IEC CIM RDF XML file." Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+    </Equipment>
+    <Equipment UUID="_044dff4a-f8ab-4740-a21a-d357f8f8917a" Name="IEC CIM Substation" Description="A substation discovered during parsing of an IEC CIM RDF XML file." Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_SUBSTATION</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+    </Equipment>
+    <Equipment UUID="_ffa3004a-8c85-481a-8cf7-4480c261afeb" Name="EnergyConsumer" Description="EnergyConsumer" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0d4085a3-2c5a-46ce-8f31-63f460c8f903</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_2d3ae4cf-6e58-478d-a574-3a584b8275f2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_cd82e885-5922-4648-a1b7-94620ea245ef</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_05d3ff2e-a254-4298-bfd4-2e5341f9d876</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0548f07b-d871-4b89-beef-5687087dcacf</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_5bb34650-4b46-439d-8fcf-b35c9e594ac7</available_data>
+    </Equipment>
+    <Equipment UUID="_22ea0051-503d-4022-83c7-c5b3cd07f29a" Name="LinearShuntCompensator" Description="LinearShuntCompensator" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_e7e37295-1ea7-4018-9040-8636b517a05e</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0d4085a3-2c5a-46ce-8f31-63f460c8f903</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_de7cb112-2a50-443f-bdb8-887b7d786647</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_5bb34650-4b46-439d-8fcf-b35c9e594ac7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_2d3ae4cf-6e58-478d-a574-3a584b8275f2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+    </Equipment>
+    <Equipment UUID="_c9eab4e2-a176-4632-a430-0943588ee511" Name="PowerTransformer" Description="PowerTransformer" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0d4085a3-2c5a-46ce-8f31-63f460c8f903</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_2d3ae4cf-6e58-478d-a574-3a584b8275f2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_5bb34650-4b46-439d-8fcf-b35c9e594ac7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_de7cb112-2a50-443f-bdb8-887b7d786647</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_e7e37295-1ea7-4018-9040-8636b517a05e</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_fdb3a69e-aaee-4d7b-8dab-535c44b96110</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_91b67da8-3263-4ff8-b378-5e3c7b640fdc</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_4b9910f1-9ae6-47e3-ad63-2601c9aba249</available_data>
+    </Equipment>
+    <Equipment UUID="_611916b6-3dbc-449c-b76e-0dc8471a6e32" Name="RatioTapChanger" Description="RatioTapChanger" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_89514325-2d1d-4388-9fa7-4188c0826659" Name="PowerElectronicsConnection" Description="PowerElectronicsConnection" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_2d3ae4cf-6e58-478d-a574-3a584b8275f2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_381dcaf6-1983-47eb-a486-c89f736d836d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0d4085a3-2c5a-46ce-8f31-63f460c8f903</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_5bb34650-4b46-439d-8fcf-b35c9e594ac7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_05d3ff2e-a254-4298-bfd4-2e5341f9d876</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_cd82e885-5922-4648-a1b7-94620ea245ef</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0548f07b-d871-4b89-beef-5687087dcacf</available_data>
+    </Equipment>
+    <Equipment UUID="_0aa7acc5-5672-41ec-ba13-509000f9e75a" Name="EnergyConsumerPhase" Description="EnergyConsumerPhase" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_3e13401c-6ff5-4c3f-af83-198f2bd9a2aa" Name="Breaker" Description="Breaker" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_de7cb112-2a50-443f-bdb8-887b7d786647</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_e7e37295-1ea7-4018-9040-8636b517a05e</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_d853f1f6-fd65-4beb-ba19-e88060039479</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+    </Equipment>
+    <Equipment UUID="_494f633f-420a-438f-953a-a81988ce6169" Name="PhotovoltaicUnit" Description="PhotovoltaicUnit" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_f782c3f2-2ab9-4b74-bfca-5a1c1a567a6f" Name="LinearShuntCompensatorPhase" Description="LinearShuntCompensatorPhase" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_6f452976-c638-4ea9-b34e-6b433967638c" Name="Recloser" Description="Recloser" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_e7e37295-1ea7-4018-9040-8636b517a05e</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_de7cb112-2a50-443f-bdb8-887b7d786647</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_d853f1f6-fd65-4beb-ba19-e88060039479</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+    </Equipment>
+    <Equipment UUID="_189f1a0a-9781-4bb2-99e9-8c48deca8df8" Name="LoadBreakSwitch" Description="LoadBreakSwitch" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_e7e37295-1ea7-4018-9040-8636b517a05e</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_de7cb112-2a50-443f-bdb8-887b7d786647</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_d853f1f6-fd65-4beb-ba19-e88060039479</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</available_data>
+    </Equipment>
+    <Equipment UUID="_ca9bc4f1-6dd7-40bd-af1d-9880eb5738f2" Name="TransformerTank" Description="TransformerTank" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_498c5257-94e2-4d89-a52a-08d63114ed50" Name="PowerElectronicsConnectionPhase" Description="PowerElectronicsConnectionPhase" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_dc789e71-f2ea-4674-9c3f-be3f8cf3db38" Name="Feeder" Description="Feeder" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_cc7597dc-5d50-4ab3-b73f-eed99a052970" Name="ACLineSegment" Description="ACLineSegment" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONDUCTOR</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_ec9353da-f8b9-4ab1-8770-cb95355dbff7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_2d3ae4cf-6e58-478d-a574-3a584b8275f2</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_0d4085a3-2c5a-46ce-8f31-63f460c8f903</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_6a9ffd79-350e-424e-87ac-a7909be6594d</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_5bb34650-4b46-439d-8fcf-b35c9e594ac7</available_data>
+      <available_data xmlns="http://pnnl.gov/gdtaf-core">_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</available_data>
+    </Equipment>
+    <Equipment UUID="_c69a7344-549c-4bad-b6c9-045cf9d96791" Name="TapChangerControl" Description="TapChangerControl" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_36344660-3da6-435f-8045-a3e7498df30f" Name="BatteryUnit" Description="BatteryUnit" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_33382e8e-36cd-41d1-a51a-d35614fe6f5f" Name="EnergySource" Description="EnergySource" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_721448fe-e95f-4c4e-aa0c-8afadb50a5f6" Name="Fuse" Description="Fuse" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_d3559f63-e7c1-4919-ab63-65d23855211b" Name="SwitchPhase" Description="SwitchPhase" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <derived_from xmlns="http://pnnl.gov/gdtaf-core">_c3cef924-067a-47f2-b539-28787996582e</derived_from>
+    </Equipment>
+    <Equipment UUID="_41d6bd45-2ae6-419f-a86d-990f1ed6d684" Name="DMS" Description="Distribution Management System - A system that monitors, manages and controls the electric distribution system." Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+    </Equipment>
+    <Equipment UUID="_0c6683f8-9e4d-438b-92ea-560a1b1feb7c" Name="Capacitor Bank" Description="An Intelligent Electronic Device that provides electronic analog performance information, status, and fault information. In addition, the device can be remotely controlled to increase the voltage on a given segment of the Distribution network" Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+    </Equipment>
+    <Equipment UUID="_C2cDDFFE-a7A0-DcE2-c953-37Ddf798fEbc" Name="Distribution" Description="The distributors of electricity to and from customers. May also store and generate electricity." Type="Distribution">
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_CONTAINER</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+    </Equipment>
+    <Equipment UUID="_0da6d3fb-a544-4a75-9937-7a851025c72f" Name="X-Corp Mesh Router" Description="A mesh router from X-Corp." Type="Communication+Distribution">
+      <ConstrainingAttribute Type="MAX_PEERS" Value="0" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_CHILDREN" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_MANAGED" Value="4000" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_MESH_DEPTH" Value="32" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value="{ &quot;freespace&quot;: { &quot;lowmhz&quot;: 902.0, &quot;himhz&quot;: 928.0, &quot;centermhz&quot;: 915.0, &quot;bandwidthmhz&quot;: 26.0, &quot;txdb&quot;:30.0, &quot;rxdb&quot;: 0.0, &quot;floordb&quot;: -85.0 } }" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="LATENCY_CALCULATION" Value="{ &quot;fixed&quot;: { &quot;ms&quot;: 0.125 } }" xmlns="http://pnnl.gov/gdtaf-core" />
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_TAKEOUT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <possible_children xmlns="http://pnnl.gov/gdtaf-core">_656bd7d0-7ff9-4e5c-987c-782720ed783d</possible_children>
+      <possible_children xmlns="http://pnnl.gov/gdtaf-core">_9410bcfa-0c75-47a6-97cb-2913741126b6</possible_children>
+    </Equipment>
+    <Equipment UUID="_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7" Name="X-Corp Cellular Node" Description="A cellular node from X-Corp." Type="Communication+Distribution">
+      <ConstrainingAttribute Type="MAX_MANAGED" Value="1" xmlns="http://pnnl.gov/gdtaf-core" />
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_TAKEOUT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+    </Equipment>
+    <Equipment UUID="_656bd7d0-7ff9-4e5c-987c-782720ed783d" Name="X-Corp Mesh Node" Description="A mesh node from X-Corp." Type="Communication+Distribution">
+      <ConstrainingAttribute Type="MAX_PARENTS" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_PEERS" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_CHILDREN" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value="{ &quot;freespace&quot;: { &quot;lowmhz&quot;: 902.0, &quot;himhz&quot;: 928.0, &quot;centermhz&quot;: 915.0, &quot;bandwidthmhz&quot;: 26.0, &quot;txdb&quot;:30.0, &quot;rxdb&quot;: 0.0, &quot;floordb&quot;: -85.0 } }" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="LATENCY_CALCULATION" Value="{ &quot;fixed&quot;: { &quot;ms&quot;: 0.125 } }" xmlns="http://pnnl.gov/gdtaf-core" />
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_ENDPOINT</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_SUBSTATION</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <possible_parents xmlns="http://pnnl.gov/gdtaf-core">_0da6d3fb-a544-4a75-9937-7a851025c72f</possible_parents>
+    </Equipment>
+    <Equipment UUID="_9410bcfa-0c75-47a6-97cb-2913741126b6" Name="X-Corp Mesh Range Extender" Description="A mesh range extender from X-Corp." Type="Communication+Distribution">
+      <ConstrainingAttribute Type="MAX_PARENTS" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_PEERS" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="MAX_CHILDREN" Value="128" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="PATH_LOSS_CALCULATION" Value="{ &quot;freespace&quot;: { &quot;lowmhz&quot;: 902.0, &quot;himhz&quot;: 928.0, &quot;centermhz&quot;: 915.0, &quot;bandwidthmhz&quot;: 26.0, &quot;txdb&quot;:30.0, &quot;rxdb&quot;: 0.0, &quot;floordb&quot;: -85.0 } }" xmlns="http://pnnl.gov/gdtaf-core" />
+      <ConstrainingAttribute Type="LATENCY_CALCULATION" Value="{ &quot;fixed&quot;: { &quot;ms&quot;: 0.125 } }" xmlns="http://pnnl.gov/gdtaf-core" />
+      <PossibleRole xmlns="http://pnnl.gov/gdtaf-core">ROLE_REPEATER</PossibleRole>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_WAN</PossibleZone>
+      <PossibleZone xmlns="http://pnnl.gov/gdtaf-core">ZONE_FIELD</PossibleZone>
+      <possible_children xmlns="http://pnnl.gov/gdtaf-core">_656bd7d0-7ff9-4e5c-987c-782720ed783d</possible_children>
+      <possible_parents xmlns="http://pnnl.gov/gdtaf-core">_0da6d3fb-a544-4a75-9937-7a851025c72f</possible_parents>
+      <possible_parents xmlns="http://pnnl.gov/gdtaf-core">_656bd7d0-7ff9-4e5c-987c-782720ed783d</possible_parents>
+    </Equipment>
+  </EquipmentRepo>
+  <DataElementRepo xmlns="">
+    <DataElement UUID="_9f58f1f9-4d86-4a4b-8c2f-6d4828143948" Name="Pos (A)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_6e809a5d-d7dd-4c35-882c-3f20b6da557a</SourceID>
+    </DataElement>
+    <DataElement UUID="_e7e37295-1ea7-4018-9040-8636b517a05e" Name="Pos (C)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_874dae15-637c-4c9e-bee1-d859ac3acf12</SourceID>
+    </DataElement>
+    <DataElement UUID="_de7cb112-2a50-443f-bdb8-887b7d786647" Name="Pos (B)" Description="Imported CIM RDF Measurement." Group="DISCRETE">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_80ef10f9-3f4f-4fd2-8262-caedf7442fda</SourceID>
+    </DataElement>
+    <DataElement UUID="_ec9353da-f8b9-4ab1-8770-cb95355dbff7" Name="PNV (B)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_7c6f94c1-1419-4582-ab2d-a0b11772c26b</SourceID>
+    </DataElement>
+    <DataElement UUID="_0d4085a3-2c5a-46ce-8f31-63f460c8f903" Name="VA (C)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_0cbdf98b-b5e4-4bc3-93d6-08db08947794</SourceID>
+    </DataElement>
+    <DataElement UUID="_5bb34650-4b46-439d-8fcf-b35c9e594ac7" Name="VA (A)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_683bbf2f-7ea6-45c6-805e-5e4b7f5000a2</SourceID>
+    </DataElement>
+    <DataElement UUID="_05d3ff2e-a254-4298-bfd4-2e5341f9d876" Name="VA (s1)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_3ff8a15e-f522-47bc-9ca4-0e06c3d58ef0</SourceID>
+    </DataElement>
+    <DataElement UUID="_2d3ae4cf-6e58-478d-a574-3a584b8275f2" Name="VA (B)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_48720b2c-7908-4f18-a80d-f7f7f4099753</SourceID>
+    </DataElement>
+    <DataElement UUID="_b8a0a135-e295-472e-bbf2-608a1fbaeaf0" Name="PNV (A)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_e4712e37-525d-43f4-b880-d126a4d9c603</SourceID>
+    </DataElement>
+    <DataElement UUID="_92e0c447-e4c0-4757-ae31-66c2bba8b2e5" Name="A (C)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_198ca97f-d307-4fe7-8a79-5caa1c3e45d0</SourceID>
+    </DataElement>
+    <DataElement UUID="_6a9ffd79-350e-424e-87ac-a7909be6594d" Name="PNV (C)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_881b2079-132d-42b6-a2e4-3d9a954199fc</SourceID>
+    </DataElement>
+    <DataElement UUID="_cd82e885-5922-4648-a1b7-94620ea245ef" Name="PNV (s1)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_628087e8-502d-444f-a014-fb11514fa82c</SourceID>
+    </DataElement>
+    <DataElement UUID="_0548f07b-d871-4b89-beef-5687087dcacf" Name="VA (s2)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_e92f7019-68ec-4ee5-8fc6-e66580f24794</SourceID>
+    </DataElement>
+    <DataElement UUID="_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0" Name="A (A)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_cc70103a-126e-4ec1-8583-12412dd8195d</SourceID>
+    </DataElement>
+    <DataElement UUID="_381dcaf6-1983-47eb-a486-c89f736d836d" Name="SoC (none)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_c462ff83-15a8-4e0d-9708-f64f41a6a8ce</SourceID>
+    </DataElement>
+    <DataElement UUID="_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2" Name="PNV (s2)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_3dbf1b7a-905f-41de-8ab2-e5451623e69e</SourceID>
+    </DataElement>
+    <DataElement UUID="_d853f1f6-fd65-4beb-ba19-e88060039479" Name="A (B)" Description="Imported CIM RDF Measurement." Group="ANALOG">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_70cb7d70-edc3-4223-a9c1-d99be8bc8c52</SourceID>
+    </DataElement>
+    <DataElement UUID="_fdb3a69e-aaee-4d7b-8dab-535c44b96110" Name="voltage (C)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_B0B5ADE1-E0B8-4038-BE0A-15AA0E864015</SourceID>
+    </DataElement>
+    <DataElement UUID="_91b67da8-3263-4ff8-b378-5e3c7b640fdc" Name="voltage (B)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_C54237A0-62E4-42C7-852B-8B2326490F14</SourceID>
+    </DataElement>
+    <DataElement UUID="_4b9910f1-9ae6-47e3-ad63-2601c9aba249" Name="voltage (A)" Description="Imported CIM RDF Measurement." Group="COMMAND">
+      <SourceID xmlns="http://pnnl.gov/gdtaf-core">_E94DDC59-1F18-4621-A172-4726383AED2C</SourceID>
+    </DataElement>
+    <DataElement UUID="_d0e11DAE-4c86-DEE9-BcbC-69E3BbBce872" Name="ACK" Description="ACK" Group="COMMAND" />
+  </DataElementRepo>
+  <ScenarioRepo xmlns="">
+    <Scenario UUID="_b0dde901-eebe-41e0-b962-784167c67cfa" Name="New_ieee13node_geo" Description="The updated geo locations and a new test">
+      <PlanningModel>
+        <State>POPULATED</State>
+        <PlanningAsset UUID="6985bd60-e881-48e7-8232-ef1587aa0641" Name="611">
+          <SourceID>_97efdf40-25d4-470e-9144-e34fc2548c50</SourceID>
+          <AtLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_200159d8-eb7e-4929-94d6-527a918cf9fd</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="5f4caf2a-4395-4d8b-b096-9cceda3ae4dc" Name="cap2">
+          <SourceID>_e2284711-220d-4478-83de-d223893d0b81</SourceID>
+          <AtLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_0da02d5a-560c-4ecb-8f2b-f582c58852f4</connected_parents>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <equipment>_22ea0051-503d-4022-83c7-c5b3cd07f29a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="ebe4aaf8-e034-43fb-a443-e666d60a463e" Name="sub3">
+          <SourceID>_e4267225-2fb9-4836-8315-0f7acb382e0f</SourceID>
+          <AtLocation X="-100.44087" Y="41.867096" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_9ca0bf2d-8390-4dc0-9b07-e5b038326ccb</connected_parents>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="c6ead977-8410-4e3e-bd1f-ddf346917c0f" Name="reg3">
+          <SourceID>_f2953e63-608c-4620-8d59-095f8459a549</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_611916b6-3dbc-449c-b76e-0dc8471a6e32</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="16d76399-c7a6-460f-8db9-43a2168e14bf" Name="Reg">
+          <SourceID>_edc5b95d-3a72-459d-84a2-852b8448db52</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_d76c1f26-91d8-4086-927a-6152fc61c63e</connected_parents>
+          <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+          <data>_fdb3a69e-aaee-4d7b-8dab-535c44b96110</data>
+          <data>_91b67da8-3263-4ff8-b378-5e3c7b640fdc</data>
+          <data>_4b9910f1-9ae6-47e3-ad63-2601c9aba249</data>
+          <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="dcac6998-8a80-4edd-9910-5d34dcde64aa" Name="school">
+          <SourceID>_b4b046d7-57fb-4939-ab29-c7dc982c51c3</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_6852b5ef-d6ec-4a91-b401-e22860baedb5</connected_parents>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_381dcaf6-1983-47eb-a486-c89f736d836d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="5d98ca26-602c-4a62-8b55-306fd2e30577" Name="645_B">
+          <SourceID>_44e36047-783c-48aa-9366-95cded38f18c</SourceID>
+          <AtLocation X="-100.465294" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="e8be62ce-4f35-46a9-ae98-d8ec574f2eb4" Name="house">
+          <SourceID>_9b628656-62a4-4be3-bb9e-685c868b9603</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_da39bfe7-4250-4d58-8d65-72bc7ed2d96e</connected_parents>
+          <data>_05d3ff2e-a254-4298-bfd4-2e5341f9d876</data>
+          <data>_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</data>
+          <data>_cd82e885-5922-4648-a1b7-94620ea245ef</data>
+          <data>_0548f07b-d871-4b89-beef-5687087dcacf</data>
+          <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="c96ccf5e-c682-4f34-8a38-97557f415c48" Name="670a_A">
+          <SourceID>_85eb841d-e2b6-4c0c-9a98-330264d2abcf</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="f5794208-96c7-49bb-9109-fcaa4d85333c" Name="646">
+          <SourceID>_c56631c8-9042-4a5a-878d-deb9ef286460</SourceID>
+          <AtLocation X="-100.48129" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_b23b5830-4d8b-41e9-a4f4-5716e1fa5a3d</connected_parents>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="f0fc9cab-3863-4c51-a630-7ed016f68ff8" Name="675a_A">
+          <SourceID>_6952c586-5275-4424-bfb7-ec3169f1ee30</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="e4cdb330-4fb3-40c2-af63-54300beab4b9" Name="brkr1">
+          <SourceID>_3bce4d2b-ef12-41ee-adb3-7dafe7040716</SourceID>
+          <AtLocation X="-100.44087" Y="41.859566" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_82d44d52-e1f9-4eeb-986b-340bd8791676</connected_parents>
+          <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+          <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_d853f1f6-fd65-4beb-ba19-e88060039479</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <equipment>_3e13401c-6ff5-4c3f-af83-198f2bd9a2aa</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="42424dcd-71ac-44d3-8f9b-b16fbdd5de26" Name="692_C">
+          <SourceID>_8c1ac480-b50e-474e-b0f6-160f34d3804b</SourceID>
+          <AtLocation X="-100.44129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="c8b9b1b7-42f8-4882-9b55-f659a5eec650" Name="634c">
+          <SourceID>_453d0aa7-75b7-4dea-a29a-52ab9759e9a8</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_b727d5c4-4db7-457e-97f4-21a70fa228ae</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="641151c1-f76b-4db3-b755-13a06cada89a" Name="school">
+          <SourceID>_6b64ea5a-dd96-4dca-b50d-f1bc48457796</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_494f633f-420a-438f-953a-a81988ce6169</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="fb2444c6-9ba4-4e72-a818-1630fbe2ea9b" Name="cap2_C">
+          <SourceID>_99c9c905-2a81-476d-9018-5e23cdd5ff47</SourceID>
+          <AtLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_f782c3f2-2ab9-4b74-bfca-5a1c1a567a6f</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="1875f91a-69de-4fa3-9217-d6915482a5ad" Name="reg2">
+          <SourceID>_207e2d14-a74f-4b7d-b17c-c47e8e986ee0</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_611916b6-3dbc-449c-b76e-0dc8471a6e32</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="dfb69a0d-7c39-40a1-bf58-d8c7ec26bf4d" Name="rec1">
+          <SourceID>_bedc55f7-516f-4d4c-9ed4-8b6139d58690</SourceID>
+          <AtLocation X="-100.44087" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_205a1afa-ad48-4d6f-bdb5-30d9d14dd835</connected_parents>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+          <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+          <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_d853f1f6-fd65-4beb-ba19-e88060039479</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <equipment>_6f452976-c638-4ea9-b34e-6b433967638c</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="ec029425-75eb-4159-b8ba-87a4657e9ffc" Name="692">
+          <SourceID>_b4c6f3fd-9dc8-4c4e-9b8c-841105e64fd1</SourceID>
+          <AtLocation X="-100.44129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_30fb11cc-1426-4f74-a658-11b873539535</connected_parents>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="70ab9f73-31d4-44b6-a241-6a31361cc1a2" Name="671692">
+          <SourceID>_127ec519-b96a-498b-a628-a79664d58394</SourceID>
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_25554363-eb95-4a3c-a0df-92b2ba8522b4</connected_parents>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+          <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_d853f1f6-fd65-4beb-ba19-e88060039479</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_d8d06b5e-c7ed-4cb8-9062-fce4d215e7f0</data>
+          <equipment>_189f1a0a-9781-4bb2-99e9-8c48deca8df8</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="f90fdc51-4dd4-4857-822a-ee865dcbd41d" Name="cap1">
+          <SourceID>_d00963bd-a20d-4415-812e-5c8a80a89031</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_90f2a5f7-9f6b-4379-883e-0554201e4353</connected_parents>
+          <data>_9f58f1f9-4d86-4a4b-8c2f-6d4828143948</data>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_de7cb112-2a50-443f-bdb8-887b7d786647</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <equipment>_22ea0051-503d-4022-83c7-c5b3cd07f29a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="579ce4f4-c3c7-4613-af5d-4c541a5e08db" Name="house_s1">
+          <SourceID>_72ec6287-1451-4dfd-bd5e-8f590e80859a</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="2e963c99-9db1-4c00-9be2-ac08d25af1c9" Name="house_s2">
+          <SourceID>_bbdfb134-b982-47bf-978c-31b55fbb6c4c</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="64a7b8bf-1028-4b6c-a38c-ade7d99adabf" Name="ieee13nodeckt">
+          <SourceID>_017c4228-b1ec-40be-b1fc-b4c0a759d187</SourceID>
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_dc789e71-f2ea-4674-9c3f-be3f8cf3db38</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="6fac3feb-a309-472a-bdcf-2991d8d342d9" Name="632645">
+          <SourceID>_614db9ab-8903-4bbb-9911-bfcac99f423f</SourceID>
+          <AtLocation X="-100.44087" Y="41.854523" />
+          <EndLocation X="-100.465294" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_be9fb658-45c3-40e0-8efe-d23d16d7312c</connected_parents>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="25f823da-7a03-4a53-8c95-edc18a605ed3" Name="632670">
+          <SourceID>_2c6bbee5-b470-4a08-96af-ea018182ab44</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EndLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_a995bde7-0d85-4fce-b4e0-2b37fbe669af</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="3596222f-90b8-46b6-a692-23f9b58afb92" Name="670c_C">
+          <SourceID>_5f5294fd-4608-4411-9b7b-13d5c235171a</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="83e11deb-6493-4046-81cd-a104c4f0c7b2" Name="634a_A">
+          <SourceID>_07c31571-38a4-47ef-b7b0-7e03020d0b68</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="d1b25860-ad46-408b-b2b8-0308b7c5f592" Name="670c">
+          <SourceID>_4896b07c-31c1-4e35-a9ae-d837cbfdd58c</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_5f37ddfd-3988-43b5-afc6-7c02574e69fd</connected_parents>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="a59044f6-e6e4-4a66-83c2-6e74bf98367b" Name="645">
+          <SourceID>_173a5dd7-5227-4fb9-a4ae-6a05c4f47c94</SourceID>
+          <AtLocation X="-100.465294" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_1201ced7-432b-46fa-b7a2-b1792626465e</connected_parents>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="214148a7-035a-4b08-9d59-2751f46bfc3f" Name="reg3_Ctrl">
+          <SourceID>_326bf4cc-8f50-49ec-8eb7-5df02aedda89</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_c69a7344-549c-4bad-b6c9-045cf9d96791</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="ff8df162-567e-4093-aad6-522699bf316e" Name="house">
+          <SourceID>_b93cdeb4-b77e-4ef9-b9fb-5bccfae67e97</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_36344660-3da6-435f-8045-a3e7498df30f</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="9a752e17-8243-4576-9ca6-0b19fc7ab85b" Name="684611">
+          <SourceID>_86f54d83-5b14-41f0-88b4-dadd8f04e008</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EndLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_2aeecf02-6a34-4d26-8e12-b1c331ee3d9e</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="2401f5b8-278b-4691-86f0-d05639b91007" Name="652_A">
+          <SourceID>_4e1b42e4-7df2-41b8-bfe9-8c1b5d1207aa</SourceID>
+          <AtLocation X="-100.465294" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="7ced974f-f5ad-4399-9879-d182425fff77" Name="684652">
+          <SourceID>_d45b2944-a697-4ca3-8fa5-721ad7a0f1ae</SourceID>
+          <AtLocation X="-100.465294" Y="41.850365" />
+          <EndLocation X="-100.465294" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_50ccd908-8aaf-49a7-945f-dee987dcdab0</connected_parents>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="7663c429-751d-4795-817c-fc76cde0075c" Name="sect1">
+          <SourceID>_be9085f9-273c-4230-bc66-b37e9d277f39</SourceID>
+          <AtLocation X="-100.465294" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_e2be1f4e-4c68-4c89-96b7-18285b624380</connected_parents>
+          <data>_e7e37295-1ea7-4018-9040-8636b517a05e</data>
+          <data>_92e0c447-e4c0-4757-ae31-66c2bba8b2e5</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <equipment>_189f1a0a-9781-4bb2-99e9-8c48deca8df8</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="91502179-9588-4a9d-8402-395c070b96be" Name="source">
+          <SourceID>_79392790-3379-4e16-88d5-4428872a54f7</SourceID>
+          <AtLocation X="-100.44087" Y="41.867096" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_33382e8e-36cd-41d1-a51a-d35614fe6f5f</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="690f9ecc-05d7-4596-99ee-f785c8c91c5b" Name="634c_C">
+          <SourceID>_a6866a39-4158-458f-a03e-cc5f8a004807</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="d12c1573-aa06-4139-9320-af3ce0f0e3c9" Name="house">
+          <SourceID>_3434cdcd-2806-4b90-8f2f-982223222b1e</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_547b6d01-3151-47cc-b25b-9e6665a1376c</connected_parents>
+          <data>_cd82e885-5922-4648-a1b7-94620ea245ef</data>
+          <data>_05d3ff2e-a254-4298-bfd4-2e5341f9d876</data>
+          <data>_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</data>
+          <data>_0548f07b-d871-4b89-beef-5687087dcacf</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="628553a6-2151-4815-b7d6-d4ddc41a3ded" Name="reg2_Ctrl">
+          <SourceID>_b28fd2d3-83d3-447b-b95e-c1e968a9a448</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_c69a7344-549c-4bad-b6c9-045cf9d96791</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="14998410-8e5c-40c9-a105-c7f237c8aaed" Name="671684">
+          <SourceID>_45dda783-a0f7-4754-a133-ede3b9b58278</SourceID>
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EndLocation X="-100.465294" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_4b8c7050-600e-44db-a479-580442d029bf</connected_parents>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="82c4a9fe-689d-4b4f-b0d0-312cc4ca5b2e" Name="675b_B">
+          <SourceID>_c5fba78c-712c-4e6f-9e52-3af55cfdc966</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="a15f5760-7113-473e-a1b8-725b03e6ab25" Name="675c_C">
+          <SourceID>_6eb828c5-5d5c-447f-8817-c32deb0f53d6</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="dba6d40f-86e8-4f1b-8435-b795c1dccce9" Name="611_C">
+          <SourceID>_b279f745-dbbf-4fe8-9adf-5714e8900402</SourceID>
+          <AtLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="7187c5d6-1a4c-4096-98de-a9169a04a4ee" Name="645646">
+          <SourceID>_ed7f511d-bb6d-4aad-b142-c8cdf41c5bb9</SourceID>
+          <AtLocation X="-100.465294" Y="41.854523" />
+          <EndLocation X="-100.48129" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_8991da17-a05e-402a-824e-35fc8b32b6e6</connected_parents>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="a8fdbf6c-26dd-4de9-ad15-18c2ee417005" Name="675a">
+          <SourceID>_f88ef775-c96e-4374-a12d-ebd35b2202f3</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_ab059c61-e2e0-4874-95c6-3f9bc1bf7a50</connected_parents>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="b4527c1c-aa85-4eab-b13f-1669ff8f7ecf" Name="632633">
+          <SourceID>_37ffdfaf-f507-4d0d-88b9-82d0d60a0dd9</SourceID>
+          <AtLocation X="-100.44087" Y="41.854523" />
+          <EndLocation X="-100.442726" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_3419175f-6c02-4878-8a35-1308cd865123</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="8dfa9ade-6161-4d22-b52d-bda00f2e19e4" Name="tpoletop">
+          <SourceID>_92dbd0c3-be66-432d-a0cb-aff175780cea</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="000d47ed-fb60-4b35-a234-21c3f4415c11" Name="671">
+          <SourceID>_1b5842d6-13b4-47ce-92a1-bb070036b329</SourceID>
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_e6b8520e-23fc-4e70-b661-034bb7714189</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="865771d1-9286-4805-9459-393ae852cddb" Name="school">
+          <SourceID>_1578ca5a-9f69-4d62-80ed-aa58589bede9</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_ad6e7fbd-20e0-45e4-8b81-5ccbcd13089f</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="fe5c0666-eb02-4c97-a81d-d5eb38643b53" Name="634b_B">
+          <SourceID>_aff0282b-650e-46ca-95ac-3e42e5e1a422</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="f52f8b32-b8c6-4420-8e7a-1cf96885943b" Name="house_s1">
+          <SourceID>_f2b09ac0-abd8-4aa8-9f5d-6c9475417929</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="9c053634-1e35-4e07-863b-93e7960045c6" Name="xfm1">
+          <SourceID>_93c1f0bd-6770-4865-9560-dc1014f40012</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_0c64871e-3d60-4885-ada5-62acc2b100cf</connected_parents>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <equipment>_c9eab4e2-a176-4632-a430-0943588ee511</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="652c5434-8fbc-44cc-9cfd-0aed9ca71171" Name="650632">
+          <SourceID>_9c038fd6-e4d7-4ef3-bc8d-4cd68fc04a64</SourceID>
+          <AtLocation X="-100.44087" Y="41.859554" />
+          <EndLocation X="-100.44087" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_b43ee139-7c44-4722-befd-a52376e65dad</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="599070aa-ca93-458d-b01a-993144fb22e9" Name="634a">
+          <SourceID>_00e176ae-3464-4962-ba78-480da97749a9</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_12b198d3-324d-48c3-ba5b-75b4e33947c1</connected_parents>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="5de3067c-5500-4a60-89aa-3b71407046a9" Name="670b">
+          <SourceID>_ddf60212-3d25-4754-beba-79275266d2f0</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_b83bd2d8-4a33-463e-8e1c-6b2c9bda7e9b</connected_parents>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="6e0a1e65-4771-4183-be2a-041203cd0bce" Name="house_s2">
+          <SourceID>_5d7beaf4-fd39-41b5-bdb7-c46b725ce18b</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="7bd52f0d-60b7-4dfc-b284-a8ea9c357665" Name="675c">
+          <SourceID>_6eb12924-d64d-4099-b196-f37a1b1799b3</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_63ea63fb-b361-4baa-af78-6991a2643787</connected_parents>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="09ce9eff-d91e-4486-97f6-30f08e8d0230" Name="fuse1">
+          <SourceID>_2dd93588-7a54-45b5-ac15-68d0a92fa256</SourceID>
+          <AtLocation X="-100.442726" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_721448fe-e95f-4c4e-aa0c-8afadb50a5f6</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="763c1e15-5fd2-44bd-a2bf-124fcb0ae981" Name="house">
+          <SourceID>_f372fa62-7e5a-4946-86f0-7bd39b37423d</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_33355654-8c5e-458c-8601-fc9938fb6834</connected_parents>
+          <data>_0548f07b-d871-4b89-beef-5687087dcacf</data>
+          <data>_381dcaf6-1983-47eb-a486-c89f736d836d</data>
+          <data>_cd82e885-5922-4648-a1b7-94620ea245ef</data>
+          <data>_05d3ff2e-a254-4298-bfd4-2e5341f9d876</data>
+          <data>_1e9277a1-93d3-4ad4-a7ef-7906bdd52dd2</data>
+          <equipment>_89514325-2d1d-4388-9fa7-4188c0826659</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="c9d0598e-6dd2-4665-9e31-36080a77ce55" Name="house_s2">
+          <SourceID>_63aeae40-ed2f-4868-ac0a-bcef4bbc0ea9</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="f95fb5fc-b5af-4b8b-a4f9-07513592abeb" Name="652">
+          <SourceID>_394bcfd5-54a5-4583-bfec-baeebd157702</SourceID>
+          <AtLocation X="-100.465294" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_70b9561c-80fa-41cc-9ba8-79daf1828284</connected_parents>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="9e36d9b6-00a2-4ff8-a2a2-27badc1b68cd" Name="reg1">
+          <SourceID>_6ba72673-4508-4284-bc6e-187be1569e4d</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_611916b6-3dbc-449c-b76e-0dc8471a6e32</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="65c6be37-4296-4942-a167-ff030b4d3363" Name="670671">
+          <SourceID>_789d090a-08e4-4f6a-83d4-879ba1674b29</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EndLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_18e6b14a-6ecd-49b5-a4d0-6bb5d2b69fcf</connected_parents>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="4c12d969-82ca-4b89-9f38-d2fa7e84887a" Name="sect1_C">
+          <SourceID>_9f9a11aa-8174-457f-be28-012a7e493a66</SourceID>
+          <AtLocation X="-100.465294" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_d3559f63-e7c1-4919-ab63-65d23855211b</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="80aca236-f4d9-4e26-9632-51391b212555" Name="670a">
+          <SourceID>_7669e270-bbec-4792-bd45-c89bed26dfa3</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_26fec922-a2d4-4c85-a6eb-d3d5f24aaa54</connected_parents>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="e1f8d28f-7e67-490e-a153-bf8c950aa81b" Name="675b">
+          <SourceID>_66cf45bc-3ffb-4418-92db-382508b35f53</SourceID>
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_d8986bc3-9d9a-4a6f-928d-b76f80574126</connected_parents>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="82f01601-d0a6-40fb-9c17-01eb6682c560" Name="692675">
+          <SourceID>_d2c3f96c-3929-4417-b8fa-cdf6b1b6c1b0</SourceID>
+          <AtLocation X="-100.44129" Y="41.850365" />
+          <EndLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_cb1977b3-543a-40bc-b509-1a1bd9990b81</connected_parents>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="89e57685-16e0-4522-bdfa-74416830606e" Name="634b">
+          <SourceID>_7d1b9b79-7c30-495c-8ec2-9917c0115da5</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <connected_parents>_8054f58a-ae57-467a-87b6-73f0756c92cd</connected_parents>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <equipment>_ffa3004a-8c85-481a-8cf7-4480c261afeb</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="7004f70c-cdab-4d21-a405-caf2c51b6954" Name="house_s1">
+          <SourceID>_e1b2b463-0beb-455b-aa6a-314de270761f</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_498c5257-94e2-4d89-a52a-08d63114ed50</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="fdea3c0b-6b2e-49e6-8dd9-4418a0d9536a" Name="house">
+          <SourceID>_b9c93574-9cf6-4868-837c-610ad0005990</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_494f633f-420a-438f-953a-a81988ce6169</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="9cb8587d-3bef-4ee7-9780-b5a54f5bfd32" Name="reg1_Ctrl">
+          <SourceID>_18ca9ae6-9da7-440f-9672-6998ded6181a</SourceID>
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_c69a7344-549c-4bad-b6c9-045cf9d96791</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="5bf4b46d-58ca-4a54-a121-d80f9b75453c" Name="school">
+          <SourceID>_a91062bb-cb88-4c0b-b45d-cf82d0f3f7c9</SourceID>
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_36344660-3da6-435f-8045-a3e7498df30f</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="3afc939a-9cde-4b6d-8b54-cf5195279106" Name="670b_B">
+          <SourceID>_bb3702d8-3589-4074-a6c6-ca3a77ba9f28</SourceID>
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="7c9050d8-2b30-4ef5-bc96-6b1720d95d69" Name="646_B">
+          <SourceID>_4d137eaa-5edb-4336-a765-c12666fe9a0c</SourceID>
+          <AtLocation X="-100.48129" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_ENDPOINT</EquipmentRole>
+          <equipment>_0aa7acc5-5672-41ec-ba13-509000f9e75a</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="d7d768bc-38b8-4f89-9fad-81eb3a0fbe1b" Name="671680">
+          <SourceID>_09948d80-4d23-4add-876c-5e21a0ac456d</SourceID>
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EndLocation X="-100.44087" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_CONDUCTOR</EquipmentRole>
+          <connected_parents>_febb1be1-94fc-4a3d-af12-06200264bb6f</connected_parents>
+          <data>_6a9ffd79-350e-424e-87ac-a7909be6594d</data>
+          <data>_ec9353da-f8b9-4ab1-8770-cb95355dbff7</data>
+          <data>_5bb34650-4b46-439d-8fcf-b35c9e594ac7</data>
+          <data>_0d4085a3-2c5a-46ce-8f31-63f460c8f903</data>
+          <data>_b8a0a135-e295-472e-bbf2-608a1fbaeaf0</data>
+          <data>_2d3ae4cf-6e58-478d-a574-3a584b8275f2</data>
+          <equipment>_cc7597dc-5d50-4ab3-b73f-eed99a052970</equipment>
+          <State>PHYSICAL</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_200159d8-eb7e-4929-94d6-527a918cf9fd" Name="611 X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>6985bd60-e881-48e7-8232-ef1587aa0641</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_0da02d5a-560c-4ecb-8f2b-f582c58852f4" Name="cap2 X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>5f4caf2a-4395-4d8b-b096-9cceda3ae4dc</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_9ca0bf2d-8390-4dc0-9b07-e5b038326ccb" Name="sub3 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.867096" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>ebe4aaf8-e034-43fb-a443-e666d60a463e</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_d76c1f26-91d8-4086-927a-6152fc61c63e" Name="Reg X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>16d76399-c7a6-460f-8db9-43a2168e14bf</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_6852b5ef-d6ec-4a91-b401-e22860baedb5" Name="school X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>dcac6998-8a80-4edd-9910-5d34dcde64aa</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_da39bfe7-4250-4d58-8d65-72bc7ed2d96e" Name="house X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>e8be62ce-4f35-46a9-ae98-d8ec574f2eb4</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_b23b5830-4d8b-41e9-a4f4-5716e1fa5a3d" Name="646 X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>f5794208-96c7-49bb-9109-fcaa4d85333c</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_82d44d52-e1f9-4eeb-986b-340bd8791676" Name="brkr1 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.859566" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>e4cdb330-4fb3-40c2-af63-54300beab4b9</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_b727d5c4-4db7-457e-97f4-21a70fa228ae" Name="634c X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>c8b9b1b7-42f8-4882-9b55-f659a5eec650</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_205a1afa-ad48-4d6f-bdb5-30d9d14dd835" Name="rec1 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>dfb69a0d-7c39-40a1-bf58-d8c7ec26bf4d</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_30fb11cc-1426-4f74-a658-11b873539535" Name="692 X-Corp Cellular Node">
+          <AtLocation X="-100.44129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>ec029425-75eb-4159-b8ba-87a4657e9ffc</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_25554363-eb95-4a3c-a0df-92b2ba8522b4" Name="671692 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>70ab9f73-31d4-44b6-a241-6a31361cc1a2</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_90f2a5f7-9f6b-4379-883e-0554201e4353" Name="cap1 X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>f90fdc51-4dd4-4857-822a-ee865dcbd41d</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_be9fb658-45c3-40e0-8efe-d23d16d7312c" Name="632645 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>6fac3feb-a309-472a-bdcf-2991d8d342d9</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_a995bde7-0d85-4fce-b4e0-2b37fbe669af" Name="632670 X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>25f823da-7a03-4a53-8c95-edc18a605ed3</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_5f37ddfd-3988-43b5-afc6-7c02574e69fd" Name="670c X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>d1b25860-ad46-408b-b2b8-0308b7c5f592</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_1201ced7-432b-46fa-b7a2-b1792626465e" Name="645 X-Corp Cellular Node">
+          <AtLocation X="-100.465294" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>a59044f6-e6e4-4a66-83c2-6e74bf98367b</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_2aeecf02-6a34-4d26-8e12-b1c331ee3d9e" Name="684611 X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>9a752e17-8243-4576-9ca6-0b19fc7ab85b</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_50ccd908-8aaf-49a7-945f-dee987dcdab0" Name="684652 X-Corp Cellular Node">
+          <AtLocation X="-100.465294" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>7ced974f-f5ad-4399-9879-d182425fff77</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_e2be1f4e-4c68-4c89-96b7-18285b624380" Name="sect1 X-Corp Cellular Node">
+          <AtLocation X="-100.465294" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>7663c429-751d-4795-817c-fc76cde0075c</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_547b6d01-3151-47cc-b25b-9e6665a1376c" Name="house X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>d12c1573-aa06-4139-9320-af3ce0f0e3c9</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_4b8c7050-600e-44db-a479-580442d029bf" Name="671684 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>14998410-8e5c-40c9-a105-c7f237c8aaed</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_8991da17-a05e-402a-824e-35fc8b32b6e6" Name="645646 X-Corp Cellular Node">
+          <AtLocation X="-100.465294" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>7187c5d6-1a4c-4096-98de-a9169a04a4ee</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_ab059c61-e2e0-4874-95c6-3f9bc1bf7a50" Name="675a X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>a8fdbf6c-26dd-4de9-ad15-18c2ee417005</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_3419175f-6c02-4878-8a35-1308cd865123" Name="632633 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>b4527c1c-aa85-4eab-b13f-1669ff8f7ecf</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_e6b8520e-23fc-4e70-b661-034bb7714189" Name="671 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>000d47ed-fb60-4b35-a234-21c3f4415c11</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_ad6e7fbd-20e0-45e4-8b81-5ccbcd13089f" Name="school X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>865771d1-9286-4805-9459-393ae852cddb</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_0c64871e-3d60-4885-ada5-62acc2b100cf" Name="xfm1 X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>9c053634-1e35-4e07-863b-93e7960045c6</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_b43ee139-7c44-4722-befd-a52376e65dad" Name="650632 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.859554" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>652c5434-8fbc-44cc-9cfd-0aed9ca71171</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_12b198d3-324d-48c3-ba5b-75b4e33947c1" Name="634a X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>599070aa-ca93-458d-b01a-993144fb22e9</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_b83bd2d8-4a33-463e-8e1c-6b2c9bda7e9b" Name="670b X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>5de3067c-5500-4a60-89aa-3b71407046a9</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_63ea63fb-b361-4baa-af78-6991a2643787" Name="675c X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>7bd52f0d-60b7-4dfc-b284-a8ea9c357665</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_33355654-8c5e-458c-8601-fc9938fb6834" Name="house X-Corp Cellular Node">
+          <AtLocation X="-100.48129" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>763c1e15-5fd2-44bd-a2bf-124fcb0ae981</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_70b9561c-80fa-41cc-9ba8-79daf1828284" Name="652 X-Corp Cellular Node">
+          <AtLocation X="-100.465294" Y="41.827316" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>f95fb5fc-b5af-4b8b-a4f9-07513592abeb</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_18e6b14a-6ecd-49b5-a4d0-6bb5d2b69fcf" Name="670671 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>65c6be37-4296-4942-a167-ff030b4d3363</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_26fec922-a2d4-4c85-a6eb-d3d5f24aaa54" Name="670a X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.85353" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>80aca236-f4d9-4e26-9632-51391b212555</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_d8986bc3-9d9a-4a6f-928d-b76f80574126" Name="675b X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>e1f8d28f-7e67-490e-a153-bf8c950aa81b</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_cb1977b3-543a-40bc-b509-1a1bd9990b81" Name="692675 X-Corp Cellular Node">
+          <AtLocation X="-100.44129" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>82f01601-d0a6-40fb-9c17-01eb6682c560</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_8054f58a-ae57-467a-87b6-73f0756c92cd" Name="634b X-Corp Cellular Node">
+          <AtLocation X="-100.4173" Y="41.854523" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>89e57685-16e0-4522-bdfa-74416830606e</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+        <PlanningAsset UUID="_febb1be1-94fc-4a3d-af12-06200264bb6f" Name="671680 X-Corp Cellular Node">
+          <AtLocation X="-100.44087" Y="41.850365" />
+          <EquipmentZone>ZONE_FIELD</EquipmentZone>
+          <EquipmentRole>ROLE_TAKEOUT</EquipmentRole>
+          <connected_children>d7d768bc-38b8-4f89-9fad-81eb3a0fbe1b</connected_children>
+          <equipment>_397391c2-5f80-4bc2-ba8c-b4adcdf09ca7</equipment>
+          <State>ADDED</State>
+        </PlanningAsset>
+      </PlanningModel>
+      <selected_gucs>_f1ccFC2F-ec2F-e22D-Aac1-fbd5aEfFBAEb</selected_gucs>
+      <selected_cnrm>_171f6be3-cbf3-4a13-9db6-580fa1252dc3</selected_cnrm>
+    </Scenario>
+  </ScenarioRepo>
+</GDTAF>

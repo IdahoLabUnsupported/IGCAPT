@@ -29,6 +29,7 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
  */
 public class SgNode implements SgNodeInterface {
 
+    // userData can hold key value pairs of text in the form "key1:value1;key2:value2". Always append to the list after initial creation.
     public SgNode(int id, 
             String typeUuid, 
             String name, 
