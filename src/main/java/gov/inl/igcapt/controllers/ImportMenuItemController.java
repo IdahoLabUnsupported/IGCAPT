@@ -125,7 +125,7 @@ public class ImportMenuItemController {
                                                 if (equipmentInstance != null) {
 
                                                     int nodeId = GraphManager.getInstance().getNodeIndex() + 1;
-                                                    String name = (equipmentInstance != null) ? equipmentInstance.getName() : "";
+                                                    String name = equipmentInstance.getName();
                                                     SgNode sgNode = new SgNode(nodeId,
                                                             equipmentInstance,
                                                             "78bf0ae2-1a27-462d-b8af-39156e80b75c",
@@ -174,91 +174,86 @@ public class ImportMenuItemController {
                                                                     m_edgeList.add(new Pair<SgNode, String>(sgNode, child.getValue()));
                                                                 }
                                                             }
-                                                            else {
-                                                                JOptionPane.showMessageDialog(null,
-                                                                "children == null OR children.isEmpty().",
-                                                                "Attention",
-                                                                JOptionPane.WARNING_MESSAGE);
-                                                            }
                                                         }
                                                         else {
                                                             JOptionPane.showMessageDialog(null,
-                                                            "topologyView == null.",
+                                                            "topologyView == null",
                                                             "Attention",
                                                             JOptionPane.WARNING_MESSAGE);
                                                         }
                                                     }
                                                     else {
                                                         JOptionPane.showMessageDialog(null,
-                                                        "views == null OR views.isEmpty().",
+                                                        "views == null OR views.isEmpty()",
                                                         "Attention",
                                                         JOptionPane.WARNING_MESSAGE);
                                                     }
                                                 }
                                                 else {
-                                                    JOptionPane.showMessageDialog(null,
-                                                    "equiptmentInstance == null.",
-                                                    "Attention",
-                                                    JOptionPane.WARNING_MESSAGE);
+                                                    // Add a log entry here instead of a user prompt.
+//                                                    JOptionPane.showMessageDialog(null,
+//                                                    "equiptmentInstance == null.",
+//                                                    "Attention",
+//                                                    JOptionPane.WARNING_MESSAGE);
                                                 }
                                             }
                                             else {
-                                                System.out.println("Asset (id: " + solutionAsset.getUUID() + ") contains no location.");
+                                                System.out.println("Asset (id: " + solutionAsset.getUUID() + ") contains no location");
                                             }
                                         }
                                     }
                                     else {
                                         JOptionPane.showMessageDialog(null,
-                                        "solutionAssetList == null OR solutionAssetList.isEmpty().",
+                                        "solutionAssetList == null OR solutionAssetList.isEmpty()",
                                         "Attention",
                                         JOptionPane.WARNING_MESSAGE);
                                     }
                                 }
                                 else {
                                     JOptionPane.showMessageDialog(null,
-                                    "option == null.",
+                                    "option == null",
                                     "Attention",
                                     JOptionPane.WARNING_MESSAGE);
                                 }
                             }
                             else {
                                 JOptionPane.showMessageDialog(null,
-                                "optionList == null OR optionList.isEmpty().",
+                                "optionList == null OR optionList.isEmpty()",
                                 "Attention",
                                 JOptionPane.WARNING_MESSAGE);
                             }
                         }
                         else {
                             JOptionPane.showMessageDialog(null,
-                            "solution == null.",
+                            "solution == null",
                             "Attention",
                             JOptionPane.WARNING_MESSAGE);
                         }
                     }
                     else {
                         JOptionPane.showMessageDialog(null,
-                        "solutionList == null OR solutionList.isEmpty().",
+                        "solutionList == null OR solutionList.isEmpty()",
                         "Attention",
                         JOptionPane.WARNING_MESSAGE);
                     }
                 }
                 else {
                     JOptionPane.showMessageDialog(null,
-                    "scenario == null.",
+                    "scenario == null",
                     "Attention",
                     JOptionPane.WARNING_MESSAGE);
                 }
             } 
             else {
                 JOptionPane.showMessageDialog(null,
-                    "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty().",
+                    "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty()",
                     "Attention",
                     JOptionPane.WARNING_MESSAGE);
 
             }
         }
         catch(Exception ex) {
-            System.out.println("Exception thrown in processing scenario.");
+            System.out.println("Exception thrown in processing scenario");
         }
 
         IGCAPTgui.getInstance().refresh();
