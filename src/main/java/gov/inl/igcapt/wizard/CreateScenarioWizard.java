@@ -19,6 +19,7 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import static java.lang.Runtime.version;
 
 /**
  *
@@ -227,6 +228,38 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         }
         
         ScenarioInformation scenInfo;
+        
+        
+        try {
+            URL url = new URL("https://" + m_webServiceHost + "/framework" +
+            "?subscription-key=" + m_webServiceKey);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                JOptionPane.showMessageDialog(null,
+                    "Error, please ensure your Host URL is correct",
+                    "Attention",
+                    JOptionPane.WARNING_MESSAGE);
+                }
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+            BufferedReader br = new BufferedReader(in);
+            ObjectMapper objMapper = new ObjectMapper();
+            String output = br.readLine();
+            while (output != null) {
+                var version = objMapper.readValue(output, RestSvcVersion.class);
+                if (version != null) {
+                    JOptionPane.showMessageDialog(this, version.toString());
+                }
+                break;
+            }
+            conn.disconnect();
+            }
+        catch (Exception e3) {
+            System.out.println("Exception:"+e3.getMessage());
+            return;
+        }
+        
         try {
             
             URL url = new URL("https://" + m_webServiceHost + "/scenarios?subscription-key="+m_webServiceKey);
@@ -257,7 +290,6 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             System.out.println("Exception:"+e2.getMessage());
             return;
         }
-        
 
         dispose();
         //Now go to next step in Wizard
