@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 
 public class ImportMenuItemController {
 
+    private static Logger logger = Logger.getLogger(ImportMenuItemController.class.getName());
     private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
     private final List<Pair<SgNode,String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
     
@@ -185,12 +186,12 @@ public class ImportMenuItemController {
                                                         }
                                                     }
                                                     else {
-                                                        Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                                        logger.log(Level.WARNING, 
                                                             "views is null or views is empty");
                                                     }
                                                 }
                                                 else {
-                                                    Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                                    logger.log(Level.WARNING, 
                                                         "equiptmentInstace is null");
                                                 }
                                             }
@@ -200,7 +201,7 @@ public class ImportMenuItemController {
                                         }
                                     }
                                     else {
-                                        Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                        logger.log(Level.WARNING, 
                                             "solutionAssetList is null or solutionAssetList is empty");
                                     }
                                 }
@@ -212,7 +213,7 @@ public class ImportMenuItemController {
                                 }
                             }
                             else {
-                                Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                logger.log(Level.WARNING, 
                                     "optionList is null or optionList is empty");
                             }
                         }
@@ -224,7 +225,7 @@ public class ImportMenuItemController {
                         }
                     }
                     else {
-                        Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                        logger.log(Level.WARNING, 
                             "solutionList is null or solutionList is empty");
                     }
                 }
@@ -236,12 +237,12 @@ public class ImportMenuItemController {
                 }
             } 
             else {
-                Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                logger.log(Level.WARNING, 
                     "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty()");
             }
         }
         catch(Exception ex) {
-            System.out.println("Exception thrown in processing scenario");
+            System.out.println("Exception thrown in processing scenario: " + ex.getLocalizedMessage());
         }
 
         IGCAPTgui.getInstance().refresh();
@@ -269,7 +270,8 @@ public class ImportMenuItemController {
             }            
         }
         catch (Exception ex) {
-            System.out.println("Exception thrown while creating edges.");
+            logger.log(Level.SEVERE, 
+                    "Exception thrown during creation of edges: " + ex.getLocalizedMessage());
         }
         
         IGCAPTgui.getInstance().refresh();
