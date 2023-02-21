@@ -4,9 +4,14 @@
  */
 package gov.inl.igcapt.wizard;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  *
@@ -75,7 +80,7 @@ public class RestSvcConnection extends javax.swing.JDialog {
             }
         });
 
-        jButton2.setText("Create");
+        jButton2.setText("Save");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -137,14 +142,40 @@ public class RestSvcConnection extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jTextField2KeyTyped
         
-    // Create
+    // Save
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // Save to properties
+        RestSvcVersion version = null;
+        String output;
         m_webServiceHost = jTextField1.getText();
         m_webServiceKey = jTextField2.getText();
         if (m_webServiceHost.isEmpty() || m_webServiceKey.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter both Host and Key");
             return;
+        }
+        try {
+            URL url = new URL("https://" + m_webServiceHost + "/framework" +
+                        "?subscription-key=" + m_webServiceKey);
+            System.out.println(url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+            }
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+            BufferedReader br = new BufferedReader(in);
+            ObjectMapper objMapper = new ObjectMapper();
+            while ((output = br.readLine()) != null) {
+                 version = objMapper.readValue(output, RestSvcVersion.class);
+                if (version != null) {
+                    JOptionPane.showMessageDialog(this, version.toString());
+                }
+            }
+            conn.disconnect();
+        }
+        catch (Exception e3) {
+            
         }
         IGCAPTproperties.getInstance().setPropertyKeyValue("WebServiceHost", m_webServiceHost);
         IGCAPTproperties.getInstance().setPropertyKeyValue("WebServiceKey", m_webServiceKey);
