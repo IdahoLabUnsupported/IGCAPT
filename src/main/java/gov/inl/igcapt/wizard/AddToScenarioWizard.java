@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
@@ -298,7 +300,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
-            System.out.println("Exception!"+e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage()); 
         }
         return m_gucsList;
     }
@@ -328,7 +331,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
-            System.out.println("Exception!"+e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage());  
         }
         return m_cnrmList;
     }
@@ -426,7 +430,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             conn.disconnect();
         }
         catch (Exception e2) {
-            System.out.println(e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage()); 
         }
     }
 
@@ -443,7 +448,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             writer.close();
         }
         catch (Exception e) {
-            System.out.println("Exception:"+e.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e.getMessage()); 
         }
         return scenarioFile;
     }
@@ -484,7 +490,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         }
         catch (Exception e2) {
-            System.out.println("Exception!"+e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage()); 
             //return e2.getMessage();
         }
     }
@@ -563,7 +570,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         }
         catch (Exception e) {
-            System.out.println("Exception::"+e.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e.getMessage()); 
         }
         if (conn != null) {
             conn.disconnect();

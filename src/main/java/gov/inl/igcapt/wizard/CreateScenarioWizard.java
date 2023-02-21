@@ -19,11 +19,8 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
-import java.awt.Cursor;
-import static java.lang.Runtime.version;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -217,7 +214,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             fileInputStream.close();
         }
         catch (Exception e) {
-            System.out.println("Exception:"+e.getMessage());
+            Logger.getLogger(CreateScenarioWizard.class.getName()).log(Level.WARNING, "Exception! {0}", e.getMessage()); 
         }
         return cimRdfEncodedFile;
     }
@@ -248,6 +245,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
                     "Error, please ensure your Host URL is correct",
                     "Attention",
                     JOptionPane.WARNING_MESSAGE);
+                setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                 }
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
             BufferedReader br = new BufferedReader(in);
@@ -263,7 +261,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             conn.disconnect();
             }
         catch (Exception e3) {
-            System.out.println("Exception:"+e3.getMessage());
+            Logger.getLogger(CreateScenarioWizard.class.getName()).log(Level.WARNING, "Exception! {0}", e3.getMessage()); 
             return;
         }
         
@@ -294,11 +292,11 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             conn.disconnect();
         }
         catch (Exception e2) {
-            System.out.println("Exception:"+e2.getMessage());
+            Logger.getLogger(CreateScenarioWizard.class.getName()).log(Level.WARNING, "Exception! {0}", e2.getMessage()); 
             return;
         }
         
-        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         
         dispose();
         //Now go to next step in Wizard
