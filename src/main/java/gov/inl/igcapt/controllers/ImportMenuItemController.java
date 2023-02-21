@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class ImportMenuItemController {
@@ -122,7 +124,7 @@ public class ImportMenuItemController {
                                                         .findAny()
                                                         .orElse(null);
 
-                                                if (equipmentInstance != null) {
+                                                if (equipmentInstance != null) { 
 
                                                     int nodeId = GraphManager.getInstance().getNodeIndex() + 1;
                                                     String name = equipmentInstance.getName();
@@ -183,18 +185,13 @@ public class ImportMenuItemController {
                                                         }
                                                     }
                                                     else {
-                                                        JOptionPane.showMessageDialog(null,
-                                                        "views == null OR views.isEmpty()",
-                                                        "Attention",
-                                                        JOptionPane.WARNING_MESSAGE);
+                                                        Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                                            "views is null or views is empty");
                                                     }
                                                 }
                                                 else {
-                                                    // Add a log entry here instead of a user prompt.
-//                                                    JOptionPane.showMessageDialog(null,
-//                                                    "equiptmentInstance == null.",
-//                                                    "Attention",
-//                                                    JOptionPane.WARNING_MESSAGE);
+                                                    Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                                        "equiptmentInstace is null");
                                                 }
                                             }
                                             else {
@@ -203,10 +200,8 @@ public class ImportMenuItemController {
                                         }
                                     }
                                     else {
-                                        JOptionPane.showMessageDialog(null,
-                                        "solutionAssetList == null OR solutionAssetList.isEmpty()",
-                                        "Attention",
-                                        JOptionPane.WARNING_MESSAGE);
+                                        Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                            "solutionAssetList is null or solutionAssetList is empty");
                                     }
                                 }
                                 else {
@@ -217,10 +212,8 @@ public class ImportMenuItemController {
                                 }
                             }
                             else {
-                                JOptionPane.showMessageDialog(null,
-                                "optionList == null OR optionList.isEmpty()",
-                                "Attention",
-                                JOptionPane.WARNING_MESSAGE);
+                                Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                                    "optionList is null or optionList is empty");
                             }
                         }
                         else {
@@ -231,10 +224,8 @@ public class ImportMenuItemController {
                         }
                     }
                     else {
-                        JOptionPane.showMessageDialog(null,
-                        "solutionList == null OR solutionList.isEmpty()",
-                        "Attention",
-                        JOptionPane.WARNING_MESSAGE);
+                        Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                            "solutionList is null or solutionList is empty");
                     }
                 }
                 else {
@@ -245,11 +236,8 @@ public class ImportMenuItemController {
                 }
             } 
             else {
-                JOptionPane.showMessageDialog(null,
-                    "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty()",
-                    "Attention",
-                    JOptionPane.WARNING_MESSAGE);
-
+                Logger.getLogger(ImportMenuItemController.class.getName()).log(Level.WARNING, 
+                    "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty()");
             }
         }
         catch(Exception ex) {
