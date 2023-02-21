@@ -19,7 +19,11 @@ import java.io.File;
 import javax.swing.JOptionPane;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import java.awt.Cursor;
 import static java.lang.Runtime.version;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -69,6 +73,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Scenario Wizard");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setText("Specify CIM/RDF:");
         jLabel1.setToolTipText("");
@@ -124,17 +129,17 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField1)
                             .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,9 +221,12 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         }
         return cimRdfEncodedFile;
     }
-        
+    
     // Next button in the wizard
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         // Call Rest service to create scenario
         JSONObject json = new JSONObject();
         json.put("name", jTextField2.getText());
@@ -228,7 +236,6 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         }
         
         ScenarioInformation scenInfo;
-        
         
         try {
             URL url = new URL("https://" + m_webServiceHost + "/framework" +
@@ -290,7 +297,9 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             System.out.println("Exception:"+e2.getMessage());
             return;
         }
-
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         dispose();
         //Now go to next step in Wizard
         new AddToScenarioWizard(localParent, true, scenInfo);

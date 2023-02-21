@@ -573,6 +573,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Select GUCS
     // PUT to update the list of GUCS for the scenario  -- need scenario id and gucs id(s)
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         if (jList1.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Please select at least one GUCS!");
             return;
@@ -581,6 +584,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         disableAllButtons();
         initCnrmList();
         //cleanupScenarios(); //-- this is test code
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton2ActionPerformed
     
     // Cancel - close form
@@ -613,22 +617,33 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Selected CNRM
     // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         if (jList2.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Please select at least one CNRM!");
             return;
         }        
         updateScenarioCnrmList();
         disableEnableButtons(ButtonStages.LINE3);
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton4ActionPerformed
 
     // Save button
     // Get to get the scenario file and write it to file system.
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         if (jTextField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Location cannot be Empty!");
             return;
         }
         getTheScenarioFile();
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
