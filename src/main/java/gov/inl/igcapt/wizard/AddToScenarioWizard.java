@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
@@ -298,7 +300,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
-            System.out.println("Exception!"+e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage()); 
         }
         return m_gucsList;
     }
@@ -328,7 +331,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
-            System.out.println("Exception!"+e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage());  
         }
         return m_cnrmList;
     }
@@ -426,7 +430,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             conn.disconnect();
         }
         catch (Exception e2) {
-            System.out.println(e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage()); 
         }
     }
 
@@ -443,7 +448,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             writer.close();
         }
         catch (Exception e) {
-            System.out.println("Exception:"+e.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e.getMessage()); 
         }
         return scenarioFile;
     }
@@ -484,7 +490,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         }
         catch (Exception e2) {
-            System.out.println("Exception!"+e2.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e2.getMessage()); 
             //return e2.getMessage();
         }
     }
@@ -563,7 +570,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             }
         }
         catch (Exception e) {
-            System.out.println("Exception::"+e.getMessage());
+            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
+                "Exception! "+e.getMessage()); 
         }
         if (conn != null) {
             conn.disconnect();
@@ -573,6 +581,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Select GUCS
     // PUT to update the list of GUCS for the scenario  -- need scenario id and gucs id(s)
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         if (jList1.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Please select at least one GUCS!");
             return;
@@ -581,6 +592,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         disableAllButtons();
         initCnrmList();
         //cleanupScenarios(); //-- this is test code
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton2ActionPerformed
     
     // Cancel - close form
@@ -613,22 +625,33 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Selected CNRM
     // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         if (jList2.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Please select at least one CNRM!");
             return;
         }        
         updateScenarioCnrmList();
         disableEnableButtons(ButtonStages.LINE3);
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton4ActionPerformed
 
     // Save button
     // Get to get the scenario file and write it to file system.
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
+        
         if (jTextField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Location cannot be Empty!");
             return;
         }
         getTheScenarioFile();
+        
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
