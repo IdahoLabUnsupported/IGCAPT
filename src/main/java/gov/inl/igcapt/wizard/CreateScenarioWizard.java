@@ -44,6 +44,11 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
                     " before running the wizard!\n (File->Initialize Connection)");
             return;
         }
+        else {
+            if (!connectionIsValid()) {
+                return;
+            }
+        }
         initComponents();
         jButton2.setEnabled(false);
         this.setVisible(true);
@@ -219,6 +224,32 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         return cimRdfEncodedFile;
     }
     
+    private boolean connectionIsValid() {
+        
+        try {
+            URL url = new URL("https://" + m_webServiceHost + "/framework" +
+            "?subscription-key=" + m_webServiceKey);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() != 200) {
+                JOptionPane.showMessageDialog(localParent,
+                    "Please ensure your Host URL is correct using the Initialize Connection form.",
+                    "Connection Error",
+                    JOptionPane.WARNING_MESSAGE);
+                 setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+                 return false;
+            }
+            
+            conn.disconnect();
+            }
+        catch (Exception e3) {
+            Logger.getLogger(CreateScenarioWizard.class.getName()).log(Level.WARNING, "Exception! {0}", e3.getMessage()); 
+            return false;
+        }
+        return true;
+    }
+    
     // Next button in the wizard
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
@@ -233,38 +264,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         }
         
         ScenarioInformation scenInfo;
-        
-        try {
-            URL url = new URL("https://" + m_webServiceHost + "/framework" +
-            "?subscription-key=" + m_webServiceKey);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(null,
-                    "Error, please ensure your Host URL is correct",
-                    "Attention",
-                    JOptionPane.WARNING_MESSAGE);
-                setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                }
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-            BufferedReader br = new BufferedReader(in);
-            ObjectMapper objMapper = new ObjectMapper();
-            String output = br.readLine();
-            while (output != null) {
-                var version = objMapper.readValue(output, RestSvcVersion.class);
-                if (version != null) {
-                    JOptionPane.showMessageDialog(this, version.toString());
-                }
-                break;
-            }
-            conn.disconnect();
-            }
-        catch (Exception e3) {
-            Logger.getLogger(CreateScenarioWizard.class.getName()).log(Level.WARNING, "Exception! {0}", e3.getMessage()); 
-            return;
-        }
-        
+                
         try {
             
             URL url = new URL("https://" + m_webServiceHost + "/scenarios?subscription-key="+m_webServiceKey);
