@@ -199,6 +199,11 @@ public class GraphManager {
         return originalGraph;
     }
     
+    public void setOriginalGraph(SgGraph newOriginalGraph) {
+        originalGraph = newOriginalGraph;
+        getVisualizationViewer().getGraphLayout().setGraph(originalGraph);
+    }
+    
     public SgGraph getTempGraph() {
         return tempGraph;
     }

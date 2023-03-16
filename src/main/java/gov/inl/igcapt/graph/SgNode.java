@@ -279,14 +279,24 @@ public class SgNode implements SgNodeInterface {
     public List<Integer> getEndPointList() {
         return _endPointList;
     }
+    
+    // Compute rate in kilobits per second
+    public double computeRate(int latency, int dataToSend) {
+        
+        double returnval = 0.0;
+        
+        if (latency > 0) {
+            // 8 bits per byte * data bytes / latency in secs. / 1000 bits per kilobit
+            returnval = 8 * (double)dataToSend / latency / 1000;
+        }
+        
+        return returnval;
+    }
 
     // Compute rate in Kilo bits per second
     @Override
     public double getComputedRate() {
-        double returnval = 0.0;
-        if(_maxLatency > 0.0) {
-            returnval = 8 * (double)_dataToSend / _maxLatency / 1000;
-        }
+        double returnval = computeRate(_maxLatency, _dataToSend);
         
         return returnval;
     }

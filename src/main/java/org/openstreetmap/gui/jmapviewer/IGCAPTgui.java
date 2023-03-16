@@ -139,6 +139,20 @@ import org.w3c.dom.NodeList;
 public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTargetListener {
 
     /**
+     * @return the showAllAnalysisResults
+     */
+    public boolean isShowAllAnalysisResults() {
+        return showAllAnalysisResults;
+    }
+
+    /**
+     * @param showAllAnalysisResults the showAllAnalysisResults to set
+     */
+    public void setShowAllAnalysisResults(boolean showAllAnalysisResults) {
+        this.showAllAnalysisResults = showAllAnalysisResults;
+    }
+
+    /**
      * @return the payloadEditorForm
      */
     public PayloadEditorForm getPayloadEditorForm() {
@@ -310,7 +324,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private GraphCollapser collapser = GraphManager.getInstance().getCollapser();
     private JMapViewer currentGisMap = GraphManager.getInstance().getCurrentGisMap();
     private SgGraph tempGraph = GraphManager.getInstance().getTempGraph();
-    private SgGraph originalGraph = GraphManager.getInstance().getOriginalGraph();
+    //private SgGraph originalGraph = GraphManager.getInstance().getOriginalGraph();
     public boolean fileDirty = GraphManager.getInstance().getFileDirty();
     
     int nodeIndex = GraphManager.getInstance().getNodeIndex();
@@ -353,7 +367,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public boolean isToolTipsEnabled(){
         return toolTipsEnabled;
     }
-    boolean showAllAnalysisResults = false;
+    private boolean showAllAnalysisResults = false;
 
     // Drop Targets - only one can be active at a time
     DropTarget logicalModelDropTarget;
@@ -577,9 +591,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (allAnalysisResultsCheckbox.isSelected()) {
-                    showAllAnalysisResults = true;
+                    setShowAllAnalysisResults(true);
                 } else {
-                    showAllAnalysisResults = false;
+                    setShowAllAnalysisResults(false);
                 }
             }
         });
@@ -588,14 +602,14 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         collapse.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                if (GraphManager.getInstance().getGraph() != originalGraph) {
-                    tempGraph = (SgGraph) GraphManager.getInstance().getLayout().getGraph();
-                    GraphManager.getInstance().getLayout().setGraph(originalGraph);
-                    collapse.setText("Swap Graphs");
-                } else if (tempGraph != null) {
-                    GraphManager.getInstance().getLayout().setGraph(tempGraph);
-                    collapse.setText("Swap Graphs*");
-                }
+//                if (GraphManager.getInstance().getGraph() != originalGraph) {
+//                    tempGraph = (SgGraph) GraphManager.getInstance().getLayout().getGraph();
+//                    GraphManager.getInstance().getLayout().setGraph(originalGraph);
+//                    collapse.setText("Swap Graphs");
+//                } else if (tempGraph != null) {
+//                    GraphManager.getInstance().getLayout().setGraph(tempGraph);
+//                    collapse.setText("Swap Graphs*");
+//                }
 
                 GraphManager.getInstance().getVisualizationViewer().repaint();
             }
@@ -647,7 +661,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         });
 
         
-        collapser = new GraphCollapser(originalGraph);
+        collapser = new GraphCollapser(GraphManager.getInstance().getOriginalGraph());
 
         // This class GraphMouseListener is used to snoop mouse interactions
         // with the graph. It is used here to detect when the graph has 
@@ -906,7 +920,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             
             chooser.setFileFilter(new FileNameExtensionFilter("IGCAP Files", "igc"));
             
-            if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
                 SwingUtilities.invokeLater(() -> {
                     saveFile(chooser);
                 });
@@ -1092,8 +1106,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             // Clear heat map
             heatmap = null; // Don't call SetHeatmap or it will redraw.
             tempGraph = null;
-            originalGraph = new SgGraph();
-            GraphManager.getInstance().getVisualizationViewer().getGraphLayout().setGraph(originalGraph);
+            var originalGraph = new SgGraph();
+            GraphManager.getInstance().setOriginalGraph(originalGraph);
 
             // There does not appear to be a way to clear the collapser's state other than creating a new one.
             collapser = new GraphCollapser(originalGraph);
@@ -1376,7 +1390,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             excep.printStackTrace();
         }
         
-        originalGraph = (SgGraph)GraphManager.getInstance().getGraph();
+        var originalGraph = (SgGraph)GraphManager.getInstance().getOriginalGraph();
 
         ArrayList<SgNodeInterface> sgNodes = new ArrayList<>(originalGraph.getVertices());
         for (SgNodeInterface nodeIntf : sgNodes) {
@@ -1540,277 +1554,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         }
         
         setCursor(Cursor.getDefaultCursor());
-    }
-
-    public class AnalysisTask extends SwingWorker<String, Integer> {
-
-        private Graph<SgNodeInterface, SgEdge> _graph;
-        private volatile boolean _running = true;
-
-        public AnalysisTask(Graph<SgNodeInterface, SgEdge> graph) {
-            _graph = graph;
-        }
-
-        public void terminate() {
-            _running = false;
-        }
-
-        @Override
-        protected String doInBackground() {
-            return analyze(_graph);
-        }
-
-        private ArrayList<SgNodeInterface> sgNodeList = null;
-        private ArrayList<SgEdge> sgEdgeList = null;
-
-        String analyze(Graph graph) {
-
-            String returnval = null;
-            
-            List<gov.inl.igcapt.components.Pair<SgNode, SgNode>> analyzeList = new ArrayList<>();
-
-            Date startDate = new Date();
-
-            // reset utilization
-            clearEdgeUtilization();
-
-            // Clear list of data flows to be analyzed
-            analyzeList.clear();
-
-            // start and end points
-            List<List<Integer>> paths;
-            StringBuilder analysisResults = new StringBuilder();
-
-            // Build list of data flows to be analyzed
-            sgNodeList = new ArrayList<>(graph.getVertices());
-            sgEdgeList = new ArrayList<>(graph.getEdges());
-
-            int i = 0;
-
-            firePropertyChange("status", "old", "Compiling endpoint pair list.");
-            for (SgNodeInterface sgAbstractNode : sgNodeList) {
-
-                if (!_running) {
-                    break;
-                }
-
-                // Only take 50% of our progress in this phase.  Take the rest below.
-                setProgress(50 * i++ / sgNodeList.size());
-
-                // If there is data to send and sending is enabled, generate the list
-                // of start/end nodes for which the paths will be generated.
-                if (sgAbstractNode instanceof SgNode sgNode) {
-                    if (sgNode.getDataToSend() > 0 && sgNode.getEnableDataSending()) {
-                        for (int endPointId : sgNode.getEndPointList()) {
-                            SgNodeInterface endPointNode = GraphManager.getInstance().getNode(sgNodeList, endPointId);
-
-                            if (endPointNode != null && endPointId != sgNode.getId()) {
-                                if (sgNode.getDataToSend() > 0.0) {
-                                    gov.inl.igcapt.components.Pair<SgNode, SgNode> innerList = new gov.inl.igcapt.components.Pair<>(sgNode, (SgNode)endPointNode);
-                                    analyzeList.add(innerList);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (_running) {
-                i = 0;
-                firePropertyChange("status", "old", "Determing paths for each endpoint pair.");
-                for (gov.inl.igcapt.components.Pair<SgNode, SgNode> pair : analyzeList) {
-
-                    if (!_running) {
-                        break;
-                    }
-                    setProgress(50 + 50 * i++ / analyzeList.size());
-
-                    paths = getComponentPaths(graph, pair.first, pair.second, true);
-
-                    double ackPayload = Double.parseDouble(IGCAPTproperties.getInstance().getPropertyKeyValue("ACKSize"));
-
-                    for (List<Integer> sublist : paths) {
-                        for (Integer value : sublist) {
-                            SgEdge sgEdge = GraphManager.getInstance().getEdge(sgEdgeList, value);
-                            SgNodeInterface sgAbstractNode = pair.first;
-
-                            if (sgAbstractNode instanceof SgNode sgNode) {
-                                sgEdge.setCalcTransRate(sgEdge.getCalcTransRate() + sgNode.getComputedRate());
-                            }
-                        }
-
-                        // Reverse communication flow for ACK
-                        for (int j = sublist.size() - 1; j >= 0; j--) {
-                            SgEdge sgEdge = GraphManager.getInstance().getEdge(sgEdgeList, sublist.get(j));
-                            SgNode sgSrcNode = pair.first;
-
-                            // This is an ACK coming back from the destination.  Use the timing from the
-                            // source and a fixed ACK payload as specified in the properties file.
-                            double ackUtilization = ackPayload * 8.0 / sgSrcNode.getMaxLatency() / 1000;
-                            sgEdge.setCalcTransRate(sgEdge.getCalcTransRate() + ackUtilization);
-                        }
-                    }
-                }
-            }
-
-            if (_running) {
-                int numExceptions = 0;
-
-                analysisResults.append("Color Legend<br> High: &gt; <font size=\"+1\" color=\"red\"><b>"
-                        + String.format("%.2f", SgEdge.getHighUtilizationLimit() * 100.0)
-                        + "%</b></font>");
-                analysisResults.append("   Medium: &gt; <font size=\"+1\" color=\"orange\"><b>"
-                        + String.format("%.2f", SgEdge.getMediumUtilizationLimit() * 100.0)
-                        + "%</b></font>");
-                analysisResults.append("   Low: &gt; <font size=\"+1\" color=\"green\"><b>"
-                        + "0.0"
-                        + "%</b></font>");
-                analysisResults.append("   Zero: = <font size=\"+1\" color=\"black\"><b>"
-                        + "0.0"
-                        + "%</b></font><br><br>");
-
-                i = 0;
-                for (SgEdge sgEdge : sgEdgeList) {
-                    
-                    Pair<SgNodeInterface> endPts = graph.getEndpoints(sgEdge);
-
-                    if (endPts.getFirst() instanceof SgNode && endPts.getSecond() instanceof SgNode) {
-
-                        SgNode endPt1 = (SgNode) endPts.getFirst();
-                        SgNode endPt2 = (SgNode) endPts.getSecond();
-
-                        if (sgEdge.isOverHighUtilizationLimit()) {
-                            analysisResults.append("(" + endPt1.getName() + " - "
-                                    + endPt2.getName()
-                                    + ")/e" + sgEdge.getId()
-                                    + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-                                    + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-                                    + ", Utilization = <font size=\"+1\" color=\"red\"><b>"
-                                    + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-                                    + "%</b></font><br>");
-                            numExceptions++;
-                        } else if (sgEdge.isOverMidUtilizationLimit()) {
-                            analysisResults.append("(" + endPt1.getName() + " - "
-                                    + endPt2.getName() + ")/e" + sgEdge.getId()
-                                    + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-                                    + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-                                    + ", Utilization = <font size=\"+1\" color=\"orange\"><b>"
-                                    + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-                                    + "%</b></font><br>");
-                            numExceptions++;
-                        } else if (!sgEdge.isZeroUtilizationLimit()) {
-                            if (showAllAnalysisResults) { //Diagnostic output
-                                analysisResults.append("(" + endPt1.getName() + " - "
-                                        + endPt2.getName() + ")/e" + sgEdge.getId()
-                                        + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-                                        + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-                                        + ", Utilization = <font size=\"+1\" color=\"green\"><b>"
-                                        + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-                                        + "%</b></font><br>");
-                            }
-                        } else {
-                            if (showAllAnalysisResults) { //Diagnostic output
-                                analysisResults.append("(" + endPt1.getName() + " - "
-                                        + endPt2.getName() + ")/e" + sgEdge.getId()
-                                        + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-                                        + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-                                        + ", Utilization = <font size=\"+1\" color=\"black\"><b>"
-                                        + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-                                        + "%</b></font><br>");
-                            }
-                        }
-                    }
-                }
-                Date endDate = new Date();
-
-                analysisResults.append(numExceptions);
-                analysisResults.append(" exceptions found.");
-                analysisResults.append("<br>");
-
-                JTextArea ta = new JTextArea(50, 100);
-                ta.setWrapStyleWord(true);
-                ta.setLineWrap(true);
-                ta.setCaretPosition(0);
-                ta.setEditable(false);
-
-                analysisResults.append("Analysis start time: ");
-                analysisResults.append(startDate.toString());
-                analysisResults.append("<br>");
-                analysisResults.append("Analysis end time: ");
-                analysisResults.append(endDate.toString());
-
-                returnval = analysisResults.toString();
-                ta.setText(returnval);
-            }
-
-            refresh();
-
-            return returnval;
-        }
-
-        private List<List<Integer>> getComponentPaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
-            List<List<Integer>> returnval = new ArrayList<>();
-            SgNode currentNode;
-
-            SgNodeInterface fromSgAbstractNode = fromNode;
-            SgNodeInterface toSgAbstractNode = toNode;
-
-            if (fromSgAbstractNode instanceof SgNode && toSgAbstractNode instanceof SgNode) {
-
-                SgNode fromSgNode = (SgNode) fromSgAbstractNode;
-                SgNode toSgNode = (SgNode) toSgAbstractNode;
-
-                currentNode = fromSgNode;
-                currentNode.setUsed(true);         // Prevent a component from being looped back on
-
-                if (fromNode == toNode) {
-                    ArrayList<Integer> x = new ArrayList<>();
-                    returnval.add(x);
-                } else if (isSender || currentNode.getEnableDataPassThrough()) {
-                    // Cycle through all connected components
-
-                    // Get list of connected edges.
-                    List<SgEdge> sgEdges = new ArrayList<>(graph.getIncidentEdges(fromSgNode));
-
-                    for (SgEdge sgEdge : sgEdges) {
-                        
-                        if (sgEdge.isEnabled()) {
-                            SgNode nextComponent = null;
-
-                            Pair<SgNodeInterface> endpoints = graph.getEndpoints(sgEdge);
-
-                            if (endpoints.getFirst() instanceof SgNode && endpoints.getSecond() instanceof SgNode) {
-                                SgNode endPt1 = (SgNode) endpoints.getFirst();
-                                SgNode endPt2 = (SgNode) endpoints.getSecond();
-
-                                if (endPt1 != null && endPt2 != null) {
-                                    if (!endPt1.getUsed()) {
-                                        nextComponent = endPt1;
-                                    } else if (!endPt2.getUsed()) {
-                                        nextComponent = endPt2;
-                                    }
-                                }
-                            }   
-
-                            if (nextComponent != null) {
-                                List<List<Integer>> returnPaths = getComponentPaths(graph, nextComponent, toSgNode, false);
-
-                                // We received a path, add our current edge to the head of each list and return it.
-                                if (returnPaths.size() > 0) {
-                                    for (List<Integer> path : returnPaths) {
-                                        path.add(0, sgEdge.getId());
-                                    }
-                                    returnval.addAll(0, returnPaths);
-                                    break; // Stop after first path found.
-                                }
-                            }
-                        }
-                    }
-                }
-                currentNode.setUsed(false); // Return it to the pool, just need to make sure it does not loop back downstream
-            }
-            return returnval;
-        }
     }
 
     public Icon getLayerIcon(String iconName) {
@@ -2093,8 +1836,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     // -------------------------------------------------------------------------
     public void showDialog(SgNode node) {
-        NodeSettingsDialog nodeSettingsDlg = new NodeSettingsDialog(null, (SgGraph) GraphManager.getInstance().getGraph(), node);
-        nodeSettingsDlg.setLocation((int) GraphManager.getInstance().getVisualizationViewer().getCenter().getX(), (int) GraphManager.getInstance().getVisualizationViewer().getCenter().getY());
+        NodeSettingsDialog nodeSettingsDlg = new NodeSettingsDialog(IGCAPTgui.getInstance(), (SgGraph) GraphManager.getInstance().getGraph(), node);
+        nodeSettingsDlg.setLocationRelativeTo(IGCAPTgui.getInstance());
         nodeSettingsDlg.setVisible(true);
 
         if (nodeSettingsDlg.getReturnValue() == NodeSettingsDialog.ReturnValue.OK) {
@@ -2117,6 +1860,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         final JTextField tbxEdgeName = new JTextField(edge.getName());
         final JTextField tbxEdgeID = new JTextField(String.valueOf(edge.getId()));
         final JTextField tbxWeight = new JTextField(String.valueOf(edge.getWeight()));
+        final JTextField tbxFixedOhd = new JTextField(String.valueOf(edge.getFixedOverhead()));
+        tbxFixedOhd.setToolTipText("Set the fixed bytes of overhead generally associated with the protocol.");
+        final JTextField tbxOverheadMult = new JTextField(String.valueOf(edge.getMultiplierOverhead()));
+        tbxOverheadMult.setToolTipText("Set the multiplier to compute the overhead as a multiple of the payload size.");
         final JTextField tbxEdgeRate = new JTextField(String.valueOf(edge.getEdgeRate()));
 
         final Pair<SgNodeInterface> endpoints = GraphManager.getInstance().getGraph().getEndpoints(edge);
@@ -2132,7 +1879,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         Object[] inputFields = {"Name", tbxEdgeName,
             "Weight", tbxWeight,
-            //            "Maximum Rate (bytes/sec)", tbxEdgeRate,
+            "Fixed Overhead (bytes)", tbxFixedOhd,
+            "Overhead Multiplier", tbxOverheadMult,
             "Maximum Rate (Kbits/sec)", tbxEdgeRate,
             "Edge ID", tbxEdgeID,
             "End Point 1", tbxEndPoint1,
@@ -2146,6 +1894,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
             edge.setName(tbxEdgeName.getText());
             edge.setWeight(Double.parseDouble(tbxWeight.getText()));
+            edge.setFixedOverhead(Integer.parseInt(tbxFixedOhd.getText()));
+            edge.setMultiplierOverhead(Double.parseDouble(tbxOverheadMult.getText()));
             edge.setEdgeRate(Double.parseDouble(tbxEdgeRate.getText()));
             edge.setIsEnabled(cbxEnable.isSelected());
 

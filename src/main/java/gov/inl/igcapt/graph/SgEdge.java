@@ -24,6 +24,13 @@ public class SgEdge {
     private boolean _isEnabled = true;
 //    private MapLine _mapLine = null; // MapImage that corresponds to this node.
     private Coordinate _midPoint = null;
+    
+    //                                                    ============================================
+    //                                                    |              Total Overhead              |
+    //                                                    ============================================
+    // Net payload is computed as net payload = payload + _fixedOverhead + _multiplierOverhead*payload
+    private int _fixedOverhead = 0;
+    private double _multiplierOverhead = 0.0;
 
     public static double defaultUtilizationHigh = 0.8;
     public static double defaultUtilizationMedium = 0.5;
@@ -34,6 +41,16 @@ public class SgEdge {
         _weight = weight;
         _calcTransRate = calcTransRate;
         _edgeRate = edgeRate;
+    }
+
+    public SgEdge(int id, String name, double weight, double calcTransRate, double edgeRate, int fixedOverhead, double multiplierOverhead) {
+        _name = name;
+        _id = id;
+        _weight = weight;
+        _calcTransRate = calcTransRate;
+        _edgeRate = edgeRate;
+        _fixedOverhead = fixedOverhead;
+        _multiplierOverhead = multiplierOverhead;
     }
 
     public SgEdge() {
@@ -130,40 +147,64 @@ public class SgEdge {
         return _weight;
     }
 
-    public double setWeight(double weight) {
+    public void setWeight(double weight) {
         _weight = weight;
-        return _weight;
     }
 
     public double getEdgeRate() {
         return _edgeRate;
     }
 
-    public double setEdgeRate(double edgeRate) {
+    public void setEdgeRate(double edgeRate) {
         _edgeRate = edgeRate;
-        return _edgeRate;
     }
 
     public double getCalcTransRate() {
         return _calcTransRate;
     }
 
-    public double setCalcTransRate(double calcTransRate) {
+    public void setCalcTransRate(double calcTransRate) {
         _calcTransRate = calcTransRate;
-        return _calcTransRate;
     }
     
     public boolean isEnabled (){
         return _isEnabled;
     }
     
-    public boolean setIsEnabled (boolean isEnabled){
+    public void setIsEnabled (boolean isEnabled){
         _isEnabled = isEnabled;
-        return _isEnabled;
     }
 
+    @Override
     public String toString() {
         return getName();
     }
 
+    /**
+     * @return the _fixedOverhead
+     */
+    public int getFixedOverhead() {
+        return _fixedOverhead;
+    }
+
+    /**
+     * @param fixedOverhead the _fixedOverhead to set
+     */
+    public void setFixedOverhead(int fixedOverhead) {
+        _fixedOverhead = fixedOverhead;
+    }
+
+    /**
+     * @return the _multiplierOverhead
+     */
+    public double getMultiplierOverhead() {
+        return _multiplierOverhead;
+    }
+
+    /**
+     * @param multiplierOverhead the _multiplierOverhead to set
+     */
+    public void setMultiplierOverhead(double multiplierOverhead) {
+        _multiplierOverhead = multiplierOverhead;
+    }
 }
