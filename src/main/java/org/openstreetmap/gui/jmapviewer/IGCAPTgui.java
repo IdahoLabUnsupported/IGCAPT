@@ -115,6 +115,7 @@ import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.view.*;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
+import java.awt.Dialog.ModalityType;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;

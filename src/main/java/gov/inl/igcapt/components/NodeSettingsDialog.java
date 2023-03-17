@@ -14,6 +14,7 @@ import javax.swing.DefaultListModel;
 import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
+import javax.swing.JFrame;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -358,9 +359,8 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_removeEndPointButtonActionPerformed
 
     private void addEndPointButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEndPointButtonActionPerformed
-        EndPointListDialog endPointListDialog = new EndPointListDialog(null, m_Graph, m_SgNode, m_EndpointList);
-        endPointListDialog.setLocation(this.getLocation());
-        
+        EndPointListDialog endPointListDialog = new EndPointListDialog(this, m_Graph, m_SgNode, m_EndpointList);
+        endPointListDialog.setLocationRelativeTo(this);
         endPointListDialog.setVisible(true);
         
         if (endPointListDialog.getReturnValue() == EndPointListDialog.ReturnValue.OK) {
