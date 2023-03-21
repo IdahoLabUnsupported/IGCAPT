@@ -497,12 +497,18 @@ MouseWheelListener {
                 ICoordinate end = map.getPosition(movePoint);
                 
                 SgNodeInterface endNode = ptInNode(e.getX(), e.getY());
-                if (endNode != null && endNode != _clickInfo._clickNode) {
-                    if (endNode != m_prevNode) {
-                        setImageUnselected(m_prevNode);
-                        m_prevNode = endNode;
-                        setImageSelected(endNode);
+                if (endNode != null) {
+                    if (endNode != _clickInfo._clickNode) {
+                        if (endNode != m_prevNode) {
+                            setImageUnselected(m_prevNode);
+                            m_prevNode = endNode;
+                            setImageSelected(endNode);
+                        }
                     }
+                }
+                else {
+                    setImageUnselected(m_prevNode);
+                    m_prevNode = null;
                 }
                 
                 MapLineImpl line = new MapLineImpl(start, end);
