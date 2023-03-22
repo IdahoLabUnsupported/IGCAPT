@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.swing.Icon;
 
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
 
 /**

@@ -4,7 +4,6 @@ import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.components.AnalysisProgress;
 import gov.inl.igcapt.components.ButtonTabComponent;
 import gov.inl.igcapt.graph.GraphManager;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;

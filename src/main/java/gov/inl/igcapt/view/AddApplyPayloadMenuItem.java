@@ -1,7 +1,6 @@
 package gov.inl.igcapt.view;
 
 import gov.inl.igcapt.components.PayloadEditorForm;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 import java.awt.event.ActionEvent;
 import javax.swing.*;

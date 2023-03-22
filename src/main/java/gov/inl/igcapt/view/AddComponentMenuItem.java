@@ -2,7 +2,6 @@ package gov.inl.igcapt.view;
 
 import javax.swing.*;
 import gov.inl.igcapt.components.ComponentEditor;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 
 public class AddComponentMenuItem extends JMenuItem {
     private ComponentEditor componentEditor = null;

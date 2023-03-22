@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openstreetmap.gui.jmapviewer;
+package gov.inl.igcapt.view;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
@@ -117,6 +117,13 @@ import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.DragTree7;
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
+import org.openstreetmap.gui.jmapviewer.JSGMapViewer;
+import org.openstreetmap.gui.jmapviewer.MapImageImpl;
+import org.openstreetmap.gui.jmapviewer.MapLineImpl;
+import org.openstreetmap.gui.jmapviewer.OsmTileLoader;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileLoader;
@@ -359,7 +366,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     DropTarget logicalModelDropTarget;
     DropTarget gisModelDropTarget;
     JMenu modeMenu;
-    String currentTypeUuidStr = null; // default to Utility DCC
+    public String currentTypeUuidStr = null; // default to Utility DCC
     private Mode mode;
     private boolean analysisCanceled = false;
     private List<SgComponentGroupData> sgComponentGroupList = null;

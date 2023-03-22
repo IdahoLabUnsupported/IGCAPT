@@ -12,6 +12,7 @@ package org.openstreetmap.gui.jmapviewer;
  * @author kur
  **/
 
+import gov.inl.igcapt.view.IGCAPTgui;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
@@ -30,7 +31,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.dnd.*;
 import java.util.List;
 
-class DragTree7 extends JTree implements DragGestureListener,
+public class DragTree7 extends JTree implements DragGestureListener,
         DragSourceListener, TreeSelectionListener {
     
     public static Color selectedBorderColor = new Color(57, 105, 138);

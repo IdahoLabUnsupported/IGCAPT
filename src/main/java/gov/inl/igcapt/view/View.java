@@ -124,7 +124,6 @@ import gov.inl.igcapt.properties.IGCAPTproperties;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Predicate;
 import org.apache.commons.collections15.Transformer;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import org.openstreetmap.gui.jmapviewer.JSGMapViewer;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;

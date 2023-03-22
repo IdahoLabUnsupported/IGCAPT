@@ -9,7 +9,7 @@ import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.gdtaf.model.Equipment;
 import gov.inl.igcapt.graph.SgEdge;
 import java.util.Map;

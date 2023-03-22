@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import javax.swing.JOptionPane;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import java.util.logging.Level;
 import java.util.logging.Logger;

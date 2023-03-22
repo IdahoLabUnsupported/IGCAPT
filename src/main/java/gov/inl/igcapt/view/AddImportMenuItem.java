@@ -5,7 +5,6 @@ import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
 import gov.inl.igcapt.controllers.ImportMenuItemController;
 
 import java.io.File;
