@@ -10,6 +10,8 @@ import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.NodeSelectionDialog;
+import gov.inl.igcapt.components.SgLayeredIcon;
+import gov.inl.igcapt.components.SgMapImage;
 import gov.inl.igcapt.graph.GraphManager;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -37,6 +39,8 @@ import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import java.awt.image.BufferedImage;
+import javax.swing.Icon;
 import org.openstreetmap.gui.jmapviewer.*;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
@@ -91,6 +95,9 @@ MouseWheelListener {
     // Flag helps user so they don't move node when creating line if release
     // the mouse too quickly
     private boolean shiftDownDuringDrag = false;
+    private SgNodeInterface m_prevNode = null;  
+    private MapImageImpl m_selectionImage = null;
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -390,6 +397,10 @@ MouseWheelListener {
             prevMapLine = null;
             shiftDownDuringDrag = false;
             
+            if (m_prevNode != null) {
+                setImageUnselected(m_prevNode);
+                m_prevNode = null;
+            }
             // get the end point SgNode selected by the user (or null)
             SgNodeInterface endNodeSpecifiedByUser = ptInNode(e.getX(), e.getY());
             // if the same node was selected or no node was selected don't make edge
@@ -457,6 +468,22 @@ MouseWheelListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
+    
+    private void setImageSelected(SgNodeInterface node) {
+        Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
+        SgLayeredIcon layeredIcon = (SgLayeredIcon)selectionIcon;
+        BufferedImage theImage = (BufferedImage)layeredIcon.getCompositeImage();
+        m_selectionImage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
+        m_selectionImage.setId(node.getName());
+        map.addMapImage(m_selectionImage);
+    }
+    
+    private void setImageUnselected(SgNodeInterface node) {
+        if (node != null) {
+            map.removeMapImage(m_selectionImage);
+            m_selectionImage = null;
+        }
+    }
 
     // Drag the image around with the cursor while the button is still down.
     @Override
@@ -469,6 +496,21 @@ MouseWheelListener {
                                                   _clickInfo.getClickNode().getLongit());
                 Point movePoint = new Point(e.getX(), e.getY());
                 ICoordinate end = map.getPosition(movePoint);
+                
+                SgNodeInterface endNode = ptInNode(e.getX(), e.getY());
+                if (endNode != null) {
+                    if (endNode != _clickInfo._clickNode) {
+                        if (endNode != m_prevNode) {
+                            setImageUnselected(m_prevNode);
+                            m_prevNode = endNode;
+                            setImageSelected(endNode);
+                        }
+                    }
+                }
+                else {
+                    setImageUnselected(m_prevNode);
+                    m_prevNode = null;
+                }
                 
                 MapLineImpl line = new MapLineImpl(start, end);
                 if (prevMapLine != null) {
