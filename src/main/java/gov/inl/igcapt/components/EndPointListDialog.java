@@ -37,7 +37,7 @@ public class EndPointListDialog extends javax.swing.JDialog {
     /**
      * Creates new form EndPointListDialog
      */
-    public EndPointListDialog(java.awt.Frame parent, UndirectedGraph<SgNodeInterface, SgEdge> graph,
+    public EndPointListDialog(javax.swing.JDialog parent, UndirectedGraph<SgNodeInterface, SgEdge> graph,
             SgNode node, List<Integer> exclusionNodeIdList) {
         super(parent, true);
         

@@ -2,6 +2,7 @@ package gov.inl.igcapt.view;
 
 import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.components.AnalysisProgress;
+import gov.inl.igcapt.components.AnalysisTask;
 import gov.inl.igcapt.components.ButtonTabComponent;
 import gov.inl.igcapt.graph.GraphManager;
 
@@ -30,7 +31,7 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                 AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
 
                 Graph expandedGraph = GraphManager.getInstance().getOriginalGraph();
-                IGCAPTgui.AnalysisTask analysisTask = IGCAPTgui.getInstance().new AnalysisTask(expandedGraph);
+                AnalysisTask analysisTask = new AnalysisTask(expandedGraph);
                 IGCAPTgui.getInstance().setAnalysisCanceled(false);
 
                 analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
