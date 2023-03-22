@@ -20,7 +20,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 
 /**
  *

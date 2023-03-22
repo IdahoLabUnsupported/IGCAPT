@@ -6,7 +6,7 @@
 package gov.inl.igcapt.graph;
 
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 
 import java.awt.event.MouseEvent;
 

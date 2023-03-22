@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.Scanner;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

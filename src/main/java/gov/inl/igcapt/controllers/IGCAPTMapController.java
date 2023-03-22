@@ -4,6 +4,7 @@
  */
 package gov.inl.igcapt.controllers;
 
+import gov.inl.igcapt.view.IGCAPTgui;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.PickedState;

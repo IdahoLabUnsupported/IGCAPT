@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import org.apache.commons.collections15.Factory;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC

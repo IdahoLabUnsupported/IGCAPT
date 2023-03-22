@@ -21,7 +21,7 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
