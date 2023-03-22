@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
-import org.openstreetmap.gui.jmapviewer.IGCAPTgui;
+import gov.inl.igcapt.view.IGCAPTgui;
 
 /**
  *
