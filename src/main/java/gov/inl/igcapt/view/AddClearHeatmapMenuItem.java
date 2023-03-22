@@ -1,6 +1,5 @@
 package gov.inl.igcapt.view;
 
-import gov.inl.igcapt.graph.GraphManager;
 
 import javax.swing.*;
 
