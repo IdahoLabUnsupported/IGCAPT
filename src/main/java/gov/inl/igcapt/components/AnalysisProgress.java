@@ -5,6 +5,7 @@
  */
 package gov.inl.igcapt.components;
 
+import gov.inl.igcapt.view.IGCAPTgui;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.DefaultListModel;
@@ -68,6 +69,7 @@ public class AnalysisProgress extends javax.swing.JDialog {
     
     public void addStatus(String status) {
         defaultListModel.addElement(status);
+        statusScrollPane.ensureIndexIsVisible(defaultListModel.getSize()-1);
     }
     
     private void abort() {

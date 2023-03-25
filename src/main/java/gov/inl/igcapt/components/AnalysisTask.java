@@ -99,6 +99,8 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 firePropertyChange("status", "old", "Determing paths for each endpoint pair.");
                 for (gov.inl.igcapt.components.Pair<SgNode, SgNode> pair : analyzeList) {
 
+                    firePropertyChange("status", "old", "Analyzing pair: " + pair.first.getName() + " - " + pair.second.getName());
+
                     if (!_running) {
                         break;
                     }

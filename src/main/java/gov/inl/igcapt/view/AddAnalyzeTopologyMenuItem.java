@@ -28,8 +28,8 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
         this.addActionListener(ActionListener -> {
 
             SwingUtilities.invokeLater(() -> {
-                AnalysisProgress analysisProgress = new AnalysisProgress(null, true);
-
+                AnalysisProgress analysisProgress = new AnalysisProgress(IGCAPTgui.getInstance(), true);
+                analysisProgress.setLocationRelativeTo(IGCAPTgui.getInstance());
                 Graph expandedGraph = GraphManager.getInstance().getOriginalGraph();
                 AnalysisTask analysisTask = new AnalysisTask(expandedGraph);
                 IGCAPTgui.getInstance().setAnalysisCanceled(false);
