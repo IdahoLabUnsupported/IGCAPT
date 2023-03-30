@@ -4,6 +4,12 @@
  */
 package gov.inl.igcapt.components;
 
+import edu.uci.ics.jung.graph.Graph;
+import gov.inl.igcapt.graph.GraphManager;
+import gov.inl.igcapt.graph.SgEdge;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author FRAZJD
@@ -17,9 +23,60 @@ public class ResultsDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        SetColumnWidth(0, 60);
-    }
+        SetColumnWidth(0, 120);
+        SetColumnWidth(1, 120);
+        SetColumnWidth(2, 120);
+        SetColumnWidth(3, 200);
+        SetColumnWidth(4, 200);
+        SetColumnWidth(5, 200);
+        
+        DefaultTableModel tableModel = (DefaultTableModel)resultsTable.getModel();
+        
+        Vector<Double> rowData = new Vector<>();
+        
+        rowData.add(0.0);
+        rowData.add(1.1);
+        rowData.add(2.2);
+        rowData.add(3.3);
+        rowData.add(4.4);
+        rowData.add(5.5);
+        
+        tableModel.addRow(rowData);
+      }
 
+    public void UpdateResults(){
+        
+        Graph graph = null;
+        var graphManager = GraphManager.getInstance();
+        
+        if (graphManager != null) {
+            graph = graphManager.getGraph();
+        }
+        
+        // Clear old graph results.
+        if (graph != null && graph.getVertexCount() > 0) {
+        
+            DefaultTableModel tableModel = (DefaultTableModel)resultsTable.getModel();
+
+            // Remove existing rows
+            var numRows = tableModel.getRowCount();
+
+            for (int i=numRows-1; i>=0; i--) {
+                tableModel.removeRow(i);
+            }
+        }
+        
+        // Iterate through edges
+        for (var edge : graph.getEdges()) {
+            var lEdge = (SgEdge)edge;
+            
+            if (lEdge != null) {
+                lEdge.getEdgeRate();
+                lEdge.getUtilization();
+                lEdge.getCalcTransRate();
+            }
+        }
+    }
     private void SetColumnWidth(int column, int width) {
                 
         var columnModel = resultsTable.getColumnModel();
@@ -47,10 +104,7 @@ public class ResultsDialog extends javax.swing.JDialog {
 
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Edge ID", "From Node", "To Node", "Bandwidth Capacity (kbits/sec)", "Bandwidth Utilization (kbits/sec)", "Utilization Percentage"
