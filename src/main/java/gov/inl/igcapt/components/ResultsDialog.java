@@ -7,6 +7,7 @@ package gov.inl.igcapt.components;
 import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
+import gov.inl.igcapt.graph.SgNodeInterface;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,20 +30,7 @@ public class ResultsDialog extends javax.swing.JDialog {
         SetColumnWidth(3, 200);
         SetColumnWidth(4, 200);
         SetColumnWidth(5, 200);
-        
-        DefaultTableModel tableModel = (DefaultTableModel)resultsTable.getModel();
-        
-        Vector<Double> rowData = new Vector<>();
-        
-        rowData.add(0.0);
-        rowData.add(1.1);
-        rowData.add(2.2);
-        rowData.add(3.3);
-        rowData.add(4.4);
-        rowData.add(5.5);
-        
-        tableModel.addRow(rowData);
-      }
+    }
 
     public void UpdateResults(){
         
@@ -64,16 +52,30 @@ public class ResultsDialog extends javax.swing.JDialog {
             for (int i=numRows-1; i>=0; i--) {
                 tableModel.removeRow(i);
             }
-        }
         
-        // Iterate through edges
-        for (var edge : graph.getEdges()) {
-            var lEdge = (SgEdge)edge;
-            
-            if (lEdge != null) {
-                lEdge.getEdgeRate();
-                lEdge.getUtilization();
-                lEdge.getCalcTransRate();
+            // Iterate through edges
+            for (var edge : graph.getEdges()) {
+                var lEdge = (SgEdge)edge;
+
+                if (lEdge != null) {
+                    String edgeName = lEdge.getName();
+                    var edgeRate = lEdge.getEdgeRate();
+                    var utilization = lEdge.getUtilization();
+                    var transRate = lEdge.getCalcTransRate();
+                    
+                    edu.uci.ics.jung.graph.util.Pair<SgNodeInterface> endPts = graph.getEndpoints(lEdge);
+                    String end1Name = endPts.getFirst().getName();
+                    String end2Name = endPts.getSecond().getName();
+                    
+                    Vector<String> rowData = new Vector<>();
+                    rowData.add(edgeName);
+                    rowData.add(end1Name);
+                    rowData.add(end2Name);
+                    rowData.add(String.valueOf(edgeRate));
+                    rowData.add(String.valueOf(transRate));
+                    rowData.add(String.valueOf(utilization*100.0));
+                    tableModel.addRow(rowData);
+                }
             }
         }
     }

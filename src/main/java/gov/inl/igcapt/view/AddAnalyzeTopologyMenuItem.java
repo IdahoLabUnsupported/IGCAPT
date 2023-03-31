@@ -4,6 +4,7 @@ import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.components.AnalysisProgress;
 import gov.inl.igcapt.components.AnalysisTask;
 import gov.inl.igcapt.components.ButtonTabComponent;
+import gov.inl.igcapt.components.ResultsDialog;
 import gov.inl.igcapt.graph.GraphManager;
 
 import java.awt.Component;
@@ -49,13 +50,22 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                             Date now = new Date();
                             String newTabStringLabel = sdfDate.format(now);
 
-                            String label = "Analysis Results" + newTabStringLabel;
+                            String label = "Analysis Results " + newTabStringLabel;
 
                             Component add = IGCAPTgui.getInstance().getJtp().add(label, analysisResultsText);
                             IGCAPTgui.getInstance().getJtp().setTabComponentAt(IGCAPTgui.getInstance().getJtp().indexOfComponent(add), new ButtonTabComponent(IGCAPTgui.getInstance().getJtp()));
 
                             int count = IGCAPTgui.getInstance().getJtp().getTabCount();
                             IGCAPTgui.getInstance().getJtp().setSelectedIndex(count - 1);
+                            
+                            // Display results dialog
+                            ResultsDialog resultsDialog = new ResultsDialog(IGCAPTgui.getInstance(), false);
+                            
+                            if (resultsDialog != null) {
+                                resultsDialog.UpdateResults();
+                                
+                                resultsDialog.setVisible(true);
+                            }
 
                         } catch (InterruptedException | ExecutionException ex) {
                             Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
