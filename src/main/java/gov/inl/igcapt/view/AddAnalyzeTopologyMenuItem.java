@@ -41,23 +41,7 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                     } else if ("status".equals(evt.getPropertyName())) {
                         analysisProgress.addStatus((String) evt.getNewValue());
                     } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !IGCAPTgui.getInstance().isAnalysisCanceled()) {
-                        JEditorPane ep1;
                         try {
-                            ep1 = new JEditorPane("text/html", analysisTask.get());
-
-                            JScrollPane analysisResultsText = new JScrollPane(ep1);
-                            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
-                            Date now = new Date();
-                            String newTabStringLabel = sdfDate.format(now);
-
-                            String label = "Analysis Results " + newTabStringLabel;
-
-                            Component add = IGCAPTgui.getInstance().getJtp().add(label, analysisResultsText);
-                            IGCAPTgui.getInstance().getJtp().setTabComponentAt(IGCAPTgui.getInstance().getJtp().indexOfComponent(add), new ButtonTabComponent(IGCAPTgui.getInstance().getJtp()));
-
-                            int count = IGCAPTgui.getInstance().getJtp().getTabCount();
-                            IGCAPTgui.getInstance().getJtp().setSelectedIndex(count - 1);
-                            
                             // Display results dialog
                             ResultsDialog resultsDialog = new ResultsDialog(IGCAPTgui.getInstance(), false);
                             
@@ -67,7 +51,7 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                                 resultsDialog.setVisible(true);
                             }
 
-                        } catch (InterruptedException | ExecutionException ex) {
+                        } catch (Exception ex) {
                             Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
