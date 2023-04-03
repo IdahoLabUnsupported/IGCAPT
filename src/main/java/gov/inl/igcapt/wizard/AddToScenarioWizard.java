@@ -4,8 +4,6 @@
  */
 package gov.inl.igcapt.wizard;
 
-//import com.fasterxml.jackson.core.JsonGenerator;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -23,8 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
@@ -32,16 +28,16 @@ import javax.swing.JOptionPane;
  * @author CHE
  */
 public class AddToScenarioWizard extends javax.swing.JDialog {
-    private List<GucsInformation>m_gucsList;
-    private List<CnrmInformation>m_cnrmList;
+    private List<GucsInformation>m_gucsList = null;
+    private List<CnrmInformation>m_cnrmList = null;
     private final ScenarioInformation m_newScenarioInfo;
     private final String m_webServiceHost;
     private final String m_webServiceKey;
-    enum ButtonStages {
-        LINE1,   // GUCS first line
-        LINE2,   // CNRM Second line
-        LINE3,   // Location Third line
-        LINE4    // Save - cancel fourth line
+    enum FieldStates {
+        GUCS_FIELD,   
+        CNRM_FIELD,   
+        LOCATION_FIELD, 
+        SAVE_CANCEL   
     }
     
     /**
@@ -60,47 +56,50 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         this.setVisible(true);
     }
            
-    private void enableLine(ButtonStages stage, boolean state) {
-        switch(stage) {
-            case LINE1 -> {
+    // Enable the appropriate field
+    private void enableField(FieldStates field, boolean state) {
+        switch(field) {
+            case GUCS_FIELD -> {
                 jList1.setEnabled(state);  // GUCS list
             }
-            case LINE2 -> {
+            case CNRM_FIELD -> {
                 jList2.setEnabled(state);  // CNRM list
             }
-            case LINE3 -> {
+            case LOCATION_FIELD -> {
                 jButton3.setEnabled(state);  // Browse
                 jTextField1.setEnabled(state);  // location
             }
-            case LINE4 -> {
+            case SAVE_CANCEL -> {
                 jButton5.setEnabled(state);   // Save
             }
         }
     }
     
     private void disableAllButtons() {
-        enableLine(ButtonStages.LINE1, false);
+        enableField(FieldStates.GUCS_FIELD, false);
         jButton2.setEnabled(false);
-        enableLine(ButtonStages.LINE2, false);
+        enableField(FieldStates.CNRM_FIELD, false);
         jButton4.setEnabled(false);
-        enableLine(ButtonStages.LINE3, false);
-        enableLine(ButtonStages.LINE4, false);
+        enableField(FieldStates.LOCATION_FIELD, false);
+        enableField(FieldStates.SAVE_CANCEL, false);
     }
     
-    private void disableEnableButtons(ButtonStages stage) {
+    private void disableEnableButtons(FieldStates stage) {
         switch (stage) {
-            case LINE3 -> {
-                enableLine(ButtonStages.LINE1, false);
-                enableLine(ButtonStages.LINE2, false);
-                enableLine(ButtonStages.LINE3, true);
-                enableLine(ButtonStages.LINE4, false);
+            case LOCATION_FIELD -> {
+                enableField(FieldStates.GUCS_FIELD, false);
+                enableField(FieldStates.CNRM_FIELD, false);
+                enableField(FieldStates.LOCATION_FIELD, true);
+                enableField(FieldStates.SAVE_CANCEL, false);
             }
-            case LINE4 -> {
-                enableLine(ButtonStages.LINE1, false);
-                enableLine(ButtonStages.LINE2, false);
-                enableLine(ButtonStages.LINE3, true);
-                enableLine(ButtonStages.LINE4, true);
+            case SAVE_CANCEL -> {
+                enableField(FieldStates.GUCS_FIELD, false);
+                enableField(FieldStates.CNRM_FIELD, false);
+                enableField(FieldStates.LOCATION_FIELD, true);
+                enableField(FieldStates.SAVE_CANCEL, true);
             }
+
+
         }
     }
 
@@ -256,10 +255,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     private void initGucsList() {
         m_gucsList = getGucsList();
         DefaultListModel listModel = new DefaultListModel();
+       
+        if (m_gucsList == null) {
+            return;
+        }
+
         for (GucsInformation gucs : m_gucsList) {
             listModel.addElement(gucs.getName());
         }
         jList1.setModel(listModel);
+        
         jList1.setEnabled(true);
     }
     
@@ -267,11 +272,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     private void initCnrmList() {
         m_cnrmList = getCnrmList();
         DefaultListModel listModel = new DefaultListModel();
+        jList2.setModel(listModel);
+        
+        if (m_gucsList == null) {
+            return;
+        }
         
         for (CnrmInformation cnrm : m_cnrmList) {
             listModel.addElement(cnrm.getName());
         }
-        jList2.setModel(listModel);
+        
         jList2.setEnabled(true);
     }
     
@@ -285,7 +295,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+                JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ conn.getResponseCode());
+                return null;
             }
             
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -300,8 +311,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
-            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
-                "Exception! "+e2.getMessage()); 
+            JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ e2.getMessage());
+            return null;
         }
         return m_gucsList;
     }
@@ -316,7 +327,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+                JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ conn.getResponseCode());
+                return null;
             }
             
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -331,11 +343,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
-            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
-                "Exception! "+e2.getMessage());  
+            JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ e2.getMessage());
+            return null;
         }
         return m_cnrmList;
-    }
+    } 
     
     // Call the web service to add the GUCS list to the scenario 
     private void updateScenarioGucsList() {
@@ -364,9 +376,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             byte[] input = jsonArray.toString().getBytes("utf-8");
             os.write(input, 0, input.length);
             if (conn.getResponseCode() != 200) {
-                System.out.println("Message=="+conn.getResponseMessage());
-                System.out.println("Bad response code=="+conn.getResponseCode());
-                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+                JOptionPane.showMessageDialog(this, 
+                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
+                return;                
             }       
                         
             InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf-8");
@@ -376,13 +388,14 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             String response = br.readLine();
             if (conn.getResponseCode() != 200) { 
                 ProblemDetails problemDetails = objMapper.readValue(response, ProblemDetails.class);
-                System.out.println(problemDetails.toString());
+                JOptionPane.showMessageDialog(this, problemDetails.toString());
             }
                 
             conn.disconnect();
         }
         catch (Exception e2) {
-            System.out.println(e2.getMessage());
+            JOptionPane.showMessageDialog(this, 
+                    "Web Service exception -- HTTP Error code : "+ e2.getMessage());
         }
     }
     
@@ -412,9 +425,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             byte[] input = jsonArray.toString().getBytes("utf-8");
             os.write(input, 0, input.length);
             if (conn.getResponseCode() != 200) {
-                System.out.println("Message=="+conn.getResponseMessage());
-                System.out.println("Bad response code=="+conn.getResponseCode());
-                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+                JOptionPane.showMessageDialog(this, 
+                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
+                return;
             }       
                         
             InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf-8");
@@ -424,14 +437,14 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             String response = br.readLine();
             if (conn.getResponseCode() != 200) { 
                 ProblemDetails problemDetails = objMapper.readValue(response, ProblemDetails.class);
-                System.out.println(problemDetails.toString());
+                JOptionPane.showMessageDialog(this, problemDetails.toString());
             }
                 
             conn.disconnect();
         }
         catch (Exception e2) {
-            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
-                "Exception! "+e2.getMessage()); 
+            JOptionPane.showMessageDialog(this, 
+                    "Web Service exception -- HTTP Error code : "+ e2.getMessage());
         }
     }
 
@@ -448,8 +461,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             writer.close();
         }
         catch (Exception e) {
-            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
-                "Exception! "+e.getMessage()); 
+            JOptionPane.showMessageDialog(this, "Exception: "+e.getMessage());
+            return null;
         }
         return scenarioFile;
     }
@@ -467,7 +480,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
+                JOptionPane.showMessageDialog(this, 
+                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
+                return;
             }
             
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -483,31 +498,20 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             
             if (!(fileName == null) && !fileName.isEmpty() &&
                 JOptionPane.showConfirmDialog(this, "Do you want to import the Scenario now?",
-                        "Import Scenario?", JOptionPane.YES_NO_OPTION) ==
-                    JOptionPane.YES_OPTION) {
+                    "Import Scenario?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 ImportMenuItemController importController = new ImportMenuItemController();
                 importController.importGdtafFile(fileName);
             }
         }
         catch (Exception e2) {
-            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
-                "Exception! "+e2.getMessage()); 
-            //return e2.getMessage();
+            JOptionPane.showMessageDialog(this, "Exception: " + e2.getMessage());
         }
     }
        
     // This is test code
     private void cleanupScenarios() {
         String output;
-        String[] idArray = {"_06eff38d-0820-42cb-8213-3f6adc80c579",
-    "_e16188a0-772e-4f8b-82ad-68ac096a7e8f", 
-    "_c2c8bbc0-d603-49dc-b987-ff7dd22c2e22",
-    "_977bcb93-1348-4f09-bf16-3d22dfaa8906",
-    "_77854f63-63fe-45ad-893f-3e973b6e894e",
-    "_54e127e3-2415-44c0-b6b0-f0a7876b4f18", 
-    "_707a080d-1ded-414b-a764-3ad80fa05fd9",
-        "_b42eae6d-c1e4-4474-b612-04c9ec666ff0"};
-        /*List<ScenarioInformation>scenarioList = null;
+        List<ScenarioInformation>scenarioList = null;
         ScenarioInformation scenarioInformation = null;
         try {
             URL url = new URL("https://" + m_webServiceHost + "/scenarios" +
@@ -536,14 +540,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
         if (scenarioList != null) {
             for (ScenarioInformation scenario : scenarioList) {
-                if (scenario.getName().startsWith("Test")) {
+                if (scenario.getDescription().contains("Cherie") || scenario.getName().contains("herie")) {
                     System.out.println("Delete scenario named:"+scenario.getName());
                     deleteScenario(scenario.getId());
                 }
             }
-        }*/
-        for (String id : idArray) {
-            deleteScenario(id);
         }
     }
 
@@ -566,12 +567,13 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             byte[] input = json.toString().getBytes("utf-8");
             os.write(input, 0, input.length);
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed: HTTP Error code:"+conn.getResponseCode());
+                JOptionPane.showMessageDialog(this, 
+                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
+                return;
             }
         }
         catch (Exception e) {
-            Logger.getLogger(AddToScenarioWizard.class.getName()).log(Level.WARNING, 
-                "Exception! "+e.getMessage()); 
+            JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage());
         }
         if (conn != null) {
             conn.disconnect();
@@ -581,7 +583,6 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Select GUCS
     // PUT to update the list of GUCS for the scenario  -- need scenario id and gucs id(s)
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         
         if (jList1.isSelectionEmpty()) {
@@ -591,13 +592,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         updateScenarioGucsList();
         disableAllButtons();
         initCnrmList();
-        //cleanupScenarios(); //-- this is test code
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton2ActionPerformed
     
     // Cancel - close form
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //cleanupScenarios();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -607,17 +606,21 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
         String lastPath = IGCAPTgui.getInstance().getLastPath(); 
+        // Is the path empty?
         if (lastPath != null && !lastPath.isEmpty()) {
-            File lastPath1 = new File(lastPath);
-            if (lastPath1.exists()) {
-                chooser.setCurrentDirectory(lastPath1);
+            // Does the path exist? Strip the filename
+            int endIndex = lastPath.lastIndexOf(File.separator);
+            lastPath = lastPath.substring(0, endIndex);
+            File lastPathDir = new File(lastPath);
+            if (lastPathDir.exists()) {
+                chooser.setCurrentDirectory(lastPathDir);
             }
         }
-        
+
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             jTextField1.setText(chooser.getSelectedFile().toString());
             if (jTextField1.getText() != null) {
-                disableEnableButtons(ButtonStages.LINE4);
+                disableEnableButtons(FieldStates.SAVE_CANCEL);
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -625,33 +628,26 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     // Next button - Selected CNRM
     // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        
         if (jList2.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Please select at least one CNRM!");
             return;
         }        
         updateScenarioCnrmList();
-        disableEnableButtons(ButtonStages.LINE3);
-        
+        disableEnableButtons(FieldStates.LOCATION_FIELD);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton4ActionPerformed
 
     // Save button
     // Get to get the scenario file and write it to file system.
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        
         if (jTextField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Location cannot be Empty!");
             return;
         }
         getTheScenarioFile();
-        
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
