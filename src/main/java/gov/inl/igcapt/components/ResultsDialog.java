@@ -8,8 +8,14 @@ import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -30,6 +36,13 @@ public class ResultsDialog extends javax.swing.JDialog {
         SetColumnWidth(3, 200);
         SetColumnWidth(4, 200);
         SetColumnWidth(5, 200);
+        
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(resultsTable.getModel());
+        resultsTable.setRowSorter(sorter);
+        
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>(4);
+        sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING));
+        sorter.setSortKeys(sortKeys);
     }
 
     public void UpdateResults(){
@@ -59,21 +72,15 @@ public class ResultsDialog extends javax.swing.JDialog {
 
                 if (lEdge != null) {
                     String edgeName = lEdge.getName();
-                    var edgeRate = lEdge.getEdgeRate();
-                    var utilization = lEdge.getUtilization();
-                    var transRate = lEdge.getCalcTransRate();
+                    double edgeRate = lEdge.getEdgeRate();
+                    double utilization = lEdge.getUtilization();
+                    double transRate = lEdge.getCalcTransRate();
                     
                     edu.uci.ics.jung.graph.util.Pair<SgNodeInterface> endPts = graph.getEndpoints(lEdge);
                     String end1Name = endPts.getFirst().getName();
                     String end2Name = endPts.getSecond().getName();
                     
-                    Vector<String> rowData = new Vector<>();
-                    rowData.add(edgeName);
-                    rowData.add(end1Name);
-                    rowData.add(end2Name);
-                    rowData.add(String.valueOf(edgeRate));
-                    rowData.add(String.valueOf(transRate));
-                    rowData.add(String.valueOf(utilization*100.0));
+                    Object[] rowData = {edgeName, end1Name, end2Name, edgeRate, transRate, utilization*100.0};
                     tableModel.addRow(rowData);
                 }
             }
@@ -98,6 +105,8 @@ public class ResultsDialog extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         resultsTable = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Analysis Results");
@@ -113,7 +122,7 @@ public class ResultsDialog extends javax.swing.JDialog {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false
@@ -133,20 +142,31 @@ public class ResultsDialog extends javax.swing.JDialog {
         jScrollPane1.setViewportView(resultsTable);
         resultsTable.getAccessibleContext().setAccessibleName("resultsTable");
 
+        jTextPane1.setText("Time, analysis");
+        jTextPane1.setEnabled(false);
+        jTextPane1.setFocusable(false);
+        jScrollPane3.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 946, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 946, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(63, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -197,6 +217,8 @@ public class ResultsDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTable resultsTable;
     // End of variables declaration//GEN-END:variables
 }

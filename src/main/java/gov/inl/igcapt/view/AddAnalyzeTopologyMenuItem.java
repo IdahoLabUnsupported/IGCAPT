@@ -8,7 +8,9 @@ import gov.inl.igcapt.components.ResultsDialog;
 import gov.inl.igcapt.graph.GraphManager;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.CancellationException;
@@ -26,7 +28,7 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
 
     private void createAnalyzeTopologyMenu() {
         
-        this.addActionListener(ActionListener -> {
+        this.addActionListener((ActionEvent ActionListener) -> {
 
             SwingUtilities.invokeLater(() -> {
                 AnalysisProgress analysisProgress = new AnalysisProgress(IGCAPTgui.getInstance(), true);
@@ -35,27 +37,30 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                 AnalysisTask analysisTask = new AnalysisTask(expandedGraph);
                 IGCAPTgui.getInstance().setAnalysisCanceled(false);
 
-                analysisTask.addPropertyChangeListener((PropertyChangeEvent evt) -> {
-                    if ("progress".equals(evt.getPropertyName())) {
-                        analysisProgress.setProgress((Integer) evt.getNewValue());
-                    } else if ("status".equals(evt.getPropertyName())) {
-                        analysisProgress.addStatus((String) evt.getNewValue());
-                    } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !IGCAPTgui.getInstance().isAnalysisCanceled()) {
-                        try {
-                            // Display results dialog
-                            ResultsDialog resultsDialog = new ResultsDialog(IGCAPTgui.getInstance(), false);
-                            
-                            if (resultsDialog != null) {
-                                resultsDialog.UpdateResults();
+                analysisTask.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if ("progress".equals(evt.getPropertyName())) {
+                            analysisProgress.setProgress((Integer) evt.getNewValue());
+                        } else if ("status".equals(evt.getPropertyName())) {
+                            analysisProgress.addStatus((String) evt.getNewValue());
+                        } else if (evt.getNewValue().equals(SwingWorker.StateValue.DONE) && !IGCAPTgui.getInstance().isAnalysisCanceled()) {
+                            try {
+                                // Display results dialog
+                                ResultsDialog resultsDialog = new ResultsDialog(IGCAPTgui.getInstance(), false);
                                 
-                                resultsDialog.setVisible(true);
+                                if (resultsDialog != null) {
+                                    resultsDialog.UpdateResults();
+                                    
+                                    resultsDialog.setVisible(true);
+                                }
+                                
+                            } catch (Exception ex) {
+                                Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
                             }
-
-                        } catch (Exception ex) {
-                            Logger.getLogger(IGCAPTgui.class.getName()).log(Level.SEVERE, null, ex);
+                            
+                            analysisProgress.setVisible(false);
                         }
-
-                        analysisProgress.setVisible(false);
                     }
                 });
 
