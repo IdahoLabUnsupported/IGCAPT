@@ -8,11 +8,14 @@ import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
+import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -23,6 +26,23 @@ import javax.swing.table.TableRowSorter;
  */
 public class ResultsDialog extends javax.swing.JDialog {
 
+    public class TableCellRenderer extends DefaultTableCellRenderer {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+              boolean isSelected, boolean hasFocus, int row, int col) {
+
+            Component c = super.getTableCellRendererComponent(table, value,
+                     isSelected, hasFocus, row, col);
+            Object valueAt = table.getModel().getValueAt(row, col);
+
+            c.setForeground(Color.RED);
+            c.setBackground(Color.WHITE);
+
+            return c;
+        }       
+    }
     /**
      * Creates new form ResultsDialog
      */
@@ -43,6 +63,8 @@ public class ResultsDialog extends javax.swing.JDialog {
         List<RowSorter.SortKey> sortKeys = new ArrayList<>(4);
         sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING));
         sorter.setSortKeys(sortKeys);
+        
+        resultsTable.setDefaultRenderer(Double.class, new TableCellRenderer());
     }
 
     public void UpdateResults(String analysisTimeStr){
