@@ -248,7 +248,7 @@ MouseWheelListener {
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
                     public void actionPerformed(ActionEvent e) {
-                        GraphManager.getInstance().fileDirty = true;
+                        GraphManager.getInstance().setFileDirty(true);
                         
                         if (nodeToUse instanceof SgNodeInterface) {
                             SgNodeInterface node = nodeToUse;
@@ -564,7 +564,7 @@ MouseWheelListener {
         }
 
         e.consume();
-        GraphManager.getInstance().fileDirty = true;
+        GraphManager.getInstance().setFileDirty(true);
         
         map.repaint(); // KD; eliminates the trail of a dragged object.
     }

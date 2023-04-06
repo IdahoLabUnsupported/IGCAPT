@@ -30,12 +30,12 @@ public class ResultsDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        SetColumnWidth(0, 120);
-        SetColumnWidth(1, 120);
-        SetColumnWidth(2, 120);
-        SetColumnWidth(3, 200);
-        SetColumnWidth(4, 200);
-        SetColumnWidth(5, 200);
+        SetColumnWidth(0, 115);
+        SetColumnWidth(1, 130);
+        SetColumnWidth(2, 130);
+        SetColumnWidth(3, 190);
+        SetColumnWidth(4, 190);
+        SetColumnWidth(5, 190);
         
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(resultsTable.getModel());
         resultsTable.setRowSorter(sorter);
@@ -45,7 +45,11 @@ public class ResultsDialog extends javax.swing.JDialog {
         sorter.setSortKeys(sortKeys);
     }
 
-    public void UpdateResults(){
+    public void UpdateResults(String analysisTimeStr){
+        
+        if (analysisTimeStr != null && !analysisTimeStr.isBlank() && !analysisTimeStr.isEmpty()) {
+            analysisTimeTxt.setText(analysisTimeStr);
+        }
         
         Graph graph = null;
         var graphManager = GraphManager.getInstance();
@@ -106,7 +110,7 @@ public class ResultsDialog extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         resultsTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        analysisTimeTxt = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Analysis Results");
@@ -142,10 +146,10 @@ public class ResultsDialog extends javax.swing.JDialog {
         jScrollPane1.setViewportView(resultsTable);
         resultsTable.getAccessibleContext().setAccessibleName("resultsTable");
 
-        jTextPane1.setText("Time, analysis");
-        jTextPane1.setEnabled(false);
-        jTextPane1.setFocusable(false);
-        jScrollPane3.setViewportView(jTextPane1);
+        analysisTimeTxt.setEditable(false);
+        analysisTimeTxt.setText("Time, analysis");
+        analysisTimeTxt.setFocusable(false);
+        jScrollPane3.setViewportView(analysisTimeTxt);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,7 +160,7 @@ public class ResultsDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 946, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -216,9 +220,9 @@ public class ResultsDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextPane analysisTimeTxt;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JTable resultsTable;
     // End of variables declaration//GEN-END:variables
 }

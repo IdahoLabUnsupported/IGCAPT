@@ -86,7 +86,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
                     public void actionPerformed(ActionEvent e) {
-                        GraphManager.getInstance().fileDirty = true;
+                        GraphManager.getInstance().setFileDirty(true);
                         
                         pickedVertexState.pick(vertex, false);
                         
@@ -193,7 +193,7 @@ public class SGEditingPopupGraphMousePlugin1<V, E> extends edu.uci.ics.jung.visu
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Edge") {
                     public void actionPerformed(ActionEvent e) {
-                        _GraphManager.fileDirty = true;
+                        GraphManager.getInstance().setFileDirty(true);
                         pickedEdgeState.pick(edge, false);
                         
                         if (edge instanceof SgEdge) {

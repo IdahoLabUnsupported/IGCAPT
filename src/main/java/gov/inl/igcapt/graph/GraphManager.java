@@ -184,7 +184,8 @@ public class GraphManager {
     }
       
     // TODO graph objects (? Need to get and set or have here?)
-    public boolean fileDirty = false;
+    private boolean fileDirty = false;
+    private boolean analysisDirty = true;
     private GraphCollapser collapser;
     private SgGraph tempGraph = null;
     private SgGraph originalGraph = null;
@@ -214,6 +215,22 @@ public class GraphManager {
     
     public boolean getFileDirty() {
         return fileDirty;
+    }
+    
+    public void setFileDirty(boolean dirty) {
+        fileDirty = dirty;
+        
+        if (dirty == true) {
+            setAnalysisDirty(dirty);
+        }
+    }
+    
+    public boolean getAnalysisDirty() {
+        return analysisDirty;
+    }
+    
+    public void setAnalysisDirty(boolean dirty) {
+        analysisDirty = dirty;
     }
    
     /**

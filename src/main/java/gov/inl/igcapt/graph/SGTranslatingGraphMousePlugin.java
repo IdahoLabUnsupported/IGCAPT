@@ -30,7 +30,7 @@ public class SGTranslatingGraphMousePlugin extends TranslatingGraphMousePlugin {
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
         
-        GraphManager.getInstance().fileDirty = true;
+        GraphManager.getInstance().setFileDirty(true);
     }
 
 }

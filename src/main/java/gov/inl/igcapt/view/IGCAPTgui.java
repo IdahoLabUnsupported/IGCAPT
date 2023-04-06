@@ -323,8 +323,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private GraphCollapser collapser = GraphManager.getInstance().getCollapser();
     private JMapViewer currentGisMap = GraphManager.getInstance().getCurrentGisMap();
     private SgGraph tempGraph = GraphManager.getInstance().getTempGraph();
-    //private SgGraph originalGraph = GraphManager.getInstance().getOriginalGraph();
-    public boolean fileDirty = GraphManager.getInstance().getFileDirty();
     
     int nodeIndex = GraphManager.getInstance().getNodeIndex();
     int edgeIndex = GraphManager.getInstance().getEdgeIndex();
@@ -698,7 +696,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     newY = GraphManager.getInstance().getLayout().getY(node);
 
                     if (newX != oldX || newY != oldY) {
-                        fileDirty = true;
+                        GraphManager.getInstance().setFileDirty(true);
                     }
                 }
             }
@@ -854,7 +852,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         fileMenu.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent ev) {
-                saveTopology.setEnabled(fileDirty);
+                saveTopology.setEnabled(GraphManager.getInstance().getFileDirty());
                 
                 boolean isGraphPresent = GraphManager.getInstance().getOriginalGraph().getVertexCount() > 0;
                 exportData.setEnabled(isGraphPresent);
@@ -877,7 +875,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         newTopology.addActionListener((ActionEvent ev) -> {
             if (clearGraph()) {
                 graphChanged();
-                fileDirty = false;
+                GraphManager.getInstance().setFileDirty(false);
             }
         });
         
@@ -1118,7 +1116,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
     
     public void graphChanged() {
-        fileDirty = true;
+        GraphManager.getInstance().setFileDirty(true);
 
         clearEdgeUtilization();
         refresh();
@@ -1148,7 +1146,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     private void confirmExit() {
-        if (fileDirty) {
+        if (GraphManager.getInstance().getFileDirty()) {
             if (JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(),
                     "Are you sure you want to exit? The current scenario has not been saved.", "Confirm Close",
                     JOptionPane.YES_NO_OPTION,
@@ -1435,7 +1433,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         
         graphChanged();
         setCursor(Cursor.getDefaultCursor());
-        fileDirty = false;
+        GraphManager.getInstance().setFileDirty(false);
     }
 
     void saveFile(JFileChooser chooser) {
@@ -1485,7 +1483,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             xmlWrite.printStackTrace();
         }
 
-        fileDirty = false;
+        GraphManager.getInstance().setFileDirty(false);
     }
     
     private void exportFile(JFileChooser chooser) {
@@ -1685,7 +1683,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     public void drop(DropTargetDropEvent e) {
-        fileDirty = true;
+        GraphManager.getInstance().setFileDirty(true);
 
         try {
             DataFlavor stringFlavor = DataFlavor.stringFlavor;
@@ -1889,7 +1887,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         int option = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), inputFields, "Line Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
         if (option == 0) {
-            fileDirty = true;
+            GraphManager.getInstance().setFileDirty(true);
 
             edge.setName(tbxEdgeName.getText());
             edge.setWeight(Double.parseDouble(tbxWeight.getText()));
