@@ -247,9 +247,9 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 currentNode = fromSgNode;
                 currentNode.setUsed(true);         // Prevent a component from being looped back on
 
-                // The second part catches when the node will not pass through but is not the sender.
-                // In that case we want to treat it just like we are at the destination node.
-                if (fromNode == toNode || (!fromNode.getEnableDataPassThrough() && !isSender)) {
+                // Can only terminate at the destination, regardless of whether there is an intermediate node
+                // that is not transmitting. We only want complete paths that start at the from node and end at the to node.
+                if (fromNode == toNode) {
                     ArrayList<Integer> x = new ArrayList<>();
                     returnval.add(x);
                 } else if (isSender || currentNode.getEnableDataPassThrough()) {

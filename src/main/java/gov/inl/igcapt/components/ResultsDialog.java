@@ -37,8 +37,14 @@ public class ResultsDialog extends javax.swing.JDialog {
                      isSelected, hasFocus, row, col);
             Object valueAt = table.getModel().getValueAt(row, col);
 
-            c.setForeground(Color.RED);
-            c.setBackground(Color.WHITE);
+            if (col == table.getColumnCount() - 1) {
+                c.setForeground(Color.RED);
+                c.setBackground(Color.WHITE);
+            }
+            else {
+                c.setForeground(Color.BLACK);
+                c.setBackground(Color.WHITE);                
+            }
 
             return c;
         }       
