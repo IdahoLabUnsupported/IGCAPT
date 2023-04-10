@@ -183,7 +183,6 @@ public class ComponentDialog extends javax.swing.JDialog {
         iconPathFld.setText(component.getIconPath());
         guidFld.setText(component.getUuid());
         isAggregate.setSelected(component.isAggregate());
-        isPassthrough.setSelected(component.isPassthrough());
         descriptionFld.setText(component.getDescription());
         ComponentGroupSelector.setSelectedItem(component);
 
@@ -212,8 +211,6 @@ public class ComponentDialog extends javax.swing.JDialog {
         component.setUuid(retrieveGuid());
         
         component.setAggregate(isAggregate.isSelected());
-        component.setPassthrough(isPassthrough.isSelected());
-
         component.setDescription(retrieveDescription());
 
         SgComponentGroupData group = retrieveComponentGroup();
@@ -398,7 +395,6 @@ public class ComponentDialog extends javax.swing.JDialog {
         guidFld = new javax.swing.JTextField();
         guidEditBtn = new javax.swing.JButton();
         isAggregate = new javax.swing.JCheckBox();
-        isPassthrough = new javax.swing.JCheckBox();
 
         setTitle("Component");
         setMaximumSize(new java.awt.Dimension(540, 582));
@@ -475,8 +471,6 @@ public class ComponentDialog extends javax.swing.JDialog {
 
         isAggregate.setText("Aggregate");
 
-        isPassthrough.setText("Passthrough");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -532,10 +526,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                                     .addComponent(cancelButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(15, 15, 15))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
                         .addComponent(isAggregate)
-                        .addGap(47, 47, 47)
-                        .addComponent(isPassthrough)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -560,9 +551,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                     .addComponent(guidFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(guidEditBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(isAggregate)
-                    .addComponent(isPassthrough))
+                .addComponent(isAggregate)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -688,7 +677,6 @@ public class ComponentDialog extends javax.swing.JDialog {
     private javax.swing.JTextField guidFld;
     private javax.swing.JTextField iconPathFld;
     private javax.swing.JCheckBox isAggregate;
-    private javax.swing.JCheckBox isPassthrough;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

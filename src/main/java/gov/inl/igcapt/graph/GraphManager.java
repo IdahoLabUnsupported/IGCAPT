@@ -80,17 +80,7 @@ public class GraphManager {
     
     // TODO map viewer object call to it from IGCAPT 
     private JSGMapViewer treeMap;
-    
-    // get and set edge index in the graph
-    int edgeIndex = 0;  
-
-    public void setEdgeIndex(int val){
-        edgeIndex = val;
-    }
-    public int getEdgeIndex(){
-        return edgeIndex;
-    }
-    
+     
 //    // get and set node index in the graph
 //    int nodeIndex = 0;  
 //
@@ -470,9 +460,7 @@ public class GraphManager {
         graphNodes = new ArrayList<>(getOriginalGraph().getVertices());
         for (SgNodeInterface graphNode : graphNodes) {
 
-            if (graphNode instanceof SgNode) {
-
-                SgNode sgNode = (SgNode) graphNode;
+            if (graphNode instanceof SgNode sgNode) {
 
                 // node element
                 Element node = doc.createElement("node");
@@ -488,15 +476,10 @@ public class GraphManager {
                 type.appendChild(doc.createTextNode(sgNode.getType()));
                 node.appendChild(type);
 
-                // canPassThru element
+                // data sending
                 Element enableDataSending = doc.createElement("enableDataSending");
                 enableDataSending.appendChild(doc.createTextNode(Boolean.toString(sgNode.getEnableDataSending())));
                 node.appendChild(enableDataSending);
-
-                // canPassThru element
-                Element enableDataPassThrough = doc.createElement("enableDataPassThrough");
-                enableDataPassThrough.appendChild(doc.createTextNode(Boolean.toString(sgNode.getEnableDataPassThrough())));
-                node.appendChild(enableDataPassThrough);
 
                 // isAggregate element
                 Element isAggregate = doc.createElement("isAggregate");
@@ -637,8 +620,6 @@ public class GraphManager {
                     sb.append(sgNode.getAssociatedComponent().getName());
                     sb.append(",");
                     sb.append(sgNode.getEnableDataSending());
-                    sb.append(",");
-                    sb.append(sgNode.getEnableDataPassThrough());
                     sb.append(",");
                     sb.append(sgNode.getIsAggregate());
                     sb.append(",");

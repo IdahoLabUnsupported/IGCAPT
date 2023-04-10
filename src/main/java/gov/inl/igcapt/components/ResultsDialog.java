@@ -38,8 +38,28 @@ public class ResultsDialog extends javax.swing.JDialog {
             Object valueAt = table.getModel().getValueAt(row, col);
 
             if (col == table.getColumnCount() - 1) {
-                c.setForeground(Color.RED);
-                c.setBackground(Color.WHITE);
+                
+                if (valueAt instanceof String cellValue) {
+                    
+                    double cellValueD = Double.parseDouble(cellValue);
+                    
+                    if (SgEdge.getHighUtilizationLimit() <= cellValueD) {
+                        c.setForeground(Color.RED);
+                        c.setBackground(Color.WHITE);                        
+                    }
+                    else if (SgEdge.getMediumUtilizationLimit() <= cellValueD) {
+                        c.setForeground(Color.ORANGE);
+                        c.setBackground(Color.WHITE);      
+                    }
+                    else if (cellValueD > 0.0f) {
+                        c.setForeground(Color.GREEN);
+                        c.setBackground(Color.WHITE);      
+                    }
+                    else {
+                        c.setForeground(Color.BLACK);
+                        c.setBackground(Color.WHITE);                
+                    }
+                }
             }
             else {
                 c.setForeground(Color.BLACK);
@@ -112,7 +132,7 @@ public class ResultsDialog extends javax.swing.JDialog {
                     String end1Name = endPts.getFirst().getName();
                     String end2Name = endPts.getSecond().getName();
                     
-                    Object[] rowData = {edgeName, end1Name, end2Name, edgeRate, transRate, utilization*100.0};
+                    Object[] rowData = {edgeName, end1Name, end2Name, String.format("%.3f",edgeRate), String.format("%.3f",transRate), String.format("%.3f",utilization*100.0)};
                     tableModel.addRow(rowData);
                 }
             }

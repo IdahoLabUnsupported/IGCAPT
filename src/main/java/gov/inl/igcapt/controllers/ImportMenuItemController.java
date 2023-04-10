@@ -132,7 +132,6 @@ public class ImportMenuItemController {
                                                             "78bf0ae2-1a27-462d-b8af-39156e80b75c",
                                                             name,
                                                             true,
-                                                            true,
                                                             false,
                                                             false,
                                                             0,
@@ -250,13 +249,12 @@ public class ImportMenuItemController {
         try {
             for (var edge : m_edgeList) {
 
-                int edgeId = GraphManager.getInstance().getEdgeIndex()+1;
+                int edgeId = GraphManager.getInstance().getNextEdgeIndex();
                 SgEdge e1 = new SgEdge(edgeId,
                         "e" + edgeId,
                         1.0,
                         0,
                         128.0);
-                GraphManager.getInstance().setEdgeIndex(edgeId); // Increment the edgeId.
 
                 var childNode = m_assetGuidToNodeMap.get(edge.second);
                 

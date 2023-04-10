@@ -100,10 +100,7 @@
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                       <Component id="isAggregate" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                      <Component id="isPassthrough" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -136,10 +133,7 @@
                   <Component id="guidEditBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="isAggregate" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="isPassthrough" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="isAggregate" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
@@ -338,11 +332,6 @@
     <Component class="javax.swing.JCheckBox" name="isAggregate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Aggregate"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="isPassthrough">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Passthrough"/>
       </Properties>
     </Component>
   </SubComponents>

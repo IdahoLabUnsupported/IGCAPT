@@ -34,7 +34,6 @@ public class SgNode implements SgNodeInterface {
             String typeUuid, 
             String name, 
             boolean enableDataSending, 
-            boolean enableDataPassThrough, 
             boolean isAggregate, 
             int dataToSend, 
             int maxInterval, 
@@ -43,7 +42,6 @@ public class SgNode implements SgNodeInterface {
                 typeUuid, 
                 name, 
                 enableDataSending, 
-                enableDataPassThrough, 
                 isAggregate, 
                 false, 
                 dataToSend, 
@@ -57,7 +55,6 @@ public class SgNode implements SgNodeInterface {
             String typeUuid,
             String name,
             boolean enableDataSending,
-            boolean enableDataPassThrough,
             boolean isAggregate,
             boolean isCollapsed,
             int dataToSend,
@@ -67,7 +64,6 @@ public class SgNode implements SgNodeInterface {
                 typeUuid, 
                 name, 
                 enableDataSending, 
-                enableDataPassThrough, 
                 isAggregate,
                 isCollapsed,  //why was this hardcoded to false? 
                 dataToSend, 
@@ -80,7 +76,6 @@ public class SgNode implements SgNodeInterface {
             String typeUuid, 
             String name, 
             boolean enableDataSending, 
-            boolean enableDataPassThrough, 
             boolean isAggregate, 
             boolean isCollapsed, 
             int dataToSend, 
@@ -91,7 +86,6 @@ public class SgNode implements SgNodeInterface {
         _id = id;
         _type = UUID.fromString(typeUuid);
         _enableDataSending = enableDataSending;
-        _enableDataPassThrough = enableDataPassThrough;
         _dataToSend = dataToSend;
         _maxLatency = maxInterval;
         _isAggregate = isAggregate;
@@ -121,7 +115,6 @@ public class SgNode implements SgNodeInterface {
     UUID _type = null;
     Equipment _gdtafEquip = null;
     boolean _enableDataSending = true;
-    boolean _enableDataPassThrough = true;
     boolean _isAggregate = false;
     int _dataToSend; // in bytes
     boolean _used = false;
@@ -201,14 +194,6 @@ public class SgNode implements SgNodeInterface {
     @Override
     public void setType(String uuidStr) {
         _type = UUID.fromString(uuidStr);
-    }
-    
-    public boolean getEnableDataPassThrough() {
-        return _enableDataPassThrough;
-    }
-
-    public void setEnableDataPassThrough(boolean enableDataPassThrough) {
-        _enableDataPassThrough = enableDataPassThrough;
     }
     
     public boolean getEnableDataSending (){

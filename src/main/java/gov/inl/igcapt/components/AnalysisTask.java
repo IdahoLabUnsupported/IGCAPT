@@ -99,8 +99,6 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 firePropertyChange("status", "old", "Determing paths for each endpoint pair.");
                 for (gov.inl.igcapt.components.Pair<SgNode, SgNode> pair : analyzeList) {
 
-                    firePropertyChange("status", "old", "Analyzing pair: " + pair.first.getName() + " - " + pair.second.getName());
-
                     if (!_running) {
                         break;
                     }
@@ -237,7 +235,6 @@ import gov.inl.igcapt.view.IGCAPTgui;
 
         private List<List<Integer>> getComponentPaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
             List<List<Integer>> returnval = new ArrayList<>();
-            List<List<SgEdge>> edgeList = new ArrayList<>();
             
             SgNode currentNode;
 
@@ -257,7 +254,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 if (fromNode == toNode) {
                     ArrayList<Integer> x = new ArrayList<>();
                     returnval.add(x);
-                } else if (isSender || currentNode.getEnableDataPassThrough()) {
+                } else {// if (isSender) {
                     // Cycle through all connected components
 
                     // Get list of connected edges.

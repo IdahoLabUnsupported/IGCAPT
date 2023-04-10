@@ -1265,8 +1265,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                             eElement.getElementsByTagName("type").item(0).getTextContent(),
                             eElement.getElementsByTagName("name").item(0).getTextContent(),
                             eElement.getElementsByTagName("enableDataSending").item(0).getTextContent().contentEquals("true"),
-                            eElement.getElementsByTagName("enableDataPassThrough").item(0).getTextContent().contentEquals("true"),
-                            eElement.getElementsByTagName("isAggregate").item(0).getTextContent().contentEquals("true"),
+                             eElement.getElementsByTagName("isAggregate").item(0).getTextContent().contentEquals("true"),
                             eElement.getElementsByTagName("isCollapsed").item(0).getTextContent().contentEquals("true"),
                             Integer.parseInt(eElement.getElementsByTagName("payload").item(0).getTextContent()),
                             Integer.parseInt(eElement.getElementsByTagName("maxLatency").item(0).getTextContent()),
@@ -1826,7 +1825,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             node.setDataToSend(nodeSettingsDlg.getPayloadBytes());
             node.setMaxLatency(nodeSettingsDlg.getMaxLatencySecs());
             node.setEnableDataSending(nodeSettingsDlg.getEnableDataSending());
-            node.setEnableDataPassThrough(nodeSettingsDlg.getEnableDataPassthrough());
             node.setIsAggregate(nodeSettingsDlg.getIsAggregate());
             node.setUserData(nodeSettingsDlg.getUserData());
 

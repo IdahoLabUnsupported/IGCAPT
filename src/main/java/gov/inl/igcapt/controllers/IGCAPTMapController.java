@@ -282,7 +282,7 @@ MouseWheelListener {
                         nsd.setVisible(true);
                         int idNumber = nsd.getToNodeIdNumber();
 
-                        int edgeIndex = GraphManager.getInstance().getEdgeIndex();
+                        int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
                         SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
                         // get the end point SgNode selected by the user
                         SgNodeInterface endNodeSpecifiedByUser = null;
@@ -294,7 +294,6 @@ MouseWheelListener {
                         }
                         // add the edge to the jung graph
                         GraphManager.getInstance().getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
-                        GraphManager.getInstance().setEdgeIndex(GraphManager.getInstance().getEdgeIndex() + 1);
                         IGCAPTgui.getInstance().graphChanged();
                     }
                 });
@@ -407,7 +406,7 @@ MouseWheelListener {
             if (endNodeSpecifiedByUser != _clickInfo.getClickNode() &&
                 endNodeSpecifiedByUser != null) {
                 // drawedge
-                int edgeIndex = GraphManager.getInstance().getEdgeIndex();
+                int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
                 SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
                 // Always store the pair from smaller node id to greater node id so
                 // don't have to worry about which direction the user drew the edge
@@ -432,7 +431,6 @@ MouseWheelListener {
                 IGCAPTgui.getInstance().nodePairList.add(edgePair);
                 // add the edge to the jung graph
                 GraphManager.getInstance().getGraph().addEdge(e2, _clickInfo._clickNode, endNodeSpecifiedByUser);
-                GraphManager.getInstance().setEdgeIndex(GraphManager.getInstance().getEdgeIndex() + 1);
                 IGCAPTgui.getInstance().graphChanged();
             }
             _clickInfo = null;

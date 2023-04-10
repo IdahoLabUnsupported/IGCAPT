@@ -76,7 +76,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         enableDataSendingCheckbox = new javax.swing.JCheckBox();
-        enableDataPassthroughCheckbox = new javax.swing.JCheckBox();
         componentNameTextField = new javax.swing.JTextField();
         componentIdTextField = new javax.swing.JTextField();
         componentTypeIdTextField = new javax.swing.JTextField();
@@ -131,8 +130,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
 
         enableDataSendingCheckbox.setText("Enable Data Sending");
 
-        enableDataPassthroughCheckbox.setText("Enable Data Passthrough");
-
         componentIdTextField.setEditable(false);
 
         componentTypeIdTextField.setEditable(false);
@@ -178,14 +175,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(enableDataSendingCheckbox)
-                            .addComponent(jLabel8)
-                            .addComponent(aggregateCheckbox)
-                            .addComponent(enableDataPassthroughCheckbox))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -193,10 +182,11 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel8))
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(componentNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(componentNameTextField)
                             .addComponent(payloadTextField)
                             .addComponent(maxLatencyTextField)
                             .addComponent(jScrollPane2)
@@ -204,20 +194,28 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                             .addComponent(componentTypeIdTextField)
                             .addComponent(componentTypeTextField)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cancelButton))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel7)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(51, 51, 51)
+                                .addComponent(enableDataSendingCheckbox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(aggregateCheckbox))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(removeEndPointButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(addEndPointButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(111, 111, 111)
+                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(cancelButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
@@ -253,18 +251,13 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                     .addComponent(componentTypeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(enableDataSendingCheckbox))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 35, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(enableDataPassthroughCheckbox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(aggregateCheckbox)
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel8)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(aggregateCheckbox)
+                    .addComponent(enableDataSendingCheckbox))
+                .addGap(9, 9, 9)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -273,7 +266,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                         .addComponent(addEndPointButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(removeEndPointButton)))
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton))
@@ -297,7 +290,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         m_PayloadBytes = Integer.parseInt(payloadTextField.getText());
         m_MaxLatencySecs = Integer.parseInt(maxLatencyTextField.getText());
         m_EnableDataSending = enableDataSendingCheckbox.isSelected();
-        m_EnableDataPassthrough = enableDataPassthroughCheckbox.isSelected();
         m_IsAggregate = aggregateCheckbox.isSelected();
         m_userData = userData.getText();
         
@@ -384,7 +376,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
     private javax.swing.JTextField componentNameTextField;
     private javax.swing.JTextField componentTypeIdTextField;
     private javax.swing.JTextField componentTypeTextField;
-    private javax.swing.JCheckBox enableDataPassthroughCheckbox;
     private javax.swing.JCheckBox enableDataSendingCheckbox;
     private javax.swing.JList<String> endPointList;
     private javax.swing.JLabel jLabel1;
@@ -423,7 +414,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         componentTypeTextField.setText(tempStr);
         componentTypeIdTextField.setText(nodeType);        
         enableDataSendingCheckbox.setSelected(m_SgNode.getEnableDataSending());
-        enableDataPassthroughCheckbox.setSelected(m_SgNode.getEnableDataPassThrough());
         aggregateCheckbox.setSelected(m_SgNode.getIsAggregate());
         m_EndpointList = m_SgNode.getEndPointList();
         userData.setText(m_SgNode.getUserData());
