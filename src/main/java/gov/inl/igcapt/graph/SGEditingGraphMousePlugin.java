@@ -13,7 +13,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.EditingGraphMousePlugin;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import org.apache.commons.collections15.Factory;
 import gov.inl.igcapt.view.IGCAPTgui;
 
@@ -27,24 +26,6 @@ public class SGEditingGraphMousePlugin<V, E> extends EditingGraphMousePlugin<V, 
     
     public SGEditingGraphMousePlugin(Factory<V> vertexFactory, Factory<E> edgeFactory) {
         super(vertexFactory, edgeFactory);
-    }
-    
-    private void addNodeToGraph(SgNodeInterface node, SgGraph graph) {
-        if (node instanceof SgNode) {
-            graph.addVertex(node);
-        }
-        else if (node instanceof SgGraph) {
-            ArrayList<SgNodeInterface> subnodes = new ArrayList<>(((SgGraph)node).getVertices());
-            
-            for (SgNodeInterface subnode : subnodes) {
-                if (subnode instanceof SgNode) {
-                    graph.addVertex(subnode);
-                }
-                else if (subnode instanceof SgGraph) {
-                    addNodeToGraph(subnode, graph);
-                }
-            }
-        }
     }
     
     @SuppressWarnings("unchecked")

@@ -91,14 +91,45 @@ public class GraphManager {
         return edgeIndex;
     }
     
-    // get and set node index in the graph
-    int nodeIndex = 0;  
+//    // get and set node index in the graph
+//    int nodeIndex = 0;  
+//
+//    public void setNodeIndex(int val){
+//        nodeIndex = val;
+//    }
+    public int getNextNodeIndex(){
+        
+        var graph = getGraph();
+        int returnval = -1;
+        
+        var vertices = graph.getVertices();
 
-    public void setNodeIndex(int val){
-        nodeIndex = val;
+        for(var vertex : vertices) {
+           if (vertex instanceof SgNode sgNode) {
+               if (sgNode.getId() >= returnval) {
+                   returnval = sgNode.getId() + 1;
+               }
+           }
+        }
+
+        return returnval;
     }
-    public int getNodeIndex(){
-        return nodeIndex;
+    public int getNextEdgeIndex(){
+        
+        var graph = getGraph();
+        int returnval = -1;
+        
+        var edges = graph.getEdges();
+
+        for(var edge : edges) {
+           if (edge instanceof SgEdge sgEdge) {
+               if (sgEdge.getId() >= returnval) {
+                   returnval = sgEdge.getId() + 1;
+               }
+           }
+        }
+
+        return returnval;
     }
     
     // get current gis map

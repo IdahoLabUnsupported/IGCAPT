@@ -1768,8 +1768,8 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                     }
                     else {
 
-                        SgNode n1 = new SgNode(GraphManager.getInstance().getNodeIndex(), uuidStr, sgComponent.getName() + "_" + String.valueOf(GraphManager.getInstance().getNodeIndex()), true, sgComponent.isPassthrough(),sgComponent.isAggregate(), 0, 0, "");
-                        GraphManager.getInstance().setNodeIndex(GraphManager.getInstance().getNodeIndex() + 1);
+                        int nodeIndex = GraphManager.getInstance().getNextNodeIndex();
+                        SgNode n1 = new SgNode(nodeIndex, uuidStr, sgComponent.getName() + "_" + String.valueOf(nodeIndex), true, sgComponent.isPassthrough(),sgComponent.isAggregate(), 0, 0, "");
                         n1.setLat(c.getLat());
                         n1.setLongit(c.getLon());
 

@@ -109,10 +109,13 @@ import gov.inl.igcapt.view.IGCAPTgui;
                     paths = getComponentPaths(graph, pair.first, pair.second, true);
 
                     double ackPayload = Double.parseDouble(IGCAPTproperties.getInstance().getPropertyKeyValue("ACKSize"));
+                    
+                    var graphManager = GraphManager.getInstance();
 
                     for (List<Integer> sublist : paths) {
                         for (Integer value : sublist) {
-                            SgEdge sgEdge = GraphManager.getInstance().getEdge(sgEdgeList, value);
+                            SgEdge sgEdge = graphManager.getEdge(sgEdgeList, value);
+                            
                             SgNodeInterface sgAbstractNode = pair.first;
 
                             if (sgAbstractNode instanceof SgNode sgNode) {
@@ -234,6 +237,8 @@ import gov.inl.igcapt.view.IGCAPTgui;
 
         private List<List<Integer>> getComponentPaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
             List<List<Integer>> returnval = new ArrayList<>();
+            List<List<SgEdge>> edgeList = new ArrayList<>();
+            
             SgNode currentNode;
 
             SgNodeInterface fromSgAbstractNode = fromNode;

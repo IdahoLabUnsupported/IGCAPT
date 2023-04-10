@@ -47,8 +47,6 @@ public class ImportMenuItemController {
                 
                 // Clear the graph
                 IGCAPTgui.getInstance().clearGraph();
-                GraphManager.getInstance().setNodeIndex(-1);
-                GraphManager.getInstance().setEdgeIndex(-1);
                 
                 // Clear utility maps and lists. They will be populated when the vertices are created for the graph.
                 m_assetGuidToNodeMap.clear();
@@ -74,7 +72,7 @@ public class ImportMenuItemController {
         return uuidStr.replace("_", "");
     }
     
-      private void createGraphVertices(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
+    private void createGraphVertices(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
 
         var scenarioRepo = gdtafData.getScenarioRepo();
         
@@ -127,7 +125,7 @@ public class ImportMenuItemController {
 
                                                 if (equipmentInstance != null) { 
 
-                                                    int nodeId = GraphManager.getInstance().getNodeIndex() + 1;
+                                                    int nodeId = GraphManager.getInstance().getNextNodeIndex();
                                                     String name = equipmentInstance.getName();
                                                     SgNode sgNode = new SgNode(nodeId,
                                                             equipmentInstance,
@@ -153,7 +151,6 @@ public class ImportMenuItemController {
                                                     sgNode.setLongit(location.getX());
 
                                                     igcaptGraph.addVertex(sgNode);
-                                                    GraphManager.getInstance().setNodeIndex(nodeId);
 
                                                     // We have access to the asset so grab the children at this point.
                                                     // Save the current Node instance and the child GUID. In the
