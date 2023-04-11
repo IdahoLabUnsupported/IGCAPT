@@ -35,13 +35,11 @@ public class ResultsDialog extends javax.swing.JDialog {
 
             Component c = super.getTableCellRendererComponent(table, value,
                      isSelected, hasFocus, row, col);
-            Object valueAt = table.getModel().getValueAt(row, col);
+            Object valueAt = table.getModel().getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
 
             if (col == table.getColumnCount() - 1) {
                 
-                if (valueAt instanceof String cellValue) {
-                    
-                    double cellValueD = Double.parseDouble(cellValue);
+                if (valueAt instanceof Double cellValueD) {
                     
                     if (SgEdge.getHighUtilizationLimit() <= cellValueD) {
                         c.setForeground(Color.RED);
@@ -127,12 +125,15 @@ public class ResultsDialog extends javax.swing.JDialog {
                     double edgeRate = lEdge.getEdgeRate();
                     double utilization = lEdge.getUtilization();
                     double transRate = lEdge.getCalcTransRate();
+                    edgeRate = Math.round(edgeRate*1000)/1000.0;
+                    utilization = Math.round(utilization*100000)/1000.0;
+                    transRate = Math.round(transRate*1000)/1000.0;
                     
                     edu.uci.ics.jung.graph.util.Pair<SgNodeInterface> endPts = graph.getEndpoints(lEdge);
                     String end1Name = endPts.getFirst().getName();
                     String end2Name = endPts.getSecond().getName();
                     
-                    Object[] rowData = {edgeName, end1Name, end2Name, String.format("%.3f",edgeRate), String.format("%.3f",transRate), String.format("%.3f",utilization*100.0)};
+                    Object[] rowData = {edgeName, end1Name, end2Name, edgeRate, transRate, utilization};
                     tableModel.addRow(rowData);
                 }
             }

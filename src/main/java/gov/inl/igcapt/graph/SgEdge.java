@@ -80,7 +80,7 @@ public class SgEdge {
   
     public boolean isOverHighUtilizationLimit()
     {
-        double highLimitValue = getHighUtilizationLimit();
+        double highLimitValue = getHighUtilizationLimit()/100.0;
         
         return (getUtilization() > highLimitValue);
     }
@@ -90,7 +90,7 @@ public class SgEdge {
         double highLimitValue;
         
         try {
-            highLimitValue = Double.parseDouble(highLimit)/100.0;
+            highLimitValue = Double.parseDouble(highLimit);
         }
         catch (NullPointerException | NumberFormatException ex) {
             highLimitValue = defaultUtilizationHigh;
@@ -104,7 +104,7 @@ public class SgEdge {
         double mediumLimitValue;
         
         try {
-            mediumLimitValue = Double.parseDouble(mediumLimit)/100.0;
+            mediumLimitValue = Double.parseDouble(mediumLimit);
         }
         catch (NullPointerException | NumberFormatException ex) {
             mediumLimitValue = defaultUtilizationMedium;
@@ -117,7 +117,7 @@ public class SgEdge {
     {
         double mediumLimitValue = getMediumUtilizationLimit();
         
-        return (getUtilization() > mediumLimitValue);
+        return (getUtilization() > mediumLimitValue/100.0);
     }
     
     // Assume this means that no analysis has been done.
