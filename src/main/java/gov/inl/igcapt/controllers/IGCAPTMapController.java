@@ -96,7 +96,9 @@ MouseWheelListener {
     // the mouse too quickly
     private boolean shiftDownDuringDrag = false;
     private SgNodeInterface m_prevNode = null;  
-    private MapImageImpl m_selectionImage = null;
+    // image for indicating node has been selected
+    private MapImageImpl m_selectionImageStartNode = null;
+    private MapImageImpl m_selectionImageEndNode = null;
 
 
     @Override
@@ -149,6 +151,9 @@ MouseWheelListener {
         if (e.getButton() == MouseEvent.BUTTON1) {            
             if (clickNode != null) {
                 _clickInfo = new ClickInfo(clickNode, new Point(e.getX(), e.getY()));
+                // draw the selection image i.e. box around the node
+                m_selectionImageStartNode = createSelectionImage(clickNode);
+                map.addMapImage(m_selectionImageStartNode);
                 if (e.isShiftDown()) {
                     // Creating an edge so do nothing until the release
                     return;
@@ -389,15 +394,18 @@ MouseWheelListener {
         isMoving = false;
         lastDragPoint = null;
         map.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-
+      
+        map.removeMapImage(m_selectionImageStartNode);
+        m_selectionImageStartNode = null;
         if (shiftDownDuringDrag && _clickInfo != null) {
             // Remove line drawn during the drag and set it to null for next drag
             GraphManager.getInstance().getCurrentGisMap().removeMapLine(prevMapLine);
             prevMapLine = null;
             shiftDownDuringDrag = false;
-            
             if (m_prevNode != null) {
-                setImageUnselected(m_prevNode);
+                // mouse was release so remove the selection image i.e. the box
+                map.removeMapImage(m_selectionImageEndNode);
+                m_selectionImageEndNode = null;
                 m_prevNode = null;
             }
             // get the end point SgNode selected by the user (or null)
@@ -467,22 +475,16 @@ MouseWheelListener {
     public void mouseExited(MouseEvent e) {
     }
     
-    private void setImageSelected(SgNodeInterface node) {
+    // Create the image (i.e. box around node) to add to the map to show node is selected
+    private MapImageImpl createSelectionImage(SgNodeInterface node) {
         Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
         SgLayeredIcon layeredIcon = (SgLayeredIcon)selectionIcon;
         BufferedImage theImage = (BufferedImage)layeredIcon.getCompositeImage();
-        m_selectionImage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
-        m_selectionImage.setId(node.getName());
-        map.addMapImage(m_selectionImage);
+        MapImageImpl image = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
+        image.setId(node.getName());
+        return image;
     }
     
-    private void setImageUnselected(SgNodeInterface node) {
-        if (node != null) {
-            map.removeMapImage(m_selectionImage);
-            m_selectionImage = null;
-        }
-    }
-
     // Drag the image around with the cursor while the button is still down.
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -499,14 +501,18 @@ MouseWheelListener {
                 if (endNode != null) {
                     if (endNode != _clickInfo._clickNode) {
                         if (endNode != m_prevNode) {
-                            setImageUnselected(m_prevNode);
+                            // end node changed so remove box from prev node and add to new node
+                            map.removeMapImage(m_selectionImageEndNode);
                             m_prevNode = endNode;
-                            setImageSelected(endNode);
+                            m_selectionImageEndNode = createSelectionImage(endNode);
+                            map.addMapImage(m_selectionImageEndNode);
                         }
                     }
                 }
                 else {
-                    setImageUnselected(m_prevNode);
+                    // no end node so remove section
+                    map.removeMapImage(m_selectionImageEndNode);
+                    m_selectionImageEndNode = null;
                     m_prevNode = null;
                 }
                 
@@ -565,6 +571,11 @@ MouseWheelListener {
         GraphManager.getInstance().setFileDirty(true);
         
         map.repaint(); // KD; eliminates the trail of a dragged object.
+        // after repaint must readd the selection image to the start node
+        if (_clickInfo != null) {
+            m_selectionImageStartNode = createSelectionImage(_clickInfo.getClickNode());
+            map.addMapImage(m_selectionImageStartNode);
+        }
     }
 
     @Override
