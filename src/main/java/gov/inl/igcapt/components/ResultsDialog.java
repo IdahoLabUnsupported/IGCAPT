@@ -101,7 +101,7 @@ public class ResultsDialog extends javax.swing.JDialog {
         var graphManager = GraphManager.getInstance();
         
         if (graphManager != null) {
-            graph = graphManager.getGraph();
+            graph = graphManager.getOriginalGraph();
         }
         
         // Clear old graph results.
