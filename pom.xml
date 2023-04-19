@@ -165,7 +165,7 @@
             </plugin>
         </plugins>
     </build>
-    <name>D:IGCAPT</name>
+    <name>IGCAPT</name>
     <repositories>
         <repository>
             <id>jitpack.io</id>
