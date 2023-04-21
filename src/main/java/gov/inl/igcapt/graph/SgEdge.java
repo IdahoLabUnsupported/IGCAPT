@@ -6,6 +6,8 @@
 package gov.inl.igcapt.graph;
 
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import java.util.HashMap;
+import java.util.Map;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 /**
@@ -24,6 +26,7 @@ public class SgEdge {
     private boolean _isEnabled = true;
 //    private MapLine _mapLine = null; // MapImage that corresponds to this node.
     private Coordinate _midPoint = null;
+    private Map<String, String> _attributes = new HashMap<>();
     
     //                                                    ============================================
     //                                                    |              Total Overhead              |

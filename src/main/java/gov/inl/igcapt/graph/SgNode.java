@@ -19,6 +19,9 @@ import java.util.UUID;
 import javax.swing.Icon;
 
 import gov.inl.igcapt.view.IGCAPTgui;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
 
 /**
@@ -110,28 +113,33 @@ public class SgNode implements SgNodeInterface {
         //Constructor
     }
 
-    String _name;
-    int _id = -1;
-    UUID _type = null;
-    Equipment _gdtafEquip = null;
-    boolean _enableDataSending = true;
-    boolean _isAggregate = false;
-    int _dataToSend; // in bytes
-    boolean _used = false;
-    int _maxLatency; // in seconds
-    double _xCoord = 0;
-    double _yCoord = 0;
-    double _lat; // Decimal degrees
-    double _longit;
-    String _userData; // Key|Value pairs seperated by semicolon like this Key|Value;Key|Value;
-    SgComponentData _component; // The component that corresponds to this device.
-    
-    List<Integer> _endPointList = new ArrayList<>();
-    Icon _icon = null;
-    MapImage _mapImage = null; // MapImage that corresponds to this node.
+    private String _name;
+    private int _id = -1;
+    private UUID _type = null;
+    private Equipment _gdtafEquip = null;
+    private boolean _enableDataSending = true;
+    private boolean _isAggregate = false;
+    private int _dataToSend; // in bytes
+    private boolean _used = false;
+    private int _maxLatency; // in seconds
+    private double _xCoord = 0;
+    private double _yCoord = 0;
+    private double _lat; // Decimal degrees
+    private double _longit;
+    private String _userData; // Key|Value pairs seperated by semicolon like this Key|Value;Key|Value;
+    private SgComponentData _component; // The component that corresponds to this device.
+    private Map<String, String> _attributes = new HashMap<>();
+    private List<Integer> _endPointList = new ArrayList<>();
+    private Icon _icon = null;
+    private MapImage _mapImage = null; // MapImage that corresponds to this node.
 
-    boolean _isCollapsed = false; // Allows the attribute to be saved/loaded so we can preserve
-                                  // the collapsed state of the graph.
+    private boolean _isCollapsed = false; // Allows the attribute to be saved/loaded so we can preserve
+
+    public Map<String, String> getAttributes() {
+        return _attributes;
+    }
+    
+    // the collapsed state of the graph.
     public boolean getIsCollapsed() {
         return _isCollapsed;
     }
