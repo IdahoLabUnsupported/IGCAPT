@@ -29,7 +29,7 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
  */
 public class SgNode implements SgNodeInterface {
 
-    // userData can hold key value pairs of text in the form "key1:value1;key2:value2". Always append to the list after initial creation.
+    // userData can hold key value pairs of text in the form "key1|value1;key2|value2". Always append to the list after initial creation.
     public SgNode(int id, 
             String typeUuid, 
             String name, 
@@ -314,9 +314,8 @@ public class SgNode implements SgNodeInterface {
     public void clearUseCaseUserData(){
                 // Remove old userData that are useCase entries (they begin with "@$")
         KeyValueManager kVManager = new KeyValueManager(this.getUserData());
-        if (kVManager != null && kVManager.KeyValues() != null && kVManager.KeyValues().entrySet() != null && kVManager.KeyValues().entrySet().size() > 0) {
+        if (kVManager.KeyValues() != null && kVManager.KeyValues().entrySet() != null && !kVManager.KeyValues().entrySet().isEmpty()) {
             kVManager.KeyValues().entrySet().removeIf(e -> e.getKey().startsWith("@$"));
-            //kVManager.KeyValues().keySet().removeIf(key -> key.startsWith("@$"));
             setUserData(kVManager.toString());
         }
     }

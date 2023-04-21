@@ -40,6 +40,12 @@ public class SgComponentData implements BaseModel {
 
     @Column
     private Long componentGroupId;
+    
+    @Column(unique = true)
+    private String formalIdentifier;
+    
+    @Column
+    private String identifierType;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "componentId")
@@ -175,6 +181,22 @@ public class SgComponentData implements BaseModel {
 
     public void setComponentGroupId(Long componentGroupId) {
         this.componentGroupId = componentGroupId;
+    }
+    
+    public String getFormalIdentifier() {
+        return formalIdentifier;
+    }
+    
+    public void setFormalIdentifier(String value) {
+        formalIdentifier = value;
+    }
+
+   public String getIdentifierType() {
+        return identifierType;
+    }
+    
+    public void setIdentifierType(String value) {
+        identifierType = value;
     }
 
     public List<SgEndPoint> getEndpoints() { return endpoints; }

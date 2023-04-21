@@ -125,8 +125,10 @@ public class ResultsDialog extends javax.swing.JDialog {
                     double edgeRate = lEdge.getEdgeRate();
                     double utilization = lEdge.getUtilization();
                     double transRate = lEdge.getCalcTransRate();
+                    
+                    // This is rounding to three decimal places.
                     edgeRate = Math.round(edgeRate*1000)/1000.0;
-                    utilization = Math.round(utilization*100000)/1000.0;
+                    utilization = Math.round(utilization*100000)/1000.0; // round and convert from decimal to percent
                     transRate = Math.round(transRate*1000)/1000.0;
                     
                     edu.uci.ics.jung.graph.util.Pair<SgNodeInterface> endPts = graph.getEndpoints(lEdge);
