@@ -539,6 +539,26 @@ public class GraphManager {
                     endPoints.appendChild(endPointNode);
                 }
                 
+                // Attributes element
+                Element attributes = doc.createElement("attributes");
+                node.appendChild(attributes);
+
+                var attributeMap = sgNode.getAttributes();
+
+                for (var attribute : attributeMap.entrySet()) {
+                    Element attributeElement = doc.createElement("attribute");
+                    attributes.appendChild(attributeElement);
+                    
+                    Element keyElement = doc.createElement("key");
+                    keyElement.appendChild(doc.createTextNode(attribute.getKey()));
+                    
+                    Element valueElement = doc.createElement("value");
+                    keyElement.appendChild(doc.createTextNode(attribute.getValue()));
+
+                    attributeElement.appendChild(keyElement);
+                    attributeElement.appendChild(valueElement);
+                }
+                
                 // UserData
                 Element userData = doc.createElement("userData");
                 userData.appendChild(doc.createTextNode(sgNode.getUserData()));

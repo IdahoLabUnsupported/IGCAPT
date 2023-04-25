@@ -107,6 +107,7 @@ import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
+import java.util.Map;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -1275,6 +1276,24 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     n1.setLat(Double.parseDouble(eElement.getElementsByTagName("lat").item(0).getTextContent()));
                     n1.setLongit(Double.parseDouble(eElement.getElementsByTagName("long").item(0).getTextContent()));
 
+                    
+                    Element attributesElement = (Element)(eElement.getElementsByTagName("attributes").item(0));
+                    
+                    if (attributesElement != null) {
+                        NodeList attributesListNodes = attributesElement.getElementsByTagName("attribute");
+
+                        if (attributesListNodes != null) {
+                            var attributes = n1.getAttributes();
+                            attributes.clear();
+                            for (int j = 0; j < attributesListNodes.getLength(); ++j) {
+                                Element attributeElement = (Element)(attributesListNodes.item(j));
+                                Element keyElement = (Element)(attributeElement.getElementsByTagName("key").item(0));
+                                Element valueElement = (Element)(attributeElement.getElementsByTagName("value").item(0));
+                                attributes.put(keyElement.getTextContent(), valueElement.getTextContent());
+                            }
+                        }
+                    }
+                    
                     Element endPtElement = (Element)(eElement.getElementsByTagName("endPoints").item(0));
                     List<Integer> endPointList = new ArrayList<>();
                     NodeList endPointListNodes = endPtElement.getElementsByTagName("endPoint");
