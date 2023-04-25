@@ -553,7 +553,7 @@ public class GraphManager {
                     keyElement.appendChild(doc.createTextNode(attribute.getKey()));
                     
                     Element valueElement = doc.createElement("value");
-                    keyElement.appendChild(doc.createTextNode(attribute.getValue()));
+                    valueElement.appendChild(doc.createTextNode(attribute.getValue()));
 
                     attributeElement.appendChild(keyElement);
                     attributeElement.appendChild(valueElement);

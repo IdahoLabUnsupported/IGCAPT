@@ -14,7 +14,7 @@ import javax.swing.DefaultListModel;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
-import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *(c) 2018 BATTELLE ENERGY ALLIANCE, LLC
@@ -38,7 +38,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
     private final SgNode m_SgNode;
     private SgGraph m_Graph;
     private String m_userData;
-    private DefaultListModel m_EndPointListModel = new DefaultListModel();
+    private final DefaultListModel m_EndPointListModel = new DefaultListModel();
     
     /**
      * Creates new form ComponentSettingsDialog
@@ -93,7 +93,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         userData = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        attributesTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Device Settings");
@@ -171,9 +171,9 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         userData.setRows(5);
         jScrollPane2.setViewportView(userData);
 
-        jLabel9.setText("Key/Values");
+        jLabel9.setText("Attributes");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        attributesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -199,7 +199,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(attributesTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -253,6 +253,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(componentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -297,7 +298,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                             .addComponent(removeEndPointButton))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -402,6 +403,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEndPointButton;
     private javax.swing.JCheckBox aggregateCheckbox;
+    private javax.swing.JTable attributesTable;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField componentIdTextField;
     private javax.swing.JTextField componentNameTextField;
@@ -421,7 +423,6 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JFormattedTextField maxLatencyTextField;
     private javax.swing.JButton okButton;
     private javax.swing.JFormattedTextField payloadTextField;
@@ -458,5 +459,13 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         }
         
         endPointList.setModel(m_EndPointListModel);
+        
+        DefaultTableModel tModel = (DefaultTableModel)attributesTable.getModel();
+        tModel.setRowCount(0);
+        
+        var attrs = m_SgNode.getAttributes();
+        for (var attrEntry : attrs.entrySet()) {
+            tModel.addRow(new Object[]{attrEntry.getKey(), attrEntry.getValue()});
+        }
     }
 }
