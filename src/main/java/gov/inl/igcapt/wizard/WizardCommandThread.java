@@ -104,7 +104,7 @@ public class WizardCommandThread extends Thread {
             conn.disconnect();
             }
         catch (Exception e3) {
-            
+            m_errorMsg = "Web Service failure -- " + e3.getMessage();
         }
     }
     
@@ -132,7 +132,7 @@ public class WizardCommandThread extends Thread {
                     fileInputStream.close();
                 }
                 catch (Exception e2) {
-                    // should never reach here
+                    m_errorMsg = "Encoding failure -- " + e2.getMessage();
                 }
             }
         }
@@ -181,7 +181,7 @@ public class WizardCommandThread extends Thread {
             conn.disconnect();
         }
         catch (Exception e2) {
-            return;
+            m_errorMsg = "Web Service failure -- " + e2.getMessage();;
         }
     }
     
@@ -392,6 +392,7 @@ public class WizardCommandThread extends Thread {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
+            m_errorMsg = "Web Service failure -- " + e2.getMessage();
         }
     }
     
@@ -445,6 +446,7 @@ public class WizardCommandThread extends Thread {
             // at this point need to parse the results and add to the combo
         }
         catch (Exception e2) {
+            m_errorMsg = "Web Service failure -- " + e2.getMessage();
         }
     }  // cnrmListFromSvc
 }  // WizardCommandThread
