@@ -14,6 +14,8 @@ import javax.swing.DefaultListModel;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -94,6 +96,8 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         attributesTable = new javax.swing.JTable();
+        addAttributeBtn = new javax.swing.JButton();
+        remAttributeBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Device Settings");
@@ -187,19 +191,26 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
         });
         jScrollPane3.setViewportView(attributesTable);
+
+        addAttributeBtn.setText("Add");
+        addAttributeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addAttributeBtnMouseClicked(evt);
+            }
+        });
+
+        remAttributeBtn.setText("Remove");
+        remAttributeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                remAttributeBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -218,25 +229,33 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                     .addComponent(jLabel9)
                     .addComponent(jLabel7))
                 .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(enableDataSendingCheckbox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(aggregateCheckbox))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2)
-                    .addComponent(componentTypeTextField)
-                    .addComponent(componentTypeIdTextField)
-                    .addComponent(componentIdTextField)
-                    .addComponent(maxLatencyTextField)
-                    .addComponent(payloadTextField)
-                    .addComponent(componentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(enableDataSendingCheckbox)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(aggregateCheckbox)
                             .addComponent(addEndPointButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(removeEndPointButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(removeEndPointButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(payloadTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(componentNameTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(remAttributeBtn)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(addAttributeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGap(1, 1, 1))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(componentTypeTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(componentTypeIdTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(maxLatencyTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                            .addComponent(componentIdTextField, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -282,11 +301,15 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
                     .addComponent(jLabel8)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
+                    .addComponent(jLabel9)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addAttributeBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(remAttributeBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(enableDataSendingCheckbox)
                     .addComponent(aggregateCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -326,6 +349,17 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         m_userData = userData.getText();
         
         m_ReturnValue = ReturnValue.OK;
+     
+        var attributes = m_SgNode.getAttributes();
+        attributes.clear();
+        
+        DefaultTableModel tModel = (DefaultTableModel)attributesTable.getModel();
+        final int KEYCOL = 0;
+        final int VALUECOL = 1;
+        
+        for(int i=0; i<tModel.getRowCount(); i++) {
+            attributes.put((String)tModel.getValueAt(i, KEYCOL), (String)tModel.getValueAt(i, VALUECOL));
+        }
         
         dispose();
     }//GEN-LAST:event_okButtonActionPerformed
@@ -400,7 +434,23 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
          endPointList.setModel(m_EndPointListModel);
     }//GEN-LAST:event_addEndPointButtonActionPerformed
 
+    private void addAttributeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addAttributeBtnMouseClicked
+        DefaultTableModel tModel = (DefaultTableModel)attributesTable.getModel();
+        tModel.addRow(new Object[]{"",""});
+        attributesTable.changeSelection(tModel.getRowCount()-1, 0, false, false);
+    }//GEN-LAST:event_addAttributeBtnMouseClicked
+
+    private void remAttributeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remAttributeBtnMouseClicked
+        DefaultTableModel tModel = (DefaultTableModel)attributesTable.getModel();
+        int selectedRow = attributesTable.getSelectedRow();
+        
+        if (selectedRow > -1 && selectedRow <= attributesTable.getRowCount()) {
+            tModel.removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_remAttributeBtnMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addAttributeBtn;
     private javax.swing.JButton addEndPointButton;
     private javax.swing.JCheckBox aggregateCheckbox;
     private javax.swing.JTable attributesTable;
@@ -426,6 +476,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
     private javax.swing.JFormattedTextField maxLatencyTextField;
     private javax.swing.JButton okButton;
     private javax.swing.JFormattedTextField payloadTextField;
+    private javax.swing.JButton remAttributeBtn;
     private javax.swing.JButton removeEndPointButton;
     private javax.swing.JTextArea userData;
     // End of variables declaration//GEN-END:variables
@@ -462,6 +513,15 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         
         DefaultTableModel tModel = (DefaultTableModel)attributesTable.getModel();
         tModel.setRowCount(0);
+        
+        DefaultCellEditor cellEditor = new DefaultCellEditor(new JTextField());
+        cellEditor.setClickCountToStart(2);
+
+        //set the editor as default on every column
+        var columnModel = attributesTable.getColumnModel();
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            columnModel.getColumn(i).setCellEditor(cellEditor);
+        } 
         
         var attrs = m_SgNode.getAttributes();
         for (var attrEntry : attrs.entrySet()) {

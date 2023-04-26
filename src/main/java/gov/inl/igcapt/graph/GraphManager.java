@@ -527,7 +527,7 @@ public class GraphManager {
                 name.appendChild(doc.createTextNode(sgNode.getName()));
                 node.appendChild(name);
 
-                // End points element
+                // End points
                 Element endPoints = doc.createElement("endPoints");
                 node.appendChild(endPoints);
 
@@ -539,7 +539,7 @@ public class GraphManager {
                     endPoints.appendChild(endPointNode);
                 }
                 
-                // Attributes element
+                // Attributes
                 Element attributes = doc.createElement("attributes");
                 node.appendChild(attributes);
 
