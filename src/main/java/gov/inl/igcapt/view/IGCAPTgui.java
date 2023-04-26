@@ -876,7 +876,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         });
         
         newScenario.addActionListener((ActionEvent ev) -> {
-            CreateScenarioWizard createScenarioWizard = new CreateScenarioWizard(this, true);
+            new CreateScenarioWizard(this, true);
         });
         
         initConnection.addActionListener((ActionEvent ev) -> {
