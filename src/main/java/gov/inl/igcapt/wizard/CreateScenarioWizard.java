@@ -239,6 +239,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         enableNext();
     }//GEN-LAST:event_jTextField1KeyTyped
 
+    // When the form is first displayed, kick off the GUCS & CNRM threads
     private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
         if (m_needData) {
             m_needData = false;
