@@ -68,7 +68,7 @@ public class SgNode implements SgNodeInterface {
                 name, 
                 enableDataSending, 
                 isAggregate,
-                isCollapsed,  //why was this hardcoded to false? 
+                isCollapsed, 
                 dataToSend, 
                 maxInterval, 
                 userData);
