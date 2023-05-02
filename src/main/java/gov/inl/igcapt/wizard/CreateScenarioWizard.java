@@ -4,23 +4,13 @@
  */
 package gov.inl.igcapt.wizard;
 
+import gov.inl.igcapt.properties.IGCAPTproperties;
 import java.awt.Frame;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Base64;
 import javax.swing.JFileChooser;
-import org.json.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import javax.swing.JOptionPane;
 import gov.inl.igcapt.view.IGCAPTgui;
-import gov.inl.igcapt.properties.IGCAPTproperties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 /**
  *
  * @author CHE
@@ -28,8 +18,9 @@ import java.util.logging.Logger;
 public class CreateScenarioWizard extends javax.swing.JDialog {
 
     private Frame localParent;
-    private String m_webServiceHost;
-    private String m_webServiceKey;
+    private boolean m_needData = true;
+    String m_webServiceHost = null;
+    String m_webServiceKey = null;
     
     /**
      * Creates new form ScenarioWizard
@@ -40,18 +31,15 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceHost");
         m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceKey");
         if (m_webServiceHost == null || m_webServiceKey == null) {
-            JOptionPane.showMessageDialog(this, "You must Initialize the Web Service Connection" +
-                    " before running the wizard!\n (File->Initialize Connection)");
+            JOptionPane.showMessageDialog(this, 
+                    "You must enter a Web Service connection. \n(File->Initialize Connection)");
+            dispose();
             return;
-        }
-        else {
-            if (!connectionIsValid()) {
-                return;
-            }
         }
         initComponents();
         jButton2.setEnabled(false);
-        this.setVisible(true);       
+        WizardDriver.getHandle().refresh();
+        this.setVisible(true);     
     }
 
     /**
@@ -75,6 +63,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Scenario Wizard");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jLabel1.setText("Specify CIM/RDF:");
         jLabel1.setToolTipText("");
@@ -87,6 +76,11 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         });
 
         jTextField1.setName(""); // NOI18N
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField1FocusGained(evt);
+            }
+        });
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField1KeyTyped(evt);
@@ -130,17 +124,17 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField1)
                             .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,113 +207,20 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
         enableNext();
     }//GEN-LAST:event_jTextField2KeyTyped
 
-    private String getCimrdf(String filename) {
-        FileInputStream fileInputStream = null;
-        String cimRdfEncodedFile = null;
-        try {
-            fileInputStream = new FileInputStream(filename);
-            byte[] bytes = new byte[(int)fileInputStream.available()];
-            fileInputStream.read(bytes);
-            cimRdfEncodedFile = Base64.getEncoder().encodeToString(bytes);
-            fileInputStream.close();
-        }
-        catch (Exception e) {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                }
-                catch (Exception e2) {
-                    // should never reach here
-                }
-            }
-            JOptionPane.showMessageDialog(this, "CIM/RDF exception -- error encoding" + 
-                    e.toString());
-        }
-        return cimRdfEncodedFile;
-    }
-        
-    private boolean connectionIsValid() {
-        
-        try {
-            URL url = new URL("https://" + m_webServiceHost + "/framework" +
-            "?subscription-key=" + m_webServiceKey);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(localParent,
-                    "Please ensure your Host URL is correct using the Initialize Connection form.",
-                    "Connection Error",
-                    JOptionPane.WARNING_MESSAGE);
-                 setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-                 return false;
-            }
-            
-            conn.disconnect();
-            }
-        catch (Exception e3) {
-            Logger.getLogger(CreateScenarioWizard.class.getName()).log(Level.WARNING, "Exception! {0}", e3.getMessage()); 
-            return false;
-        }
-        return true;
-    }
-    
     // Next button in the wizard
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        String cimrdfEncoded = getCimrdf(jTextField1.getText());
-        // Return if valid file was NOT selected
-
-        if (cimrdfEncoded== null) {
-            JOptionPane.showMessageDialog(this, "Could not encode the CIM/RDF file. Ensure the file is valid.");
-            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            return;
-        }
         
-        // Call Rest service to create scenario
-        JSONObject json = new JSONObject();
-        json.put("name", jTextField2.getText());
-        json.put("topology", cimrdfEncoded);
-        if (jTextField3.getText() != null && jTextField3.getText().trim().length() > 0) {
-            json.put("description", jTextField3.getText().trim());
+        if (jTextField1.getText().length() <= 0 || 
+            jTextField2.getText().length() <= 0 ||
+            jTextField3.getText().length() <= 0) {
+            JOptionPane.showMessageDialog(this, "All fields must be entered");
         }
-        
-        ScenarioInformation scenInfo;
-        try {
-           
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios?subscription-key="+m_webServiceKey);
-            
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
-
-            OutputStream os = conn.getOutputStream();
-            byte[] input = json.toString().getBytes("utf-8");
-            os.write(input, 0, input.length);
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
-            }       
-                        
-            InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf-8");
-            BufferedReader br = new BufferedReader(isr);
-            ObjectMapper objMapper = new ObjectMapper();
-            
-            String response = br.readLine();
-            scenInfo = objMapper.readValue(response, ScenarioInformation.class);
-                
-            conn.disconnect();
-        }
-        catch (Exception e2) {
-            setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            JOptionPane.showMessageDialog(this, "Web Service exception -- " + e2.toString());
-            return;
-        }
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        WizardDriver.getHandle().startCreateScenarioThread(jTextField1.getText(), 
+                jTextField2.getText(), jTextField3.getText());
+ 
         dispose();
         //Now go to next step in Wizard
-        new AddToScenarioWizard(localParent, true, scenInfo);
+        AddToScenarioWizard tmp = new AddToScenarioWizard(localParent, true);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -337,6 +238,15 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
         enableNext();
     }//GEN-LAST:event_jTextField1KeyTyped
+
+    // When the form is first displayed, kick off the GUCS & CNRM threads
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+        if (m_needData) {
+            m_needData = false;
+            WizardDriver.getHandle().startGucsListThread();
+            WizardDriver.getHandle().startCnrmListThread();
+        }
+    }//GEN-LAST:event_jTextField1FocusGained
 
     /**
      * @param args the command line arguments

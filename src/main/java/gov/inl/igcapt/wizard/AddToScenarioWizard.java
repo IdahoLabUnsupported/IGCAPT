@@ -12,27 +12,24 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import javax.swing.JFileChooser;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import gov.inl.igcapt.view.IGCAPTgui;
-import gov.inl.igcapt.properties.IGCAPTproperties;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 /**
  *
  * @author CHE
  */
+// Class to guide user through the process to update scenario with GUCS/CNRM
 public class AddToScenarioWizard extends javax.swing.JDialog {
     private List<GucsInformation>m_gucsList = null;
     private List<CnrmInformation>m_cnrmList = null;
-    private final ScenarioInformation m_newScenarioInfo;
-    private final String m_webServiceHost;
-    private final String m_webServiceKey;
+    private String m_webServiceHost = null;
+    private String m_webServiceKey = null;
     enum FieldStates {
         GUCS_FIELD,   
         CNRM_FIELD,   
@@ -43,16 +40,13 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     /**
      * Creates new form ScenarioWizard
      */
-    public AddToScenarioWizard(java.awt.Frame parent, boolean modal, ScenarioInformation newScenario) {
+    public AddToScenarioWizard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceHost");
-        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceKey");
-        m_newScenarioInfo = newScenario;
         
         initComponents();
         disableAllButtons();
         initGucsList();
-        setTitle("Update Scenario - " + m_newScenarioInfo.getName() + " - with GUCS/CNRM");
+        setTitle("Update Scenario with GUCS/CNRM");
         this.setVisible(true);
     }
            
@@ -75,6 +69,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
     }
     
+    // Disable all buttons 
     private void disableAllButtons() {
         enableField(FieldStates.GUCS_FIELD, false);
         jButton2.setEnabled(false);
@@ -84,6 +79,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         enableField(FieldStates.SAVE_CANCEL, false);
     }
     
+    // Enables/Disables buttons according to stage of the process
     private void disableEnableButtons(FieldStates stage) {
         switch (stage) {
             case LOCATION_FIELD -> {
@@ -135,6 +131,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         jLabel2.setText("Select CNRM");
 
         jButton2.setText("Next");
+        jButton2.setToolTipText("Apply GUCS");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -142,7 +139,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         });
 
         jButton1.setText("Cancel");
-        jButton1.setToolTipText("Delete scenario and quit");
+        jButton1.setToolTipText("Close form with no changes");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -153,8 +150,8 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         jLabel3.setText("Save Location");
         jLabel3.setToolTipText("Select Location for the Scenario file");
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
         jButton3.setText("Browse");
+        jButton3.setToolTipText("Browse to save location");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -162,14 +159,15 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         });
 
         jButton4.setText("Next");
+        jButton4.setToolTipText("Apply CNRM");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jButton5.setText(" Save ");
+        jButton5.setText("   Save  ");
+        jButton5.setToolTipText("Save file to specified location");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -253,7 +251,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     
     // Initialize the GUCS combo box with the retrieved GUCS List
     private void initGucsList() {
-        m_gucsList = getGucsList();
+        m_gucsList = WizardDriver.getHandle().getGucs();
         DefaultListModel listModel = new DefaultListModel();
        
         if (m_gucsList == null) {
@@ -270,247 +268,27 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     
     // Initialize the CNRM combo box with the retrieved CNRM List
     private void initCnrmList() {
-        m_cnrmList = getCnrmList();
+        m_cnrmList = WizardDriver.getHandle().getCnrm();
         DefaultListModel listModel = new DefaultListModel();
-        jList2.setModel(listModel);
-        
-        if (m_gucsList == null) {
+                
+        if (m_cnrmList == null) {
             return;
         }
         
         for (CnrmInformation cnrm : m_cnrmList) {
             listModel.addElement(cnrm.getName());
         }
+        jList2.setModel(listModel);
         
         jList2.setEnabled(true);
-    }
-    
-    // Call the web service for the GUCS List
-    private List<GucsInformation> getGucsList() {
-        String output;
-        try {
-            URL url = new URL("https://" + m_webServiceHost + 
-                    "/gucs?subscription-key=" + m_webServiceKey);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ conn.getResponseCode());
-                return null;
-            }
-            
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-            BufferedReader br = new BufferedReader(in);
-            ObjectMapper objMapper = new ObjectMapper();
-            TypeFactory typeFactory = objMapper.getTypeFactory();
-            CollectionType collectionType = typeFactory.constructCollectionType(List.class, GucsInformation.class);
-            while ((output = br.readLine()) != null) {
-                m_gucsList = objMapper.readValue(output, collectionType);
-            }
-            conn.disconnect();
-            // at this point need to parse the results and add to the combo
-        }
-        catch (Exception e2) {
-            JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ e2.getMessage());
-            return null;
-        }
-        return m_gucsList;
-    }
-    
-    // Call the web service for the CNRM List
-    private List<CnrmInformation> getCnrmList() {
-        String output;
-        try {
-            URL url = new URL("https://" + m_webServiceHost + 
-                    "/cnrm?subscription-key=" + m_webServiceKey);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ conn.getResponseCode());
-                return null;
-            }
-            
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-            BufferedReader br = new BufferedReader(in);
-            ObjectMapper objMapper = new ObjectMapper();
-            TypeFactory typeFactory = objMapper.getTypeFactory();
-            CollectionType collectionType = typeFactory.constructCollectionType(List.class, CnrmInformation.class);
-            while ((output = br.readLine()) != null) {
-                m_cnrmList = objMapper.readValue(output, collectionType);
-            }
-            conn.disconnect();
-            // at this point need to parse the results and add to the combo
-        }
-        catch (Exception e2) {
-            JOptionPane.showMessageDialog(this, "Web Service exception -- HTTP Error code : "+ e2.getMessage());
-            return null;
-        }
-        return m_cnrmList;
-    } 
-    
-    // Call the web service to add the GUCS list to the scenario 
-    private void updateScenarioGucsList() {
-        JSONArray jsonArray = new JSONArray();
-        GucsInformation selectedGucs;
-        for (int i : jList1.getSelectedIndices()) {
-            selectedGucs = m_gucsList.get(i);
-            jsonArray.put(selectedGucs.getId());
-        }       
-        
-        String scenarioId = m_newScenarioInfo.getId();
-
-        try {
-            String urlString = "https://" + m_webServiceHost + 
-                    "/scenarios/" + scenarioId + "/gucs?subscription-key=" +
-                    m_webServiceKey; 
-            URL url = new URL(urlString);
-            
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("PUT");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "application/json");
-            
-            OutputStream os = conn.getOutputStream();
-            byte[] input = jsonArray.toString().getBytes("utf-8");
-            os.write(input, 0, input.length);
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(this, 
-                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
-                return;                
-            }       
-                        
-            InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf-8");
-            BufferedReader br = new BufferedReader(isr);
-            ObjectMapper objMapper = new ObjectMapper();
-            
-            String response = br.readLine();
-            if (conn.getResponseCode() != 200) { 
-                ProblemDetails problemDetails = objMapper.readValue(response, ProblemDetails.class);
-                JOptionPane.showMessageDialog(this, problemDetails.toString());
-            }
-                
-            conn.disconnect();
-        }
-        catch (Exception e2) {
-            JOptionPane.showMessageDialog(this, 
-                    "Web Service exception -- HTTP Error code : "+ e2.getMessage());
-        }
-    }
-    
-    // Call the web service to add the CNRM list to the scenario 
-    private void updateScenarioCnrmList() {
-        JSONArray jsonArray = new JSONArray();
-        CnrmInformation selectedCnrm;
-        for (int i : jList2.getSelectedIndices()) {
-            selectedCnrm = m_cnrmList.get(i);
-            jsonArray.put(selectedCnrm.getId());
-        }       
-        String scenarioId = m_newScenarioInfo.getId();
-
-        try {
-            String urlString = "https://" + m_webServiceHost + 
-                    "/scenarios/" + scenarioId + "/cnrm?subscription-key=" + 
-                    m_webServiceKey;
-            URL url = new URL(urlString);
-            
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setRequestMethod("PUT");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "application/json");
-            
-            OutputStream os = conn.getOutputStream();
-            byte[] input = jsonArray.toString().getBytes("utf-8");
-            os.write(input, 0, input.length);
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(this, 
-                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
-                return;
-            }       
-                        
-            InputStreamReader isr = new InputStreamReader(conn.getInputStream(), "utf-8");
-            BufferedReader br = new BufferedReader(isr);
-            ObjectMapper objMapper = new ObjectMapper();
-            
-            String response = br.readLine();
-            if (conn.getResponseCode() != 200) { 
-                ProblemDetails problemDetails = objMapper.readValue(response, ProblemDetails.class);
-                JOptionPane.showMessageDialog(this, problemDetails.toString());
-            }
-                
-            conn.disconnect();
-        }
-        catch (Exception e2) {
-            JOptionPane.showMessageDialog(this, 
-                    "Web Service exception -- HTTP Error code : "+ e2.getMessage());
-        }
-    }
-
-    // Name the file scenarioInformation.getName()
-    // Write the file to the selected path
-    private String writeScenarioFile(ScenarioDetails scenarioDetails) {
-        String path = jTextField1.getText();
-        String scenarioFile = path + File.separator + 
-            scenarioDetails.getScenarioInformation().getName() + ".xml";
-        try {
-            
-            PrintWriter writer = new PrintWriter(scenarioFile, "UTF-8");
-            writer.println(scenarioDetails.getContent());
-            writer.close();
-        }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Exception: "+e.getMessage());
-            return null;
-        }
-        return scenarioFile;
-    }
-    
-    // Get the scenario file through the web service and call the write method
-    private void getTheScenarioFile() {
-        String output;
-        String fileName = null;
-        ScenarioDetails scenarioDetails = null;
-        try {
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios/" +
-                    m_newScenarioInfo.getId() + "?subscription-key=" + 
-                    m_webServiceKey);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-            if (conn.getResponseCode() != 200) {
-                JOptionPane.showMessageDialog(this, 
-                        "Web Service exception -- HTTP Error code : " + conn.getResponseCode());
-                return;
-            }
-            
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-            BufferedReader br = new BufferedReader(in);
-            ObjectMapper objMapper = new ObjectMapper();
-            while ((output = br.readLine()) != null) {
-                scenarioDetails = objMapper.readValue(output, ScenarioDetails.class);
-            }
-            if (scenarioDetails != null) {
-                fileName = writeScenarioFile(scenarioDetails);
-            }
-            conn.disconnect();
-            
-            if (!(fileName == null) && !fileName.isEmpty() &&
-                JOptionPane.showConfirmDialog(this, "Do you want to import the Scenario now?",
-                    "Import Scenario?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                ImportMenuItemController importController = new ImportMenuItemController();
-                importController.importGdtafFile(fileName);
-            }
-        }
-        catch (Exception e2) {
-            JOptionPane.showMessageDialog(this, "Exception: " + e2.getMessage());
-        }
     }
        
     // This is test code
     private void cleanupScenarios() {
         String output;
+
+        m_webServiceKey = "";
+        m_webServiceHost = "";
         List<ScenarioInformation>scenarioList = null;
         ScenarioInformation scenarioInformation = null;
         try {
@@ -540,15 +318,16 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
         if (scenarioList != null) {
             for (ScenarioInformation scenario : scenarioList) {
-                if (scenario.getDescription().contains("Cherie") || scenario.getName().contains("herie")) {
+                if (scenario.getDescription().contains("herie") || scenario.getName().contains("herie")) {
                     System.out.println("Delete scenario named:"+scenario.getName());
                     deleteScenario(scenario.getId());
                 }
             }
         }
+
     }
 
-    // delete scenario due to cancelling wizard
+    // delete scenario 
     private void deleteScenario(String id) {
         JSONObject json = new JSONObject();
         json.put("id", id);
@@ -581,7 +360,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     }
 
     // Next button - Select GUCS
-    // PUT to update the list of GUCS for the scenario  -- need scenario id and gucs id(s)
+    // Uses the wizard driver to activate thread that will update scenario with GUCS list
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         
@@ -589,7 +368,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Please select at least one GUCS!");
             return;
         }
-        updateScenarioGucsList();
+        WizardDriver.getHandle().startGucsUpdateScenarioThread(jList1.getSelectedIndices());
         disableAllButtons();
         initCnrmList();
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -597,6 +376,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     
     // Cancel - close form
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // To clean up data -- comment in next line.  adjust criteria line ~324
+        // and set web service info at line ~293
+        //cleanupScenarios();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -626,29 +408,44 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     // Next button - Selected CNRM
-    // PUT to update the list of CNRM for the scenario -- need scenario id and cnrm id(s)
+    // Uses the wizard driver to activate thread that will update scenario with CNRM list
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         if (jList2.isSelectionEmpty()) {
             JOptionPane.showMessageDialog(this, "Please select at least one CNRM!");
             return;
         }        
-        updateScenarioCnrmList();
+        WizardDriver.getHandle().startCnrmUpdateScenarioThread(jList2.getSelectedIndices());
         disableEnableButtons(FieldStates.LOCATION_FIELD);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton4ActionPerformed
 
     // Save button
-    // Get to get the scenario file and write it to file system.
+    // Uses the Wizard driver to activate the thread that will retrieve the 
+    // scenario and write it to file system.
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         if (jTextField1.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Location cannot be Empty!");
             return;
         }
-        getTheScenarioFile();
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+ 
+        WizardDriver.getHandle().startSaveFileThread(jTextField1.getText());
+        if (!(jTextField1.getText() == null) && !(jTextField1.getText().isEmpty()) &&
+            JOptionPane.showConfirmDialog(this, "Do you want to import the Scenario now?",
+                "Import Scenario?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            
+            
+            WizardDriver.getHandle().joinSaveFileThread();
+            ImportMenuItemController importController = new ImportMenuItemController();
+            String importFile = jTextField1.getText() + File.separator +
+                    WizardDriver.getHandle().getScenarioInfo().getName() + ".xml";
+            System.out.println("Scenario filename=="+importFile);
+            importController.importGdtafFile(importFile);
+        }
+
         dispose();
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_jButton5ActionPerformed
 
     // As soon as user makes selection, enable the Next button
@@ -696,7 +493,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
                 scenario.setId("_0f39c303-9794-41c7-a9c2-f798e5f8a9b2");
                 scenario.setName("ForDougStaging");
                 scenario.setSourceId("_0f39c303-9794-41c7-a9c2-f798e5f8a9b2");
-                AddToScenarioWizard dialog = new AddToScenarioWizard(new javax.swing.JFrame(), true, scenario);
+                AddToScenarioWizard dialog = new AddToScenarioWizard(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
