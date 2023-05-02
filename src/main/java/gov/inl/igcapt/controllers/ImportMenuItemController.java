@@ -12,6 +12,8 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.gdtaf.model.Equipment;
+import gov.inl.igcapt.gdtaf.model.GDTAF.ScenarioRepo;
+import gov.inl.igcapt.gdtaf.model.OperationalObjective;
 import gov.inl.igcapt.gdtaf.model.SolutionAsset;
 import gov.inl.igcapt.gdtaf.model.SolutionOption;
 import gov.inl.igcapt.graph.SgEdge;
@@ -57,6 +59,7 @@ public class ImportMenuItemController {
                 
                 createGraphVertices(gdtaf);
                 createGraphEdges();
+                setNodeData(gdtaf); //Payload and latency.
                 
             } catch (JAXBException ex) {
                 System.out.println(ex.getMessage());
@@ -70,13 +73,24 @@ public class ImportMenuItemController {
         }
     }
     
+    // Set the payload and latency data for nodes based on GDTAF operational objectives.
+    private void setNodeData(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
+        
+        // Need to look through objectives and grab payloads and latencies to add to each node.
+        // It is going to be some work because the objectives are listed by equipment and not assets.
+        // So, what needs to be done is loop through all objectives finding their equipment then
+        // find the nodes that have this equipment and add the payload and latencies.
+        // There is a map linking nodes with solution asset UUIDs. Use that to obtain
+        // solution assets currently in play.
+    }
+    
     private String stripUnderscoreFromUUID(String uuidStr) {
         
         return uuidStr.replace("_", "");
     }
     
     // Given the asset UUID and the SolutionOption, find the solution asset.
-    SolutionAsset findSolutionAsset(String assetUuid, SolutionOption option) {
+    private SolutionAsset findSolutionAsset(String assetUuid, SolutionOption option) {
         SolutionAsset returnval = null;
         
          var solutionAssets = option.getSolutionAsset();
@@ -101,110 +115,104 @@ public class ImportMenuItemController {
         var igcaptGraph = GraphManager.getInstance().getGraph();
         var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
         SolutionAsset solutionAsset = findSolutionAsset(assetUuid, option);
-        
-        // Make sure Node does not already exist.
-        var nodes = igcaptGraph.getVertices();
-        
-        if (m_assetGuidToNodeMap.containsKey(assetUuid)) {
             
-            // This asset alread exists. Don't add it again.
-            return;
-        }
-        
-        if (assetEquipment != null) {
-            if (solutionAsset != null) {
-                var location = solutionAsset.getAtLocation();
+        // This asset already exists. Don't add it again.
+        if (!m_assetGuidToNodeMap.containsKey(assetUuid)) {
+            if (assetEquipment != null) {
+                if (solutionAsset != null) {
+                    var location = solutionAsset.getAtLocation();
 
-                if (location != null) {
-                    String equipmentId = solutionAsset.getEquipment();
-                    Equipment equipmentInstance = assetEquipment.stream()
-                            .filter(equipment -> equipmentId.equals(equipment.getUUID()))
-                            .findAny()
-                            .orElse(null);
+                    if (location != null) {
+                        String equipmentId = solutionAsset.getEquipment();
+                        Equipment equipmentInstance = assetEquipment.stream()
+                                .filter(equipment -> equipmentId.equals(equipment.getUUID()))
+                                .findAny()
+                                .orElse(null);
 
-                    if (equipmentInstance != null) { 
+                        if (equipmentInstance != null) { 
 
-                        int nodeId = GraphManager.getInstance().getNextNodeIndex();
-                        String name = equipmentInstance.getName();
-                        SgNode sgNode = new SgNode(nodeId,
-                                equipmentInstance,
-                                "78bf0ae2-1a27-462d-b8af-39156e80b75c",
-                                name,
-                                true,
-                                false,
-                                false,
-                                0,
-                                10,
-                                "assetGuid:"+stripUnderscoreFromUUID(solutionAsset.getUUID()));
+                            int nodeId = GraphManager.getInstance().getNextNodeIndex();
+                            String name = equipmentInstance.getName();
+                            SgNode sgNode = new SgNode(nodeId,
+                                    equipmentInstance,
+                                    "78bf0ae2-1a27-462d-b8af-39156e80b75c",
+                                    name,
+                                    true,
+                                    false,
+                                    false,
+                                    0,
+                                    10,
+                                    "assetGuid:"+stripUnderscoreFromUUID(solutionAsset.getUUID()));
 
-                        m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
+                            m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
 
-                        if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
-                            sgNode.setType(stripUnderscoreFromUUID(equipmentId));
-                        } else {
-                            JOptionPane.showMessageDialog(null,
-                                "Asset (id: " + solutionAsset.getUUID() + ") contains no equipment.",
-                                "Attention",
-                                JOptionPane.WARNING_MESSAGE);
-                        }
+                            if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
+                                sgNode.setType(stripUnderscoreFromUUID(equipmentId));
+                            } else {
+                                JOptionPane.showMessageDialog(null,
+                                    "Asset (id: " + solutionAsset.getUUID() + ") contains no equipment.",
+                                    "Attention",
+                                    JOptionPane.WARNING_MESSAGE);
+                            }
 
-                        sgNode.setLat(location.getY());
-                        sgNode.setLongit(location.getX());
+                            sgNode.setLat(location.getY());
+                            sgNode.setLongit(location.getX());
 
-                        igcaptGraph.addVertex(sgNode);
+                            igcaptGraph.addVertex(sgNode);
 
-                        // We have access to the asset so grab the children at this point.
-                        // Save the current Node instance and the child GUID. In the
-                        // construction of the edges we will need the two Nodes that comprise
-                        // the edge. We will have the one and can look up the other using the 
-                        // m_assetGuidToNodeMap.
-                        var views = solutionAsset.getViews();
+                            // We have access to the asset so grab the children at this point.
+                            // Save the current Node instance and the child GUID. In the
+                            // construction of the edges we will need the two Nodes that comprise
+                            // the edge. We will have the one and can look up the other using the 
+                            // m_assetGuidToNodeMap.
+                            var views = solutionAsset.getViews();
 
-                        if (views != null && !views.isEmpty()) {
-                            var topologyView = views.stream()
-                                    .filter(view -> view.getName().equals("Topology"))
-                                    .findAny()
-                                    .orElse(null);
+                            if (views != null && !views.isEmpty()) {
+                                var topologyView = views.stream()
+                                        .filter(view -> view.getName().equals("Topology"))
+                                        .findAny()
+                                        .orElse(null);
 
-                            if (topologyView != null) {
-                                List<EdgeIndexType> children = topologyView.getChildren();
+                                if (topologyView != null) {
+                                    List<EdgeIndexType> children = topologyView.getChildren();
 
-                                if (children != null && !children.isEmpty()) {
+                                    if (children != null && !children.isEmpty()) {
 
-                                    for (var child : children) {
-                                        m_edgeList.add(new Pair<SgNode, String>(sgNode, child.getValue()));
-                                        
-                                        addNodeAndChildren(gdtafData, child.getValue(), option);
+                                        for (var child : children) {
+                                            m_edgeList.add(new Pair<>(sgNode, child.getValue()));
+
+                                            addNodeAndChildren(gdtafData, child.getValue(), option);
+                                        }
                                     }
+                                }
+                                else {
+                                    JOptionPane.showMessageDialog(null,
+                                    "topologyView == null",
+                                    "Attention",
+                                    JOptionPane.WARNING_MESSAGE);
                                 }
                             }
                             else {
-                                JOptionPane.showMessageDialog(null,
-                                "topologyView == null",
-                                "Attention",
-                                JOptionPane.WARNING_MESSAGE);
+                                logger.log(Level.WARNING, 
+                                    "views is null or views is empty");
                             }
                         }
                         else {
                             logger.log(Level.WARNING, 
-                                "views is null or views is empty");
+                                "equiptmentInstace is null");
                         }
                     }
                     else {
-                        logger.log(Level.WARNING, 
-                            "equiptmentInstace is null");
+                        System.out.println("Asset (id: " + solutionAsset.getUUID() + ") contains no location");
                     }
                 }
-                else {
-                    System.out.println("Asset (id: " + solutionAsset.getUUID() + ") contains no location");
-                }
             }
-        }
-        else {
-            JOptionPane.showMessageDialog(null,
-                                "Could not obtain a reference to the equipment repository.",
-                                "Attention",
-                                JOptionPane.WARNING_MESSAGE);
+            else {
+                JOptionPane.showMessageDialog(null,
+                                    "Could not obtain a reference to the equipment repository.",
+                                    "Attention",
+                                    JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
     
@@ -216,10 +224,6 @@ public class ImportMenuItemController {
         for (gov.inl.igcapt.gdtaf.model.CNRM crnm : crnmRepo.getCNRM()) {
             System.out.println("CRNM Layout: " + crnm.getLayout());
         }
-        
-        // Comprised of nodes and edges. Loop through assets to create nodes. Each asset contains parent and/or children.
-        // Use these to construct the edges.
-        var igcaptGraph = GraphManager.getInstance().getGraph();
         
         // Get the first scenario, first solution, first option
         var scenarioList = scenarioRepo.getScenario();
