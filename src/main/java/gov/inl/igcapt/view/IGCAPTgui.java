@@ -105,6 +105,7 @@ import javax.xml.transform.TransformerException;
 import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
 import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
 import java.util.Map;
@@ -883,7 +884,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         initConnection.addActionListener((ActionEvent ev) -> {
             RestSvcConnection createConnection = new RestSvcConnection(this, true); 
         });
-
+      
         loadTopology.addActionListener((ActionEvent ev) -> {
             
             JFileChooser chooser = new JFileChooser();
@@ -997,7 +998,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem importResultsItem;
         JMenuItem showHeatmapItem;
         JMenuItem clearHeatmapItem;
+        JMenuItem editThreshold = new JMenuItem("Edit Thresholds");
+
         
+        analysisMenu.add(editThreshold);
         analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem());
         analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem());
         analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem());
@@ -1025,6 +1029,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             @Override
             public void menuDeselected(MenuEvent e) {
             }
+        });
+        
+        editThreshold.addActionListener((ActionEvent ev) -> {
+            ThresholdEditor thresholdEdit = new ThresholdEditor(this, false);
         });
         
         return analysisMenu;
