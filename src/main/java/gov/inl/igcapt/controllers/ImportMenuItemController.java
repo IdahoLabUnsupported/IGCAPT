@@ -1,8 +1,10 @@
 
 package gov.inl.igcapt.controllers;
 
-import gov.inl.igcapt.components.KeyValueManager;
 import gov.inl.igcapt.components.Pair;
+import gov.inl.igcapt.gdtaf.data.EquipmentRepoMgr;
+import gov.inl.igcapt.gdtaf.data.OperationalObjectiveRepoMgr;
+import gov.inl.igcapt.gdtaf.data.PayloadRepoMgr;
 import gov.inl.igcapt.gdtaf.model.EdgeIndexType;
 import gov.inl.igcapt.gdtaf.model.EquipmentRole;
 import gov.inl.igcapt.graph.GraphManager;
@@ -12,8 +14,6 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.gdtaf.model.Equipment;
-import gov.inl.igcapt.gdtaf.model.GDTAF.ScenarioRepo;
-import gov.inl.igcapt.gdtaf.model.OperationalObjective;
 import gov.inl.igcapt.gdtaf.model.SolutionAsset;
 import gov.inl.igcapt.gdtaf.model.SolutionOption;
 import gov.inl.igcapt.graph.SgEdge;
@@ -32,8 +32,9 @@ public class ImportMenuItemController {
     private static Logger logger = Logger.getLogger(ImportMenuItemController.class.getName());
     private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
     private final List<Pair<SgNode,String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
+    private  gov.inl.igcapt.gdtaf.model.GDTAF gdtafData = null;
     
-    public void importGdtafFile(String fileToImport){
+    public void importGdtafScenarioFile(String fileToImport){
         
         if (fileToImport != null && !fileToImport.isEmpty() && !fileToImport.isBlank()) {
             
@@ -48,8 +49,12 @@ public class ImportMenuItemController {
                 
                 JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.model.GDTAF.class);
                 Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
-                var gdtaf = (gov.inl.igcapt.gdtaf.model.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
-                
+                gdtafData = (gov.inl.igcapt.gdtaf.model.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
+
+                EquipmentRepoMgr.getInstance().initRepo(gdtafData);
+                PayloadRepoMgr.getInstance().initRepo(gdtafData);
+                OperationalObjectiveRepoMgr.getInstance().initRepo(gdtafData);
+
                 // Clear the graph
                 IGCAPTgui.getInstance().clearGraph();
                 
@@ -57,9 +62,9 @@ public class ImportMenuItemController {
                 m_assetGuidToNodeMap.clear();
                 m_edgeList.clear();
                 
-                createGraphVertices(gdtaf);
+                createGraphVertices();
                 createGraphEdges();
-                setNodeData(gdtaf); //Payload and latency.
+                setNodeData(); //Payload and latency.
                 
             } catch (JAXBException ex) {
                 System.out.println(ex.getMessage());
@@ -74,7 +79,7 @@ public class ImportMenuItemController {
     }
     
     // Set the payload and latency data for nodes based on GDTAF operational objectives.
-    private void setNodeData(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
+    private void setNodeData() {
         
         // Need to look through objectives and grab payloads and latencies to add to each node.
         // It is going to be some work because the objectives are listed by equipment and not assets.
@@ -216,7 +221,7 @@ public class ImportMenuItemController {
         }
     }
     
-    private void createGraphVertices(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData) {
+    private void createGraphVertices() {
 
         var scenarioRepo = gdtafData.getScenarioRepo();
         
@@ -227,10 +232,10 @@ public class ImportMenuItemController {
         
         // Get the first scenario, first solution, first option
         var scenarioList = scenarioRepo.getScenario();
-        var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
+       // var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
         
         try {
-            if (scenarioList != null && !scenarioList.isEmpty() && assetEquipment != null && !assetEquipment.isEmpty()) {
+            if (scenarioList != null && !scenarioList.isEmpty() && EquipmentRepoMgr.getInstance().count()>0) {
 
                 var scenario = scenarioList.get(0);
 

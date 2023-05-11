@@ -17,7 +17,7 @@ public class AddImportMenuItem extends JMenuItem {
 
     private void importFile(JFileChooser chooser) {
         String selectedOpenFile = chooser.getSelectedFile().toString();
-        m_controller.importGdtafFile(selectedOpenFile);
+        m_controller.importGdtafScenarioFile(selectedOpenFile);
     }
 
     private void createImportMenuItem(java.awt.Frame parent) {
