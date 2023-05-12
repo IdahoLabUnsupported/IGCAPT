@@ -6,8 +6,7 @@ import gov.inl.igcapt.gdtaf.model.Solution;
 import gov.inl.igcapt.gdtaf.model.SolutionOption;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GDTAFScenarioMgr {
     private static final GDTAFScenarioMgr instance = new GDTAFScenarioMgr();
@@ -205,5 +204,47 @@ public class GDTAFScenarioMgr {
         }
     }
 
+    public List<String> listScenariosByName(){
+        List<String> nameList = new ArrayList<String>();
+        for (var scenario: m_scenarioMap.values()) {
+            nameList.add(scenario.getName());
+        }
+        return nameList;
+    }
+
+    /**
+     * util to list the solution names  Returns empty list of active Scenario not set
+     * @return List String
+     */
+    public List<String> listSolutionsByName(){
+        List<String> solnList = new ArrayList<String>();
+        if(m_activeScenario == null){
+            warningMessage("Must have Active Scenario Set to access Solution Data");
+        }
+        else {
+            for (var soln : m_activeScenario.getSolution()) {
+                solnList.add(soln.getName());
+            }
+        }
+        return solnList;
+    }
+
+    /**
+     * util to list names of available options for a give Solution
+     * Note active Solution must be set.
+     * @return List String
+     */
+    public List<String> listSolutionOptionsByName(){
+        List<String> optList = new ArrayList<String>();
+        if(m_activeSolution == null){
+            warningMessage("Must have active Solution set to list the Solution Options");
+        }
+        else{
+            for(var opt : m_activeSolution.getOption()){
+                optList.add(opt.getName());
+            }
+        }
+        return optList;
+    }
 
 }
