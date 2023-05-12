@@ -48,6 +48,7 @@ public class GDTAFImportController {
                 Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
                 m_gdtafData = (gov.inl.igcapt.gdtaf.model.GDTAF) jaxbGdtafUnmarshaller.unmarshal(currentFile);
 
+                GDTAFScenarioMgr.getInstance().initRepo(m_gdtafData);
                 AssetRepoMgr.getInstance().initRepo(m_gdtafData);
                 EquipmentRepoMgr.getInstance().initRepo(m_gdtafData);
                 CNRMRepoMgr.getInstance().initRepo(m_gdtafData);
@@ -213,7 +214,7 @@ public class GDTAFImportController {
                         }
                         else {
                             logger.log(Level.WARNING, 
-                                "equiptmentInstace is null");
+                                "equipmentInstance is null");
                         }
                     }
                     else {
