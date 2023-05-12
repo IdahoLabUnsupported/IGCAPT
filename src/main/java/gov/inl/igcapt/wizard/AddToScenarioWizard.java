@@ -7,7 +7,7 @@ package gov.inl.igcapt.wizard;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import gov.inl.igcapt.controllers.ImportMenuItemController;
+import gov.inl.igcapt.controllers.GDTAFImportController;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -437,11 +437,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             
             
             WizardDriver.getHandle().joinSaveFileThread();
-            ImportMenuItemController importController = new ImportMenuItemController();
+            GDTAFImportController importController = new GDTAFImportController();
             String importFile = jTextField1.getText() + File.separator +
                     WizardDriver.getHandle().getScenarioInfo().getName() + ".xml";
             System.out.println("Scenario filename=="+importFile);
-            importController.importGdtafScenarioFile(importFile);
+            importController.applyGDTAFSelections();
         }
 
         dispose();
