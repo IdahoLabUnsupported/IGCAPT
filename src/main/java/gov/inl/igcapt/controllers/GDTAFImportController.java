@@ -2,9 +2,7 @@
 package gov.inl.igcapt.controllers;
 
 import gov.inl.igcapt.components.Pair;
-import gov.inl.igcapt.gdtaf.data.EquipmentRepoMgr;
-import gov.inl.igcapt.gdtaf.data.OperationalObjectiveRepoMgr;
-import gov.inl.igcapt.gdtaf.data.PayloadRepoMgr;
+import gov.inl.igcapt.gdtaf.data.*;
 import gov.inl.igcapt.gdtaf.model.EdgeIndexType;
 import gov.inl.igcapt.gdtaf.model.EquipmentRole;
 import gov.inl.igcapt.graph.GraphManager;
@@ -27,34 +25,52 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class ImportMenuItemController {
+public class GDTAFImportController {
 
-    private static Logger logger = Logger.getLogger(ImportMenuItemController.class.getName());
+    private static Logger logger = Logger.getLogger(GDTAFImportController.class.getName());
     private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
     private final List<Pair<SgNode,String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
-    private  gov.inl.igcapt.gdtaf.model.GDTAF gdtafData = null;
-    
-    public void importGdtafScenarioFile(String fileToImport){
-        
-        if (fileToImport != null && !fileToImport.isEmpty() && !fileToImport.isBlank()) {
-            
+    private  gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
+
+    public void readGDTAFScenarioFile(String fileToRead) {
+        if (fileToRead != null && !fileToRead.isEmpty() && !fileToRead.isBlank()) {
+
             try {
-                
-                File currentFile = new File(fileToImport);
+
+                File currentFile = new File(fileToRead);
                 try {
                     IGCAPTgui.getInstance().setLastPath(currentFile.getCanonicalPath());
                 } catch (IOException ex) {
                     IGCAPTgui.getInstance().setLastPath("");
                 }
-                
+
                 JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.model.GDTAF.class);
                 Unmarshaller jaxbGdtafUnmarshaller = jaxbGdtafContext.createUnmarshaller();
-                gdtafData = (gov.inl.igcapt.gdtaf.model.GDTAF)jaxbGdtafUnmarshaller.unmarshal(currentFile);
+                m_gdtafData = (gov.inl.igcapt.gdtaf.model.GDTAF) jaxbGdtafUnmarshaller.unmarshal(currentFile);
 
-                EquipmentRepoMgr.getInstance().initRepo(gdtafData);
-                PayloadRepoMgr.getInstance().initRepo(gdtafData);
-                OperationalObjectiveRepoMgr.getInstance().initRepo(gdtafData);
+                GDTAFScenarioMgr.getInstance().initRepo(m_gdtafData);
+                AssetRepoMgr.getInstance().initRepo(m_gdtafData);
+                EquipmentRepoMgr.getInstance().initRepo(m_gdtafData);
+                CNRMRepoMgr.getInstance().initRepo(m_gdtafData);
+                GridCommPathRepoMgr.getInstance().initRepo(m_gdtafData);
+                PayloadRepoMgr.getInstance().initRepo(m_gdtafData);
+                DataElementRepoMgr.getInstance().initRepo(m_gdtafData);
+                GUCSRepoMgr.getInstance().initRepo(m_gdtafData);
+                OperationalObjectiveRepoMgr.getInstance().initRepo(m_gdtafData);
 
+            } catch (JAXBException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,
+                    "fileToImport == null OR fileToImport.isEmpty() OR fileToImport.isBlank().",
+                    "Attention",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    public void applyGDTAFSelections(){
+        try{
                 // Clear the graph
                 IGCAPTgui.getInstance().clearGraph();
                 
@@ -66,17 +82,11 @@ public class ImportMenuItemController {
                 createGraphEdges();
                 setNodeData(); //Payload and latency.
                 
-            } catch (JAXBException ex) {
+            } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-        }
-        else {
-            JOptionPane.showMessageDialog(null,
-            "fileToImport == null OR fileToImport.isEmpty() OR fileToImport.isBlank().",
-            "Attention",
-            JOptionPane.WARNING_MESSAGE);        
-        }
     }
+
     
     // Set the payload and latency data for nodes based on GDTAF operational objectives.
     private void setNodeData() {
@@ -204,7 +214,7 @@ public class ImportMenuItemController {
                         }
                         else {
                             logger.log(Level.WARNING, 
-                                "equiptmentInstace is null");
+                                "equipmentInstance is null");
                         }
                     }
                     else {
@@ -223,9 +233,9 @@ public class ImportMenuItemController {
     
     private void createGraphVertices() {
 
-        var scenarioRepo = gdtafData.getScenarioRepo();
+        var scenarioRepo = m_gdtafData.getScenarioRepo();
         
-        var crnmRepo = gdtafData.getCNRMRepo();
+        var crnmRepo = m_gdtafData.getCNRMRepo();
         for (gov.inl.igcapt.gdtaf.model.CNRM crnm : crnmRepo.getCNRM()) {
             System.out.println("CRNM Layout: " + crnm.getLayout());
         }
@@ -262,7 +272,7 @@ public class ImportMenuItemController {
                                     var topologyHead = option.getTopologyHead();
                                     
                                     if (topologyHead != null) {
-                                        addNodeAndChildren(gdtafData, topologyHead, option);
+                                        addNodeAndChildren(m_gdtafData, topologyHead, option);
                                     }
                                  }
                                 else {

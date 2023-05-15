@@ -1,6 +1,6 @@
 package gov.inl.igcapt.view;
 
-import gov.inl.igcapt.controllers.ImportMenuItemController;
+import gov.inl.igcapt.controllers.GDTAFImportController;
 
 import java.io.File;
 import javax.swing.*;
@@ -10,14 +10,14 @@ public class AddImportMenuItem extends JMenuItem {
     public AddImportMenuItem(java.awt.Frame parent) {
         super("Import...");
         createImportMenuItem(parent);
-        m_controller = new ImportMenuItemController();
+        m_controller = new GDTAFImportController();
     }
 
-    private ImportMenuItemController m_controller;
+    private GDTAFImportController m_controller;
 
     private void importFile(JFileChooser chooser) {
         String selectedOpenFile = chooser.getSelectedFile().toString();
-        m_controller.importGdtafScenarioFile(selectedOpenFile);
+        m_controller.applyGDTAFSelections();
     }
 
     private void createImportMenuItem(java.awt.Frame parent) {
