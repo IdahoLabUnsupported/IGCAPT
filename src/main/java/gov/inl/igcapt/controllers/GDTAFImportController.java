@@ -100,22 +100,7 @@ public class GDTAFImportController {
         
         return uuidStr.replace("_", "");
     }
-    
-    // Given the asset UUID and the SolutionOption, find the solution asset.
-    private SolutionAsset findSolutionAsset(String assetUuid) {
-        SolutionAsset returnval = null;
-        var solutionAssets = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getSolutionAsset();
-         
-         if (solutionAssets != null && !solutionAssets.isEmpty()) {
-             for (var solutionAsset : solutionAssets) {
-                 if (solutionAsset.getUUID().equals(assetUuid)) {
-                     returnval = solutionAsset;
-                     break;
-                 }
-             }
-         }
-        return returnval;
-    }
+
     
     // Recursively add nodes starting with assetUuid and continuing through the "Topology" View's children.
     private void addNodeAndChildren(String assetUuid) {
