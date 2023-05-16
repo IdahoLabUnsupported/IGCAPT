@@ -251,16 +251,5 @@ public class GDTAFScenarioMgr {
         return m_activeScenario.getSelectedGucs();
     }
 
-    public List<String> gettAppScenarioList(){
-        for (var gucUUID:getSelectedGucsList()) {
-            var guc = GUCSRepoMgr.getInstance().getGridUseCase(gucUUID);
-            if(guc != null){
-                for(var appScenUUID: guc.getAppScenarios()){
-                    guc.
-                }
-            }
-
-        }
-    }
 
 }
