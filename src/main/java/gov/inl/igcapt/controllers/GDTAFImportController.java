@@ -106,7 +106,7 @@ public class GDTAFImportController {
     private void addNodeAndChildren(String assetUuid) {
         
         var igcaptGraph = GraphManager.getInstance().getGraph();
-        SolutionAsset solutionAsset = findSolutionAsset(assetUuid);
+        SolutionAsset solutionAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(assetUuid);
             
         // This asset already exists. Don't add it again.
         if (!m_assetGuidToNodeMap.containsKey(assetUuid)) {

@@ -1,9 +1,6 @@
 package gov.inl.igcapt.gdtaf.data;
 
-import gov.inl.igcapt.gdtaf.model.GDTAF;
-import gov.inl.igcapt.gdtaf.model.Scenario;
-import gov.inl.igcapt.gdtaf.model.Solution;
-import gov.inl.igcapt.gdtaf.model.SolutionOption;
+import gov.inl.igcapt.gdtaf.model.*;
 
 import javax.swing.*;
 import java.util.*;
@@ -247,6 +244,14 @@ public class GDTAFScenarioMgr {
         return optList;
     }
 
+    public SolutionAsset findSolutionAsset(String uuid){
+        for(var soln_asset:m_activeOption.getSolutionAsset()){
+            if(soln_asset.getUUID().equals(uuid)){
+                return soln_asset;
+            }
+        }
+        return null;
+    }
     public List<String> getSelectedGucsList(){
         return m_activeScenario.getSelectedGucs();
     }
