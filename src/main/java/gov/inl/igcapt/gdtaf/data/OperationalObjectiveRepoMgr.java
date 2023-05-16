@@ -1,9 +1,12 @@
 package gov.inl.igcapt.gdtaf.data;
 
 import gov.inl.igcapt.gdtaf.model.GDTAF;
+import gov.inl.igcapt.gdtaf.model.OperationalAttributeType;
 import gov.inl.igcapt.gdtaf.model.OperationalObjective;
 import jdk.dynalink.Operation;
+import org.json.JSONObject;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +52,37 @@ public class OperationalObjectiveRepoMgr {
      */
     public OperationalObjective getOperationalObjective(String uuid){
         return m_opobj_map.get(uuid);
+    }
+
+    /**
+     * getter for Latency in Seconds.  GDTAF provides a json string as the
+     * application_latency value... this method takes that string and parses
+     * into a JSONObject and returns the value converted to seconds if the units
+     * are not seconds
+     * @param ooUuid
+     * @return
+     */
+    public int getOpObjLatencySec(String ooUuid){
+        var oo = m_opobj_map.get(ooUuid);
+        for(var attr:oo.getAttributes()){
+            if(attr.getType()== OperationalAttributeType.APPLICATION_LATENCY){
+                String jsonstring = attr.getValue();
+                JSONObject obj = new JSONObject(jsonstring);
+                int value = obj.getInt("value");
+                String units = obj.getString("units");
+                switch (units){
+                    case "second":
+                        return value;
+                    case "hour":
+                        return value * 3600;
+                    case "minute":
+                        return value *  60;
+                    default:
+                        return value;
+                }
+            }
+        }
+        return 0;
     }
 
     /**
