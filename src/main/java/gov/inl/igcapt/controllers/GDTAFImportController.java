@@ -3,17 +3,13 @@ package gov.inl.igcapt.controllers;
 
 import gov.inl.igcapt.components.Pair;
 import gov.inl.igcapt.gdtaf.data.*;
-import gov.inl.igcapt.gdtaf.model.EdgeIndexType;
-import gov.inl.igcapt.gdtaf.model.EquipmentRole;
+import gov.inl.igcapt.gdtaf.model.*;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgNode;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import gov.inl.igcapt.view.IGCAPTgui;
-import gov.inl.igcapt.gdtaf.model.Equipment;
-import gov.inl.igcapt.gdtaf.model.SolutionAsset;
-import gov.inl.igcapt.gdtaf.model.SolutionOption;
 import gov.inl.igcapt.graph.SgEdge;
 import java.util.Map;
 import java.util.HashMap;
@@ -105,41 +101,36 @@ public class GDTAFImportController {
     }
     
     // Given the asset UUID and the SolutionOption, find the solution asset.
-    private SolutionAsset findSolutionAsset(String assetUuid, SolutionOption option) {
+    private SolutionAsset findSolutionAsset(String assetUuid) {
         SolutionAsset returnval = null;
-        
-         var solutionAssets = option.getSolutionAsset();
+        var solutionAssets = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getSolutionAsset();
          
          if (solutionAssets != null && !solutionAssets.isEmpty()) {
-             
              for (var solutionAsset : solutionAssets) {
-                 
                  if (solutionAsset.getUUID().equals(assetUuid)) {
                      returnval = solutionAsset;
                      break;
                  }
              }
          }
-        
         return returnval;
     }
     
     // Recursively add nodes starting with assetUuid and continuing through the "Topology" View's children.
-    private void addNodeAndChildren(gov.inl.igcapt.gdtaf.model.GDTAF gdtafData, String assetUuid, SolutionOption option) {
+    private void addNodeAndChildren(String assetUuid) {
         
         var igcaptGraph = GraphManager.getInstance().getGraph();
-        var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
-        SolutionAsset solutionAsset = findSolutionAsset(assetUuid, option);
+        SolutionAsset solutionAsset = findSolutionAsset(assetUuid);
             
         // This asset already exists. Don't add it again.
         if (!m_assetGuidToNodeMap.containsKey(assetUuid)) {
-            if (assetEquipment != null) {
+            if (EquipmentRepoMgr.getInstance().getAllEquip() != null) {
                 if (solutionAsset != null) {
                     var location = solutionAsset.getAtLocation();
 
                     if (location != null) {
                         String equipmentId = solutionAsset.getEquipment();
-                        Equipment equipmentInstance = assetEquipment.stream()
+                        Equipment equipmentInstance = (Equipment) EquipmentRepoMgr.getInstance().getAllEquip().stream()
                                 .filter(equipment -> equipmentId.equals(equipment.getUUID()))
                                 .findAny()
                                 .orElse(null);
@@ -150,7 +141,7 @@ public class GDTAFImportController {
                             String name = equipmentInstance.getName();
                             SgNode sgNode = new SgNode(nodeId,
                                     equipmentInstance,
-                                    "78bf0ae2-1a27-462d-b8af-39156e80b75c",
+                                    EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()),
                                     name,
                                     true,
                                     false,
@@ -196,7 +187,7 @@ public class GDTAFImportController {
                                         for (var child : children) {
                                             m_edgeList.add(new Pair<>(sgNode, child.getValue()));
 
-                                            addNodeAndChildren(gdtafData, child.getValue(), option);
+                                            addNodeAndChildren(child.getValue());
                                         }
                                     }
                                 }
@@ -233,88 +224,23 @@ public class GDTAFImportController {
     
     private void createGraphVertices() {
 
-        var scenarioRepo = m_gdtafData.getScenarioRepo();
-        
-        var crnmRepo = m_gdtafData.getCNRMRepo();
-        for (gov.inl.igcapt.gdtaf.model.CNRM crnm : crnmRepo.getCNRM()) {
-            System.out.println("CRNM Layout: " + crnm.getLayout());
-        }
-        
-        // Get the first scenario, first solution, first option
-        var scenarioList = scenarioRepo.getScenario();
-       // var assetEquipment = gdtafData.getEquipmentRepo().getEquipment();
-        
         try {
-            if (scenarioList != null && !scenarioList.isEmpty() && EquipmentRepoMgr.getInstance().count()>0) {
 
-                var scenario = scenarioList.get(0);
+            if (GDTAFScenarioMgr.getInstance().getActiveScenario() != null &&
+                    GDTAFScenarioMgr.getInstance().getActiveSolution() != null &&
+                    GDTAFScenarioMgr.getInstance().getActiveSolutionOption() != null &&
+                    EquipmentRepoMgr.getInstance().count() > 0) {
+                var option = GDTAFScenarioMgr.getInstance().getActiveSolutionOption();
+                var topologyHead = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getTopologyHead();
 
-                if (scenario != null) {
-                    var solutionList = scenario.getSolution();
-
-                    if (solutionList != null && !solutionList.isEmpty()) {
-                        var solution = solutionList.get(0);
-
-                        if (solution != null) {
-                            var optionList = solution.getOption();
-
-                            if (optionList != null && !optionList.isEmpty()) {
-                                SolutionOption option = null;
-                                // Find mesh or whatever option we want to import. Should prompt for this, ultimately.
-                                for (var opt : optionList) {
-                                    if (opt.getName().contains("Mesh")) {
-                                        option = opt;
-                                        break;
-                                    }
-                                }
-                                
-                                if (option != null) {
-                                    var topologyHead = option.getTopologyHead();
-                                    
-                                    if (topologyHead != null) {
-                                        addNodeAndChildren(m_gdtafData, topologyHead, option);
-                                    }
-                                 }
-                                else {
-                                    JOptionPane.showMessageDialog(null,
-                                    "option == null",
-                                    "Attention",
-                                    JOptionPane.WARNING_MESSAGE);
-                                }
-                            }
-                            else {
-                                logger.log(Level.WARNING, 
-                                    "optionList is null or optionList is empty");
-                            }
-                        }
-                        else {
-                            JOptionPane.showMessageDialog(null,
-                            "solution == null",
-                            "Attention",
-                            JOptionPane.WARNING_MESSAGE);
-                        }
-                    }
-                    else {
-                        logger.log(Level.WARNING, 
-                            "solutionList is null or solutionList is empty");
-                    }
+                if (topologyHead != null) {
+                    addNodeAndChildren(topologyHead);
                 }
-                else {
-                    JOptionPane.showMessageDialog(null,
-                    "scenario == null",
-                    "Attention",
-                    JOptionPane.WARNING_MESSAGE);
-                }
-            } 
-            else {
-                logger.log(Level.WARNING, 
-                    "scenarioList == null OR scenarioList.isEmpty() OR assetEquipment == null OR assetEquipment.isEmpty()");
             }
         }
         catch(Exception ex) {
             System.out.println("Exception thrown in processing scenario: " + ex.getLocalizedMessage());
         }
-
         IGCAPTgui.getInstance().refresh();
     }
 

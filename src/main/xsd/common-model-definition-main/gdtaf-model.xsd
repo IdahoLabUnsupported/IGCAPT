@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!--Created with Liquid Studio (https://www.liquid-technologies.com)-->
 <xs:schema xmlns:core="http://pnnl.gov/gdtaf-core" xmlns="http://pnnl.gov/gdtaf-model" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://pnnl.gov/gdtaf-model" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:import schemaLocation="./gdtaf-core.xsd" namespace="http://pnnl.gov/gdtaf-core" />
@@ -218,7 +218,7 @@
             <xs:extension base="core:BaseBlock">
                 <xs:sequence>
                     <xs:element name="Attributes" type="PayloadAttribute" minOccurs="1" maxOccurs="unbounded" />
-                    <xs:element name="data" type="core:guid" minOccurs="1" maxOccurs="unbounded"/>
+                    <xs:element name="data" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
                 <xs:attribute name="Description" type="xs:string" />
             </xs:extension>
@@ -280,6 +280,7 @@
     <xs:simpleType name="SolutionEdgeAttributeType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="PACKET_SIZE_BYTES" />
+            <xs:enumeration value="CAPACITY_BITS_PER_SECOND" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="SolutionEdgeAttribute">
@@ -297,11 +298,11 @@
                     <xs:element name="Exception" type="SolutionException" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="Node" type="TopologyNode" minOccurs="1" maxOccurs="unbounded" />
                     <xs:element name="Edge" type="SolutionEdgeAttribute" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="cnrm_head" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="gucs_head" type="core:guid" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
                 <xs:attribute name="parent" type="core:guid" />
                 <xs:attribute name="topology_head" type="core:guid" />
+                <xs:attribute name="cnrm_head" type="core:guidList" />
+                <xs:attribute name="gucs_head" type="core:guidList" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -372,6 +373,7 @@
                     <xs:element name="TimedBasedOverhead" type="core:TimeBasedOverhead" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
                 <xs:attribute name="FixedByteOverhead" type="xs:integer" />
+                <xs:attribute name="engine" type="core:guid" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -604,8 +606,7 @@
                 <xs:element name="ApplicationProtocolRepo" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="ApplicationProtocol" type="ApplicationProtocol" minOccurs="1" maxOccurs="unbounded">
-                            </xs:element>
+                            <xs:element name="ApplicationProtocol" type="ApplicationProtocol" minOccurs="1" maxOccurs="unbounded" />
                         </xs:sequence>
                     </xs:complexType>
                     <xs:unique name="uniqueApplicationProtocol">
