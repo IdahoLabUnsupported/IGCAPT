@@ -46,6 +46,7 @@ public class GDTAFImportController {
 
                 GDTAFScenarioMgr.getInstance().initRepo(m_gdtafData);
                 AssetRepoMgr.getInstance().initRepo(m_gdtafData);
+                ApplicationScenarioRepoMgr.getInstance().initRepo(m_gdtafData);
                 EquipmentRepoMgr.getInstance().initRepo(m_gdtafData);
                 CNRMRepoMgr.getInstance().initRepo(m_gdtafData);
                 GridCommPathRepoMgr.getInstance().initRepo(m_gdtafData);
