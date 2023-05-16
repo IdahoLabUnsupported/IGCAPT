@@ -3,6 +3,7 @@ package gov.inl.igcapt.gdtaf.data;
 import gov.inl.igcapt.gdtaf.model.GDTAF;
 import gov.inl.igcapt.gdtaf.model.Equipment;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +50,8 @@ public class EquipmentRepoMgr {
         return m_equipMap.get(uuid);
     }
 
+    public Collection<Equipment> getAllEquip() { return m_equipMap.values();}
+
     /**
      * Number of elements in the Repo
      * @return int
@@ -62,7 +65,7 @@ public class EquipmentRepoMgr {
      * @param uuid
      * @return
      */
-    String getICAPTComponentUUID(String uuid){
+    public String getICAPTComponentUUID(String uuid){
         /// TODO It would be better to generate a sqlite call to find the UUID and return that.
 
         switch(getEquip(uuid).getName()) {

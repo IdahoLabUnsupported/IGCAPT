@@ -1,3 +1,4 @@
 #.gitignore
 igcapt.properties
+.idea/
 target/
