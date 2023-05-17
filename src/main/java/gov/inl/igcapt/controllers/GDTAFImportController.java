@@ -27,6 +27,18 @@ public class GDTAFImportController {
     private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
     private final List<Pair<SgNode,String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
     private  gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
+    private static GDTAFImportController m_importController = null;
+
+    private GDTAFImportController() {
+        
+    }
+    
+    public static GDTAFImportController getInstance() {
+        if (m_importController == null) {
+            m_importController = new GDTAFImportController();
+        }
+        return m_importController;
+    }
 
     public void readGDTAFScenarioFile(String fileToRead) {
         if (fileToRead != null && !fileToRead.isEmpty() && !fileToRead.isBlank()) {

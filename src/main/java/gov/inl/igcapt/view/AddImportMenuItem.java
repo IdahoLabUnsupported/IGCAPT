@@ -10,14 +10,13 @@ public class AddImportMenuItem extends JMenuItem {
     public AddImportMenuItem(java.awt.Frame parent) {
         super("Import...");
         createImportMenuItem(parent);
-        m_controller = new GDTAFImportController();
+        m_controller = GDTAFImportController.getInstance();
     }
 
     private GDTAFImportController m_controller;
 
     private void importFile(JFileChooser chooser) {
         String selectedOpenFile = chooser.getSelectedFile().toString();
-        m_controller.applyGDTAFSelections();
     }
 
     private void createImportMenuItem(java.awt.Frame parent) {

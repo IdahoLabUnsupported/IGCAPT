@@ -176,7 +176,8 @@ public class RestSvcConnection extends javax.swing.JDialog {
             conn.disconnect();
         }
         catch (Exception e3) {
-            
+            JOptionPane.showMessageDialog(this, "Could not connect - Invalid Web Service Host or Key!!");
+            return;
         }
         IGCAPTproperties.getInstance().setPropertyKeyValue("WebServiceHost", m_webServiceHost);
         IGCAPTproperties.getInstance().setPropertyKeyValue("WebServiceKey", m_webServiceKey);
