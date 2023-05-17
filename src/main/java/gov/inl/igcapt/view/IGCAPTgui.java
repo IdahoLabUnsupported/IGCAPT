@@ -103,12 +103,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
+import gov.inl.igcapt.wizard.ImportGdtafScenario;
 import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
-import java.util.Map;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -830,16 +830,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenuItem newTopology = new JMenuItem("New Topology");
         JMenuItem loadTopology = new JMenuItem("Load Topology");
         JMenuItem saveTopology = new JMenuItem("Save Topology");
-        JMenuItem newScenario = new JMenuItem("New Scenario");
-        JMenuItem initConnection = new JMenuItem("Initialize Connection");
         JMenuItem exportData = new JMenuItem("Export...");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(newTopology);
         fileMenu.add(loadTopology);
         fileMenu.add(saveTopology);
-        fileMenu.add(new JSeparator()); // SEPARATOR
-        fileMenu.add(initConnection);
-        fileMenu.add(newScenario);
         fileMenu.add(new JSeparator()); // SEPARATOR
         fileMenu.add(new AddImportMenuItem(null));
         fileMenu.add(exportData);
@@ -876,15 +871,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 GraphManager.getInstance().setFileDirty(false);
             }
         });
-        
-        newScenario.addActionListener((ActionEvent ev) -> {
-            new CreateScenarioWizard(this, true);
-        });
-        
-        initConnection.addActionListener((ActionEvent ev) -> {
-            RestSvcConnection createConnection = new RestSvcConnection(this, true); 
-        });
-      
+              
         loadTopology.addActionListener((ActionEvent ev) -> {
             
             JFileChooser chooser = new JFileChooser();
@@ -943,6 +930,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         menuBar.add(modeMenu);
 
         menuBar.add(createComponentsMenu());
+        menuBar.add(createGdtafMenu());
         menuBar.add(createAnalysisMenu());
 
         JMenu helpMenu = new JMenu("Help");
@@ -982,6 +970,40 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         loadLayerIcons();
 
         pack();
+    }
+    
+    private JMenu createGdtafMenu() {
+        JMenu gdtafMenu = new JMenu("GDTAF");
+        JMenuItem gdtafConn = new JMenuItem("Initialize Connection");
+        JMenuItem gdtafScenario = new JMenuItem("Create GDTAF Scenario");
+        JMenuItem gdtafImport = new JMenuItem("GDTAF Import Scenario");
+        JMenuItem gdtafStuff2 = new JMenuItem("GDTAF Stuff");
+        gdtafMenu.add(gdtafConn);
+        gdtafMenu.add(gdtafScenario);
+        gdtafMenu.add(gdtafImport);
+        // Might need a check to determine if a file has been imported so know
+        // whether or not to enable menu items???
+        gdtafMenu.add(gdtafStuff2);
+        
+        gdtafImport.addActionListener((ActionEvent ev) -> {
+            //new ImportScenarioWizard(this, true);
+            ImportGdtafScenario work = new ImportGdtafScenario(this, true, null); 
+        });
+        
+        gdtafScenario.addActionListener((ActionEvent ev) -> {
+            new CreateScenarioWizard(this, true);
+        });
+        
+        gdtafConn.addActionListener((ActionEvent ev) -> {
+            RestSvcConnection createConnection = new RestSvcConnection(this, true); 
+        });
+        
+        gdtafStuff2.addActionListener((ActionEvent ev) -> {
+            System.out.println("NO FUNCTIONALITY YET!!");
+        });
+
+        return gdtafMenu;
+        
     }
 
     private JMenu createComponentsMenu() {
