@@ -43,6 +43,17 @@ public class GDTAFScenarioMgr {
     }
 
     /**
+     * reset the Repo to allow for reloading another file from
+     * the GUI interface.
+     */
+    public void resetRepo(){
+        m_scenarioMap.clear();
+        m_activeScenario = null;
+        m_activeSolution = null;
+        m_activeOption = null;
+    }
+
+    /**
      * getter... get Scenario by UUID
      * @param uuid
      * @return Scenario
