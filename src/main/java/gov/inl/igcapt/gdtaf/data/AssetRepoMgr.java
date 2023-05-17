@@ -1,6 +1,7 @@
 package gov.inl.igcapt.gdtaf.data;
 
 import gov.inl.igcapt.gdtaf.model.Asset;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,42 +15,54 @@ import java.util.Map;
 public class AssetRepoMgr {
     private static final AssetRepoMgr instance = new AssetRepoMgr();
     private Map<String, Asset> m_assetMap = new HashMap<String, Asset>();
-    private AssetRepoMgr(){
+
+    private AssetRepoMgr() {
     }
 
     /**
      * Singleton accessor method
+     *
      * @return AssetRepoMgr
      */
-    public static AssetRepoMgr getInstance(){
+    public static AssetRepoMgr getInstance() {
         return instance;
     }
 
     /**
      * populates the AssetRepoMgr Map with data from the GDTAF
      * Scenario
+     *
      * @param gdtaf
      */
-    public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf){
+    public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf) {
+        resetRepo();
         var assetList = gdtaf.getAssetRepo().getAsset();
-        for (var asset:assetList) {
+        for (var asset : assetList) {
             m_assetMap.put(asset.getUUID(), asset);
         }
     }
 
+    private void resetRepo() {
+        m_assetMap.clear();
+    }
+
     /**
      * Asset Getter by uuid string
+     *
      * @param uuid
      * @return Asset
      */
-    public Asset getAsset(String uuid){
+    public Asset getAsset(String uuid) {
         return m_assetMap.get(uuid);
     }
 
     /**
      * returns number of Assets in the map
+     *
      * @return int
      */
-    public int count(){return m_assetMap.size();}
+    public int count() {
+        return m_assetMap.size();
+    }
 
 }

@@ -32,10 +32,15 @@ public class GUCSRepoMgr {
      * @param gdtafData
      */
     public void initRepo(GDTAF gdtafData){
+        resetRepo();
         var gucsList = gdtafData.getGridUseCaseScenarioRepo().getGridUseCaseScenario();
         for (var gucs:gucsList) {
             m_gucsMap.put(gucs.getUUID(), gucs);
         }
+    }
+
+    private void resetRepo(){
+        m_gucsMap.clear();
     }
 
     /**

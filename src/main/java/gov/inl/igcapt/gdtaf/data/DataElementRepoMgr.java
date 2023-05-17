@@ -34,10 +34,15 @@ public class DataElementRepoMgr {
      * @param gdtafData
      */
     public void initRepo(GDTAF gdtafData){
+        resetRepo();
         var dataElementList = gdtafData.getDataElementRepo().getDataElement();
         for (var de : dataElementList) {
             m_dataElementMap.put(de.getUUID(), de);
         }
+    }
+
+    private void resetRepo(){
+        m_dataElementMap.clear();
     }
 
     /**

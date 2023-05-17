@@ -31,10 +31,15 @@ public class PayloadRepoMgr {
      * @param gdtaf
      */
     public void initRepo(GDTAF gdtaf){
+        resetRepo();
         var payloadList = gdtaf.getPayloadRepo().getPayload();
         for (var payload:payloadList) {
             m_payLoadRepo.put(payload.getUUID(), payload);
         }
+    }
+
+    private void resetRepo(){
+        m_payLoadRepo.clear();
     }
 
     /**

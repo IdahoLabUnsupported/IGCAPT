@@ -31,10 +31,15 @@ public class CNRMRepoMgr {
      * @param gdtafData
      */
     public void initRepo(GDTAF gdtafData){
+        resetRepo();
         var cnrmList = gdtafData.getCNRMRepo().getCNRM();
         for (var cnrm: cnrmList) {
             m_cnrmMap.put(cnrm.getUUID(), cnrm);
         }
+    }
+
+    private void resetRepo(){
+        m_cnrmMap.clear();
     }
 
     /**

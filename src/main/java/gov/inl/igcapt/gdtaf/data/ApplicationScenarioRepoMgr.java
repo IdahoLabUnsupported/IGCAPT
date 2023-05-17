@@ -23,10 +23,15 @@ public class ApplicationScenarioRepoMgr {
      * @param gdtaf
      */
     public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf){
+        resetRepo();
         var appscenList = gdtaf.getApplicationScenarioRepo().getApplicationScenario();
         for(var appscen : appscenList){
             m_appScenMap.put(appscen.getUUID(), appscen);
         }
+    }
+
+    private void resetRepo(){
+        m_appScenMap.clear();
     }
 
     /**

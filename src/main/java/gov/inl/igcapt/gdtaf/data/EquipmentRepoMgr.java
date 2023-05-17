@@ -33,10 +33,15 @@ public class EquipmentRepoMgr {
      * @param gdtaf
      */
     public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf){
+        resetRepo();
         var equipList = gdtaf.getEquipmentRepo().getEquipment();
         for (var equip :equipList) {
             m_equipMap.put(equip.getUUID(), equip);
         }
+    }
+
+    private void resetRepo(){
+        m_equipMap.clear();
     }
 
     /**

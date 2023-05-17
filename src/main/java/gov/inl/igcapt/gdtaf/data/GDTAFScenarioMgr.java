@@ -36,6 +36,7 @@ public class GDTAFScenarioMgr {
      * @param gdtaf
      */
     public void initRepo(GDTAF gdtaf){
+        resetRepo();
         var scenarioList = gdtaf.getScenarioRepo().getScenario();
         for (var scenario:scenarioList) {
             m_scenarioMap.put(scenario.getUUID(), scenario);
@@ -46,7 +47,7 @@ public class GDTAFScenarioMgr {
      * reset the Repo to allow for reloading another file from
      * the GUI interface.
      */
-    public void resetRepo(){
+    private void resetRepo(){
         m_scenarioMap.clear();
         m_activeScenario = null;
         m_activeSolution = null;

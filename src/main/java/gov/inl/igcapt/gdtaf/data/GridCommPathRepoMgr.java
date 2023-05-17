@@ -32,10 +32,15 @@ public class GridCommPathRepoMgr {
      * @param gdtafData
      */
     public void initRepo(GDTAF gdtafData){
+        resetRepo();
         var gcpList = gdtafData.getGridCommunicationPathRepo().getGridCommunicationPath();
         for (var gcp: gcpList) {
             m_gridCommPathMap.put(gcp.getUUID(), gcp);
         }
+    }
+
+    private void resetRepo(){
+        m_gridCommPathMap.clear();
     }
 
     /**

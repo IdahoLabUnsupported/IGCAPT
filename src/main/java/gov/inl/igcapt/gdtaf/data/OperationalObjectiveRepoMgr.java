@@ -39,10 +39,15 @@ public class OperationalObjectiveRepoMgr {
      * @param gdtaf
      */
     public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf){
+        resetRepo();
         var ooList = gdtaf.getOperationalObjectiveRepo().getOperationalObjective();
         for(var oo : ooList){
             m_opobj_map.put(oo.getUUID(), oo);
         }
+    }
+
+    private void resetRepo(){
+        m_opobj_map.clear();
     }
 
     /**
