@@ -244,6 +244,11 @@ public class GDTAFScenarioMgr {
         return optList;
     }
 
+    /**
+     * util to find a solution asset by UUID
+     * @param uuid
+     * @return
+     */
     public SolutionAsset findSolutionAsset(String uuid){
         for(var soln_asset:m_activeOption.getSolutionAsset()){
             if(soln_asset.getUUID().equals(uuid)){
@@ -255,6 +260,25 @@ public class GDTAFScenarioMgr {
     public List<String> getSelectedGucsList(){
         return m_activeScenario.getSelectedGucs();
     }
+
+    /**
+     * util to find SolutionAssets of particular equipment type uuids.
+     * This is  useful for connecting OperationalObjective source/dest to
+     * SolutionAsset equip.  Take the OO souce/dest  call EquipmentManager.getEquipDerivedFrom(source)
+     * use that list to find the SolutionAsset associated with the source using this method.
+     * @param equipUuid
+     * @return
+     */
+    public List<String> findSolutionAssetsOfEquipmentType(String equipUuid){
+        List<String> foundAssets = new ArrayList<String>();
+        for(var solnasset:m_activeOption.getSolutionAsset()){
+            if(solnasset.getEquipment().equals(equipUuid)){
+                foundAssets.add(solnasset.getUUID());
+            }
+        }
+        return foundAssets;
+    }
+
 
 
 }

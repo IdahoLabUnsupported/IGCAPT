@@ -3,9 +3,7 @@ package gov.inl.igcapt.gdtaf.data;
 import gov.inl.igcapt.gdtaf.model.GDTAF;
 import gov.inl.igcapt.gdtaf.model.Equipment;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * EquipmentRepoMgr is a manager/accessor class for GTDAF
@@ -58,6 +56,25 @@ public class EquipmentRepoMgr {
      */
     public int count(){ return m_equipMap.size();}
 
+    /**
+     * this is a utility to get a list of equipment derived from a particular UUID
+     * This is handy when trying to associate a Operational Objective Source/Dest ID
+     * to a SolutionAsset.  The Source/Dest will be the parameter uuid and the return list
+     * of uuids will be things to search for as AssetSolution->Eqiupment
+     * @param uuid
+     * @return
+     */
+    public List<String> getEquipmentDerivedFrom(String uuid){
+        List<String> derivedFromList = new ArrayList<String>();
+        for(var equip:m_equipMap.values()){
+            for(var der:equip.getDerivedFrom()){
+                if(der.equals(uuid)){
+                    derivedFromList.add(equip.getUUID());
+                }
+            }
+        }
+        return derivedFromList;
+    }
 
     /**
      * helper function to associate the GDTAF Equipment Name to

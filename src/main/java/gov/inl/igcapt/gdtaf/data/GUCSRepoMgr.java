@@ -3,7 +3,9 @@ package gov.inl.igcapt.gdtaf.data;
 import gov.inl.igcapt.gdtaf.model.GDTAF;
 import gov.inl.igcapt.gdtaf.model.GridUseCaseScenario;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
