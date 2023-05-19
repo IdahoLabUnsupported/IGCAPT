@@ -1,7 +1,6 @@
 
 package gov.inl.igcapt.controllers;
 
-import gov.inl.igcapt.components.DataModels.SgEndPoint;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
 import gov.inl.igcapt.components.Pair;
@@ -21,18 +20,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class GDTAFImportController {
 
-    private static Logger logger = Logger.getLogger(GDTAFImportController.class.getName());
+    private static final Logger logger = Logger.getLogger(GDTAFImportController.class.getName());
     private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
     private final List<Pair<SgNode, String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
     private gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
     private static GDTAFImportController m_importController = null;
+    private static SgNode m_lastAncestorNode = null;
 
     private GDTAFImportController() {
 
@@ -195,7 +194,6 @@ public class GDTAFImportController {
         return uuidStr.replace("_", "");
     }
 
-
     // Recursively add nodes starting with assetUuid and continuing through the "Topology" View's children.
     private void addNodeAndChildren(String assetUuid) {
 
@@ -229,6 +227,7 @@ public class GDTAFImportController {
                                     10,
                                     "assetGuid:" + stripUnderscoreFromUUID(solutionAsset.getUUID()));
 
+                            m_lastAncestorNode = sgNode;
                             m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
 
                             if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
@@ -253,7 +252,7 @@ public class GDTAFImportController {
                         // m_assetGuidToNodeMap.
                         var views = solutionAsset.getViews();
 
-                        if (views != null && !views.isEmpty() && sgNode != null) {
+                        if (views != null && !views.isEmpty() && m_lastAncestorNode != null) {
                             var topologyView = views.stream()
                                     .filter(view -> view.getName().equals("Topology"))
                                     .findAny()
@@ -265,7 +264,7 @@ public class GDTAFImportController {
                                 if (children != null && !children.isEmpty()) {
 
                                     for (var child : children) {
-                                        m_edgeList.add(new Pair<>(sgNode, child.getValue()));
+                                        m_edgeList.add(new Pair<>(m_lastAncestorNode, child.getValue()));
 
                                         addNodeAndChildren(child.getValue());
                                     }
