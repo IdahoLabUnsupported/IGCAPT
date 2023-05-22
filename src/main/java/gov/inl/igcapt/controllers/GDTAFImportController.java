@@ -194,7 +194,11 @@ public class GDTAFImportController {
         return uuidStr.replace("_", "");
     }
 
-    // Recursively add nodes starting with assetUuid and continuing through the "Topology" View's children.
+    /**
+     * Recursively add nodes starting with assetUuid and continuing through the solnAssetView's children.
+     * @param assetUuid The uuid of the asset to recursively add.
+     * @param solnAssetView The view's children to add.
+     */
     private void addNodeAndChildren(String assetUuid, String solnAssetView) {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
@@ -212,7 +216,16 @@ public class GDTAFImportController {
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
                     if (equipmentInstance != null) {
-                        if (solutionAsset.getEquipmentRole() != EquipmentRole.ROLE_CONTAINER && location != null) {
+                        //if (solutionAsset.getEquipmentRole() != EquipmentRole.ROLE_CONTAINER && location != null) {
+                        
+                        if (location == null && m_lastAncestorNode != null){
+                            location = new GeoLocation();
+                            
+                            location.setX((float)m_lastAncestorNode.getLongit());
+                            location.setY((float)m_lastAncestorNode.getLat());
+                        }
+                        
+                        if (location != null) {
 
                             int nodeId = GraphManager.getInstance().getNextNodeIndex();
                             String name = equipmentInstance.getName();
@@ -252,19 +265,21 @@ public class GDTAFImportController {
                         // m_assetGuidToNodeMap.
                         var views = solutionAsset.getViews();
 
-                        if (views != null && !views.isEmpty() && m_lastAncestorNode != null) {
-                            var topologyView = views.stream()
+                        //if (views != null && !views.isEmpty() && m_lastAncestorNode != null) {
+                        if (views != null && !views.isEmpty() && sgNode != null) {
+                            var assetView = views.stream()
                                     .filter(view -> view.getName().equals(solnAssetView))
                                     .findAny()
                                     .orElse(null);
 
-                            if (topologyView != null) {
-                                List<EdgeIndexType> children = topologyView.getChildren();
+                            if (assetView != null) {
+                                List<EdgeIndexType> children = assetView.getChildren();
 
                                 if (children != null && !children.isEmpty()) {
 
                                     for (var child : children) {
-                                        m_edgeList.add(new Pair<>(m_lastAncestorNode, child.getValue()));
+                                        //m_edgeList.add(new Pair<>(m_lastAncestorNode, child.getValue()));
+                                        m_edgeList.add(new Pair<>(sgNode, child.getValue()));
 
                                         addNodeAndChildren(child.getValue(),solnAssetView);
                                     }

@@ -83,7 +83,7 @@ public class GraphManager {
     public int getNextNodeIndex(){
         
         var graph = getGraph();
-        int returnval = -1;
+        int returnval = 0;
         
         var vertices = graph.getVertices();
 
