@@ -195,7 +195,7 @@ public class GDTAFImportController {
     }
 
     // Recursively add nodes starting with assetUuid and continuing through the "Topology" View's children.
-    private void addNodeAndChildren(String assetUuid) {
+    private void addNodeAndChildren(String assetUuid, String solnAssetView) {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
         SolutionAsset solutionAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(assetUuid);
@@ -254,7 +254,7 @@ public class GDTAFImportController {
 
                         if (views != null && !views.isEmpty() && m_lastAncestorNode != null) {
                             var topologyView = views.stream()
-                                    .filter(view -> view.getName().equals("Topology"))
+                                    .filter(view -> view.getName().equals(solnAssetView))
                                     .findAny()
                                     .orElse(null);
 
@@ -266,12 +266,12 @@ public class GDTAFImportController {
                                     for (var child : children) {
                                         m_edgeList.add(new Pair<>(m_lastAncestorNode, child.getValue()));
 
-                                        addNodeAndChildren(child.getValue());
+                                        addNodeAndChildren(child.getValue(),solnAssetView);
                                     }
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(null,
-                                        "topologyView == null",
+                                        "View == null",
                                         "Attention",
                                         JOptionPane.WARNING_MESSAGE);
                             }
@@ -303,9 +303,17 @@ public class GDTAFImportController {
                     EquipmentRepoMgr.getInstance().count() > 0) {
                 var option = GDTAFScenarioMgr.getInstance().getActiveSolutionOption();
                 var topologyHead = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getTopologyHead();
+                var gucsHeadList = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getGucsHead();
+                var selectedGucsList = GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs();
 
                 if (topologyHead != null) {
-                    addNodeAndChildren(topologyHead);
+                    addNodeAndChildren(topologyHead, "Topology" );
+                }
+                for(int lcv = 0; lcv < gucsHeadList.size(); lcv++ ){
+                    var selectedGucs = GUCSRepoMgr.getInstance().getGridUseCase(selectedGucsList.get(lcv));
+                    String gucsSolnView = "GUCS: " + selectedGucs.getName();
+
+                    addNodeAndChildren(gucsHeadList.get(lcv), gucsSolnView);
                 }
             }
         } catch (Exception ex) {

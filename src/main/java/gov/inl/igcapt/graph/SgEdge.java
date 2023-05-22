@@ -93,7 +93,12 @@ public class SgEdge {
         double highLimitValue;
         
         try {
-            highLimitValue = Double.parseDouble(highLimit);
+            if(highLimit != null) {
+                highLimitValue = Double.parseDouble(highLimit);
+            }
+            else{
+                highLimitValue = defaultUtilizationHigh;
+            }
         }
         catch (NullPointerException | NumberFormatException ex) {
             highLimitValue = defaultUtilizationHigh;
@@ -107,7 +112,12 @@ public class SgEdge {
         double mediumLimitValue;
         
         try {
-            mediumLimitValue = Double.parseDouble(mediumLimit);
+            if(mediumLimit != null){
+                mediumLimitValue = Double.parseDouble(mediumLimit);
+            }
+            else{
+                mediumLimitValue = defaultUtilizationMedium;
+            }
         }
         catch (NullPointerException | NumberFormatException ex) {
             mediumLimitValue = defaultUtilizationMedium;
