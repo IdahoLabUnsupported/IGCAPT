@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--Created with Liquid Studio 2021 (https://www.liquid-technologies.com)-->
 <xs:schema xmlns:core="http://pnnl.gov/gdtaf-core" xmlns="http://pnnl.gov/gdtaf-gucs" elementFormDefault="qualified" targetNamespace="http://pnnl.gov/gdtaf-gucs" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:import schemaLocation="../common-model-definition-main/gdtaf-core.xsd" namespace="http://pnnl.gov/gdtaf-core" />
+    <xs:import schemaLocation="../common-model-definition/gdtaf-core.xsd" namespace="http://pnnl.gov/gdtaf-core" />
     <xs:complexType name="GridUseCaseScenario">
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">

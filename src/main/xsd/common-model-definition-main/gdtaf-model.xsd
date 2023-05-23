@@ -10,10 +10,10 @@
             <xs:enumeration value="ADDED" />
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType name="EdgeIndexType">
+    <xs:complexType name="EdgeType">
         <xs:simpleContent>
             <xs:extension base="core:guid">
-                <xs:attribute name="EdgeIndexList" type="core:indexList" use="optional" />
+                <xs:attribute name="Edges" type="core:guidList" use="optional" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -49,9 +49,9 @@
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">
                 <xs:sequence>
-                    <xs:element name="parents" type="EdgeIndexType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="children" type="EdgeIndexType" minOccurs="0" maxOccurs="unbounded" />
-                    <xs:element name="peers" type="EdgeIndexType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="parents" type="EdgeType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="children" type="EdgeType" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="peers" type="EdgeType" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -279,11 +279,15 @@
     </xs:complexType>
     <xs:simpleType name="SolutionEdgeAttributeType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="PACKET_SIZE_BYTES" />
-            <xs:enumeration value="CAPACITY_BITS_PER_SECOND" />
+            <xs:enumeration value="PACKET_SIZE" />
+            <xs:enumeration value="APPLICATION_CAPACITY" />
+            <xs:enumeration value="APPLICATION_LATENCY" />
+            <xs:enumeration value="LINK_CAPACITY" />
+            <xs:enumeration value="LINK_LATENCY" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="SolutionEdgeAttribute">
+        <xs:attribute name="UUID" type="core:guid" use="required" />
         <xs:attribute name="Type" type="SolutionEdgeAttributeType" use="required" />
         <xs:attribute name="Value" type="xs:anySimpleType" use="required" />
         <xs:attribute name="Schedule" type="xs:string" />
