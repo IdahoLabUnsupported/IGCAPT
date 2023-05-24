@@ -194,7 +194,11 @@ public class GDTAFImportController {
         return uuidStr.replace("_", "");
     }
 
-    // Recursively add nodes starting with assetUuid and continuing through the "Topology" View's children.
+    /**
+     * Recursively add nodes starting with assetUuid and continuing through the solnAssetView's children.
+     * @param assetUuid The uuid of the asset to recursively add.
+     * @param solnAssetView The view's children to add.
+     */
     private void addNodeAndChildren(String assetUuid, String solnAssetView) {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
@@ -253,13 +257,13 @@ public class GDTAFImportController {
                         var views = solutionAsset.getViews();
 
                         if (views != null && !views.isEmpty() && m_lastAncestorNode != null) {
-                            var topologyView = views.stream()
+                            var assetView = views.stream()
                                     .filter(view -> view.getName().equals(solnAssetView))
                                     .findAny()
                                     .orElse(null);
 
-                            if (topologyView != null) {
-                                List<EdgeIndexType> children = topologyView.getChildren();
+                            if (assetView != null) {
+                                List<EdgeType> children = assetView.getChildren();
 
                                 if (children != null && !children.isEmpty()) {
 
@@ -301,19 +305,10 @@ public class GDTAFImportController {
                     GDTAFScenarioMgr.getInstance().getActiveSolution() != null &&
                     GDTAFScenarioMgr.getInstance().getActiveSolutionOption() != null &&
                     EquipmentRepoMgr.getInstance().count() > 0) {
-                var option = GDTAFScenarioMgr.getInstance().getActiveSolutionOption();
                 var topologyHead = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getTopologyHead();
-                var gucsHeadList = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getGucsHead();
-                var selectedGucsList = GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs();
 
                 if (topologyHead != null) {
                     addNodeAndChildren(topologyHead, "Topology" );
-                }
-                for(int lcv = 0; lcv < gucsHeadList.size(); lcv++ ){
-                    var selectedGucs = GUCSRepoMgr.getInstance().getGridUseCase(selectedGucsList.get(lcv));
-                    String gucsSolnView = "GUCS: " + selectedGucs.getName();
-
-                    addNodeAndChildren(gucsHeadList.get(lcv), gucsSolnView);
                 }
             }
         } catch (Exception ex) {

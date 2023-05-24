@@ -94,15 +94,14 @@
             <xs:enumeration value="MAX_PARENTS" />
             <xs:enumeration value="MAX_MANAGED" />
             <xs:enumeration value="PATH_LOSS_CALCULATION" />
-            <xs:enumeration value="LATENCY_CALCULATION" />
+            <xs:enumeration value="LINK_LATENCY_CALCULATION" />
+            <xs:enumeration value="LINK_CAPACITY_CALCULATION" />
             <xs:enumeration value="MIN_PATH_THRESHOLD" />
             <xs:enumeration value="COST_FACTOR" />
             <xs:enumeration value="IMPLEMENTATION_FACTOR" />
             <xs:enumeration value="SAFETY_FACTOR" />
             <xs:enumeration value="RELIABILITY_FACTOR" />
             <xs:enumeration value="MAX_APPLICATION_PACKET_BYTES" />
-            <xs:enumeration value="LINK_BANDWIDTH_BITS_PER_SECOND" />
-            <xs:enumeration value="LINK_CAPACITY_CALCULATION" />
             <xs:enumeration value="MAX_QUEUED_PACKETS" />
             <xs:enumeration value="RESILIENCE_FACTOR" />
             <xs:enumeration value="LIFECYCLE_MANAGEMENT_FACTOR" />
