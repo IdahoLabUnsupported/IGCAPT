@@ -46,7 +46,7 @@ public class GraphManager {
     // Class.
     
     // private static instance
-    private static GraphManager instance;
+    private static GraphManager instance = new GraphManager();
    
     // private constructor
     private GraphManager() {  
@@ -68,13 +68,6 @@ public class GraphManager {
 
     // Static method to create instance of GraphManager class
     public static GraphManager getInstance() {
-
-       // creates class if it's not already created
-       if(instance == null) {
-          instance = new GraphManager();
-       }
-
-        // returns the singleton class
         return instance;
     }
     
@@ -90,7 +83,7 @@ public class GraphManager {
     public int getNextNodeIndex(){
         
         var graph = getGraph();
-        int returnval = -1;
+        int returnval = 0;
         
         var vertices = graph.getVertices();
 

@@ -2,6 +2,7 @@ package gov.inl.igcapt.gdtaf.data;
 
 import gov.inl.igcapt.gdtaf.model.GDTAF;
 import gov.inl.igcapt.gdtaf.model.GridUseCaseScenario;
+import gov.inl.igcapt.gdtaf.model.OperationalObjective;
 
 import java.util.ArrayList;
 import java.util.HashMap;

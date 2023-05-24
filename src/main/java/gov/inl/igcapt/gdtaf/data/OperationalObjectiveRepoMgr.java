@@ -59,6 +59,7 @@ public class OperationalObjectiveRepoMgr {
         return m_opobj_map.get(uuid);
     }
 
+
     /**
      * getter for Latency in Seconds.  GDTAF provides a json string as the
      * application_latency value... this method takes that string and parses

@@ -477,12 +477,23 @@ MouseWheelListener {
     
     // Create the image (i.e. box around node) to add to the map to show node is selected
     private MapImageImpl createSelectionImage(SgNodeInterface node) {
+        
+        MapImageImpl returnval = null;
         Icon selectionIcon = IGCAPTgui.getInstance().getLayerIcon("selectionIcon");
-        SgLayeredIcon layeredIcon = (SgLayeredIcon)selectionIcon;
-        BufferedImage theImage = (BufferedImage)layeredIcon.getCompositeImage();
-        MapImageImpl image = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
-        image.setId(node.getName());
-        return image;
+        
+        if (selectionIcon != null) {
+            SgLayeredIcon layeredIcon = (SgLayeredIcon)selectionIcon;
+            
+            BufferedImage theImage = (BufferedImage)layeredIcon.getCompositeImage();
+
+            if (theImage != null) {
+                returnval = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
+
+                returnval.setId(node.getName());                                    
+            }
+        }
+
+        return returnval;
     }
     
     // Drag the image around with the cursor while the button is still down.
