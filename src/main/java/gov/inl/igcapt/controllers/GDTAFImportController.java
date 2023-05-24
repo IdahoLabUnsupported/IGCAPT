@@ -219,9 +219,9 @@ public class GDTAFImportController {
                         if (solutionAsset.getEquipmentRole() != EquipmentRole.ROLE_CONTAINER && location != null) {
 
                             int nodeId = GraphManager.getInstance().getNextNodeIndex();
-                            String name = equipmentInstance.getName();
+                            String name = solutionAsset.getName();
                             sgNode = new SgNode(nodeId,
-                                    equipmentInstance,
+                                    solutionAsset.getUUID(),
                                     EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()),
                                     name,
                                     true,

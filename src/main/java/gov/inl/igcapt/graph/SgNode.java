@@ -19,7 +19,6 @@ import java.util.UUID;
 import javax.swing.Icon;
 
 import gov.inl.igcapt.view.IGCAPTgui;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
@@ -54,7 +53,7 @@ public class SgNode implements SgNodeInterface {
     
  
     public SgNode(int id,
-            Equipment gdtaf_equip,
+            String assetUuid,
             String typeUuid,
             String name,
             boolean enableDataSending,
@@ -72,7 +71,7 @@ public class SgNode implements SgNodeInterface {
                 dataToSend, 
                 maxInterval, 
                 userData);
-         _gdtafEquip = gdtaf_equip;
+         _assetUuid = assetUuid;
     }
         
     public SgNode(int id, 
@@ -116,7 +115,7 @@ public class SgNode implements SgNodeInterface {
     private String _name;
     private int _id = -1;
     private UUID _type = null;
-    private Equipment _gdtafEquip = null;
+    private String _assetUuid = null;
     private boolean _enableDataSending = true;
     private boolean _isAggregate = false;
     private int _dataToSend; // in bytes
@@ -148,8 +147,8 @@ public class SgNode implements SgNodeInterface {
         this._isCollapsed = _isCollapsed;
     }
                                   
-    public Equipment getGDTAFEquipmentModel(){
-        return _gdtafEquip;
+    public String getAssetUUID(){
+        return _assetUuid;
     }
     
     public SgComponentData getAssociatedComponent() {
