@@ -857,7 +857,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         if (mapImagesVisible && mapImageList != null) {
             synchronized (this) {
                 for (MapImage image : mapImageList) {
-                    if (image.isVisible()) {
+                    if (image != null && image.isVisible()) {
                         paintImage(g, image);
                     }
                 }
