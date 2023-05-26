@@ -485,7 +485,7 @@ public class NodeSettingsDialog extends javax.swing.JDialog {
         maxLatencyTextField.setText(Integer.toString(m_SgNode.getMaxLatency()));
         componentIdTextField.setText(Integer.toString(m_SgNode.getId()));
         
-        String tempStr = "<Unknown>";
+        String tempStr = m_SgNode.getTypeName();
         String nodeType = m_SgNode.getType();
         
         SgComponentData sgComponent = IGCAPTgui.getComponentByUuid(nodeType);

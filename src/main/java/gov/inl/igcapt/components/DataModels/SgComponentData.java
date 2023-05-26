@@ -182,6 +182,10 @@ public class SgComponentData implements BaseModel {
     public void setComponentGroupId(Long componentGroupId) {
         this.componentGroupId = componentGroupId;
     }
+
+    public Long getComponentGroupId(){
+        return this.componentGroupId;
+    }
     
     public String getFormalIdentifier() {
         return formalIdentifier;

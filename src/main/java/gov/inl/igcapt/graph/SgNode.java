@@ -7,15 +7,15 @@ package gov.inl.igcapt.graph;
 
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.LayeredIcon;
+import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
 import gov.inl.igcapt.components.KeyValueManager;
-import gov.inl.igcapt.gdtaf.model.Equipment;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import javax.swing.Icon;
 
 import gov.inl.igcapt.view.IGCAPTgui;
@@ -55,6 +55,7 @@ public class SgNode implements SgNodeInterface {
     public SgNode(int id,
             String assetUuid,
             String typeUuid,
+            String typeName,
             String name,
             boolean enableDataSending,
             boolean isAggregate,
@@ -72,6 +73,7 @@ public class SgNode implements SgNodeInterface {
                 maxInterval, 
                 userData);
          _assetUuid = assetUuid;
+         _typeName = typeName;
     }
         
     public SgNode(int id, 
@@ -86,7 +88,8 @@ public class SgNode implements SgNodeInterface {
         
         _name = name;
         _id = id;
-        _type = UUID.fromString(typeUuid);
+        //_type = UUID.fromString(typeUuid);
+        _typeId = typeUuid;
         _enableDataSending = enableDataSending;
         _dataToSend = dataToSend;
         _maxLatency = maxInterval;
@@ -114,7 +117,10 @@ public class SgNode implements SgNodeInterface {
 
     private String _name;
     private int _id = -1;
-    private UUID _type = null;
+    //private UUID _type = null;
+    private String _typeId = null;
+
+    private String _typeName = null;
     private String _assetUuid = null;
     private boolean _enableDataSending = true;
     private boolean _isAggregate = false;
@@ -153,6 +159,11 @@ public class SgNode implements SgNodeInterface {
     
     public SgComponentData getAssociatedComponent() {
         return _component;
+    }
+
+    public void refreshAssociatedComponent(){
+        ComponentDao compDao = new ComponentDao();
+        _component = compDao.getComponentByUUID(_component.getUuid());
     }
     
     @Override
@@ -195,12 +206,17 @@ public class SgNode implements SgNodeInterface {
     
     @Override
     public String getType() {
-        return _type.toString();
+        return _typeId.toString();
+    }
+
+    public String getTypeName(){
+        return _typeName;
     }
     
     @Override
     public void setType(String uuidStr) {
-        _type = UUID.fromString(uuidStr);
+        //_type = UUID.fromString(uuidStr);
+        _typeId = uuidStr;
     }
     
     public boolean getEnableDataSending (){
