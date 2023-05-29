@@ -1,14 +1,13 @@
 package gov.inl.igcapt.gdtaf.data;
 
-import gov.inl.igcapt.gdtaf.model.GDTAF;
 import gov.inl.igcapt.gdtaf.model.OperationalAttributeType;
 import gov.inl.igcapt.gdtaf.model.OperationalObjective;
-import jdk.dynalink.Operation;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * OperationalObjectivRepoMgr is a manager/accessor class for GTDAF
@@ -73,18 +72,22 @@ public class OperationalObjectiveRepoMgr {
         for(var attr:oo.getAttributes()){
             if(attr.getType()== OperationalAttributeType.APPLICATION_LATENCY){
                 String jsonstring = attr.getValue();
-                JSONObject obj = new JSONObject(jsonstring);
-                int value = obj.getInt("value");
-                String units = obj.getString("units");
-                switch (units){
-                    case "second":
-                        return value;
-                    case "hour":
-                        return value * 3600;
-                    case "minute":
-                        return value *  60;
-                    default:
-                        return value;
+                String escaped =  escapeHTML(jsonstring);
+                JSONArray jsonArray = new JSONArray(jsonstring);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject arrayObj = jsonArray.getJSONObject(i);
+                    int value = arrayObj.getInt("value");
+                    String units = arrayObj.getString("units");
+                    switch (units){
+                        case "second":
+                            return value;
+                        case "hour":
+                            return value * 3600;
+                        case "minute":
+                            return value *  60;
+                        default:
+                            return value;
+                    }
                 }
             }
         }
@@ -96,5 +99,11 @@ public class OperationalObjectiveRepoMgr {
      * @return int
      */
     public int count(){return m_opobj_map.size();}
+
+    public static String escapeHTML(String str) {
+        return str.codePoints().mapToObj(c -> c > 127 || "\"'<>&".indexOf(c) != -1 ?
+                        "&#" + c + ";" : new String(Character.toChars(c)))
+                .collect(Collectors.joining());
+    }
 
 }

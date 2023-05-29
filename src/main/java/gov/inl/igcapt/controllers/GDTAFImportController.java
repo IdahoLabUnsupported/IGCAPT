@@ -135,30 +135,56 @@ public class GDTAFImportController {
                     ooUseCase.setName(opObj.getName());
                 }
                 //See if the SgField is associated with the UseCase
-                //if not create on and associate it to the use_case
+                //if not create one and associate it to the use_case
                 for(var field:ooUseCase.getFields()){
-                    if(field.getName().equals(ooPayload.getName())){
+                    if(field.getName().equals(ooPayload.getName())) {
                         ooField = field;
+                    }
+                    if( ooField == null) {
+                        for (var field2 : componentDao.getFields()) {
+                            if (field2.getName().equals(ooPayload.getName())) {
+                                ooField = field2;
+                            }
+                        }
+                    }
+                    if(ooField == null) {
+                        ooField = new SgField(ooPayload.getName(), payloadSize);
+                       // ooField.setId(node.getAssociatedComponent().getId());
+                    }
                         //assert the size in case there have
                         //been changes
                         ooField.setPayload(payloadSize);
-                        ooField.setId(node.getAssociatedComponent().getId());
+                       // ooField.setId(node.getAssociatedComponent().getId());
                     }
-                }
-                if(ooField == null){
-                    ooField = new SgField(ooPayload.getName(), payloadSize);
-                    ooField.setId(node.getAssociatedComponent().getId());
-                }
                 componentDao.saveField(ooField);
 
-                node.getAssociatedComponent().addField(ooField);
-                ooUseCase.addComponent(node.getAssociatedComponent());
-                ooUseCase.addField(ooField);
+                //if the node ComponentData does not contain ooField add it
+                if(!node.getAssociatedComponent().getFields().contains(ooField)){
+                    node.getAssociatedComponent().addField(ooField);
+                }
+
+                // of ooUsecase does not contain the Node data add it
+                if(ooUseCase.getComponents().size() == 0){
+                    ooUseCase.addComponent(node.getAssociatedComponent());
+                }
+                else if(!ooUseCase.getComponents().contains(node.getAssociatedComponent()))  {
+                    ooUseCase.addComponent(node.getAssociatedComponent());
+                }
+
+                // if the ooUsecase does nto contain the ooField add it
+                if(ooUseCase.getFields().size() == 0){
+                    ooUseCase.addField(ooField);
+                }
+                else if(!ooUseCase.getFields().contains(ooField)){
+                    ooUseCase.addField(ooField);
+                }
+
                 ooUseCase.setLatency(OperationalObjectiveRepoMgr.getInstance().getOpObjLatencySec(opObj.getUUID()));
                 //TODO figure out a good place to grab the description...
                 ooUseCase.setDescription(opObj.getName());
-                //ooUseCase.addComponent(node.getAssociatedComponent());
 
+                //Update the Node Component Data by removing and re-adding ooUseCase
+            //    node.getAssociatedComponent().removeUsecase(ooUseCase);
                 node.getAssociatedComponent().addUsecase(ooUseCase);
                 componentDao.saveUseCase(ooUseCase);
                 componentDao.saveComponent(node.getAssociatedComponent());
@@ -174,9 +200,6 @@ public class GDTAFImportController {
                     endpointTypeList.add(m_assetGuidToNodeMap.get(endPointAssetUUID).getType());
                 }
                 node.setEndPointList(endpoints);
-                componentDao.saveField(ooField);
-                componentDao.saveUseCase(ooUseCase);
-                componentDao.saveComponent(node.getAssociatedComponent());
             }
             //need to clear the list ahead of the next opObj
             solnAssetUUIDList.clear();
