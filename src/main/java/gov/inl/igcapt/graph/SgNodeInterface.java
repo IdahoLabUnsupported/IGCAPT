@@ -35,5 +35,7 @@ public interface SgNodeInterface {
     public void setRefNode(SgNode refNode);
     public boolean canCollapse();
     public boolean canExpand();
+    public void setRenderName(boolean renderName);
+    public boolean isRenderName();
     public ArrayList<SgNodeInterface> getConnectedNodes(boolean recursive, ArrayList<SgNodeInterface>existingNodeList);
 }

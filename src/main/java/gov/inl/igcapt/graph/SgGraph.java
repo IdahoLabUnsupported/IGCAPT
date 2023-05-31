@@ -236,4 +236,13 @@ public class SgGraph extends UndirectedSparseMultigraph<SgNodeInterface, SgEdge>
     public String toString() {
         return getRefNode().getName();
     }
+
+    @Override
+    public void setRenderName(boolean renderName) {
+    }
+
+    @Override
+    public boolean isRenderName() {
+        return false;
+    }
 }

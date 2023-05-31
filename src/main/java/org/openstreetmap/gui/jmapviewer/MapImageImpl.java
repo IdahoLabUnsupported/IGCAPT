@@ -32,6 +32,7 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
     private double radius;
     BufferedImage img;
     String id;
+    private boolean drawImageMarker = true; // Draw the label for the image.
     
     //private MapMarker.STYLE markerStyle;
 
@@ -40,74 +41,21 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
         VARIABLE
     }
 
-
-    /**
-     * Constructs a new {@code MapImageImpl}.
-     * @param coord Coordinates of the map marker
-     * @param radius Radius of the map marker position
-     */
-/*    public MapImageImpl(Coordinate coord, double radius) {
-        this(null, null, coord, radius);
-    }*/
-
-    /**
-     * Constructs a new {@code MapImageImpl}.
-     * @param name Name of the map marker
-     * @param coord Coordinates of the map marker
-     * @param radius Radius of the map marker position
-     */
-/*    public MapImageImpl(String name, Coordinate coord, double radius) {
-        this(null, name, coord, radius);
-    }*/
-
-    /**
-     * Constructs a new {@code MapImageImpl}.
-     * @param layer Layer of the map marker
-     * @param coord Coordinates of the map marker
-     * @param radius Radius of the map marker position
-     */
- /*   public MapImageImpl(Layer layer, Coordinate coord, double radius) {
-        this(layer, null, coord, radius);
-    }*/
-
-    /**
-     * Constructs a new {@code MapImageImpl}.
-     * @param lat Latitude of the map marker
-     * @param lon Longitude of the map marker
-     * @param radius Radius of the map marker position
-     */
- /*   public MapImageImpl(double lat, double lon, double radius) {
-        this(null, null, new Coordinate(lat, lon), radius);
-    }*/
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // constructor for images
-    public MapImageImpl(double lat, double lon, BufferedImage image, double radius) {
-        this(null, null, new Coordinate(lat, lon), radius);
+    public MapImageImpl(double lat, double lon, BufferedImage image, double radius, boolean showName) {
+        this(null, null, new Coordinate(lat, lon), radius, showName);
         img = image;
     }
 
     /**
      * Constructs a new {@code MapImageImpl}.
      * @param layer Layer of the map marker
-     * @param lat Latitude of the map marker
-     * @param lon Longitude of the map marker
-     * @param radius Radius of the map marker position
-     */
-/*    public MapImageImpl(Layer layer, double lat, double lon, double radius) {
-        this(layer, null, new Coordinate(lat, lon), radius);
-    } */
-
-    /**
-     * Constructs a new {@code MapImageImpl}.
-     * @param layer Layer of the map marker
      * @param name Name of the map marker
      * @param coord Coordinates of the map marker
      * @param radius Radius of the map marker position
      */
-    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius) {
-        this(layer, name, coord, radius, STYLE.VARIABLE, getDefaultStyle());
+    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius, boolean showName) {
+        this(layer, name, coord, radius, STYLE.VARIABLE, getDefaultStyle(), showName);
     } 
 
     /**
@@ -118,12 +66,12 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
      * @param radius Radius of the map marker position
      * @param markerStyle Marker style (fixed or variable)
      * @param style Graphical style
+     * @param showName Whether to show name of image
      */
-    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius, STYLE markerStyle, Style style) {
-        super(layer, name, style);
-        //this.markerStyle = markerStyle;
+    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius, STYLE markerStyle, Style style, boolean showName) {
+        super(layer, name, style, showName);
         this.coord = coord;
-        //this.radius = radius;
+        drawImageMarker = showName;
     }
 
     @Override
@@ -183,31 +131,7 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
             g2.setPaint(getBackColor());
             //g.fillOval(position.x - sizeH, position.y - sizeH, size, size);
             g2.setComposite(oldComposite);
-            
-            //public abstract boolean drawImage(Image img,AffineTransform xform,ImageObserver obs)
-            //g2.drawImage(img, xform, obs);
-            
-            //public abstract void drawImage(BufferedImage img,BufferedImageOp op,int x,int y)
-            //g2.drawImage(img, null, position.x, position.y);
-            //System.out.println("zoom level = " + JMapViewer.zoom);
-            // test of image scaling as a user zooms on the map
-            // this does not work
-        /*    int imageWidth = img.getWidth();
-            int imageHeight = img.getHeight();
-            int imageType = img.getType();
-            int newImageWidth = imageWidth * JMapViewer.zoom;
-            int newImageHeight = imageHeight * JMapViewer.zoom;
-            BufferedImage resizedImage = new BufferedImage(newImageWidth , newImageHeight, imageType);
-            Graphics2D g3 = resizedImage.createGraphics();
-            Composite oldComposite1 = g3.getComposite();
-            g3.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-            g3.setPaint(getBackColor());
-            g3.setComposite(oldComposite1);
-            g3.drawImage(img, position.x, position.y, newImageWidth , newImageHeight , null);
-            //g3.dispose(); */
-            // use this draw method places the upper left corner of the image at x,y
-            //g2.drawImage(img, null, position.x, position.y);
-        
+                    
             // place the image so the connecting lines go to the image center
             int imageWidth = img.getWidth();
             int imageHeight = img.getHeight();
@@ -216,10 +140,11 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
             g2.drawImage(img, null, position.x - newImageWidth, position.y - newImageHeight);
             
             // draw the text label for the image
-            //Font myFont = g2.getFont();
-            g2.setColor(Color.black);
-            g2.setFont(new Font(g2.getFont().getFontName(), Font.BOLD, g2.getFont().getSize()));
-            g2.drawString(getId(), position.x + newImageWidth, position.y + newImageHeight);
+            if (drawImageMarker) {
+                g2.setColor(Color.black);
+                g2.setFont(new Font(g2.getFont().getFontName(), Font.BOLD, g2.getFont().getSize()));
+                g2.drawString(getId(), position.x + newImageWidth, position.y + newImageHeight);
+            }
         }
     /*    g.setColor(getColor());
         g.drawOval(position.x - sizeH, position.y - sizeH, size, size);

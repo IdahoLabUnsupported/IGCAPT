@@ -131,6 +131,17 @@ public class SgNode implements SgNodeInterface {
     private List<Integer> _endPointList = new ArrayList<>();
     private Icon _icon = null;
     private MapImage _mapImage = null; // MapImage that corresponds to this node.
+    private boolean _renderName = true; // Should the name be shown on the map?
+
+    @Override
+    public void setRenderName(boolean _renderName) {
+        this._renderName = _renderName;
+    }
+
+    @Override
+    public boolean isRenderName() {
+        return _renderName;
+    }
 
     private boolean _isCollapsed = false; // Allows the attribute to be saved/loaded so we can preserve
 

@@ -14,20 +14,22 @@ public abstract class MapObjectImpl {
     private String name;
     private Style style;
     private Boolean visible;
+    private Boolean showName;
 
     public MapObjectImpl(String name) {
-        this(null, name, null);
+        this(null, name, null, true);
     }
 
     public MapObjectImpl(Layer layer) {
-        this(layer, null, null);
+        this(layer, null, null, true);
     }
 
-    public MapObjectImpl(Layer layer, String name, Style style) {
+    public MapObjectImpl(Layer layer, String name, Style style, boolean showName) {
         super();
         this.layer = layer;
         this.name = name;
         this.style = style;
+        this.showName = showName;
     }
 
     public Layer getLayer() {

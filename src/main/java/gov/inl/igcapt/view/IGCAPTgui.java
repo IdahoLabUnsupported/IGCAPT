@@ -230,7 +230,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             BufferedImage theImage;
             SgLayeredIcon icon = (SgLayeredIcon) node.getIcon();
             theImage = (BufferedImage) icon.getCompositeImage();
-            MapImageImpl myimage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
+            MapImageImpl myimage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node, node.isRenderName());
             myimage.setId(node.getName());
             node.setMapImage(myimage);
             map.addMapImage(myimage);
@@ -1876,6 +1876,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             node.setEnableDataSending(nodeSettingsDlg.getEnableDataSending());
             node.setIsAggregate(nodeSettingsDlg.getIsAggregate());
             node.setUserData(nodeSettingsDlg.getUserData());
+            node.setRenderName(nodeSettingsDlg.is_showName());
 
             node.setEndPointList(nodeSettingsDlg.getEndPointList());
 

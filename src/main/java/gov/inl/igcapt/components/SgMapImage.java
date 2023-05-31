@@ -29,8 +29,8 @@ public class SgMapImage extends MapImageImpl {
         return _sgNode;
     }
     
-    public SgMapImage(double lat, double lon, BufferedImage image, double radius, SgNodeInterface sgNode) {
-        super(lat, lon, image, radius);
+    public SgMapImage(double lat, double lon, BufferedImage image, double radius, SgNodeInterface sgNode, boolean showName) {
+        super(lat, lon, image, radius, showName);
         _sgNode = sgNode;
     }
     
