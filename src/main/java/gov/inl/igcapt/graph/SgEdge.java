@@ -6,6 +6,7 @@
 package gov.inl.igcapt.graph;
 
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import java.util.HashMap;
 import java.util.Map;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -89,7 +90,7 @@ public class SgEdge {
     }
     
     public static double getHighUtilizationLimit() {
-        String highLimit = IGCAPTproperties.getInstance().getPropertyKeyValue("utilizationHighLimit");
+        String highLimit = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.UTILIZATION_HIGH_LIMIT);
         double highLimitValue;
         
         try {
@@ -103,7 +104,7 @@ public class SgEdge {
     }
     
     public static double getMediumUtilizationLimit() {
-        String mediumLimit = IGCAPTproperties.getInstance().getPropertyKeyValue("utilizationMediumLimit");
+        String mediumLimit = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.UTILIZATION_MEDIUM_LIMIT);
         double mediumLimitValue;
         
         try {

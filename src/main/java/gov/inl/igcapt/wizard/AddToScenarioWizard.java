@@ -17,7 +17,8 @@ import java.net.URL;
 import java.util.List;
 import javax.swing.JFileChooser;
 import org.json.JSONObject;
-import gov.inl.igcapt.view.IGCAPTgui;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import java.awt.Frame;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -387,9 +388,6 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     
     // Cancel - close form
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // To clean up data -- comment in next line.  adjust criteria line ~324
-        // and set web service info at line ~293
-        //cleanupScenarios();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -398,12 +396,9 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
-        String lastPath = IGCAPTgui.getInstance().getLastPath(); 
+        String lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.LAST_PATH);
         // Is the path empty?
         if (lastPath != null && !lastPath.isEmpty()) {
-            // Does the path exist? Strip the filename
-            int endIndex = lastPath.lastIndexOf(File.separator);
-            lastPath = lastPath.substring(0, endIndex);
             File lastPathDir = new File(lastPath);
             if (lastPathDir.exists()) {
                 chooser.setCurrentDirectory(lastPathDir);
@@ -411,7 +406,11 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         }
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            jTextField1.setText(chooser.getSelectedFile().toString());
+            lastPath = chooser.getSelectedFile().toString();
+            jTextField1.setText(lastPath);
+            lastPath = lastPath + File.separator + WizardDriver.getHandle().getScenarioInfo().getName() + ".xml";
+            IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.LAST_PATH, 
+                    lastPath);            
             if (jTextField1.getText() != null) {
                 disableEnableButtons(FieldStates.SAVE_CANCEL);
             }
@@ -426,6 +425,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Please select at least one CNRM!");
             return;
         }        
+        
         WizardDriver.getHandle().startCnrmUpdateScenarioThread(jList2.getSelectedIndices());
         jButton4.setEnabled(false);
         disableEnableButtons(FieldStates.LOCATION_FIELD);

@@ -10,6 +10,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import gov.inl.igcapt.view.IGCAPTgui;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import gov.inl.igcapt.graph.SgEdge;
 import java.util.Map;
 import java.util.HashMap;
@@ -47,9 +49,10 @@ public class GDTAFImportController {
 
                 File currentFile = new File(fileToRead);
                 try {
-                    IGCAPTgui.getInstance().setLastPath(currentFile.getCanonicalPath());
+                    IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.LAST_PATH, currentFile.getCanonicalPath());
+                    
                 } catch (IOException ex) {
-                    IGCAPTgui.getInstance().setLastPath("");
+                    //IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.LAST_PATH, "");
                 }
 
                 JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.model.GDTAF.class);

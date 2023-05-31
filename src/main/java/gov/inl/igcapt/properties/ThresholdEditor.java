@@ -11,8 +11,6 @@ import javax.swing.JFrame;
  * @author CHE
  */
 public class ThresholdEditor extends javax.swing.JFrame {
-    final static String MEDIUM_PROPERTY = "utilizationMediumLimit";
-    final static String HIGH_PROPERTY = "utilizationHighLimit";
     String m_mediumValue = null;
     String m_highValue = null;
     /**
@@ -26,8 +24,8 @@ public class ThresholdEditor extends javax.swing.JFrame {
     
     // load data from properties
     private void populateData() {
-        m_mediumValue = IGCAPTproperties.getInstance().getPropertyKeyValue(MEDIUM_PROPERTY);
-        m_highValue = IGCAPTproperties.getInstance().getPropertyKeyValue(HIGH_PROPERTY);
+        m_mediumValue = IGCAPTproperties.getInstance().getPropertyKeyValue(IGCAPTproperties.IgcaptProperty.UTILIZATION_MEDIUM_LIMIT);
+        m_highValue = IGCAPTproperties.getInstance().getPropertyKeyValue(IGCAPTproperties.IgcaptProperty.UTILIZATION_HIGH_LIMIT);
         if (m_mediumValue != null && isInteger(m_mediumValue)) {
             jSpinner2.setValue(Integer.parseInt(m_mediumValue));
         }
@@ -141,8 +139,12 @@ public class ThresholdEditor extends javax.swing.JFrame {
 
     // Cancel button
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        IGCAPTproperties.getInstance().setPropertyKeyValue(MEDIUM_PROPERTY, jSpinner2.getValue().toString());
-        IGCAPTproperties.getInstance().setPropertyKeyValue(HIGH_PROPERTY, jSpinner3.getValue().toString());
+        IGCAPTproperties.getInstance().setPropertyKeyValue(
+                IGCAPTproperties.IgcaptProperty.UTILIZATION_MEDIUM_LIMIT, 
+                jSpinner2.getValue().toString());
+        IGCAPTproperties.getInstance().setPropertyKeyValue(
+                IGCAPTproperties.IgcaptProperty.UTILIZATION_HIGH_LIMIT, 
+                jSpinner3.getValue().toString());
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

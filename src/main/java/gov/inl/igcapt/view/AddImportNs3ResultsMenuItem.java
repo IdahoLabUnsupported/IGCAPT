@@ -3,6 +3,8 @@ package gov.inl.igcapt.view;
 
 import javax.swing.*;
 import java.io.File;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 
 public class AddImportNs3ResultsMenuItem extends JMenuItem {
 
@@ -15,9 +17,10 @@ public class AddImportNs3ResultsMenuItem extends JMenuItem {
         
         this.addActionListener(ActionListener -> {
             JFileChooser chooser = new JFileChooser();
-
-            if (!IGCAPTgui.getInstance().getLastPath().isEmpty()) {
-                chooser.setCurrentDirectory(new File(IGCAPTgui.getInstance().getLastPath()));
+            String lastPath = 
+                    IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.LAST_PATH);
+            if (!lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(lastPath));
             }
 
             if (chooser.showOpenDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {

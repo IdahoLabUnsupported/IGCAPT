@@ -106,6 +106,7 @@ import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
 import gov.inl.igcapt.wizard.ImportGdtafScenario;
 import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
@@ -168,20 +169,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     /**
-     * @return the lastPath
-     */
-    public String getLastPath() {
-        return lastPath;
-    }
-
-    /**
-     * @param lastPath the lastPath to set
-     */
-    public void setLastPath(String lastPath) {
-        this.lastPath = lastPath;
-    }
-
-    /**
      * @return the jtp
      */
     public JTabbedPane getJtp() {
@@ -213,7 +200,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
     private final JLabel mperpLabelName;
     private final JLabel mperpLabelValue;
-    private String lastPath = "";
+    private String m_lastPath = "";
     private DragTree7 tree = null;
     public List<Pair<SgNodeInterface>>nodePairList = new ArrayList<>();
     
@@ -412,7 +399,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public Icon getUnknownNodeIcon() {
 
         if (_unknownNodeIcon == null) {
-            String unknownNodeIconPath = IGCAPTPROPERTIES.getPropertyKeyValue("unknownNodeIcon");
+            String unknownNodeIconPath = IGCAPTPROPERTIES.getPropertyKeyValue(IgcaptProperty.UNKNOWN_NODE_ICON);
             _unknownNodeIcon = loadIcon(unknownNodeIconPath);
         }
 
@@ -429,16 +416,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     public final void loadLayerIcons() {
 
         // These correspond to the names from the property file.
-        String[] iconKeys = new String[]{
-            "expandIcon",
-            "collapseIcon",
-            "aggregateIcon",
-            "selectionIcon"
+        IgcaptProperty[] iconKeys = {
+            IgcaptProperty.EXPAND_ICON,
+            IgcaptProperty.COLLAPSE_ICON,
+            IgcaptProperty.AGGREGATE_ICON,
+            IgcaptProperty.SELECTION_ICON
         };
 
-        for (String iconKey : iconKeys) {
-            String whichIcon = iconKey;
-            String iconPath = IGCAPTPROPERTIES.getPropertyKeyValue(whichIcon);
+        for (IgcaptProperty iconKey : iconKeys) {
+            String whichIcon = IGCAPTPROPERTIES.convertKeyToString(iconKey);
+            String iconPath = IGCAPTPROPERTIES.getPropertyKeyValue(iconKey);
 
             if (null != iconPath && !iconPath.isEmpty()) {
                 
@@ -490,7 +477,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         super("Intelligent Grid Communications & Analysis Planning Tool");
         setSize(400, 400);
         
-        lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue("LastPath");
+        m_lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.LAST_PATH);
 
         treeMap = new JSGMapViewer("Components");
 
@@ -878,8 +865,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             FileFilter filter = new FileNameExtensionFilter("IGCAP Files", "igc");
             chooser.setFileFilter(filter);
             
-            if (lastPath != null && !lastPath.isEmpty()) {
-                File lastPath1 = new File(IGCAPTgui.this.getLastPath());
+            if (m_lastPath != null && !m_lastPath.isEmpty()) {
+                File lastPath1 = new File(m_lastPath);
                 if (lastPath1.exists()) {
                     chooser.setCurrentDirectory(lastPath1);
                 }
@@ -896,8 +883,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         saveTopology.addActionListener((ActionEvent ev) -> {
             JFileChooser chooser = new JFileChooser();
             
-            if (!lastPath.isEmpty()) {
-                chooser.setCurrentDirectory(new File(getLastPath()));
+            if (!m_lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(m_lastPath));
             }
             
             chooser.setFileFilter(new FileNameExtensionFilter("IGCAP Files", "igc"));
@@ -912,8 +899,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         exportData.addActionListener((ActionEvent ev) -> {
             JFileChooser chooser = new JFileChooser();
             
-            if (!lastPath.isEmpty()) {
-                chooser.setCurrentDirectory(new File(getLastPath()));
+            if (!m_lastPath.isEmpty()) {
+                chooser.setCurrentDirectory(new File(m_lastPath));
             }
             
             if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
@@ -975,15 +962,13 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private JMenu createGdtafMenu() {
         JMenu gdtafMenu = new JMenu("GDTAF");
         JMenuItem gdtafConn = new JMenuItem("Initialize Connection");
-        JMenuItem gdtafScenario = new JMenuItem("Create GDTAF Scenario");
-        JMenuItem gdtafImport = new JMenuItem("GDTAF Import Scenario");
-        JMenuItem gdtafStuff2 = new JMenuItem("GDTAF Stuff");
+        JMenuItem gdtafScenario = new JMenuItem("Create Scenario");
+        JMenuItem gdtafImport = new JMenuItem("Import Scenario");
         gdtafMenu.add(gdtafConn);
         gdtafMenu.add(gdtafScenario);
         gdtafMenu.add(gdtafImport);
         // Might need a check to determine if a file has been imported so know
         // whether or not to enable menu items???
-        gdtafMenu.add(gdtafStuff2);
         
         gdtafImport.addActionListener((ActionEvent ev) -> {
             //new ImportScenarioWizard(this, true);
@@ -998,10 +983,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             RestSvcConnection createConnection = new RestSvcConnection(this, true); 
         });
         
-        gdtafStuff2.addActionListener((ActionEvent ev) -> {
-            System.out.println("NO FUNCTIONALITY YET!!");
-        });
-
         return gdtafMenu;
         
     }
@@ -1255,10 +1236,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         String selectedOpenFile = chooser.getSelectedFile().toString();
         File lastFile = new File(selectedOpenFile);
         try {
-            setLastPath(lastFile.getCanonicalPath());
-            IGCAPTproperties.getInstance().setPropertyKeyValue("LastPath", getLastPath());
+            m_lastPath = lastFile.getCanonicalPath();
+            IGCAPTproperties.getInstance().setPropertyKeyValue(IGCAPTproperties.IgcaptProperty.LAST_PATH, m_lastPath);
         } catch (IOException ex) {
-            setLastPath("");
+            m_lastPath = "";
         }
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1473,9 +1454,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         File lastFile = new File(selectedSaveFile);
         try {
-            setLastPath(lastFile.getCanonicalPath());
+            m_lastPath = lastFile.getCanonicalPath();
         } catch (IOException ex) {
-            setLastPath("");
+            m_lastPath = "";
         }
 
         try {
