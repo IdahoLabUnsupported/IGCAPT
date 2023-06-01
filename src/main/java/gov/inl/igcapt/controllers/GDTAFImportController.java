@@ -228,16 +228,19 @@ public class GDTAFImportController {
                     }
 
                     //If the oofield is not associated with the use case add it
-                    if (!ooUseCase.getFields().contains(ooField)) {
+                    List<String> fieldNameList = new ArrayList<>();
+                    for(var ucfield : ooUseCase.getFields()){
+                        fieldNameList.add(ucfield.getName());
+                    }
+                    if (!fieldNameList.contains(ooField.getName())) {
+                        //componentDao.getFieldByName(ooField.getName());
                         ooUseCase.addField(ooField);
+                     //   componentDao.saveUseCase(ooUseCase);
                     }
 
                     //Update the Node Component Data by removing and re-adding ooUseCase
                     node.getAssociatedComponent().updateUseCase(ooUseCase);
                     node.refreshAssociatedComponent();
-
-                //    componentDao.saveUseCase(ooUseCase);
-                //    componentDao.saveComponent(node.getAssociatedComponent());
 
                     List<String> destSolnAssetList = new ArrayList<>();
                     List<Integer> endpoints = new ArrayList<>();
@@ -255,7 +258,7 @@ public class GDTAFImportController {
                     if (!endpoints.isEmpty()) {
                         node.setEndPointList(endpoints);
                     } else {
-                        System.out.println("No Endpoints Found");
+                        System.out.println("No Endpoints Found for ");
                     }
                 }
             }

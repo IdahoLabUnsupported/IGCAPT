@@ -82,7 +82,7 @@ public class SgUseCase implements BaseModel {
                 for(var uccompfield : component.getFields()){
                     if( uccompfield.getName().equals(field.getName())){
                         components.add(component);
-                        System.out.println("Field added to UseCase Component Reference");
+                        //System.out.println("Field added to UseCase Component Reference");
                         break;
                     }
                 }
@@ -94,9 +94,6 @@ public class SgUseCase implements BaseModel {
                 }
                 */
             }
-        }
-        if(!found){
-            System.out.println("Field not Found");
         }
         fields.add(field);
     }
