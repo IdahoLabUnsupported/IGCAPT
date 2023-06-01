@@ -1,29 +1,30 @@
 
 package gov.inl.igcapt.controllers;
 
+import gov.inl.igcapt.components.DataModels.ComponentDao;
+import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
 import gov.inl.igcapt.components.Pair;
 import gov.inl.igcapt.gdtaf.data.*;
 import gov.inl.igcapt.gdtaf.model.*;
 import gov.inl.igcapt.graph.GraphManager;
+import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.view.IGCAPTgui;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import gov.inl.igcapt.view.IGCAPTgui;
-import gov.inl.igcapt.graph.SgEdge;
 
-import java.util.Map;
-import java.util.HashMap;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
 public class GDTAFImportController {
 
     private static final Logger logger = Logger.getLogger(GDTAFImportController.class.getName());
@@ -100,46 +101,166 @@ public class GDTAFImportController {
         }
     }
 
+    /**
+     * Looks to see if an SgField is associated with the componentData parameter.. if so it updates the payload size
+     * to ensure it is fresh.... it not it look int he DB to see if it can find an SgField with the payload param name..
+     * if it finds it it updates the payload size...  finally if an SgField is not found with the Component or in the DB
+     * this method makes one, associates it with the componentData and pushes it to the DB before returning it.
+     * @param componentData - IGCAPT Node component data
+     * @param payload - GDTAF payload class..
+     * @return SgField - The looked up OR created SgField
+     */
+    private SgField getRelevantField(SgComponentData componentData, Payload payload){
+        ComponentDao componentDao = new ComponentDao();
+        SgField ooField = null;
+
+        //Determine the payload size
+        int payloadSize = 0;
+        var ooPayloadAttrList = payload.getAttributes();
+        for (var attr : ooPayloadAttrList) {
+            if (attr.getType() == PayloadAttributeType.STATIC_PAYLOAD_SIZE) {
+                payloadSize = Integer.parseInt(attr.getValue());
+            }
+        }
+        //see if the payload is associated with the component
+        for(var field: componentData.getFields()){
+            if(field.getName().equals(payload.getName())){
+                ooField = field;
+                ooField.setPayload(payloadSize);
+                //Add Field does an update by delete and add since the field exists
+                componentData.addField(ooField);
+                componentDao.saveField(ooField);
+                break;
+            }
+        }
+        if(ooField == null){
+            for(var dbfield: componentDao.getFields()){
+                if(dbfield.getName().equals(payload.getName())){
+                    ooField = dbfield;
+                    ooField.setPayload(payloadSize);
+                    componentData.addField(ooField);
+                    break;
+                }
+            }
+        }
+        if(ooField == null){
+            ooField = new SgField(payload.getName(), payloadSize);
+            componentData.addField(ooField);
+            componentDao.saveField(ooField);
+            componentDao.saveComponent(componentData);
+        }
+        return ooField;
+    }
+
+    /**
+     * This method looks to see if a relevent Use case exists... e.g. one with the same name as
+     * the operational objective name.  It first looks to see if the use case is associated with the
+     * component data... if not is looks through the database to see if it can find it... otherwise
+     * it creates it
+     * @param componentData
+     * @param opObj
+     * @return SgUseCase
+     */
+    private SgUseCase getRelevantUseCase(SgComponentData componentData, OperationalObjective opObj){
+
+        ComponentDao componentDao = new ComponentDao();
+        SgUseCase ooUseCase = null;
+        boolean foundincomp = false;
+        boolean foundindb = false;
+
+        if(componentData.getUsecases() == null){
+            componentData.setUsecases(new ArrayList<>());
+        }
+
+        for(var comp_uc : componentData.getUsecases()){
+            if(comp_uc.getName().equals(opObj.getName())){
+                ooUseCase = comp_uc;
+           //     foundincomp = true;
+                break;
+            }
+        }
+        if(ooUseCase == null) {
+            ooUseCase = componentDao.getUseCaseByName(opObj.getName());
+            if (ooUseCase != null) {
+                componentData.addUsecase(ooUseCase);
+                //foundindb = true;
+            }
+        }
+        if(ooUseCase == null) {
+            ooUseCase = new SgUseCase();
+            ooUseCase.setName(opObj.getName());
+            ooUseCase.setDescription(opObj.getName());
+            ooUseCase.setFields(new ArrayList<>());
+            ooUseCase.setComponents(new ArrayList<>());
+            ooUseCase.setLatency(OperationalObjectiveRepoMgr.getInstance().getOpObjLatencySec(opObj.getUUID()));
+            componentDao.saveUseCase(ooUseCase);
+            componentData.addUsecase(ooUseCase);
+            componentDao.saveComponent(componentData);
+        }
+
+        return ooUseCase;
+    }
 
     // Set the payload and latency data for nodes based on GDTAF operational objectives.
     private void setNodeData() {
+        ComponentDao componentDao = new ComponentDao();
         List<String> solnAssetUUIDList = new ArrayList<String>();
 
         var opObjList = getRelevantOperationalObjectives();
-
+        int counter = 0;
         for (var opObj : opObjList) {
+            counter ++;
             solnAssetUUIDList.addAll(getSolutionAssetsRelatedToEquipUUID(opObj.getSource()));
             for (var solnAssetUuid : solnAssetUUIDList) {
                 SgNode node = m_assetGuidToNodeMap.get(solnAssetUuid);
-                Payload ooPayload = PayloadRepoMgr.getInstance().getPayload(opObj.getPayload());
-                int payloadSize = 0;
-                var ooPayloadAttrList = ooPayload.getAttributes();
-                for (var attr : ooPayloadAttrList) {
-                    if (attr.getType() == PayloadAttributeType.STATIC_PAYLOAD_SIZE) {
-                        payloadSize = Integer.parseInt(attr.getValue());
+                if (node != null) {
+                    Payload ooPayload = PayloadRepoMgr.getInstance().getPayload(opObj.getPayload());
+
+
+                    SgField ooField = getRelevantField(node.getAssociatedComponent(), ooPayload);
+                    node.refreshAssociatedComponent();
+                    SgUseCase ooUseCase = getRelevantUseCase(node.getAssociatedComponent(), opObj);
+                    node.refreshAssociatedComponent();
+
+                    //If the componentData is not associated with the use_case add it.
+                    if (!ooUseCase.getComponents().contains(node.getAssociatedComponent())) {
+                        ooUseCase.addComponent(node.getAssociatedComponent());
+                    }
+
+                    //If the oofield is not associated with the use case add it
+                    List<String> fieldNameList = new ArrayList<>();
+                    for(var ucfield : ooUseCase.getFields()){
+                        fieldNameList.add(ucfield.getName());
+                    }
+                    if (!fieldNameList.contains(ooField.getName())) {
+                        //componentDao.getFieldByName(ooField.getName());
+                        ooUseCase.addField(ooField);
+                     //   componentDao.saveUseCase(ooUseCase);
+                    }
+
+                    //Update the Node Component Data by removing and re-adding ooUseCase
+                    node.getAssociatedComponent().updateUseCase(ooUseCase);
+                    node.refreshAssociatedComponent();
+
+                    List<String> destSolnAssetList = new ArrayList<>();
+                    List<Integer> endpoints = new ArrayList<>();
+                    List<String> endpointTypeList = new ArrayList<>();
+                    for (var destEquipUUID : opObj.getDestination()) {
+                        destSolnAssetList.addAll(getSolutionAssetsRelatedToEquipUUID(destEquipUUID));
+                    }
+                    for (var endPointAssetUUID : destSolnAssetList) {
+                        var lookup = m_assetGuidToNodeMap.get(endPointAssetUUID);
+                        if (lookup != null) {
+                            endpoints.add(lookup.getId());
+                            endpointTypeList.add(lookup.getType());
+                        }
+                    }
+                    if (!endpoints.isEmpty()) {
+                        node.setEndPointList(endpoints);
+                    } else {
+                        System.out.println("No Endpoints Found for ");
                     }
                 }
-                SgField ooField = new SgField(ooPayload.getName(), payloadSize);
-                node.getAssociatedComponent().addField(ooField);
-
-                SgUseCase ooUseCase = new SgUseCase();
-                ooUseCase.setName(opObj.getName());
-                ooUseCase.addField(ooField);
-                ooUseCase.setLatency(OperationalObjectiveRepoMgr.getInstance().getOpObjLatencySec(opObj.getUUID()));
-                //TODO figure out a good place to grab the description...
-                ooUseCase.setDescription(opObj.getName());
-                ooUseCase.addComponent(node.getAssociatedComponent());
-                node.getAssociatedComponent().addUsecase(ooUseCase);
-
-                List<String> destSolnAssetList = new ArrayList<String>();
-                List<Integer> endpoints = new ArrayList<Integer>();
-                for (var destEquipUUID : opObj.getDestination()) {
-                    destSolnAssetList.addAll(getSolutionAssetsRelatedToEquipUUID(destEquipUUID));
-                }
-                for (var endPointAssetUUID : destSolnAssetList) {
-                    endpoints.add(m_assetGuidToNodeMap.get(endPointAssetUUID).getId());
-                }
-                node.setEndPointList(endpoints);
             }
             //need to clear the list ahead of the next opObj
             solnAssetUUIDList.clear();
@@ -152,7 +273,7 @@ public class GDTAFImportController {
     // from the uuid parameter.
 
     private List<String> getSolutionAssetsRelatedToEquipUUID(String uuid) {
-        List<String> solnAssetUuidList = new ArrayList<String>();
+        List<String> solnAssetUuidList = new ArrayList<>();
         //find any solution assets that have a direct equip association with SourceID
         solnAssetUuidList.addAll(GDTAFScenarioMgr.getInstance().findSolutionAssetsOfEquipmentType(uuid));
         //find any solution asset that has an equipment type derived from the SourceID
@@ -168,9 +289,9 @@ public class GDTAFImportController {
         // get a list of Application Scenarios from the GUCS... then each App Scenario will have a list of
         // Operational Objective UUIDs so we can look them up with the OO Repo MGR...
         List<String> selectedGUCSList = GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs();
-        List<String> appScenarioUUIDList = new ArrayList<String>();
-        List<String> opObjUUIDLIst = new ArrayList<String>();
-        List<OperationalObjective> ooList = new ArrayList<OperationalObjective>();
+        List<String> appScenarioUUIDList = new ArrayList<>();
+        List<String> opObjUUIDLIst = new ArrayList<>();
+        List<OperationalObjective> ooList = new ArrayList<>();
 
         // build the list of application scenario UUIDs
         for (var gucsUUID : selectedGUCSList) {
@@ -203,7 +324,7 @@ public class GDTAFImportController {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
         SolutionAsset solutionAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(assetUuid);
-        SgNode sgNode = null;
+        SgNode sgNode;
 
         // This asset already exists. Don't add it again.
         if (!m_assetGuidToNodeMap.containsKey(assetUuid)) {
@@ -215,14 +336,18 @@ public class GDTAFImportController {
                     //lookup the Equipment Object for the SolutionAsset Equipment
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
+                    ComponentDao componentDao = new ComponentDao();
                     if (equipmentInstance != null) {
                         if (solutionAsset.getEquipmentRole() != EquipmentRole.ROLE_CONTAINER && location != null) {
-
+                            var equipInstanceIgcaptCompData =
+                                    componentDao.getComponentByUUID(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
                             int nodeId = GraphManager.getInstance().getNextNodeIndex();
                             String name = solutionAsset.getName();
+
                             sgNode = new SgNode(nodeId,
                                     solutionAsset.getUUID(),
-                                    EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()),
+                                    equipInstanceIgcaptCompData.getUuid(),
+                                    equipInstanceIgcaptCompData.getName(),
                                     name,
                                     true,
                                     false,
@@ -263,7 +388,7 @@ public class GDTAFImportController {
                                     .orElse(null);
 
                             if (assetView != null) {
-                                List<EdgeType> children = assetView.getChildren();
+                                List<EdgeIndexType> children = assetView.getChildren();
 
                                 if (children != null && !children.isEmpty()) {
 
@@ -306,9 +431,16 @@ public class GDTAFImportController {
                     GDTAFScenarioMgr.getInstance().getActiveSolutionOption() != null &&
                     EquipmentRepoMgr.getInstance().count() > 0) {
                 var topologyHead = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getTopologyHead();
+                var gucsHeadList = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getGucsHead();
 
                 if (topologyHead != null) {
                     addNodeAndChildren(topologyHead, "Topology" );
+                }
+                if (gucsHeadList != null){
+                    for( var gucsUUID: GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs()){
+                        String gucsViewString = "GUCS: " + GUCSRepoMgr.getInstance().getGridUseCase(gucsUUID).getName();
+                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString);
+                    }
                 }
             }
         } catch (Exception ex) {

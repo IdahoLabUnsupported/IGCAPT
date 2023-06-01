@@ -283,6 +283,7 @@ public class GDTAFScenarioMgr {
      */
     public List<String> findSolutionAssetsOfEquipmentType(String equipUuid){
         List<String> foundAssets = new ArrayList<String>();
+        int solnAssetCount = m_activeOption.getSolutionAsset().size();
         for(var solnasset:m_activeOption.getSolutionAsset()){
             if(solnasset.getEquipment().equals(equipUuid)){
                 foundAssets.add(solnasset.getUUID());

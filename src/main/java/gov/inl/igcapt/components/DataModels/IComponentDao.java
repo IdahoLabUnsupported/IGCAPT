@@ -27,7 +27,11 @@ public interface IComponentDao {
 
     List<SgUseCase> getUseCases();
 
+    SgUseCase getUseCaseByName(String name);
+
     List<SgField> getFields();
+
+    SgField getFieldByName(String name);
 
     SgComponentData getComponentByUUID(String uuid);
 

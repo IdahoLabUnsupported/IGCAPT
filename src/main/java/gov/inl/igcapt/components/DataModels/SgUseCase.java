@@ -79,14 +79,21 @@ public class SgUseCase implements BaseModel {
         if(!found) {
             ComponentDao dao = new ComponentDao();
             for(SgComponentData component: dao.getComponents()){
+                for(var uccompfield : component.getFields()){
+                    if( uccompfield.getName().equals(field.getName())){
+                        components.add(component);
+                        //System.out.println("Field added to UseCase Component Reference");
+                        break;
+                    }
+                }
+                /*
                 if(component.getFields().contains(field)){
                     components.add(component);
+                    System.out.println("Field added to UseCase Component Reference");
                     break;
                 }
+                */
             }
-        }
-        if(!found){
-            System.out.println("Field not Found");
         }
         fields.add(field);
     }

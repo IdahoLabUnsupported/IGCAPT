@@ -51,6 +51,26 @@ public class CachedComponentDao implements IComponentDao {
         componentDao.saveField(field);
     }
 
+    @Override
+    public SgUseCase getUseCaseByName(String name){
+        for(var uc : getUseCases()){
+            if(uc.getName().equals(name)){
+                return uc;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public SgField getFieldByName(String name){
+        for(var field: getFields()){
+            if(field.getName().equals(name)){
+                return field;
+            }
+        }
+        return null;
+    }
+
     public void stageComponentGroup(SgComponentGroupData componentGroup) {
         if(!componentGroups.contains(componentGroup)) {
             componentGroups.add(componentGroup);

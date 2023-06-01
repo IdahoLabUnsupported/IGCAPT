@@ -24,7 +24,7 @@ public class KeyValueManager {
                 .trimResults()
                 .omitEmptyStrings()
                 .withKeyValueSeparator(
-                    Splitter.on('|')
+                    Splitter.on(':')
                         .limit(2)
                         .trimResults())
                 .split(keyValues);
