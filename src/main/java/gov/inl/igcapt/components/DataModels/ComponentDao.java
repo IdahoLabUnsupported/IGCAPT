@@ -70,6 +70,26 @@ public class ComponentDao implements IComponentDao {
     @Override
     public List<SgField> getFields() { return getAll("field", SgField.class); }
 
+    @Override
+    public SgUseCase getUseCaseByName(String name){
+        for (var uc : getUseCases()){
+            if(uc.getName().equals(name)){
+                return uc;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public SgField getFieldByName(String name){
+        for(var field : getFields()){
+            if(field.getName().equals(name)){
+                return field;
+            }
+        }
+        return null;
+    }
+
     private <T> List<T> getAll(String tableName, Class cls) {
         EntityManager manager = ComponentDao.ENTITY_MANAGER_FACTORY.createEntityManager();
         EntityTransaction transaction = null;

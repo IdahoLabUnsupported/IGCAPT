@@ -6,9 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -80,18 +79,58 @@ public class SgComponentData implements BaseModel {
     }
     public void addField(SgField field) {
         fields = getFields();
-        fields.remove(field); // Removes only if its already there to allow for updates
+        // Removes only if its already there to allow for updates
+        Iterator<SgField> it = fields.iterator();
+        while(it.hasNext()){
+            if(it.getClass().getName().equals(field.getName())){
+                it.remove();
+            }
+            it.next();
+        }
+        fields = getFields();
         fields.add(field);
     }
 
     public List<SgUseCase> getUsecases() { return usecases != null? usecases: new ArrayList<>(); }
     public void setUsecases(List<SgUseCase> usecases) { this.usecases = usecases; }
     public void addUsecase(SgUseCase usecase) {
+        boolean found = false;
         usecases = getUsecases();
-        if(usecases.contains(usecase)) { return; }
-
+        if(usecases.contains(usecase)) { found = true; }
+        for(var uc : usecases){
+            if (uc.getName().equals(usecase.getName())) {
+                found = true;
+                break;
+            }
+        }
+        if(found){
+            return;
+        }
         usecases.add(usecase);
         usecase.addComponent(this);
+    }
+
+    /**
+     * this method updates a use_case by searching the SgComponent use_case list for
+     * the use_case by name... if found it deletes what was found and adds what was passed in as
+     * a parameter
+     * @param usecase - the SgComponent Use Case to be updated.
+     */
+    public void updateUseCase(SgUseCase usecase){
+        usecases = getUsecases();
+        if(usecases != null) {
+            for (var uc : usecases) {
+                if (uc.getName().equals(usecase.getName())) {
+                    removeUsecase(uc);
+                    break;
+                }
+            }
+            addUsecase(usecase);
+        }
+        else{
+            setUsecases(new ArrayList<>());
+            addUsecase(usecase);
+        }
     }
 
     public void removeUsecase(SgUseCase usecase) {
@@ -118,8 +157,10 @@ public class SgComponentData implements BaseModel {
                     e.printStackTrace();
                 }
 
-                ImageIcon newicon = new ImageIcon(img);
-                icon = new SgLayeredIcon(newicon.getImage()); // LayeredIcon used for checking an icon
+                if(img != null) {
+                    ImageIcon newicon = new ImageIcon(img);
+                    icon = new SgLayeredIcon(newicon.getImage()); // LayeredIcon used for checking an icon
+                }
             }
         }
         
@@ -169,11 +210,7 @@ public class SgComponentData implements BaseModel {
     }
 
     public boolean isAggregate() {
-        if (aggregate == null) {
-            return false;
-        } else {
-            return aggregate;
-        }
+        return aggregate;
     }
     public void setAggregate(Boolean value) {
         this.aggregate = value;
