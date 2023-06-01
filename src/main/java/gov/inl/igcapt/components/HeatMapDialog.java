@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 
 /**
  *
@@ -17,11 +18,6 @@ public class HeatMapDialog extends javax.swing.JDialog {
     private final static Heatmap.KernelTypes KERNEL_TYPE_DEFAULT = Heatmap.KernelTypes.Quartic;
     private final static int START_COLOR_DEFAULT = 120;  // Green
     private final static int END_COLOR_DEFAULT = 240;   // Blue
-    private final static String GRID_SIZE_PROPERTY_NAME = "heatmapGridSize";
-    private final static String KERNEL_TYPE_PROPERTY_NAME = "heatmapKernelType";
-    private final static String KERNEL_RADIUS_PROPERTY_NAME = "heatmapKernelRadius";
-    private final static String START_COLOR_PROPERTY_NAME = "heatmapStartColor";
-    private final static String END_COLOR_PROPERTY_NAME = "heatmapEndColor";
     private final java.awt.Frame parent;
     private boolean modal=true;
     private int m_savedGridSize;
@@ -73,11 +69,11 @@ public class HeatMapDialog extends javax.swing.JDialog {
     
     // get the properties from the property file
     private void getProperties() {
-        String heatmapGridStr = IGCAPTproperties.getInstance().getPropertyKeyValue(GRID_SIZE_PROPERTY_NAME);
-        String heatmapKernelTypeStr = IGCAPTproperties.getInstance().getPropertyKeyValue(KERNEL_TYPE_PROPERTY_NAME);
-        String heatmapKernelRadiusStr = IGCAPTproperties.getInstance().getPropertyKeyValue(KERNEL_RADIUS_PROPERTY_NAME);
-        String heatmapStartColorStr = IGCAPTproperties.getInstance().getPropertyKeyValue(START_COLOR_PROPERTY_NAME);
-        String heatmapEndColorStr = IGCAPTproperties.getInstance().getPropertyKeyValue(END_COLOR_PROPERTY_NAME);
+        String heatmapGridStr = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.HEATMAP_GRID_SIZE);
+        String heatmapKernelTypeStr = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.HEATMAP_KERNEL_TYPE);
+        String heatmapKernelRadiusStr = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.HEATMAP_KERNEL_RADIUS);
+        String heatmapStartColorStr = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.HEATMAP_START_COLOR);
+        String heatmapEndColorStr = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.HEATMAP_END_COLOR);
         
         if (heatmapGridStr == null) {
             m_savedGridSize = GRID_SIZE_DEFAULT;
@@ -120,11 +116,11 @@ public class HeatMapDialog extends javax.swing.JDialog {
         m_savedStartColor = m_startColor;
         m_savedEndColor = m_endColor;
 
-        IGCAPTproperties.getInstance().setPropertyKeyValue(GRID_SIZE_PROPERTY_NAME, String.valueOf(m_savedGridSize));
-        IGCAPTproperties.getInstance().setPropertyKeyValue(KERNEL_TYPE_PROPERTY_NAME, m_savedKernelType.toString());
-        IGCAPTproperties.getInstance().setPropertyKeyValue(KERNEL_RADIUS_PROPERTY_NAME, String.valueOf(m_savedKernelRadius));
-        IGCAPTproperties.getInstance().setPropertyKeyValue(START_COLOR_PROPERTY_NAME, String.valueOf(m_savedStartColor));
-        IGCAPTproperties.getInstance().setPropertyKeyValue(END_COLOR_PROPERTY_NAME, String.valueOf(m_savedEndColor));
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.HEATMAP_GRID_SIZE, String.valueOf(m_savedGridSize));
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.HEATMAP_KERNEL_TYPE, m_savedKernelType.toString());
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.HEATMAP_KERNEL_RADIUS, String.valueOf(m_savedKernelRadius));
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.HEATMAP_START_COLOR, String.valueOf(m_savedStartColor));
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.HEATMAP_END_COLOR, String.valueOf(m_savedEndColor));
     }
     
     // Generate the heat map

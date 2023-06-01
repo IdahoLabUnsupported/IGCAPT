@@ -10,10 +10,10 @@ import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 import gov.inl.igcapt.view.IGCAPTgui;
 
@@ -106,7 +106,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
 
                     paths = getComponentPaths(graph, pair.first, pair.second, true);
 
-                    double ackPayload = Double.parseDouble(IGCAPTproperties.getInstance().getPropertyKeyValue("ACKSize"));
+                    double ackPayload = Double.parseDouble(IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.ACK_SIZE));
                     
                     var graphManager = GraphManager.getInstance();
 

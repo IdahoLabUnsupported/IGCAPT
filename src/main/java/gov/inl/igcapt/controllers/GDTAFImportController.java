@@ -12,6 +12,8 @@ import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.view.IGCAPTgui;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -52,9 +54,12 @@ public class GDTAFImportController {
 
                 File currentFile = new File(fileToRead);
                 try {
-                    IGCAPTgui.getInstance().setLastPath(currentFile.getCanonicalPath());
+                    IGCAPTproperties.getInstance().setPropertyKeyValue(
+                            IgcaptProperty.LAST_PATH, currentFile.getCanonicalPath());
                 } catch (IOException ex) {
-                    IGCAPTgui.getInstance().setLastPath("");
+                    //Setting lastpath to "" assumes that the file didn't open because lastpath was bad
+                    //Maybe lastpath was correct and file DNE -- just leave lastpath as it was?
+                    //IGCAPTgui.getInstance().setLastPath("");
                 }
 
                 JAXBContext jaxbGdtafContext = JAXBContext.newInstance(gov.inl.igcapt.gdtaf.model.GDTAF.class);

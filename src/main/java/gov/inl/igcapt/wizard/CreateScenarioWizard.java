@@ -5,11 +5,11 @@
 package gov.inl.igcapt.wizard;
 
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import java.awt.Frame;
 import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.JOptionPane;
-import gov.inl.igcapt.view.IGCAPTgui;
 
 /**
  *
@@ -28,8 +28,8 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
     public CreateScenarioWizard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         localParent = parent;
-        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceHost");
-        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceKey");
+        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_HOST);
+        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_KEY);
         if (m_webServiceHost == null || m_webServiceKey == null) {
             JOptionPane.showMessageDialog(this, 
                     "You must enter a Web Service connection. \n(File->Initialize Connection)");
@@ -131,9 +131,9 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton3))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField1)
@@ -179,27 +179,28 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
             jButton2.setEnabled(false);
         }
     }
-    
+       
     // Select the CIM/RDF file
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         JFileChooser chooser = new JFileChooser();
-        String lastPath = IGCAPTgui.getInstance().getLastPath(); 
+        String lastPath = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.LAST_PATH);
         // Is the path empty?
         if (lastPath != null && !lastPath.isEmpty()) {
-            // Does the path exist? Strip the filename
-            int endIndex = lastPath.lastIndexOf(File.separator);
-            lastPath = lastPath.substring(0, endIndex);
-            File lastPathDir = new File(lastPath);
-            if (lastPathDir.exists()) {
-                chooser.setCurrentDirectory(lastPathDir);
+            File lastPathFile = new File(lastPath);
+            if (lastPathFile.exists()) {
+                chooser.setCurrentDirectory(lastPathFile);
             }
         }
         
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            jTextField1.setText(chooser.getSelectedFile().toString());
+            String lastPathFile = chooser.getSelectedFile().toString();
+            jTextField1.setText(lastPathFile);
+            IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.LAST_PATH, 
+                    lastPathFile);
             enableNext();
         }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Scenario name text field

@@ -7,6 +7,7 @@ package gov.inl.igcapt.components;
 
 import gov.inl.igcapt.components.DataModels.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -14,8 +15,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+
 import java.util.UUID;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -64,8 +64,8 @@ public class ComponentDialog extends javax.swing.JDialog {
 
         properties = IGCAPTproperties.getInstance();
         try {
-            DEFAULT_ICON = properties.getPropertyKeyValue("unknownNodeIcon");
-            DEFAULT_PATH = new File(properties.getPropertyKeyValue("lastIconPath")).getParentFile().getName();
+            DEFAULT_ICON = properties.getPropertyKeyValue(IgcaptProperty.UNKNOWN_NODE_ICON);
+            DEFAULT_PATH = new File(properties.getPropertyKeyValue(IgcaptProperty.LAST_ICON_PATH)).getParentFile().getName();
         } catch (Exception ignored) {
             if (DEFAULT_ICON == null) {
                 DEFAULT_ICON = "sgicons/Unknown.png";
@@ -333,7 +333,7 @@ public class ComponentDialog extends javax.swing.JDialog {
             if (extension.equalsIgnoreCase("png")) {
                 iconPathFld.setBackground(NORMAL_COLOR);
                 String iconPath = new File(".").getAbsoluteFile().toURI().relativize(file.toURI()).getPath();
-                properties.setPropertyKeyValue("lastIconPath", iconPath);
+                properties.setPropertyKeyValue(IGCAPTproperties.IgcaptProperty.LAST_ICON_PATH, iconPath);
                 iconPathFld.setText(iconPath);
             } else {
                 iconPathFld.setBackground(ERROR_COLOR);
@@ -587,8 +587,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                         .addGap(103, 103, 103)
                         .addComponent(jLabel8)
                         .addGap(13, 13, 13)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel9))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

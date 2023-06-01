@@ -158,6 +158,11 @@ public class WizardDriver extends javax.swing.JDialog {
     }
     
     public void startSaveFileThread(String filename) {
+        try {
+            m_cnrmUpdateScenarioThread.join();
+        }
+        catch (Exception e) {}
+        
         ScenarioInformation scenario = m_createScenarioThread.getScenario();
         m_saveFileThread.setSaveFileParams(scenario.getId(), 
                 filename);             

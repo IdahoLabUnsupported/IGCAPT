@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Frame;
 import javax.swing.JOptionPane;
 import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -34,8 +35,8 @@ public class RestSvcConnection extends javax.swing.JDialog {
     }
     
     private void populateData() {
-        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceHost");
-        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue("WebServiceKey");
+        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_HOST);
+        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_KEY);
         jTextField1.setText(m_webServiceHost);
         jTextField2.setText(m_webServiceKey);
         if (jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty()) {
@@ -179,8 +180,8 @@ public class RestSvcConnection extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Could not connect - Invalid Web Service Host or Key!!");
             return;
         }
-        IGCAPTproperties.getInstance().setPropertyKeyValue("WebServiceHost", m_webServiceHost);
-        IGCAPTproperties.getInstance().setPropertyKeyValue("WebServiceKey", m_webServiceKey);
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.WEB_SERVICE_HOST, m_webServiceHost);
+        IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.WEB_SERVICE_KEY, m_webServiceKey);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
