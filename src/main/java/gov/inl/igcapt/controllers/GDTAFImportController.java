@@ -336,11 +336,10 @@ public class GDTAFImportController {
                     //lookup the Equipment Object for the SolutionAsset Equipment
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
-                    ComponentDao componentDao = new ComponentDao();
                     if (equipmentInstance != null) {
                         if (solutionAsset.getEquipmentRole() != EquipmentRole.ROLE_CONTAINER && location != null) {
                             var equipInstanceIgcaptCompData =
-                                    componentDao.getComponentByUUID(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
+                                IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
                             int nodeId = GraphManager.getInstance().getNextNodeIndex();
                             String name = solutionAsset.getName();
 
@@ -358,15 +357,6 @@ public class GDTAFImportController {
 
                             m_lastAncestorNode = sgNode;
                             m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
-
-                            if (!equipmentId.isBlank() && !equipmentId.isEmpty()) {
-                                sgNode.setType(stripUnderscoreFromUUID(equipmentId));
-                            } else {
-                                JOptionPane.showMessageDialog(null,
-                                        "Asset (id: " + solutionAsset.getUUID() + ") contains no equipment.",
-                                        "Attention",
-                                        JOptionPane.WARNING_MESSAGE);
-                            }
 
                             sgNode.setLat(location.getY());
                             sgNode.setLongit(location.getX());
@@ -388,7 +378,7 @@ public class GDTAFImportController {
                                     .orElse(null);
 
                             if (assetView != null) {
-                                List<EdgeIndexType> children = assetView.getChildren();
+                                List<EdgeType> children = assetView.getChildren();
 
                                 if (children != null && !children.isEmpty()) {
 
