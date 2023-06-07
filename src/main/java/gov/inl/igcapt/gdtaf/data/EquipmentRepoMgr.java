@@ -104,7 +104,7 @@ public class EquipmentRepoMgr {
             case "EnergyConsumerPhase":
                 return "490027ba-e03a-4b4e-8ef8-3280c056aa12";
             case "EnergyConsumer":
-                return "89ca2726-ecba-490a-affc-2e826a638c9f";
+                return "b5ccc545-630e-46e1-b9f1-533e81de9250";
             case "DMS":
                 return "49b20f30-cde6-4850-bf26-cb36e5d3ffa3";
             case "Y-Corp Cellular Gateway":
@@ -145,8 +145,13 @@ public class EquipmentRepoMgr {
                 return "acb86d4f-1c02-4434-92e0-368e41879a18";
             case "Distribution":
                 return "29ece96d-8641-446e-aee2-d983580dac43";
+            case "PowerElectronicsConnection":
+                return "f5dcab01-0ae1-4c83-9b16-1b39ebf61fb5";
+            case "Breaker":
+                return "67610d9e-b48b-47eb-b751-9688080e4467";
             default:
                 // UUID for Unknown
+                System.out.println(getEquip(uuid).getName());
                 return "4cf6265d-b575-4de7-a2e1-2b794809fbbd";
 
         }
