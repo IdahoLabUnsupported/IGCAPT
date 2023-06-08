@@ -110,6 +110,7 @@ import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
+import java.awt.GridLayout;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -1894,19 +1895,42 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         cbxEnable.setSelected(edge.isEnabled());
         cbxShowName.setSelected(edge.isRenderName());
 
-        Object[] inputFields = {"Name", tbxEdgeName,
-            "Show Name on Map", cbxShowName,
-            "Weight", tbxWeight,
-            "Fixed Overhead (bytes)", tbxFixedOhd,
-            "Overhead Multiplier", tbxOverheadMult,
-            "Maximum Rate (Kbits/sec)", tbxEdgeRate,
-            "Edge ID", tbxEdgeID,
-            "End Point 1", tbxEndPoint1,
-            "End Point 2", tbxEndPoint2,
-            "Enable", cbxEnable
-        };
+        GridLayout layout = new GridLayout(10,2);
+        JPanel controlsPanel = new JPanel(layout);
+        controlsPanel.add(new JLabel("Name"));
+        controlsPanel.add(tbxEdgeName);
+        controlsPanel.add(new JLabel("Show Name on Map"));
+        controlsPanel.add(cbxShowName);
+        controlsPanel.add(new JLabel("Weight"));
+        controlsPanel.add(tbxWeight);
+        controlsPanel.add(new JLabel("Fixed Overhead (bytes)"));
+        controlsPanel.add(tbxFixedOhd);
+        controlsPanel.add(new JLabel("Overhead Multiplier"));
+        controlsPanel.add(tbxOverheadMult);
+        controlsPanel.add(new JLabel("Maximum Rate (Kbits/sec)"));
+        controlsPanel.add(tbxEdgeRate);
+        controlsPanel.add(new JLabel("Edge ID"));
+        controlsPanel.add(tbxEdgeID);
+        controlsPanel.add(new JLabel("End Point 1"));
+        controlsPanel.add(tbxEndPoint1);
+        controlsPanel.add(new JLabel("End Point 2"));
+        controlsPanel.add(tbxEndPoint2);
+        controlsPanel.add(new JLabel("Enable"));
+        controlsPanel.add(cbxEnable);
+        
+//        Object[] inputFields = {"Name", tbxEdgeName,
+//            "Show Name on Map", cbxShowName,
+//            "Weight", tbxWeight,
+//            "Fixed Overhead (bytes)", tbxFixedOhd,
+//            "Overhead Multiplier", tbxOverheadMult,
+//            "Maximum Rate (Kbits/sec)", tbxEdgeRate,
+//            "Edge ID", tbxEdgeID,
+//            "End Point 1", tbxEndPoint1,
+//            "End Point 2", tbxEndPoint2,
+//            "Enable", cbxEnable
+//        };
 
-        int option = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), inputFields, "Line Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), controlsPanel, "Line Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
         if (option == 0) {
             GraphManager.getInstance().setFileDirty(true);
