@@ -137,7 +137,7 @@ public class SgNode implements SgNodeInterface {
     private List<Integer> _endPointList = new ArrayList<>();
     private Icon _icon = null;
     private MapImage _mapImage = null; // MapImage that corresponds to this node.
-    private boolean _renderName = true; // Should the name be shown on the map?
+    private boolean _renderName = false; // Should the name be shown on the map?
 
     @Override
     public void setRenderName(boolean _renderName) {

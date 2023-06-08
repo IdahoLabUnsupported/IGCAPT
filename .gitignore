@@ -1,4 +1,4 @@
 #.gitignore
-igcapt.properties
+webService.properties
 .idea/
 target/
