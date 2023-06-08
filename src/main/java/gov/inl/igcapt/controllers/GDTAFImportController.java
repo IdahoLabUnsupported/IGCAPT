@@ -35,6 +35,7 @@ public class GDTAFImportController {
     private gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
     private static GDTAFImportController m_importController = null;
     private static SgNode m_lastAncestorNode = null;
+    private ComponentDao m_componentDao = new ComponentDao();
 
     private GDTAFImportController() {
 
@@ -116,7 +117,6 @@ public class GDTAFImportController {
      * @return SgField - The looked up OR created SgField
      */
     private SgField getRelevantField(SgComponentData componentData, Payload payload){
-        ComponentDao componentDao = new ComponentDao();
         SgField ooField = null;
 
         //Determine the payload size
@@ -134,12 +134,12 @@ public class GDTAFImportController {
                 ooField.setPayload(payloadSize);
                 //Add Field does an update by delete and add since the field exists
                 componentData.addField(ooField);
-                componentDao.saveField(ooField);
+                m_componentDao.saveField(ooField);
                 break;
             }
         }
         if(ooField == null){
-            for(var dbfield: componentDao.getFields()){
+            for(var dbfield: m_componentDao.getFields()){
                 if(dbfield.getName().equals(payload.getName())){
                     ooField = dbfield;
                     ooField.setPayload(payloadSize);
@@ -151,8 +151,8 @@ public class GDTAFImportController {
         if(ooField == null){
             ooField = new SgField(payload.getName(), payloadSize);
             componentData.addField(ooField);
-            componentDao.saveField(ooField);
-            componentDao.saveComponent(componentData);
+            m_componentDao.saveField(ooField);
+            m_componentDao.saveComponent(componentData);
         }
         return ooField;
     }
@@ -168,7 +168,6 @@ public class GDTAFImportController {
      */
     private SgUseCase getRelevantUseCase(SgComponentData componentData, OperationalObjective opObj){
 
-        ComponentDao componentDao = new ComponentDao();
         SgUseCase ooUseCase = null;
         boolean foundincomp = false;
         boolean foundindb = false;
@@ -185,7 +184,7 @@ public class GDTAFImportController {
             }
         }
         if(ooUseCase == null) {
-            ooUseCase = componentDao.getUseCaseByName(opObj.getName());
+            ooUseCase = m_componentDao.getUseCaseByName(opObj.getName());
             if (ooUseCase != null) {
                 componentData.addUsecase(ooUseCase);
                 //foundindb = true;
@@ -198,9 +197,9 @@ public class GDTAFImportController {
             ooUseCase.setFields(new ArrayList<>());
             ooUseCase.setComponents(new ArrayList<>());
             ooUseCase.setLatency(OperationalObjectiveRepoMgr.getInstance().getOpObjLatencySec(opObj.getUUID()));
-            componentDao.saveUseCase(ooUseCase);
+            m_componentDao.saveUseCase(ooUseCase);
             componentData.addUsecase(ooUseCase);
-            componentDao.saveComponent(componentData);
+            m_componentDao.saveComponent(componentData);
         }
 
         return ooUseCase;
@@ -208,7 +207,6 @@ public class GDTAFImportController {
 
     // Set the payload and latency data for nodes based on GDTAF operational objectives.
     private void setNodeData() {
-        ComponentDao componentDao = new ComponentDao();
         List<String> solnAssetUUIDList = new ArrayList<String>();
 
         var opObjList = getRelevantOperationalObjectives();
@@ -238,9 +236,8 @@ public class GDTAFImportController {
                         fieldNameList.add(ucfield.getName());
                     }
                     if (!fieldNameList.contains(ooField.getName())) {
-                        //componentDao.getFieldByName(ooField.getName());
                         ooUseCase.addField(ooField);
-                     //   componentDao.saveUseCase(ooUseCase);
+                        m_componentDao.saveUseCase(ooUseCase);
                     }
 
                     //Update the Node Component Data by removing and re-adding ooUseCase

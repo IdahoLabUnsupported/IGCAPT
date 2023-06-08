@@ -21,6 +21,7 @@
           <!-- The JDBC URL to the database instance -->
           <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:SGComponents.db"/>
           <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+          <property name="hibernate.event.merge.entity_copy_observer" value="allow"/>
           <!--            <property name="hibernate.hbm2ddl.auto" value="update" />-->
         </properties>
     </persistence-unit>

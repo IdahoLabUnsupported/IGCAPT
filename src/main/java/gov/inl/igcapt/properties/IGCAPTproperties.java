@@ -40,9 +40,7 @@ public final class IGCAPTproperties implements Serializable {
         SG_USE_CASE_FILE,
         UNKNOWN_NODE_ICON,
         UTILIZATION_HIGH_LIMIT,
-        UTILIZATION_MEDIUM_LIMIT,
-        WEB_SERVICE_HOST,
-        WEB_SERVICE_KEY        
+        UTILIZATION_MEDIUM_LIMIT
     }
 
     /**
@@ -166,12 +164,6 @@ public final class IGCAPTproperties implements Serializable {
                 break;
             case UTILIZATION_MEDIUM_LIMIT:
                 keyString = "utilizationMediumLimit";
-                break;
-            case WEB_SERVICE_HOST:
-                keyString = "WebServiceHost";
-                break;
-            case WEB_SERVICE_KEY:
-                keyString = "WebServiceKey";
                 break;
         }
     
