@@ -35,7 +35,7 @@ public class CleanupScenarios extends javax.swing.JDialog {
     public CleanupScenarios() {
         super();
         m_webServiceHost = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
-        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
+        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
         initComponents();
         getScenarioList();
         
