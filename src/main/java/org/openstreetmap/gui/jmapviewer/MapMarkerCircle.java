@@ -95,7 +95,7 @@ public class MapMarkerCircle extends MapObjectImpl implements MapMarker {
      * @param style Graphical style
      */
     public MapMarkerCircle(Layer layer, String name, Coordinate coord, double radius, STYLE markerStyle, Style style) {
-        super(layer, name, style, true);
+        super(layer, name, style);
         this.markerStyle = markerStyle;
         this.coord = coord;
         this.radius = radius;

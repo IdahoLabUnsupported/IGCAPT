@@ -29,10 +29,8 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 public class MapImageImpl extends MapObjectImpl implements MapImage {
 
     private Coordinate coord;
-    private double radius;
     BufferedImage img;
     String id;
-    private boolean drawImageMarker = true; // Draw the label for the image.
     
     //private MapMarker.STYLE markerStyle;
 
@@ -42,8 +40,8 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
     }
 
     // constructor for images
-    public MapImageImpl(double lat, double lon, BufferedImage image, double radius, boolean showName) {
-        this(null, null, new Coordinate(lat, lon), radius, showName);
+    public MapImageImpl(double lat, double lon, BufferedImage image, double radius) {
+        this(null, null, new Coordinate(lat, lon), radius);
         img = image;
     }
 
@@ -54,8 +52,8 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
      * @param coord Coordinates of the map marker
      * @param radius Radius of the map marker position
      */
-    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius, boolean showName) {
-        this(layer, name, coord, radius, STYLE.VARIABLE, getDefaultStyle(), showName);
+    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius) {
+        this(layer, name, coord, radius, STYLE.VARIABLE, getDefaultStyle());
     } 
 
     /**
@@ -66,12 +64,10 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
      * @param radius Radius of the map marker position
      * @param markerStyle Marker style (fixed or variable)
      * @param style Graphical style
-     * @param showName Whether to show name of image
      */
-    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius, STYLE markerStyle, Style style, boolean showName) {
-        super(layer, name, style, showName);
+    public MapImageImpl(Layer layer, String name, Coordinate coord, double radius, STYLE markerStyle, Style style) {
+        super(layer, name, style);
         this.coord = coord;
-        drawImageMarker = showName;
     }
 
     @Override
@@ -119,10 +115,6 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
 
     @Override
     public void paint(Graphics g, Point position, BufferedImage img) {
-        //int sizeH = radius;
-        //int size = sizeH * 2;
-        //System.out.println("start -------------------------------------------- MapImageImpl paint()");
-        //System.out.println("MapImageImpl paint, position.x = " + position.x + ", position.y= " + position.y);
 
         if (g instanceof Graphics2D && getBackColor() != null) {
             Graphics2D g2 = (Graphics2D) g;
@@ -140,37 +132,14 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
             g2.drawImage(img, null, position.x - newImageWidth, position.y - newImageHeight);
             
             // draw the text label for the image
-            if (drawImageMarker) {
+            var imageId = getId();
+            if (imageId != null) {
                 g2.setColor(Color.black);
-                g2.setFont(new Font(g2.getFont().getFontName(), Font.BOLD, g2.getFont().getSize()));
-                g2.drawString(getId(), position.x + newImageWidth, position.y + newImageHeight);
+                g2.setFont(new Font(g2.getFont().getFontName(), Font.BOLD, g2.getFont().getSize()));                
+                g2.drawString(imageId, position.x + newImageWidth, position.y + newImageHeight);
             }
         }
-    /*    g.setColor(getColor());
-        g.drawOval(position.x - sizeH, position.y - sizeH, size, size);
-
-        if (getLayer() == null || getLayer().isVisibleTexts()) paintText(g, position); */
-        //System.out.println("end -------------------------------------------- MapImageImpl paint()");
     }
-
-/*    @Override
-    public void paint(Graphics g, Point position, int radius) {
-        int sizeH = radius;
-        int size = sizeH * 2;
-
-        if (g instanceof Graphics2D && getBackColor() != null) {
-            Graphics2D g2 = (Graphics2D) g;
-            Composite oldComposite = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-            g2.setPaint(getBackColor());
-            g.fillOval(position.x - sizeH, position.y - sizeH, size, size);
-            g2.setComposite(oldComposite);
-        }
-        g.setColor(getColor());
-        g.drawOval(position.x - sizeH, position.y - sizeH, size, size);
-
-        if (getLayer() == null || getLayer().isVisibleTexts()) paintText(g, position);
-    } */
 
     public static Style getDefaultStyle() {
         return new Style(Color.ORANGE, new Color(200, 200, 200, 200), null, getDefaultFont());

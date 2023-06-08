@@ -32,7 +32,7 @@ public class MapRectangleImpl extends MapObjectImpl implements MapRectangle {
     }
 
     public MapRectangleImpl(Layer layer, String name, Coordinate topLeft, Coordinate bottomRight, Style style) {
-        super(layer, name, style, true);
+        super(layer, name, style);
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }

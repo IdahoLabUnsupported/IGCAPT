@@ -319,13 +319,21 @@ public class GDTAFImportController {
 
         return uuidStr.replace("_", "");
     }
+    
+    private boolean isContainer(SolutionAsset solutionAsset){
+        return (solutionAsset.getEquipmentRole() == EquipmentRole.ROLE_CONTAINER);
+    }
+    
+    private void addNodeAndChildren(String assetUuid, String solnAssetView) {
+        addNodeAndChildren(assetUuid, solnAssetView, false);
+    }
 
     /**
      * Recursively add nodes starting with assetUuid and continuing through the solnAssetView's children.
      * @param assetUuid The uuid of the asset to recursively add.
      * @param solnAssetView The view's children to add.
      */
-    private void addNodeAndChildren(String assetUuid, String solnAssetView) {
+    private void addNodeAndChildren(String assetUuid, String solnAssetView, boolean includeContainers) {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
         SolutionAsset solutionAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(assetUuid);
@@ -342,7 +350,7 @@ public class GDTAFImportController {
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
                     if (equipmentInstance != null) {
-                        if (solutionAsset.getEquipmentRole() != EquipmentRole.ROLE_CONTAINER && location != null) {
+                        if (includeContainers || (location != null && !isContainer(solutionAsset))) {
                             var equipInstanceIgcaptCompData =
                                 IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
                             int nodeId = GraphManager.getInstance().getNextNodeIndex();
@@ -363,6 +371,12 @@ public class GDTAFImportController {
                             m_lastAncestorNode = sgNode;
                             m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
 
+                            if (location == null){
+                                location = new GeoLocation();
+                                location.setX(0.0f);
+                                location.setY(0.0f);
+                                location.setZ(0.0f);
+                            }
                             sgNode.setLat(location.getY());
                             sgNode.setLongit(location.getX());
 
@@ -390,7 +404,7 @@ public class GDTAFImportController {
                                     for (var child : children) {
                                         m_edgeList.add(new Pair<>(m_lastAncestorNode, child.getValue()));
 
-                                        addNodeAndChildren(child.getValue(),solnAssetView);
+                                        addNodeAndChildren(child.getValue(),solnAssetView, includeContainers);
                                     }
                                 }
                             } else {
@@ -429,12 +443,12 @@ public class GDTAFImportController {
                 var gucsHeadList = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getGucsHead();
 
                 if (topologyHead != null) {
-                    addNodeAndChildren(topologyHead, "Topology" );
+                    addNodeAndChildren(topologyHead, "Topology", true);
                 }
                 if (gucsHeadList != null){
                     for( var gucsUUID: GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs()){
                         String gucsViewString = "GUCS: " + GUCSRepoMgr.getInstance().getGridUseCase(gucsUUID).getName();
-                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString);
+                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString, true);
                     }
                 }
             }

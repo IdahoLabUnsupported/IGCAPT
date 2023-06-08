@@ -217,8 +217,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             BufferedImage theImage;
             SgLayeredIcon icon = (SgLayeredIcon) node.getIcon();
             theImage = (BufferedImage) icon.getCompositeImage();
-            MapImageImpl myimage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node, node.isRenderName());
-            myimage.setId(node.getName());
+            MapImageImpl myimage = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
+            
+            if (node.isRenderName()) {
+                myimage.setId(node.getName());
+            }
             node.setMapImage(myimage);
             map.addMapImage(myimage);
         }
@@ -264,7 +267,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
             else {
                 line = new MapLineImpl(start, end);
-                line.setId(edge.toString());
+                
+                if (edge.isRenderName()) {
+                    line.setId(edge.toString());
+                }
             }
               
             map.addMapLine(line);
@@ -1880,13 +1886,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         final JTextField tbxEndPoint1 = new JTextField(String.valueOf(endpoints.getFirst().getId()));
         final JTextField tbxEndPoint2 = new JTextField(String.valueOf(endpoints.getSecond().getId()));
         final JCheckBox cbxEnable = new JCheckBox();
+        final JCheckBox cbxShowName = new JCheckBox();
 
         tbxEdgeID.setEnabled(false);
         tbxEndPoint1.setEnabled(false);
         tbxEndPoint2.setEnabled(false);
         cbxEnable.setSelected(edge.isEnabled());
+        cbxShowName.setSelected(edge.isRenderName());
 
         Object[] inputFields = {"Name", tbxEdgeName,
+            "Show Name on Map", cbxShowName,
             "Weight", tbxWeight,
             "Fixed Overhead (bytes)", tbxFixedOhd,
             "Overhead Multiplier", tbxOverheadMult,
@@ -1894,7 +1903,8 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             "Edge ID", tbxEdgeID,
             "End Point 1", tbxEndPoint1,
             "End Point 2", tbxEndPoint2,
-            "Enable", cbxEnable};
+            "Enable", cbxEnable
+        };
 
         int option = JOptionPane.showConfirmDialog(IGCAPTgui.getInstance(), inputFields, "Line Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
@@ -1907,6 +1917,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             edge.setMultiplierOverhead(Double.parseDouble(tbxOverheadMult.getText()));
             edge.setEdgeRate(Double.parseDouble(tbxEdgeRate.getText()));
             edge.setIsEnabled(cbxEnable.isSelected());
+            edge.setRenderName(cbxShowName.isSelected());
 
             graphChanged();
         }

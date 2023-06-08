@@ -50,7 +50,7 @@ public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
     }
 
     public MapPolygonImpl(Layer layer, String name, List<? extends ICoordinate> points, Style style) {
-        super(layer, name, style, true);
+        super(layer, name, style);
         this.points = points;
     }
 

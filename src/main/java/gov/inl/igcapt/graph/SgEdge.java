@@ -18,16 +18,16 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
  * @author ymj
  */
 public class SgEdge {
-    
+
     private String _name;
     private int _id;
     private double _weight;
     private double _calcTransRate;
     private double _edgeRate;
     private boolean _isEnabled = true;
-//    private MapLine _mapLine = null; // MapImage that corresponds to this node.
     private Coordinate _midPoint = null;
     private Map<String, String> _attributes = new HashMap<>();
+    private boolean _renderName = true; // Should the edge name be drawn on the map?
     
     //                                                    ============================================
     //                                                    |              Total Overhead              |
@@ -61,6 +61,20 @@ public class SgEdge {
 // Constructor    
     }
     
+    /**
+     * @return the _renderName
+     */
+    public boolean isRenderName() {
+        return _renderName;
+    }
+
+    /**
+     * @param _renderName the _renderName to set
+     */
+    public void setRenderName(boolean _renderName) {
+        this._renderName = _renderName;
+    }
+    
     public void setMidPoint(Coordinate point) {
         _midPoint = point;
     }
@@ -68,15 +82,6 @@ public class SgEdge {
     public Coordinate getMidPoint() {
         return _midPoint;
     }
-    
-// These are never called and perhaps _mapLine should be removed from the class
-//    public void setMapLine(MapLine mapLine) {
-//        _mapLine = mapLine;
-//    }
-
-//    public MapLine getMapLine() {
-//        return _mapLine;
-//    }
     
     public double getUtilization() {
         return ((getEdgeRate() > 0.0)?(getCalcTransRate() / getEdgeRate()):0.0);

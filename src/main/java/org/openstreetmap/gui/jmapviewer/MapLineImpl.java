@@ -67,7 +67,7 @@ public class MapLineImpl extends MapObjectImpl implements MapLine {
     }
 
     public MapLineImpl(Layer layer, String name, List<? extends ICoordinate> points, Style style) {
-        super(layer, name, style, true);
+        super(layer, name, style);
         this.points = points;
     }
 

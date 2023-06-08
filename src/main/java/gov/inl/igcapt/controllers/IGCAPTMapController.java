@@ -487,9 +487,11 @@ MouseWheelListener {
             BufferedImage theImage = (BufferedImage)layeredIcon.getCompositeImage();
 
             if (theImage != null) {
-                returnval = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node, node.isRenderName());
+                returnval = new SgMapImage(node.getLat(), node.getLongit(), theImage, 0, node);
 
-                returnval.setId(node.getName());                                    
+                if (node.isRenderName()) {
+                    returnval.setId(node.getName());                                                        
+                }
             }
         }
 
