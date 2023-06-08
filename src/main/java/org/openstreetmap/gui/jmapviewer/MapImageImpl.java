@@ -11,11 +11,6 @@ import java.awt.image.BufferedImage;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 
-//import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
-//import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker.STYLE;
-//
-// a copy of MapMarkerCircle for visualizing images on a map
-//
 /**
  * A simple implementation of the {@link MapMarker} interface. Each map marker
  * is painted as a circle with a black border line and filled with a specified
@@ -24,8 +19,6 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
  * @author Jan Peter Stotz
  *
  */
-//public class MapImageImpl extends MapObjectImpl implements MapImage {
-//public class MapImageImpl extends MapObjectImpl implements MapImage, MapMarker {
 public class MapImageImpl extends MapObjectImpl implements MapImage {
 
     private Coordinate coord;
@@ -85,17 +78,6 @@ public class MapImageImpl extends MapObjectImpl implements MapImage {
         return coord.getLon();
     }
 
-/*    @Override
-    public double getRadius() {
-        return radius;
-    }
-
-
-    @Override
-    public MapMarker.STYLE getMarkerStyle() {
-        return markerStyle;
-    }
-*/    
     public BufferedImage getImg() {
         return img;
     }
