@@ -107,6 +107,7 @@ import gov.inl.igcapt.wizard.ImportGdtafScenario;
 import gov.inl.igcapt.graph.*;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
+import gov.inl.igcapt.properties.WebServiceProperties;
 import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
@@ -190,6 +191,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     }
 
     static final IGCAPTproperties IGCAPTPROPERTIES = IGCAPTproperties.getInstance();
+    WebServiceProperties webSvcProperties = WebServiceProperties.getInstance();
     private static final long serialVersionUID = 1L;
 
     private final JSGMapViewer treeMap; 
@@ -1184,10 +1186,12 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 
                 IGCAPTproperties.getInstance().storeProperties();
+                WebServiceProperties.getInstance().storeProperties();
                 System.exit(0);
             }
         } else {
             IGCAPTproperties.getInstance().storeProperties();
+            WebServiceProperties.getInstance().storeProperties();
             System.exit(0);
         }
     }
