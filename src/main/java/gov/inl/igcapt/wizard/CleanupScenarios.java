@@ -7,8 +7,8 @@ package gov.inl.igcapt.wizard;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import gov.inl.igcapt.properties.IGCAPTproperties;
-import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
+import gov.inl.igcapt.properties.WebServiceProperties;
+import gov.inl.igcapt.properties.WebServiceProperties.WebServiceProperty;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -34,8 +34,8 @@ public class CleanupScenarios extends javax.swing.JDialog {
      */
     public CleanupScenarios() {
         super();
-        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_HOST);
-        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_HOST);
+        m_webServiceHost = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
+        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
         initComponents();
         getScenarioList();
         

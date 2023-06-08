@@ -7,8 +7,8 @@ package gov.inl.igcapt.wizard;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import gov.inl.igcapt.properties.IGCAPTproperties;
-import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
+import gov.inl.igcapt.properties.WebServiceProperties;
+import gov.inl.igcapt.properties.WebServiceProperties.WebServiceProperty;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,8 +58,8 @@ public class WizardCommandThread extends Thread {
 
     public WizardCommandThread (CommandType command) {
         m_command = command;
-        m_webServiceHost = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_HOST);
-        m_webServiceKey = IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.WEB_SERVICE_KEY);
+        m_webServiceHost = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
+        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
     }
     
     // thread will execute based on m_command which is set in constructor

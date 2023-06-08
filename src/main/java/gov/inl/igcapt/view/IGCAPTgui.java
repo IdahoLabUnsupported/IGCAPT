@@ -561,7 +561,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
         });
 
-        // Tool Tips Enabbled
+        // Tool Tips Enabled
         final JCheckBox toolTipsCheckbox = new JCheckBox("ToolTips", true);
         toolTipsCheckbox.addActionListener(new ActionListener() {
             @Override
@@ -571,6 +571,26 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 } else {
                     toolTipsEnabled = false;
                 }
+            }
+        });
+        
+        // Labels Enabled
+        final JCheckBox labelsCheckbox = new JCheckBox("Labels", false);
+        labelsCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (labelsCheckbox.isSelected()) {
+                    List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+                    for(SgNodeInterface node: nodes){
+                        node.setRenderName(true);
+                    }
+                } else {
+                    List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+                    for(SgNodeInterface node: nodes){
+                        node.setRenderName(false);
+                    }
+                }
+                refresh();
             }
         });
 
@@ -625,6 +645,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 
         panelBottom.add(gisEnabled);
         panelBottom.add(toolTipsCheckbox);
+        panelBottom.add(labelsCheckbox);
         panelBottom.add(allAnalysisResultsCheckbox);
         panelBottom.add(collapse);
         panelBottom.add(expand);
