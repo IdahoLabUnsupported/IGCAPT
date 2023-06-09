@@ -1,6 +1,7 @@
 
 package gov.inl.igcapt.controllers;
 
+import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
@@ -11,6 +12,7 @@ import gov.inl.igcapt.gdtaf.model.*;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
+import gov.inl.igcapt.graph.SgNodeInterface;
 import gov.inl.igcapt.view.IGCAPTgui;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
@@ -22,6 +24,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,6 @@ public class GDTAFImportController {
     private final List<Pair<SgNode, String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
     private gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
     private static GDTAFImportController m_importController = null;
-    private static SgNode m_lastAncestorNode = null;
     private ComponentDao m_componentDao = new ComponentDao();
 
     private GDTAFImportController() {
@@ -100,6 +102,10 @@ public class GDTAFImportController {
 
             createGraphVertices();
             createGraphEdges();
+
+            // Remove containers and reconnect connected nodes.
+            removeContainers();
+
             setNodeData(); //Payload and latency.
 
         } catch (Exception ex) {
@@ -320,17 +326,13 @@ public class GDTAFImportController {
     private boolean isContainer(SolutionAsset solutionAsset){
         return (solutionAsset.getEquipmentRole() == EquipmentRole.ROLE_CONTAINER);
     }
-    
-    private void addNodeAndChildren(String assetUuid, String solnAssetView) {
-        addNodeAndChildren(assetUuid, solnAssetView, false);
-    }
 
     /**
      * Recursively add nodes starting with assetUuid and continuing through the solnAssetView's children.
      * @param assetUuid The uuid of the asset to recursively add.
      * @param solnAssetView The view's children to add.
      */
-    private void addNodeAndChildren(String assetUuid, String solnAssetView, boolean includeContainers) {
+    private void addNodeAndChildren(String assetUuid, String solnAssetView) {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
         SolutionAsset solutionAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(assetUuid);
@@ -347,38 +349,35 @@ public class GDTAFImportController {
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
                     if (equipmentInstance != null) {
-                        if (includeContainers || (location != null && !isContainer(solutionAsset))) {
-                            var equipInstanceIgcaptCompData =
-                                IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
-                            int nodeId = GraphManager.getInstance().getNextNodeIndex();
-                            String name = solutionAsset.getName();
+                        var equipInstanceIgcaptCompData =
+                            IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
+                        int nodeId = GraphManager.getInstance().getNextNodeIndex();
+                        String name = solutionAsset.getName();
 
-                            sgNode = new SgNode(nodeId,
-                                    solutionAsset.getUUID(),
-                                    equipInstanceIgcaptCompData.getUuid(),
-                                    equipInstanceIgcaptCompData.getName(),
-                                    name,
-                                    true,
-                                    false,
-                                    false,
-                                    0,
-                                    10,
-                                    "assetGuid:" + stripUnderscoreFromUUID(solutionAsset.getUUID()));
+                        sgNode = new SgNode(nodeId,
+                                solutionAsset.getUUID(),
+                                equipInstanceIgcaptCompData.getUuid(),
+                                equipInstanceIgcaptCompData.getName(),
+                                name,
+                                true,
+                                false,
+                                false,
+                                0,
+                                10,
+                                "assetGuid:" + stripUnderscoreFromUUID(solutionAsset.getUUID()));
 
-                            m_lastAncestorNode = sgNode;
-                            m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
+                        m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
 
-                            if (location == null){
-                                location = new GeoLocation();
-                                location.setX(0.0f);
-                                location.setY(0.0f);
-                                location.setZ(0.0f);
-                            }
-                            sgNode.setLat(location.getY());
-                            sgNode.setLongit(location.getX());
-
-                            igcaptGraph.addVertex(sgNode);
+                        if (location == null){
+                            location = new GeoLocation();
+                            location.setX(0.0f);
+                            location.setY(0.0f);
+                            location.setZ(0.0f);
                         }
+                        sgNode.setLat(location.getY());
+                        sgNode.setLongit(location.getX());
+
+                        igcaptGraph.addVertex(sgNode);
 
                         // We have access to the asset so grab the children at this point.
                         // Save the current Node instance and the child GUID. In the
@@ -387,7 +386,7 @@ public class GDTAFImportController {
                         // m_assetGuidToNodeMap.
                         var views = solutionAsset.getViews();
 
-                        if (views != null && !views.isEmpty() && sgNode != null) {
+                        if (views != null && !views.isEmpty()) {
                             var assetView = views.stream()
                                     .filter(view -> view.getName().equals(solnAssetView))
                                     .findAny()
@@ -401,7 +400,7 @@ public class GDTAFImportController {
                                     for (var child : children) {
                                         m_edgeList.add(new Pair<>(sgNode, child.getValue()));
 
-                                        addNodeAndChildren(child.getValue(),solnAssetView, includeContainers);
+                                        addNodeAndChildren(child.getValue(),solnAssetView);
                                     }
                                 }
                             } else {
@@ -427,6 +426,47 @@ public class GDTAFImportController {
             }
         }
     }
+    
+    /**
+     * Iterate through all nodes and remove container classes. They don't have location and are just aggregation points for networks.
+     */
+    private void removeContainers() {
+        
+        Graph graph = GraphManager.getInstance().getOriginalGraph();
+        List<SgNodeInterface> nodes = new ArrayList<>(graph.getVertices());
+        
+        for(var node : nodes) {
+            
+            var asset = GDTAFScenarioMgr.getInstance().findSolutionAsset(node.getAssetUUID());
+            if (asset != null && isContainer(asset)) {
+                
+                // Rewire all connections with the container to all the other connections and then delete the container and edges.
+                // Get the list all nodes connected to the container.
+                List<SgNodeInterface> connectedNodes = new ArrayList<>(graph.getNeighbors(node));
+                List<SgEdge> connectedEdges = new ArrayList<>(graph.getIncidentEdges(node));
+                
+                // Remove edges connected to the container.
+                for (var edge : connectedEdges) {
+                    graph.removeEdge(edge);
+                }
+                
+                int numConnections = connectedNodes.size();
+                
+                // Connect each of the connectedNodes to each of the other connectedNodes.
+                for (int i=0; i<numConnections; i++) {
+                    for (int j=i+1; j<numConnections; j++) {
+                        int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
+                        graph.addEdge(new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0), connectedNodes.get(i), connectedNodes.get(j));
+                    }
+                }
+                
+                // Now delete the container
+                graph.removeVertex(node);
+            }
+        }
+        
+        IGCAPTgui.getInstance().refresh();
+    }
 
     private void createGraphVertices() {
 
@@ -440,14 +480,14 @@ public class GDTAFImportController {
                 var gucsHeadList = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getGucsHead();
 
                 if (topologyHead != null) {
-                    addNodeAndChildren(topologyHead, "Topology", true);
+                    addNodeAndChildren(topologyHead, "Topology");
                 }
-//                if (gucsHeadList != null){
-//                    for( var gucsUUID: GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs()){
-//                        String gucsViewString = "GUCS: " + GUCSRepoMgr.getInstance().getGridUseCase(gucsUUID).getName();
-//                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString, true);
-//                    }
-//                }
+                if (gucsHeadList != null){
+                    for( var gucsUUID: GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs()){
+                        String gucsViewString = "GUCS: " + GUCSRepoMgr.getInstance().getGridUseCase(gucsUUID).getName();
+                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString);
+                    }
+                }
             }
         } catch (Exception ex) {
             System.out.println("Exception thrown in processing scenario: " + ex.getLocalizedMessage());

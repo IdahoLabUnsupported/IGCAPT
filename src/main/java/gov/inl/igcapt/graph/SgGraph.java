@@ -243,6 +243,11 @@ public class SgGraph extends UndirectedSparseMultigraph<SgNodeInterface, SgEdge>
 
     @Override
     public boolean isRenderName() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public String getAssetUUID() {
+        return getRefNode().getAssetUUID();
     }
 }

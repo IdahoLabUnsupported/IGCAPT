@@ -164,6 +164,7 @@ public class SgNode implements SgNodeInterface {
         this._isCollapsed = _isCollapsed;
     }
                                   
+    @Override
     public String getAssetUUID(){
         return _assetUuid;
     }

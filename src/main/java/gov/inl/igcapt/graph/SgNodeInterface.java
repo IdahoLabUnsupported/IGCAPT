@@ -25,6 +25,7 @@ public interface SgNodeInterface {
     public void setId(int id);
     public String getType();
     public void setType(String uuidStr);
+    public String getAssetUUID();
     public double getComputedRate();
     public Icon getIcon();
     public double getLat();
