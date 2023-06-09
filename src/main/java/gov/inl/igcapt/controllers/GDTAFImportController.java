@@ -334,7 +334,7 @@ public class GDTAFImportController {
 
         var igcaptGraph = GraphManager.getInstance().getGraph();
         SolutionAsset solutionAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(assetUuid);
-        SgNode sgNode;
+        SgNode sgNode = null;
 
         // This asset already exists. Don't add it again.
         if (!m_assetGuidToNodeMap.containsKey(assetUuid)) {
@@ -387,7 +387,7 @@ public class GDTAFImportController {
                         // m_assetGuidToNodeMap.
                         var views = solutionAsset.getViews();
 
-                        if (views != null && !views.isEmpty() && m_lastAncestorNode != null) {
+                        if (views != null && !views.isEmpty() && sgNode != null) {
                             var assetView = views.stream()
                                     .filter(view -> view.getName().equals(solnAssetView))
                                     .findAny()
@@ -399,7 +399,7 @@ public class GDTAFImportController {
                                 if (children != null && !children.isEmpty()) {
 
                                     for (var child : children) {
-                                        m_edgeList.add(new Pair<>(m_lastAncestorNode, child.getValue()));
+                                        m_edgeList.add(new Pair<>(sgNode, child.getValue()));
 
                                         addNodeAndChildren(child.getValue(),solnAssetView, includeContainers);
                                     }
@@ -442,12 +442,12 @@ public class GDTAFImportController {
                 if (topologyHead != null) {
                     addNodeAndChildren(topologyHead, "Topology", true);
                 }
-                if (gucsHeadList != null){
-                    for( var gucsUUID: GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs()){
-                        String gucsViewString = "GUCS: " + GUCSRepoMgr.getInstance().getGridUseCase(gucsUUID).getName();
-                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString, true);
-                    }
-                }
+//                if (gucsHeadList != null){
+//                    for( var gucsUUID: GDTAFScenarioMgr.getInstance().getActiveScenario().getSelectedGucs()){
+//                        String gucsViewString = "GUCS: " + GUCSRepoMgr.getInstance().getGridUseCase(gucsUUID).getName();
+//                        addNodeAndChildren(gucsHeadList.get(0), gucsViewString, true);
+//                    }
+//                }
             }
         } catch (Exception ex) {
             System.out.println("Exception thrown in processing scenario: " + ex.getLocalizedMessage());
