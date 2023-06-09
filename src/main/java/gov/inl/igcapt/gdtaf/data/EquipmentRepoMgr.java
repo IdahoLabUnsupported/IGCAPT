@@ -102,9 +102,9 @@ public class EquipmentRepoMgr {
             case "Switch":
                 return "71e87e52-b32f-4ca4-9db3-6dd071204154";
             case "EnergyConsumerPhase":
-                return "490027ba-e03a-4b4e-8ef8-3280c056aa12";
+                return "3f40e7be-d5ac-4b8e-845f-bc38f7bd5938";
             case "EnergyConsumer":
-                return "b5ccc545-630e-46e1-b9f1-533e81de9250";
+                return "eefab4fc-a62b-4b97-8142-f8d3d089c370";
             case "DMS":
                 return "49b20f30-cde6-4850-bf26-cb36e5d3ffa3";
             case "Y-Corp Cellular Gateway":
@@ -146,9 +146,11 @@ public class EquipmentRepoMgr {
             case "Distribution":
                 return "29ece96d-8641-446e-aee2-d983580dac43";
             case "PowerElectronicsConnection":
-                return "f5dcab01-0ae1-4c83-9b16-1b39ebf61fb5";
+                return "9a8b0787-21f5-440c-af94-bfca70b0cd80";
+            case "PowerElectronicsConnectionPhase":
+                return "35f65649-2578-4a15-a2b4-5c1fad61f848";
             case "Breaker":
-                return "67610d9e-b48b-47eb-b751-9688080e4467";
+                return "2f96c46c-10ff-4914-8a20-beec51511e74";
             default:
                 // UUID for Unknown
                 System.out.println(getEquip(uuid).getName());

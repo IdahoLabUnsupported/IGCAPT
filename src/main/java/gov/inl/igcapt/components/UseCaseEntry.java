@@ -11,7 +11,7 @@ package gov.inl.igcapt.components;
  */
 public class UseCaseEntry implements java.io.Serializable {
     
-    private int percentToApply;
+    private int percentToApply = 100;
     public int getPercentToApply() {
         return percentToApply;
     }
