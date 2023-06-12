@@ -7,6 +7,10 @@ package gov.inl.igcapt.components;
 
 import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
+import gov.inl.igcapt.graph.GraphManager;
+import gov.inl.igcapt.view.IGCAPTgui;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -48,12 +52,27 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        ComponentDao componentDao = new ComponentDao();
+        // Only list those use cases that have components in the graph that support it.
+        var graph = GraphManager.getInstance().getOriginalGraph();
+        Set<String> useCaseNameSet = new HashSet<>();
+        var nodes = graph.getVertices();
         
-        for (SgUseCase useCase:componentDao.getUseCases()) {
-            useCaseComboBox.addItem(useCase.getName());
-        }
+        for (var node : nodes) {
+            var component = IGCAPTgui.getComponentByUuid(node.getType());
+
+            if (component != null) {
+                var useCaseList = component.getUsecases();
                 
+                for (var useCase : useCaseList) {
+                    useCaseNameSet.add(useCase.getName());
+                }
+            }
+        }
+        
+        for (String useCaseName : useCaseNameSet) {
+            useCaseComboBox.addItem(useCaseName);
+        }
+        
         if (useCaseComboBox.getItemCount() > 0) {
             useCaseComboBox.setSelectedIndex(0);
         }
