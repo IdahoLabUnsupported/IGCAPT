@@ -8,7 +8,9 @@ package gov.inl.igcapt.components;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.view.IGCAPTgui;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.swing.DefaultListModel;
 
 
 /**
@@ -35,8 +37,8 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
         return _dependent;
     }
     
-    public String getUseCaseName() {
-        return (String)useCaseComboBox.getSelectedItem();
+    public List<String> getUseCaseNameList() {
+        return jList1.getSelectedValuesList();
     }
     
     public int getPercentApply() {
@@ -66,14 +68,13 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
                 }
             }
         }
-        
+                
+        DefaultListModel listModel = new DefaultListModel();
+       
         for (String useCaseName : useCaseNameSet) {
-            useCaseComboBox.addItem(useCaseName);
+            listModel.addElement(useCaseName);
         }
-        
-        if (useCaseComboBox.getItemCount() > 0) {
-            useCaseComboBox.setSelectedIndex(0);
-        }
+        jList1.setModel(listModel);
                 
         revalidate();
         pack();
@@ -98,7 +99,8 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(17, 0), new java.awt.Dimension(17, 0), new java.awt.Dimension(17, 32767));
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         dependentCB = new javax.swing.JCheckBox();
-        useCaseComboBox = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         setTitle("Add Use Case");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -129,6 +131,7 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
         jLabel2.setText("Percent");
 
         percentApply.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        percentApply.setValue(100);
 
         dependentCB.setText("Dependent");
         dependentCB.addActionListener(new java.awt.event.ActionListener() {
@@ -137,63 +140,69 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
             }
         });
 
+        jScrollPane1.setViewportView(jList1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(dependentCB)
-                        .addGap(95, 95, 95))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(cancelBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(useCaseComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(percentApply, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(25, 25, 25)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(dependentCB)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(percentApply, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(127, Short.MAX_VALUE)
+                    .addContainerGap(144, Short.MAX_VALUE)
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(126, Short.MAX_VALUE)))
+                    .addContainerGap(144, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 118, Short.MAX_VALUE)
+                    .addGap(0, 135, Short.MAX_VALUE)
                     .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 118, Short.MAX_VALUE)))
+                    .addGap(0, 136, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(filler3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 119, Short.MAX_VALUE)))
+                    .addGap(0, 154, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(useCaseComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(percentApply, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(dependentCB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -233,13 +242,12 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
         if (((javax.swing.JCheckBox)evt.getSource()).isSelected()) {
             _dependent = true;
             
-            useCaseComboBox.setEditable(true);
-            useCaseComboBox.getEditor().setItem(DEPENDENT_LABEL);
-            useCaseComboBox.setEnabled(false);
+            jList1.setEnabled(false);
+            jList1.setSelectedIndex(-1);
         }
         else {
-            useCaseComboBox.setSelectedIndex(-1);
-            useCaseComboBox.setEnabled(true);            
+            jList1.setEnabled(true);
+            jList1.setSelectedIndex(-1);
         }
     }//GEN-LAST:event_dependentCBActionPerformed
 
@@ -291,8 +299,9 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
     private javax.swing.Box.Filler filler3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton okBtn;
     private javax.swing.JSpinner percentApply;
-    private javax.swing.JComboBox<String> useCaseComboBox;
     // End of variables declaration//GEN-END:variables
 }
