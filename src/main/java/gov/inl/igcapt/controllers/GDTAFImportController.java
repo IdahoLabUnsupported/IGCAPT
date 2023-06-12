@@ -23,6 +23,7 @@ import jakarta.xml.bind.Unmarshaller;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import static java.lang.Double.min;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -444,9 +445,18 @@ public class GDTAFImportController {
                 // Get the list all nodes connected to the container.
                 List<SgNodeInterface> connectedNodes = new ArrayList<>(graph.getNeighbors(node));
                 List<SgEdge> connectedEdges = new ArrayList<>(graph.getIncidentEdges(node));
+                Map<Integer, Double> nodeBandwidthMap = new HashMap<>();
                 
                 // Remove edges connected to the container.
                 for (var edge : connectedEdges) {
+                    edu.uci.ics.jung.graph.util.Pair endPts = graph.getEndpoints(edge);
+                    if (endPts.getFirst() != node) {
+                        nodeBandwidthMap.put(((SgNode)endPts.getFirst()).getId(), edge.getEdgeRate());
+                    }
+                    else if (endPts.getSecond() != node) {
+                        nodeBandwidthMap.put(((SgNode)endPts.getSecond()).getId(), edge.getEdgeRate());
+                    }
+                    
                     graph.removeEdge(edge);
                 }
                 
@@ -456,7 +466,9 @@ public class GDTAFImportController {
                 for (int i=0; i<numConnections; i++) {
                     for (int j=i+1; j<numConnections; j++) {
                         int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
-                        graph.addEdge(new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0), connectedNodes.get(i), connectedNodes.get(j));
+                        double minEdgeRate = min(nodeBandwidthMap.getOrDefault(connectedNodes.get(i).getId(), 0.0), 
+                                                 nodeBandwidthMap.getOrDefault(connectedNodes.get(j).getId(), 0.0));
+                        graph.addEdge(new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, minEdgeRate), connectedNodes.get(i), connectedNodes.get(j));
                     }
                 }
                 
