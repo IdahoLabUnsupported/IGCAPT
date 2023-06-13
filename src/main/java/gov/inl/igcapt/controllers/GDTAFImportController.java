@@ -429,7 +429,6 @@ public class GDTAFImportController {
     }
     
     SgNode getNodeFromAssetId(String assetId) {
-        
         SgNode returnval = null;
         Graph graph = GraphManager.getInstance().getOriginalGraph();
         List<SgNodeInterface> nodes = new ArrayList<>(graph.getVertices());
@@ -441,23 +440,6 @@ public class GDTAFImportController {
             }
         }
         
-        return returnval;
-    }
-    
-    List<SgNode> getNodesFromAssetIds(List<String> assetIds) {
-        
-        List<SgNode> returnval = new ArrayList<>();
-
-        for (var assetId : assetIds) {
-            
-            SgNode sgNode = getNodeFromAssetId(assetId);
-            
-            if (sgNode != null) {
-                returnval.add(sgNode);
-            }
-        }
-
-
         return returnval;
     }
     
@@ -538,60 +520,7 @@ public class GDTAFImportController {
 
         return returnval;
     }
-    
-    /**
-     * 
-     * Is otherNode a child of parent.
-     * @param parent The parent node.
-     * @param childCandidate The node we want to know if it is a child of parent.
-     * @param maxDepth The maximum depth to traverse to determine if it is a child.
-     * @return 
-     */
-    boolean isChild(SgNode parent, SgNode childCandidate, int maxDepth) {
         
-        boolean returnval = false;
-        
-        String parentAssetUuid = parent.getAssetUUID();
-        var parentAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(parentAssetUuid);
-        
-        if (parentAsset != null && parent != childCandidate && maxDepth > 0) {
-            var views = parentAsset.getViews();
-            if (views != null && !views.isEmpty()) {
-                var assetView = views.stream()
-                        .filter(view -> view.getName().equals("Topology"))
-                        .findAny()
-                        .orElse(null);
-                
-                if (assetView != null) {
-                    var children = assetView.getChildren();
-                    
-                    if (children != null && !children.isEmpty()) {
-           
-                        for (var child : children) {
-                            if (childCandidate.getAssetUUID().equals(child.getValue())) {
-                                returnval = true;
-                                break;
-                            }
-                            else {
-                                var childNode = getNodeFromAssetId(child.getValue());
-                                
-                                // We must check this because we may have already deleted the container.
-                                if (childNode != null) {
-                                    returnval = isChild(childNode, childCandidate, maxDepth-1);
-                                    if (returnval) {
-                                       break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        return returnval;
-    }
-    
     /**
      * Iterate through all nodes and remove container classes. They don't have location and are just aggregation points for networks.
      */
@@ -614,7 +543,9 @@ public class GDTAFImportController {
                 // For each node connected to a container that is a parent of the container, that is not a container itself, reconnect each connection
                 // to the nearest children non-container.
                 for (var connectedNode : connectedNodes) {
-                    if (isParent((SgNode)node, (SgNode)connectedNode, 1)) { // Is the connected node a parent of container?
+                    var connectedAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(connectedNode.getAssetUUID());
+                    
+                    if (isParent((SgNode)node, (SgNode)connectedNode, 1) && connectedAsset != null && !isContainer(connectedAsset)) { // Is the connected node a parent of container?
                         var childrenToConnect = getContainerChildren(asset);
                         
                         for (var childNode : childrenToConnect) {
