@@ -428,6 +428,170 @@ public class GDTAFImportController {
         }
     }
     
+    SgNode getNodeFromAssetId(String assetId) {
+        
+        SgNode returnval = null;
+        Graph graph = GraphManager.getInstance().getOriginalGraph();
+        List<SgNodeInterface> nodes = new ArrayList<>(graph.getVertices());
+
+        for (var node : nodes) {
+            if (node.getAssetUUID().equals(assetId)) {
+                returnval = (SgNode)node;
+                break;
+            }
+        }
+        
+        return returnval;
+    }
+    
+    List<SgNode> getNodesFromAssetIds(List<String> assetIds) {
+        
+        List<SgNode> returnval = new ArrayList<>();
+
+        for (var assetId : assetIds) {
+            
+            SgNode sgNode = getNodeFromAssetId(assetId);
+            
+            if (sgNode != null) {
+                returnval.add(sgNode);
+            }
+        }
+
+
+        return returnval;
+    }
+    
+    /**
+     * Traverse down to the children and return all the children, grandchildren, etc. that are not containers.
+     * Stop traversing when only noncontainers exist.
+     * @param asset The asset to start at.
+     * @return 
+     */
+    List<SgNode> getContainerChildren(SolutionAsset asset) {
+        
+        List<SgNode> returnval = new ArrayList<>();
+        
+        var views = asset.getViews();
+        var assetView = views.stream()
+                .filter(view -> view.getName().equals("Topology"))
+                .findAny()
+                .orElse(null);
+
+        if (assetView != null) {
+            var children = assetView.getChildren();
+        
+            for (var child : children) {
+                var childAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(child.getValue());
+
+                if (isContainer(childAsset)) {
+                    var containerChildren = getContainerChildren(childAsset);
+                    returnval.addAll(containerChildren);
+                }
+                else {
+                    returnval.add(getNodeFromAssetId(child.getValue()));
+                }
+            }
+        }
+        
+        return returnval;
+    }
+    
+    boolean isParent(SgNode child, SgNode parentCandidate, int maxDepth) {
+        
+        boolean returnval = false;
+        
+        String childAssetUuid = child.getAssetUUID();
+        var childAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(childAssetUuid);
+        
+        if (childAsset != null && child != parentCandidate && maxDepth > 0) {
+            var views = childAsset.getViews();
+            if (views != null && !views.isEmpty()) {
+
+                outer:
+                for (var assetView : views) {
+                    if (assetView != null && (assetView.getName().equals("Topology") || assetView.getName().equals("GUCS: SCADA for Observability"))) {
+                        var parents = assetView.getParents();
+
+                        if (parents != null && !parents.isEmpty()) {
+
+                            for (var parent : parents) {
+                                if (parentCandidate.getAssetUUID().equals(parent.getValue())) {
+                                    returnval = true;
+                                    break outer;
+                                }
+                                else {
+                                    var parentNode = getNodeFromAssetId(parent.getValue());
+
+                                    if (parentNode != null) {
+                                        returnval = isParent(parentNode, parentCandidate, maxDepth-1);
+                                        if (returnval) {
+                                           break outer;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return returnval;
+    }
+    
+    /**
+     * 
+     * Is otherNode a child of parent.
+     * @param parent The parent node.
+     * @param childCandidate The node we want to know if it is a child of parent.
+     * @param maxDepth The maximum depth to traverse to determine if it is a child.
+     * @return 
+     */
+    boolean isChild(SgNode parent, SgNode childCandidate, int maxDepth) {
+        
+        boolean returnval = false;
+        
+        String parentAssetUuid = parent.getAssetUUID();
+        var parentAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(parentAssetUuid);
+        
+        if (parentAsset != null && parent != childCandidate && maxDepth > 0) {
+            var views = parentAsset.getViews();
+            if (views != null && !views.isEmpty()) {
+                var assetView = views.stream()
+                        .filter(view -> view.getName().equals("Topology"))
+                        .findAny()
+                        .orElse(null);
+                
+                if (assetView != null) {
+                    var children = assetView.getChildren();
+                    
+                    if (children != null && !children.isEmpty()) {
+           
+                        for (var child : children) {
+                            if (childCandidate.getAssetUUID().equals(child.getValue())) {
+                                returnval = true;
+                                break;
+                            }
+                            else {
+                                var childNode = getNodeFromAssetId(child.getValue());
+                                
+                                // We must check this because we may have already deleted the container.
+                                if (childNode != null) {
+                                    returnval = isChild(childNode, childCandidate, maxDepth-1);
+                                    if (returnval) {
+                                       break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return returnval;
+    }
+    
     /**
      * Iterate through all nodes and remove container classes. They don't have location and are just aggregation points for networks.
      */
@@ -438,16 +602,33 @@ public class GDTAFImportController {
         
         for(var node : nodes) {
             
-            var asset = GDTAFScenarioMgr.getInstance().findSolutionAsset(node.getAssetUUID());
+            SolutionAsset asset = GDTAFScenarioMgr.getInstance().findSolutionAsset(node.getAssetUUID());
             if (asset != null && isContainer(asset)) {
-                
+
                 // Rewire all connections with the container to all the other connections and then delete the container and edges.
                 // Get the list all nodes connected to the container.
                 List<SgNodeInterface> connectedNodes = new ArrayList<>(graph.getNeighbors(node));
                 List<SgEdge> connectedEdges = new ArrayList<>(graph.getIncidentEdges(node));
                 Map<Integer, Double> nodeBandwidthMap = new HashMap<>();
                 
-                // Remove edges connected to the container.
+                // For each node connected to a container that is a parent of the container, that is not a container itself, reconnect each connection
+                // to the nearest children non-container.
+                for (var connectedNode : connectedNodes) {
+                    if (isParent((SgNode)node, (SgNode)connectedNode, 1)) { // Is the connected node a parent of container?
+                        var childrenToConnect = getContainerChildren(asset);
+                        
+                        for (var childNode : childrenToConnect) {
+                            int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
+                            double minEdgeRate = 0.0;
+    //                      double minEdgeRate = min(nodeBandwidthMap.getOrDefault(connectedNodes.get(i).getId(), 0.0), 
+    //                                               nodeBandwidthMap.getOrDefault(connectedNodes.get(j).getId(), 0.0));
+                            graph.addEdge(new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, minEdgeRate), connectedNode, childNode);
+                        }
+                    }
+                }
+
+                
+                // Remove edges connected to the container after saving its bandwidth.
                 for (var edge : connectedEdges) {
                     edu.uci.ics.jung.graph.util.Pair endPts = graph.getEndpoints(edge);
                     if (endPts.getFirst() != node) {
@@ -459,20 +640,7 @@ public class GDTAFImportController {
                     
                     graph.removeEdge(edge);
                 }
-                
-                int numConnections = connectedNodes.size();
-                
-                // Connect each of the connectedNodes to each of the other connectedNodes.
-                for (int i=0; i<numConnections; i++) {
-                    for (int j=i+1; j<numConnections; j++) {
-                        int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
-                        double minEdgeRate = min(nodeBandwidthMap.getOrDefault(connectedNodes.get(i).getId(), 0.0), 
-                                                 nodeBandwidthMap.getOrDefault(connectedNodes.get(j).getId(), 0.0));
-                        graph.addEdge(new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, minEdgeRate), connectedNodes.get(i), connectedNodes.get(j));
-                    }
-                }
-                
-                // Now delete the container
+                                
                 graph.removeVertex(node);
             }
         }

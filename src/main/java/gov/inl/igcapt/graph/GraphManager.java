@@ -100,7 +100,7 @@ public class GraphManager {
     public int getNextEdgeIndex(){
         
         var graph = getGraph();
-        int returnval = -1;
+        int returnval = 0;
         
         var edges = graph.getEdges();
 
