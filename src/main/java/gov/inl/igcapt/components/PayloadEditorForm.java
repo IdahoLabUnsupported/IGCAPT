@@ -324,16 +324,21 @@ public class PayloadEditorForm extends javax.swing.JDialog {
                     }                  
                 }
                 
-                UseCaseEntry treeEntry = new UseCaseEntry();
-                treeEntry.setUseCaseName(addUseCaseDlg.getUseCaseName());
-                treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
-                DefaultMutableTreeNode child = new DefaultMutableTreeNode(treeEntry);
+                DefaultMutableTreeNode child = null;
+                for (String useCaseName : addUseCaseDlg.getUseCaseNameList()) {
+                    UseCaseEntry treeEntry = new UseCaseEntry();
+                    treeEntry.setUseCaseName(useCaseName);
+                    treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
+                    child = new DefaultMutableTreeNode(treeEntry);
+                    treeModel.insertNodeInto(child, node, node.getChildCount());
+                }
 
-                treeModel.insertNodeInto(child, node, node.getChildCount());
                 if (selectedNodeTreePath != null) {
                     payloadTree.expandPath(selectedNodeTreePath);
                 }
-                payloadTree.scrollPathToVisible(new TreePath(child.getPath()));
+                if (child != null) {
+                    payloadTree.scrollPathToVisible(new TreePath(child.getPath()));
+                }
             }
         }
     }//GEN-LAST:event_addPayloadBtnActionPerformed
