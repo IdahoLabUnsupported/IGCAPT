@@ -153,21 +153,21 @@
                         <configuration>
                             <sourceRoot>${project.basedir}\src\main\java</sourceRoot>
                             <xsdOptions>
-                                <xsdOption>
+<!--                                <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\common-model-definition-main\gdtaf-core.xsd</xsd>
                                     <packagename>gov.inl.igcapt.gdtaf.core</packagename>
-                                    <!--<bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>-->
-                                </xsdOption>
+                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>
+                                </xsdOption>-->
                                 <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\common-model-definition-main\gdtaf-model.xsd</xsd>
                                     <packagename>gov.inl.igcapt.gdtaf.model</packagename>
                                     <!--<bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>-->
                                 </xsdOption>
-                                <xsdOption>
+<!--                                <xsdOption>
                                     <xsd>${project.basedir}\src\main\xsd\grid-use-case-scenario-master\gdtaf-gucs.xsd</xsd>
                                     <packagename>gov.inl.igcapt.gdtaf.gucs</packagename>
-<!--                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>-->
-                               </xsdOption>
+                                    <bindingFile>${project.basedir}\src\main\xsd\gdtaf.xjb</bindingFile>
+                               </xsdOption>-->
                             </xsdOptions>
                         </configuration>
                     </execution>
