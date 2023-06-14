@@ -233,7 +233,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
             return returnval;
         }
 
-        private List<List<Integer>> getComponentPaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
+        public static List<List<Integer>> getComponentPaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
             List<List<Integer>> returnval = new ArrayList<>();
             
             SgNode currentNode;
@@ -284,7 +284,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
                                 List<List<Integer>> returnPaths = getComponentPaths(graph, nextComponent, toSgNode, false);
 
                                 // We received a path, add our current edge to the head of each list and return it.
-                                if (returnPaths.size() > 0) {
+                                if (!returnPaths.isEmpty()) {
                                     for (List<Integer> path : returnPaths) {
                                         path.add(0, sgEdge.getId());
                                     }

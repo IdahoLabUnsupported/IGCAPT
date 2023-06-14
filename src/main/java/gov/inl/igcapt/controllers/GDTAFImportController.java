@@ -551,8 +551,28 @@ public class GDTAFImportController {
                         for (var childNode : childrenToConnect) {
                             int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
                             double minEdgeRate = 0.0;
-    //                      double minEdgeRate = min(nodeBandwidthMap.getOrDefault(connectedNodes.get(i).getId(), 0.0), 
-    //                                               nodeBandwidthMap.getOrDefault(connectedNodes.get(j).getId(), 0.0));
+                            
+                            // Determine the minimum edge bandwidth.
+                            
+                            // This function returns the list of edges to get from connectedNode to childNode. There may be more than one path.
+                            // Use the first path since there is not a good way to determine which one to use.
+                            var paths = gov.inl.igcapt.components.AnalysisTask.getComponentPaths(graph, (SgNode)connectedNode, childNode, true);
+                            
+                            if (paths != null && !paths.isEmpty()) {
+                                
+                                minEdgeRate = -1.0;
+                                for (var edgeId : paths.get(0)) {
+                                    SgEdge sgEdge = GraphManager.getInstance().getEdge(graph, edgeId);
+                                    
+                                    // We assume that a node with 0.0 bandwidth specified has not been set. Don't use that one if another is available.
+                                    if (minEdgeRate < 0.0 || (sgEdge.getEdgeRate() > 0.0 && sgEdge.getEdgeRate() < minEdgeRate))
+                                    {
+                                        minEdgeRate = sgEdge.getEdgeRate();
+                                    }
+                                }
+                            }
+
+                            // Create the edge
                             graph.addEdge(new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, minEdgeRate), connectedNode, childNode);
                         }
                     }
