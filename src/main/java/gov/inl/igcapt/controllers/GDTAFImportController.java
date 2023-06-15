@@ -23,19 +23,19 @@ import jakarta.xml.bind.Unmarshaller;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import static java.lang.Double.min;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.javatuples.Triplet;
+import org.json.JSONObject;
 public class GDTAFImportController {
 
     private static final Logger logger = Logger.getLogger(GDTAFImportController.class.getName());
     private final Map<String, SgNode> m_assetGuidToNodeMap = new HashMap<>(); // Asset GUID and node instance. Will need this when creating edges.
-    private final List<Pair<SgNode, String>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
+    private final List<Triplet<SgNode, String, Double>> m_edgeList = new ArrayList<>(); // Node instance and child asset GUID that form an edge.
     private gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
     private static GDTAFImportController m_importController = null;
     private ComponentDao m_componentDao = new ComponentDao();
@@ -327,6 +327,49 @@ public class GDTAFImportController {
     private boolean isContainer(SolutionAsset solutionAsset){
         return (solutionAsset.getEquipmentRole() == EquipmentRole.ROLE_CONTAINER);
     }
+    
+    private double getChildEdgeCapacity(EdgeType child) {
+        double returnval = 128.0;
+        
+        var edgeTypeList = child.getEdges();
+        if (!edgeTypeList.isEmpty()) {
+            var bandwidthUUID = edgeTypeList.get(0);
+            var option = GDTAFScenarioMgr.getInstance().getActiveSolutionOption();
+            var bandwidthEdge = option.getEdge().stream().filter(edge -> edge.getUUID().equals(bandwidthUUID)).findFirst().get();
+            String jsonString = bandwidthEdge.getValue();
+            var obj = new JSONObject(jsonString);
+            var countObj  = (JSONObject)obj.get("count");
+            var valueObj = countObj.getInt("value");
+            var valueUnits = countObj.getString("units");
+            var everyObj = (JSONObject)obj.get("every");
+            var everyValue = everyObj.getInt("value");
+            var everyUnits = everyObj.getString("units");
+
+            double countConversion;
+            switch (valueUnits){
+                case "bit" -> countConversion = 1.0/1000.0;
+                case "kilobit" -> countConversion = 1.0;
+                case "byte" -> countConversion = 8.0/1000.0;
+                case "kilobyte" -> countConversion = 8.0;
+                case "megabyte" -> countConversion = 8.0*1000.0;
+                default -> countConversion = 1.0;
+            }
+
+            double everyConversion;
+            switch (everyUnits){
+                case "second" -> everyConversion = 1.0;
+                case "minute" -> everyConversion = 60.0;
+                case "hour" -> everyConversion = 3600.0;
+                case "day" -> everyConversion = 86400.0;
+                default -> everyConversion = 1.0;
+            }
+
+            // Convert to kbits/second.
+            returnval = valueObj * countConversion / everyValue / everyConversion;
+        }
+        
+        return returnval;
+    }
 
     /**
      * Recursively add nodes starting with assetUuid and continuing through the solnAssetView's children.
@@ -399,7 +442,8 @@ public class GDTAFImportController {
                                 if (children != null && !children.isEmpty()) {
 
                                     for (var child : children) {
-                                        m_edgeList.add(new Pair<>(sgNode, child.getValue()));
+                                        Triplet<SgNode, String, Double> edgeEntry = new Triplet<>(sgNode, child.getValue(), getChildEdgeCapacity(child));
+                                        m_edgeList.add(edgeEntry);
 
                                         addNodeAndChildren(child.getValue(),solnAssetView);
                                     }
@@ -636,12 +680,12 @@ public class GDTAFImportController {
                         "e" + edgeId,
                         1.0,
                         0,
-                        128.0);
+                        edge.getValue2());
 
-                var childNode = m_assetGuidToNodeMap.get(edge.second);
+                var childNode = m_assetGuidToNodeMap.get(edge.getValue1());
 
                 if (childNode != null) {
-                    GraphManager.getInstance().getGraph().addEdge(e1, edge.first, childNode);
+                    GraphManager.getInstance().getGraph().addEdge(e1, edge.getValue0(), childNode);
                 }
 
             }
