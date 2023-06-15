@@ -108,6 +108,8 @@ public class GDTAFImportController {
             removeContainers();
 
             setNodeData(); //Payload and latency.
+            
+            IGCAPTgui.getInstance().graphChanged();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
