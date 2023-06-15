@@ -105,8 +105,14 @@ MouseWheelListener {
     public void mouseClicked(MouseEvent e) {
     }
 
-    private SgNodeInterface ptInNode(int x, int y) {
-        SgNodeInterface returnval = null;
+    /**
+     * Return all nodes at the point clicked.
+     * @param x The screen x position of the click.
+     * @param y The screen y position of the click.
+     * @return A list of nodes that are at the click point.
+     */
+    private List<SgNodeInterface> ptInNode(int x, int y) {
+        List<SgNodeInterface> returnval = new ArrayList<>();
         
         List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
 
@@ -118,8 +124,7 @@ MouseWheelListener {
                 Rectangle nodeRect = new Rectangle(nodePoint.x - SGNODECLICKWIDTH / 2, nodePoint.y - SGNODECLICKHEIGHT / 2, SGNODECLICKWIDTH, SGNODECLICKHEIGHT);
 
                 if (nodeRect.contains(x, y)) {
-                    returnval = node;
-                    break;
+                    returnval.add(node);
                 }
             }
         }
@@ -145,7 +150,9 @@ MouseWheelListener {
     @Override
     public void mousePressed(MouseEvent e) {
         
-        SgNodeInterface clickNode = ptInNode(e.getX(), e.getY());
+        List<SgNodeInterface> clickNodes = ptInNode(e.getX(), e.getY());
+        SgNodeInterface clickNode = (clickNodes != null && !clickNodes.isEmpty()) ? clickNodes.get(0) : null;
+        
         JPopupMenu popup;
         
         if (e.getButton() == MouseEvent.BUTTON1) {            
@@ -409,7 +416,8 @@ MouseWheelListener {
                 m_prevNode = null;
             }
             // get the end point SgNode selected by the user (or null)
-            SgNodeInterface endNodeSpecifiedByUser = ptInNode(e.getX(), e.getY());
+            List<SgNodeInterface> endNodesSpecifiedByUser = ptInNode(e.getX(), e.getY());
+            SgNodeInterface endNodeSpecifiedByUser = (endNodesSpecifiedByUser != null && !endNodesSpecifiedByUser.isEmpty()) ? endNodesSpecifiedByUser.get(0) : null;
             // if the same node was selected or no node was selected don't make edge
             if (endNodeSpecifiedByUser != _clickInfo.getClickNode() &&
                 endNodeSpecifiedByUser != null) {
@@ -510,7 +518,8 @@ MouseWheelListener {
                 Point movePoint = new Point(e.getX(), e.getY());
                 ICoordinate end = map.getPosition(movePoint);
                 
-                SgNodeInterface endNode = ptInNode(e.getX(), e.getY());
+                List<SgNodeInterface> endNodes = ptInNode(e.getX(), e.getY());
+                SgNodeInterface endNode = (endNodes != null && !endNodes.isEmpty()) ? endNodes.get(0) : null;
                 if (endNode != null) {
                     if (endNode != _clickInfo._clickNode) {
                         if (endNode != m_prevNode) {

@@ -345,6 +345,7 @@ public class GDTAFImportController {
             var everyValue = everyObj.getInt("value");
             var everyUnits = everyObj.getString("units");
 
+            // Convert to kilobits
             double countConversion;
             switch (valueUnits){
                 case "bit" -> countConversion = 1.0/1000.0;
@@ -355,6 +356,7 @@ public class GDTAFImportController {
                 default -> countConversion = 1.0;
             }
 
+            // Convert to seconds
             double everyConversion;
             switch (everyUnits){
                 case "second" -> everyConversion = 1.0;
