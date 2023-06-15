@@ -863,7 +863,7 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
                 }
             }
         }
-        if (mapImageList == null) {
+        else if (mapImageList == null) {
             System.out.println("JMapViewer paintComponent() mapImageList is NULL");
         }
         attribution.paintAttribution(g, getWidth(), getHeight(), getPosition(0, 0), getPosition(getWidth(), getHeight()), zoom, this);
