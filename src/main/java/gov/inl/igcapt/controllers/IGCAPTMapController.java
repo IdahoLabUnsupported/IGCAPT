@@ -9,7 +9,6 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
-import gov.inl.igcapt.components.DeconflictionForm;
 import gov.inl.igcapt.components.NodeSelectionDialog;
 import gov.inl.igcapt.components.SgLayeredIcon;
 import gov.inl.igcapt.components.SgMapImage;
@@ -41,6 +40,8 @@ import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
 import org.openstreetmap.gui.jmapviewer.*;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -148,14 +149,22 @@ MouseWheelListener {
         }
     }
     
+    private String selectedString = "";
+    private void setSelection(String name) {
+        selectedString = name;
+    }
+    
+    
     /**
      * Allow the user to choose which node to select when there are more than
      * one under the click.
      * @param clickNodeList The list of all nodes under the click.
      * @return The node to select.
      */
-    private SgNodeInterface getNodeSelection(List<SgNodeInterface> clickNodeList, int x, int y) {
+    private SgNodeInterface getNodeSelection(List<SgNodeInterface> clickNodeList, Point mousePoint) {
         SgNodeInterface returnval = null;
+        Map<String, SgNodeInterface> nodeNameMap = new HashMap<>();
+        selectedString = "";
         
         if (clickNodeList != null && !clickNodeList.isEmpty()) {
             
@@ -164,9 +173,22 @@ MouseWheelListener {
                 returnval = clickNodeList.get(0);
             }
             else {
-                DeconflictionForm deconForm = new DeconflictionForm(IGCAPTgui.getInstance(), true, clickNodeList);
-                deconForm.setLocation(x, y);
-                deconForm.setVisible(true);
+                JPopupMenu deconMenu = new JPopupMenu();
+                
+                for (var node : clickNodeList) {
+                    nodeNameMap.put(node.getName(), node);
+                    
+                    deconMenu.add(new AbstractAction(node.getName()) {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            setSelection(e.getActionCommand());
+                        }
+                    });
+                }
+                
+                deconMenu.show(map, (int)mousePoint.getX(), (int)mousePoint.getY());
+                
+                returnval = nodeNameMap.get(selectedString);
             }
         }
         
@@ -278,12 +300,10 @@ MouseWheelListener {
                 }
             }
 
-//            nodeToUse = selectedNode;
+            nodeToUse = getNodeSelection(clickNodes, mousePoint);
             edgeToUse = selectedEdge;
 
             if (mousePointIsOnNode) { //Mouse button 2 or 3 pressed on a node 
-
-                nodeToUse = getNodeSelection(clickNodes, e.getX(), e.getY());
                 
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
