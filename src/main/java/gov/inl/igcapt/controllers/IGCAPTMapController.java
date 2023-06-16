@@ -9,6 +9,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
+import gov.inl.igcapt.components.DeconflictionForm;
 import gov.inl.igcapt.components.NodeSelectionDialog;
 import gov.inl.igcapt.components.SgLayeredIcon;
 import gov.inl.igcapt.components.SgMapImage;
@@ -147,6 +148,31 @@ MouseWheelListener {
         }
     }
     
+    /**
+     * Allow the user to choose which node to select when there are more than
+     * one under the click.
+     * @param clickNodeList The list of all nodes under the click.
+     * @return The node to select.
+     */
+    private SgNodeInterface getNodeSelection(List<SgNodeInterface> clickNodeList, int x, int y) {
+        SgNodeInterface returnval = null;
+        
+        if (clickNodeList != null && !clickNodeList.isEmpty()) {
+            
+            // There is only one under the click, so return it.
+            if (clickNodeList.size() == 1) {
+                returnval = clickNodeList.get(0);
+            }
+            else {
+                DeconflictionForm deconForm = new DeconflictionForm(IGCAPTgui.getInstance(), true, clickNodeList);
+                deconForm.setLocation(x, y);
+                deconForm.setVisible(true);
+            }
+        }
+        
+        return returnval;
+    }
+    
     @Override
     public void mousePressed(MouseEvent e) {
         
@@ -252,11 +278,13 @@ MouseWheelListener {
                 }
             }
 
-            nodeToUse = selectedNode;
+//            nodeToUse = selectedNode;
             edgeToUse = selectedEdge;
 
-            if (mousePointIsOnNode) {
-                //System.out.println("Mouse button 2 or 3 pressed on a node = " + nodeToUse.toString());
+            if (mousePointIsOnNode) { //Mouse button 2 or 3 pressed on a node 
+
+                nodeToUse = getNodeSelection(clickNodes, e.getX(), e.getY());
+                
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
                     public void actionPerformed(ActionEvent e) {
