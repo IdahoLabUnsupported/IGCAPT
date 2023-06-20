@@ -98,6 +98,7 @@
             <xs:enumeration value="LINK_CAPACITY_CALCULATION" />
             <xs:enumeration value="MIN_PATH_THRESHOLD" />
             <xs:enumeration value="COST_FACTOR" />
+            <xs:enumeration value="ACTUAL_COST" />
             <xs:enumeration value="IMPLEMENTATION_FACTOR" />
             <xs:enumeration value="SAFETY_FACTOR" />
             <xs:enumeration value="RELIABILITY_FACTOR" />
