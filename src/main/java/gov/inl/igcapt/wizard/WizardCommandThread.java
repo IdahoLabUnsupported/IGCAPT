@@ -182,7 +182,7 @@ public class WizardCommandThread extends Thread {
             conn.disconnect();
         }
         catch (Exception e2) {
-            m_errorMsg = "Web Service failure -- " + e2.getMessage();;
+            m_errorMsg = "Web Service failure -- " + e2.getMessage();
         }
     }
     

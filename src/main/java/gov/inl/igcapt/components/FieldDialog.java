@@ -78,7 +78,7 @@ public class FieldDialog extends javax.swing.JDialog {
         componentSelector.setModel(components);
         componentSelector.setSelectedIndex(0);
 
-        componentSelector.disable();
+        componentSelector.setEnabled(false);
         componentSelector.setBackground(NORMAL_COLOR);
     }
 

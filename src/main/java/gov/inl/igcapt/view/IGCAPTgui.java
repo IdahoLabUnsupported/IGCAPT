@@ -1002,7 +1002,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         
         gdtafImport.addActionListener((ActionEvent ev) -> {
             //new ImportScenarioWizard(this, true);
-            ImportGdtafScenario work = new ImportGdtafScenario(this, true, null); 
+            ImportGdtafScenario work = new ImportGdtafScenario(null, true, null); 
         });
         
         gdtafScenario.addActionListener((ActionEvent ev) -> {

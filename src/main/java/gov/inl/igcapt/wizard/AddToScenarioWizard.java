@@ -459,7 +459,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
             String importFile = jTextField1.getText() + File.separator +
                     WizardDriver.getHandle().getScenarioInfo().getName() + ".xml";
             dispose();
-            new ImportGdtafScenario(m_parent, true, importFile);
+            new ImportGdtafScenario(null, true, importFile);
         }
 
         dispose();

@@ -403,6 +403,7 @@ public class ComponentDialog extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         formalIdentFld = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setTitle("Component");
         setMaximumSize(new java.awt.Dimension(540, 582));
@@ -452,7 +453,7 @@ public class ComponentDialog extends javax.swing.JDialog {
 
         jLabel9.setText("Payload");
 
-        newFieldBtn.setText("Add");
+        newFieldBtn.setText("    Add    ");
         newFieldBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newFieldBtnActionPerformed(evt);
@@ -483,6 +484,8 @@ public class ComponentDialog extends javax.swing.JDialog {
         jLabel11.setToolTipText("");
 
         jLabel12.setText("Identifier Description");
+
+        jButton1.setText("Remove");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -524,19 +527,21 @@ public class ComponentDialog extends javax.swing.JDialog {
                             .addComponent(ComponentGroupSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(nameFld)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(okButton)
-                            .addGap(18, 18, 18)
-                            .addComponent(cancelButton))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(newFieldNameFld, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(newFieldBtn))
-                            .addComponent(newFieldPayloadFld, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(10, Short.MAX_VALUE))
+                                .addComponent(okButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(cancelButton))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(newFieldNameFld, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(newFieldPayloadFld, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(newFieldBtn)
+                            .addComponent(jButton1))))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,12 +594,15 @@ public class ComponentDialog extends javax.swing.JDialog {
                         .addGap(13, 13, 13)
                         .addComponent(jLabel9))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(newFieldBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(newFieldNameFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(newFieldBtn))
-                        .addGap(6, 6, 6)
+                        .addComponent(newFieldNameFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
                         .addComponent(newFieldPayloadFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -626,7 +634,15 @@ public class ComponentDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_closeDialog
 
     private void newFieldBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFieldBtnActionPerformed
-        AddField();
+        //AddField();
+        System.out.println("Open field dialog next");
+        FieldDialog dialog = new FieldDialog(new javax.swing.JFrame(), true, this.componentDao);
+        System.out.println("Field dialog should be open");
+        if (existingComponent != null) {
+            dialog.setComponent(existingComponent);
+        }
+        dialog.setVisible(true);
+        
     }//GEN-LAST:event_newFieldBtnActionPerformed
 
     private void guidEditBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guidEditBtnActionPerformed
@@ -698,6 +714,7 @@ public class ComponentDialog extends javax.swing.JDialog {
     private javax.swing.JTextField iconPathFld;
     private javax.swing.JTextField identDescFld;
     private javax.swing.JCheckBox isAggregate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
