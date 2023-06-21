@@ -97,7 +97,7 @@
             <xs:enumeration value="LINK_LATENCY_CALCULATION" />
             <xs:enumeration value="LINK_CAPACITY_CALCULATION" />
             <xs:enumeration value="MIN_PATH_THRESHOLD" />
-            <xs:enumeration value="COST_FACTOR" />
+            <xs:enumeration value="COST_FACTORS" />
             <xs:enumeration value="IMPLEMENTATION_FACTOR" />
             <xs:enumeration value="SAFETY_FACTOR" />
             <xs:enumeration value="RELIABILITY_FACTOR" />
