@@ -6,7 +6,6 @@ import gov.inl.igcapt.components.DataModels.ComponentDao;
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import gov.inl.igcapt.components.DataModels.SgField;
 import gov.inl.igcapt.components.DataModels.SgUseCase;
-import gov.inl.igcapt.components.Pair;
 import gov.inl.igcapt.gdtaf.data.*;
 import gov.inl.igcapt.gdtaf.model.*;
 import gov.inl.igcapt.graph.GraphManager;
@@ -269,7 +268,7 @@ public class GDTAFImportController {
                     if (!endpoints.isEmpty()) {
                         node.setEndPointList(endpoints);
                     } else {
-                        System.out.println("No Endpoints Found for ");
+                        System.out.println("No Endpoints Found for source Node: " + node.getName() + " use_case: " + opObj.getName());
                     }
                 }
             }
@@ -337,28 +336,40 @@ public class GDTAFImportController {
         if (!edgeTypeList.isEmpty()) {
             var bandwidthUUID = edgeTypeList.get(0);
             var option = GDTAFScenarioMgr.getInstance().getActiveSolutionOption();
-            var bandwidthEdge = option.getEdge().stream().filter(edge -> edge.getUUID().equals(bandwidthUUID)).findFirst().get();
+            var bandwidthEdge = option.getEdge().stream().filter(edge -> edge.getUUID().equals(bandwidthUUID) && edge.getType().equals("LINK_CAPACITY"))
+                    .findFirst()
+                    .orElse(null);
+            returnval = getEdgeAttributeCapacityValue(bandwidthEdge);
+        }
+        
+        return returnval;
+    }
+
+    private double getEdgeAttributeCapacityValue(SolutionEdgeAttribute bandwidthEdge){
+        double returnval = 128.0;
+
+        if(bandwidthEdge != null) {
             String jsonString = bandwidthEdge.getValue();
             var obj = new JSONObject(jsonString);
-            var countObj  = (JSONObject)obj.get("count");
+            var countObj = (JSONObject) obj.get("count");
             var valueObj = countObj.getInt("value");
             var valueUnits = countObj.getString("units");
-            var everyObj = (JSONObject)obj.get("every");
+            var everyObj = (JSONObject) obj.get("every");
             var everyValue = everyObj.getInt("value");
             var everyUnits = everyObj.getString("units");
 
             double countConversion;
-            switch (valueUnits){
-                case "bit" -> countConversion = 1.0/1000.0;
+            switch (valueUnits) {
+                case "bit" -> countConversion = 1.0 / 1000.0;
                 case "kilobit" -> countConversion = 1.0;
-                case "byte" -> countConversion = 8.0/1000.0;
+                case "byte" -> countConversion = 8.0 / 1000.0;
                 case "kilobyte" -> countConversion = 8.0;
-                case "megabyte" -> countConversion = 8.0*1000.0;
+                case "megabyte" -> countConversion = 8.0 * 1000.0;
                 default -> countConversion = 1.0;
             }
 
             double everyConversion;
-            switch (everyUnits){
+            switch (everyUnits) {
                 case "second" -> everyConversion = 1.0;
                 case "minute" -> everyConversion = 60.0;
                 case "hour" -> everyConversion = 3600.0;
@@ -369,9 +380,9 @@ public class GDTAFImportController {
             // Convert to kbits/second.
             returnval = valueObj * countConversion / everyValue / everyConversion;
         }
-        
         return returnval;
     }
+
 
     /**
      * Recursively add nodes starting with assetUuid and continuing through the solnAssetView's children.
