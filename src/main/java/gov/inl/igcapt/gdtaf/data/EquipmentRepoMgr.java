@@ -113,7 +113,7 @@ public class EquipmentRepoMgr {
                 return "16634386-e364-41cf-a3dc-e6641e25b3e8";
             case "X-Corp Mesh Node":
                 return "be8672a3-fb13-4144-970a-fc717ab2c07a";
-            case "X-Corp Cellular Node":
+            case "Y-Corp Cellular Node":
                 return "9d07a4b1-816c-4177-8a3e-4be275a4d631";
             case "X-Corp Mesh Router":
                 return "894f4ea9-cfaa-4d9a-8b98-e048ca53ecb5";
