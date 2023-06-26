@@ -292,6 +292,9 @@ public class GDTAFScenarioMgr {
         return foundAssets;
     }
 
+    public List<SolutionEdgeAttribute> getEdgeAttributes(){
+       return m_activeOption.getEdge();
+    }
 
 
 }

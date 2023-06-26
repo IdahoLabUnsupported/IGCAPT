@@ -333,15 +333,14 @@ public class GDTAFImportController {
         double returnval = 128.0;
         
         var edgeTypeList = child.getEdges();
-        if (!edgeTypeList.isEmpty()) {
-            var bandwidthUUID = edgeTypeList.get(0);
-            var option = GDTAFScenarioMgr.getInstance().getActiveSolutionOption();
-            var bandwidthEdge = option.getEdge().stream().filter(edge -> edge.getUUID().equals(bandwidthUUID) && edge.getType().equals("LINK_CAPACITY"))
-                    .findFirst()
-                    .orElse(null);
-            returnval = getEdgeAttributeCapacityValue(bandwidthEdge);
+        for(var edgeType : edgeTypeList){
+            for (var solEdgeAttr: GDTAFScenarioMgr.getInstance().getEdgeAttributes()) {
+                if (solEdgeAttr.getUUID().equals(edgeType.toString()) && solEdgeAttr.getType().name().equals("LINK_CAPACITY")) {
+
+                    return getEdgeAttributeCapacityValue(solEdgeAttr);
+                }
+            }
         }
-        
         return returnval;
     }
 
