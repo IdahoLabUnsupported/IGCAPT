@@ -5,6 +5,7 @@
 package gov.inl.igcapt.wizard;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 /**
  *
  * @author CHE
@@ -136,6 +137,10 @@ public class WizardDriver extends javax.swing.JDialog {
         try {
             m_createScenarioThread.join();
             scenario = m_createScenarioThread.getScenario();
+            if (scenario == null) {
+                JOptionPane.showMessageDialog(this, "Scenario is null indicating that it did not get created.");
+                return;
+            }
         }
         catch (Exception e) {}
              
@@ -151,9 +156,13 @@ public class WizardDriver extends javax.swing.JDialog {
         }
         catch (Exception e) {}
         ScenarioInformation scenario = m_createScenarioThread.getScenario();
+        if (scenario == null) {
+            JOptionPane.showMessageDialog(this, "Scenario is null indicating that it did not get created.");
+            return;
+        }
         m_cnrmUpdateScenarioThread.setCnrmUpdateParams(selectedIndices, 
-                scenario.getId(),
-                m_cnrmThread.getCnrmList());
+            scenario.getId(),
+            m_cnrmThread.getCnrmList());
         m_cnrmUpdateScenarioThread.start();
     }
     
@@ -164,6 +173,10 @@ public class WizardDriver extends javax.swing.JDialog {
         catch (Exception e) {}
         
         ScenarioInformation scenario = m_createScenarioThread.getScenario();
+        if (scenario == null) {
+            JOptionPane.showMessageDialog(this, "Scenario is null indicating that it did not get created.");
+            return;
+        }
         m_saveFileThread.setSaveFileParams(scenario.getId(), 
                 filename);             
         m_saveFileThread.saveFile();

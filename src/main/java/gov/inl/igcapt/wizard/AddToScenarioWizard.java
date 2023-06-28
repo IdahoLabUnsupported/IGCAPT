@@ -414,7 +414,13 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             lastPath = chooser.getSelectedFile().toString();
             jTextField1.setText(lastPath);
-            lastPath = lastPath + File.separator + WizardDriver.getHandle().getScenarioInfo().getName() + ".xml";
+            ScenarioInformation scenarioInfo = WizardDriver.getHandle().getScenarioInfo();
+            if (scenarioInfo == null) {
+                JOptionPane.showMessageDialog(this, "Error Creating Scenario!");
+                //close window??
+                return;
+            }
+            lastPath = lastPath + File.separator + scenarioInfo.getName() + ".xml";
             IGCAPTproperties.getInstance().setPropertyKeyValue(IgcaptProperty.LAST_PATH, 
                     lastPath);            
             if (jTextField1.getText() != null) {
