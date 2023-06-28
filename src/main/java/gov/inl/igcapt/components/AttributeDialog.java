@@ -198,7 +198,7 @@ public class AttributeDialog extends javax.swing.JDialog {
         valueFld = new javax.swing.JTextField();
         validationLbl = new javax.swing.JLabel();
 
-        setTitle("Component Field");
+        setTitle("Component Attribute");
         setMaximumSize(new java.awt.Dimension(416, 182));
         setMinimumSize(new java.awt.Dimension(416, 182));
         setResizable(false);

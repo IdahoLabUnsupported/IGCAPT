@@ -1020,7 +1020,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
     private JMenu createComponentsMenu() {
         JMenu componentsMenu = new JMenu("Components");
         componentsMenu.add(new AddComponentMenuItem(null));
-        componentsMenu.add(new AddMultiAttributeMenuItem(null));
+        //componentsMenu.add(new AddMultiAttributeMenuItem(null));
         return componentsMenu;
     }
 
