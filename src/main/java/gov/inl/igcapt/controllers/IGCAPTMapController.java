@@ -39,6 +39,7 @@ import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -193,6 +194,10 @@ MouseWheelListener {
         }
         
         return returnval;
+    }
+    
+    private void addMenuItems(Component menu) {
+        
     }
     
     @Override
