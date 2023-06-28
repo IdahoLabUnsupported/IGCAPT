@@ -594,6 +594,11 @@ public class ComponentDialog extends javax.swing.JDialog {
         jLabel12.setText("Identifier Description");
 
         removeFieldButton.setText("Remove");
+        removeFieldButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeFieldButtonActionPerformed(evt);
+            }
+        });
 
         jScrollPane4.setViewportView(attributeList);
 
@@ -615,6 +620,11 @@ public class ComponentDialog extends javax.swing.JDialog {
         });
 
         removeAttributeButton.setText("Remove");
+        removeAttributeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAttributeButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -784,6 +794,20 @@ public class ComponentDialog extends javax.swing.JDialog {
     private void newAttributeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAttributeButtonActionPerformed
         showAddAttribute();
     }//GEN-LAST:event_newAttributeButtonActionPerformed
+
+    private void removeFieldButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeFieldButtonActionPerformed
+        int index = FieldList.getSelectedIndex();
+        if (index > -1) {
+            fieldListModel.removeElementAt(index);
+        }
+    }//GEN-LAST:event_removeFieldButtonActionPerformed
+
+    private void removeAttributeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAttributeButtonActionPerformed
+        int index = attributeList.getSelectedIndex();
+        if (index > -1) {
+            attributeListModel.removeElementAt(index);
+        }
+    }//GEN-LAST:event_removeAttributeButtonActionPerformed
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;
