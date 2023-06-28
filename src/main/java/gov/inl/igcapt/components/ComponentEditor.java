@@ -31,6 +31,7 @@ public class ComponentEditor extends javax.swing.JDialog {
     private DefaultListModel<SgComponentData> components;
     private DefaultListModel<SgComponentGroupData> componentGroups;
     private DefaultListModel<SgField> fields;
+    private DefaultListModel<SgAttribute> attributes;
     private DefaultListModel<SgUseCase> useCases;
     private DefaultListModel<SgField> usecaseFields;
 
@@ -69,7 +70,7 @@ public class ComponentEditor extends javax.swing.JDialog {
 
         initializeButtons();
         initializeLists();
-
+        
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -88,6 +89,7 @@ public class ComponentEditor extends javax.swing.JDialog {
         initializeFields();
         initializeUseCases();
         initializeUseCaseFields();
+        initializeAttributes();
     }
 
     private void initializeComponentGroups() {
@@ -132,6 +134,21 @@ public class ComponentEditor extends javax.swing.JDialog {
 
         fieldSelector.setModel(fields);
         fieldSelector.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    }
+
+    private void initializeAttributes() {
+        attributes = new DefaultListModel<>();
+
+        try {
+            for (SgAttribute attribute : components.get(0).getAttributes()) {
+                attributes.addElement(attribute);
+            }
+        } catch (Exception ignored) {
+        }
+
+        attributeSelector.setModel(attributes);
+        attributeSelector.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     }
 
@@ -269,12 +286,36 @@ public class ComponentEditor extends javax.swing.JDialog {
 
             try {
                 SgComponentData component = addComponentDialog.getComponent();
-                ((SgComponentGroupData) componentGroupSelector.getSelectedValue()).addComponent(component);
+                               
                 components.addElement(component);
                 if (existingComponent != null) {
                     components.removeElementAt(components.size() - 1);
                 }
-
+                //new
+                if (component.getFields() != null) {
+                    fields.removeAllElements();
+                    for (SgField field : component.getFields()) {
+                        fields.addElement(field);
+                    }
+                }
+                else {
+                    fields.removeAllElements();
+                }
+                if (component.getAttributes() != null) {
+                    attributes.removeAllElements();
+                    
+                    for (SgAttribute attribute : component.getAttributes()) {
+                        attributes.addElement(attribute);
+                    }
+                }
+                else {
+                    fields.removeAllElements();
+                }
+                // end new
+                // next line moved down event those above just populates the list
+                ((SgComponentGroupData) componentGroupSelector.getSelectedValue()).addComponent(component);
+                
+// handle the delete....
                 addComponentDialog.dispose();
                 addComponentDialog = null;
             } catch (Exception ignored) {
@@ -464,6 +505,13 @@ public class ComponentEditor extends javax.swing.JDialog {
         }
         fieldSelector.setModel(fields);
         fieldSelector.setSelectedIndex(0);
+        
+        attributes = new DefaultListModel<>();
+        for (SgAttribute attribute : selected.getAttributes()) {
+            attributes.addElement(attribute);
+        }
+        attributeSelector.setModel(attributes);
+        attributeSelector.setSelectedIndex(0);
 
         useCases = new DefaultListModel<>();
         for (SgUseCase useCase : selected.getUsecases()) {
@@ -576,6 +624,11 @@ public class ComponentEditor extends javax.swing.JDialog {
         useCaseFieldsLbl = new javax.swing.JLabel();
         errorLbl = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(12, 0), new java.awt.Dimension(12, 0), new java.awt.Dimension(12, 32767));
+        jScrollPane6 = new javax.swing.JScrollPane();
+        attributeSelector = new javax.swing.JList<>();
+        attributesLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setTitle("Component Editor");
         setMaximumSize(new java.awt.Dimension(880, 530));
@@ -792,6 +845,14 @@ public class ComponentEditor extends javax.swing.JDialog {
 
         useCaseFieldsLbl.setText("Use Case Fields");
 
+        jScrollPane6.setViewportView(attributeSelector);
+
+        attributesLabel.setText("Attributes");
+
+        jButton1.setText("jButton1");
+
+        jButton2.setText("jButton2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -826,25 +887,34 @@ public class ComponentEditor extends javax.swing.JDialog {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addGap(227, 227, 227)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel3)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(4, 4, 4)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(addField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(removeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(editField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(12, 12, 12)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
+                                        .addGap(18, 18, 18))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel3)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(4, 4, 4)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(attributesLabel)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                            .addComponent(jScrollPane6)
+                                                            .addComponent(jScrollPane3))
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(addField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addComponent(removeField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(editField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(jButton1)
+                                                            .addComponent(jButton2))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -879,7 +949,7 @@ public class ComponentEditor extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -908,7 +978,8 @@ public class ComponentEditor extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(useCaseLbl)
-                            .addComponent(useCaseFieldsLbl))
+                            .addComponent(useCaseFieldsLbl)
+                            .addComponent(attributesLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -926,15 +997,23 @@ public class ComponentEditor extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(removeUseCaseField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(22, 171, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane6)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(8, 8, 8)
+                                                .addComponent(jButton1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButton2)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4))
+                                    .addComponent(jScrollPane5)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addContainerGap())))
                     .addComponent(errorLbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
@@ -985,9 +1064,12 @@ public class ComponentEditor extends javax.swing.JDialog {
         if (selected == null) {
             fields = new DefaultListModel<>();
             useCases = new DefaultListModel<>();
+            attributes = new DefaultListModel<>();
             
             fieldSelector.setModel(fields);
             useCaseSelector.setModel(useCases);
+            attributeSelector.setModel(attributes);
+                        
             return;
         }
 
@@ -997,6 +1079,14 @@ public class ComponentEditor extends javax.swing.JDialog {
         }
         fieldSelector.setModel(fields);
         fieldSelector.setSelectedIndex(0);
+        
+        attributes = new DefaultListModel<>();
+        for (SgAttribute attribute : selected.getAttributes()) {
+            attributes.addElement(attribute);
+        }
+        attributeSelector.setModel(attributes);
+        attributeSelector.setSelectedIndex(0);
+        attributesLabel.setText(selected.getName() + "'s Attributes");
 
         useCases = new DefaultListModel<>();
         for (SgUseCase useCase : selected.getUsecases()) {
@@ -1147,6 +1237,8 @@ public class ComponentEditor extends javax.swing.JDialog {
     private javax.swing.JButton addField;
     private javax.swing.JButton addUseCase;
     private javax.swing.JButton addUseCaseField;
+    private javax.swing.JList<SgAttribute> attributeSelector;
+    private javax.swing.JLabel attributesLabel;
     private javax.swing.JButton cancelButton;
     private javax.swing.JList<SgComponentGroupData> componentGroupSelector;
     private javax.swing.JList<SgComponentData> componentSelector;
@@ -1157,6 +1249,8 @@ public class ComponentEditor extends javax.swing.JDialog {
     private javax.swing.JLabel errorLbl;
     private javax.swing.JList<SgField> fieldSelector;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1165,6 +1259,7 @@ public class ComponentEditor extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JButton okButton;
     private javax.swing.JButton removeComponent;
     private javax.swing.JButton removeComponentGroup;

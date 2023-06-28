@@ -10,11 +10,12 @@ public class CachedComponentDao implements IComponentDao {
     private List<SgCollapseInto> collapseIntos;
     private List<SgUseCase> useCases;
     private List<SgField> fields;
+    private List<SgAttribute> attributes;
 
     private Map<Long, SgComponentGroupData> groupsMap;
     private Map<Long, SgComponentData> componentsMap;
     private Map<Long, SgField> fieldsMap;
-
+    private Map<Long, SgAttribute> attributesMap;
 
     public CachedComponentDao() {
         componentDao = new ComponentDao();
@@ -50,6 +51,11 @@ public class CachedComponentDao implements IComponentDao {
     public void saveField(SgField field) {
         componentDao.saveField(field);
     }
+    
+    @Override
+    public void saveAttribute(SgAttribute attribute) {
+        componentDao.saveAttribute(attribute);
+    }
 
     @Override
     public SgUseCase getUseCaseByName(String name){
@@ -66,6 +72,16 @@ public class CachedComponentDao implements IComponentDao {
         for(var field: getFields()){
             if(field.getName().equals(name)){
                 return field;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public SgAttribute getAttributeByName(String name){
+        for(var attribute: getAttributes()){
+            if(attribute.getName().equals(name)){
+                return attribute;
             }
         }
         return null;
@@ -96,6 +112,12 @@ public class CachedComponentDao implements IComponentDao {
     public void stageField(SgField field) {
         if(!fields.contains(field)) {
             fields.add(field);
+        }
+    }
+    
+    public void stageAttribute(SgAttribute attribute) {
+        if(!attributes.contains(attribute)) {
+            attributes.add(attribute);
         }
     }
 
@@ -162,6 +184,12 @@ public class CachedComponentDao implements IComponentDao {
             for (SgField field : fields){
                 fieldsMap.put(field.getId(), field);
             }
+            
+            // CHERIE attributes -- this breaks it
+//            attributesMap = new HashMap<>();
+//            for (SgAttribute attribute : attributes) {
+//                attributesMap.put(attribute.getId(), attribute);
+//            }
 
             for (SgComponentData component : components) {
                 List<SgUseCase> componentUseCases = new ArrayList<>();
@@ -236,6 +264,14 @@ public class CachedComponentDao implements IComponentDao {
         }
 
         return fields;
+    }
+    
+    @Override
+    public List<SgAttribute> getAttributes() {
+        if (attributes == null) {
+            attributes = componentDao.getAttributes();
+        }
+        return attributes;
     }
 
     @Override

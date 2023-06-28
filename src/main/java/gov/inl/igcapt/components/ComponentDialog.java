@@ -25,7 +25,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -36,6 +35,7 @@ public class ComponentDialog extends javax.swing.JDialog {
 
     private final IComponentDao componentDao;
     private DefaultListModel<SgField> fieldListModel;
+    private DefaultListModel<SgAttribute> attributeListModel;
     private DefaultListModel<SgComponentData> collapseIntos;
     private DefaultComboBoxModel<SgComponentGroupData> componentGroups;
     private SgComponentData existingComponent;
@@ -81,16 +81,15 @@ public class ComponentDialog extends javax.swing.JDialog {
 
         this.componentDao = componentDao;
         fieldListModel = new DefaultListModel();
+        attributeListModel = new DefaultListModel();
         
         initializeCollapseInto();
         initializeIcon();
         initializeGuid();
         initializeComponentGroups();
         initializeFields();
-
-//        newFieldBtn.addActionListener(e -> AddField());
-//        addIconBtn.addActionListener(e -> collectIconPath());
-        
+        initializeAttributes();
+       
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -137,6 +136,11 @@ public class ComponentDialog extends javax.swing.JDialog {
         fieldListModel = new DefaultListModel<>();
         FieldList.setModel(fieldListModel);
     }
+    
+    private void initializeAttributes() {
+        attributeListModel = new DefaultListModel<>();
+        AttributeList.setModel(attributeListModel);
+    }
 
     public void setComponentGroup(SgComponentGroupData componentGroup) {
         componentGroups = new DefaultComboBoxModel<>();
@@ -175,6 +179,13 @@ public class ComponentDialog extends javax.swing.JDialog {
             fieldListModel.addElement(field);
         }
         FieldList.setModel(fieldListModel);
+        
+        attributeListModel = new DefaultListModel<>();
+        for (SgAttribute attribute: component.getAttributes()) {
+            attributeListModel.addElement(attribute);
+        }
+        AttributeList.setModel(attributeListModel);
+        
     }
 
     public SgComponentData getComponent() throws Exception {
@@ -193,14 +204,17 @@ public class ComponentDialog extends javax.swing.JDialog {
 
         SgCollapseInto[] collapseIntos = retrieveCollapseInto();
         if (collapseIntos != null) { component.setSgCollapseIntos(Arrays.asList(collapseIntos)); }
-
-//        if (!newFieldNameFld.getText().isBlank() || !newFieldPayloadFld.getText().isBlank()) {
-//            AddField();
-//        }
         
         SgField[] fields = retrieveFields();
-        if (fields != null) { component.setFields(new ArrayList<SgField>(Arrays.asList(fields))); }
+        if (fields != null) { 
+            component.setFields(new ArrayList<SgField>(Arrays.asList(fields))); 
+        }
 
+        SgAttribute[] attributes = retrieveAttributes();
+        if (attributes != null) { 
+            component.setAttributes(new ArrayList<SgAttribute>(Arrays.asList(attributes))); 
+        }
+//        if (attributes != null)
         if (!validateComponent()) {
             throw new Exception();
         }
@@ -282,7 +296,21 @@ public class ComponentDialog extends javax.swing.JDialog {
             return null;
         }
     }
+    private SgAttribute[] retrieveAttributes() {
+        AttributeList.setBackground(NORMAL_COLOR);
+        try {
+            SgAttribute[] attributes = new SgAttribute[attributeListModel.getSize()];
 
+            for(int i=0; i < attributeListModel.getSize(); ++i) {
+                attributes[i] = attributeListModel.get(i);
+            }
+            return attributes;
+        } catch (Exception ignored) {
+            AttributeList.setBackground(ERROR_COLOR);
+            return null;
+        }
+    }
+    
     private void collectIconPath() {
         final JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File(DEFAULT_PATH));
@@ -315,6 +343,7 @@ public class ComponentDialog extends javax.swing.JDialog {
     private boolean validateComponent() {
         return fieldIsNormal(nameFld) && fieldIsNormal(ComponentGroupSelector)
                 && fieldIsNormal(CollapseIntoFld) && fieldIsNormal(FieldList)
+                && fieldIsNormal(AttributeList)
                 && fieldIsNormal(iconPathFld);
     }
 
@@ -372,8 +401,8 @@ public class ComponentDialog extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton2 = new javax.swing.JButton();
+        AttributeList = new javax.swing.JList<>();
+        newAttributeButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setTitle("Component");
@@ -467,12 +496,18 @@ public class ComponentDialog extends javax.swing.JDialog {
 
         jLabel7.setText("Multi Attribute");
 
-        jList1.setToolTipText("");
-        jScrollPane4.setViewportView(jList1);
+        AttributeList.setToolTipText("");
+        AttributeList.setName(""); // NOI18N
+        jScrollPane4.setViewportView(AttributeList);
 
-        jButton2.setText("    Add    ");
-        jButton2.setMaximumSize(new java.awt.Dimension(73, 23));
-        jButton2.setMinimumSize(new java.awt.Dimension(73, 23));
+        newAttributeButton.setText("    Add    ");
+        newAttributeButton.setMaximumSize(new java.awt.Dimension(73, 23));
+        newAttributeButton.setMinimumSize(new java.awt.Dimension(73, 23));
+        newAttributeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newAttributeButtonActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Remove");
 
@@ -519,7 +554,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(newAttributeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton3)
                             .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
@@ -590,7 +625,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(newAttributeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton3)
                                 .addGap(9, 9, 9))))
@@ -626,9 +661,7 @@ public class ComponentDialog extends javax.swing.JDialog {
 
     private void newFieldBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFieldBtnActionPerformed
         //AddField();
-        System.out.println("Open field dialog next");
         FieldDialog dialog = new FieldDialog(new javax.swing.JFrame(), true, this.componentDao);
-        System.out.println("Field dialog should be open");
         if (existingComponent != null) {
             dialog.setComponent(existingComponent);
         }
@@ -676,6 +709,38 @@ public class ComponentDialog extends javax.swing.JDialog {
         int index = FieldList.getSelectedIndex();
         fieldListModel.removeElementAt(index);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void newAttributeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAttributeButtonActionPerformed
+        AttributeDialog dialog = new AttributeDialog(new javax.swing.JFrame(), true, this.componentDao);
+        if (existingComponent != null) {
+            dialog.setComponent(existingComponent);
+        }
+        while (true) {
+            if (dialog == null) {
+                break;
+            }
+
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+            dialog.toFront();
+
+            if (dialog.clickedCancel()) {
+                dialog = null;
+                break;
+            }
+
+            try {
+                SgAttribute attribute = dialog.getAttribute();
+                existingComponent.addAttribute(attribute);
+                attributeListModel.addElement(attribute);
+                AttributeList.updateUI();
+
+                dialog.dispose();
+                dialog = null;
+            } catch (Exception ignored) {
+            }
+        }
+    }//GEN-LAST:event_newAttributeButtonActionPerformed
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;
@@ -726,6 +791,7 @@ public class ComponentDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<SgAttribute> AttributeList;
     private javax.swing.JList<SgComponentData> CollapseIntoFld;
     private javax.swing.JComboBox<SgComponentGroupData> ComponentGroupSelector;
     private javax.swing.JList<SgField> FieldList;
@@ -739,7 +805,6 @@ public class ComponentDialog extends javax.swing.JDialog {
     private javax.swing.JTextField identDescFld;
     private javax.swing.JCheckBox isAggregate;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -751,12 +816,12 @@ public class ComponentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField nameFld;
+    private javax.swing.JButton newAttributeButton;
     private javax.swing.JButton newFieldBtn;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
