@@ -17,6 +17,17 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
+    <xs:simpleType name="ViewAttributeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="REACHABLE_CHILDREN" />
+            <xs:enumeration value="REACHABLE_PARENTS" />
+            <xs:enumeration value="REACHABLE_PEERS" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="ViewAttribute">
+        <xs:attribute name="Type" type="ViewAttributeType" use="required" />
+        <xs:attribute name="Value" type="xs:anySimpleType" use="required" />
+    </xs:complexType>
     <xs:complexType name="Asset">
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">
@@ -49,6 +60,7 @@
         <xs:complexContent>
             <xs:extension base="core:BaseBlock">
                 <xs:sequence>
+                    <xs:element name="ViewAttributes" type="ViewAttribute" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="parents" type="EdgeType" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="children" type="EdgeType" minOccurs="0" maxOccurs="unbounded" />
                     <xs:element name="peers" type="EdgeType" minOccurs="0" maxOccurs="unbounded" />

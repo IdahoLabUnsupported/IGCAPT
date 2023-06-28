@@ -108,16 +108,22 @@ public class EquipmentRepoMgr {
             case "DMS":
                 return "49b20f30-cde6-4850-bf26-cb36e5d3ffa3";
             case "Y-Corp Cellular Gateway":
+            case "X-Corp Cellular Gateway":
                 return "6d03b93f-a693-44ad-a023-c3076029bf24";
             case "X-Corp Mesh Range Extender":
+            case "Y-Corp Mesh Range Extender":
                 return "16634386-e364-41cf-a3dc-e6641e25b3e8";
             case "X-Corp Mesh Node":
+            case "Y-Corp Mesh Node":
                 return "be8672a3-fb13-4144-970a-fc717ab2c07a";
+            case "Y-Corp Cellular Node":
             case "X-Corp Cellular Node":
                 return "9d07a4b1-816c-4177-8a3e-4be275a4d631";
             case "X-Corp Mesh Router":
+            case "Y-Corp Mesh Router":
                 return "894f4ea9-cfaa-4d9a-8b98-e048ca53ecb5";
             case "X-Corp NMS":
+            case "Y-Corp NMS":
                 return "caf557d2-1cab-48f0-8f2f-89edacb97138";
             case "Distribution Automation Feeder Device":
                 return "eeaa2f6a-3cb4-4f01-807e-f9848ef108f9";
@@ -151,6 +157,8 @@ public class EquipmentRepoMgr {
                 return "35f65649-2578-4a15-a2b4-5c1fad61f848";
             case "Breaker":
                 return "2f96c46c-10ff-4914-8a20-beec51511e74";
+            case "Public Carrier eNodeB":
+                return "06905227-2b74-497b-806a-9413c661ef0a";
             default:
                 // UUID for Unknown
                 System.out.println(getEquip(uuid).getName());
