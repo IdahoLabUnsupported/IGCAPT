@@ -594,6 +594,8 @@ public class ComponentDialog extends javax.swing.JDialog {
         jLabel12.setText("Identifier Description");
 
         removeFieldButton.setText("Remove");
+        removeFieldButton.setMaximumSize(new java.awt.Dimension(76, 23));
+        removeFieldButton.setMinimumSize(new java.awt.Dimension(76, 23));
         removeFieldButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeFieldButtonActionPerformed(evt);
@@ -620,6 +622,8 @@ public class ComponentDialog extends javax.swing.JDialog {
         });
 
         removeAttributeButton.setText("Remove");
+        removeAttributeButton.setMaximumSize(new java.awt.Dimension(76, 23));
+        removeAttributeButton.setMinimumSize(new java.awt.Dimension(76, 23));
         removeAttributeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeAttributeButtonActionPerformed(evt);
@@ -679,9 +683,9 @@ public class ComponentDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(newFieldBtn)
-                            .addComponent(removeFieldButton)
+                            .addComponent(removeFieldButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(newAttributeButton)
-                            .addComponent(removeAttributeButton))))
+                            .addComponent(removeAttributeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -733,7 +737,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(newFieldBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(removeFieldButton)))
+                        .addComponent(removeFieldButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -743,7 +747,7 @@ public class ComponentDialog extends javax.swing.JDialog {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(newAttributeButton)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(removeAttributeButton))
+                                    .addComponent(removeAttributeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
