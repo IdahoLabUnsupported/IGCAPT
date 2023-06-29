@@ -159,11 +159,14 @@ public class EquipmentRepoMgr {
                 return "2f96c46c-10ff-4914-8a20-beec51511e74";
             case "Public Carrier eNodeB":
                 return "06905227-2b74-497b-806a-9413c661ef0a";
+            case "PhotovoltaicUnit":
+                return "f93458a7-5fbd-4647-9952-5639c7d17644";
+            case "Fuse":
+                return "d66fe77e-99f0-4270-ae35-139037fa382a";
             default:
                 // UUID for Unknown
                 System.out.println(getEquip(uuid).getName());
                 return "4cf6265d-b575-4de7-a2e1-2b794809fbbd";
-
         }
     }
 }
