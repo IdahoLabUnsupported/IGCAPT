@@ -39,8 +39,13 @@ import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgGraph;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import java.awt.Component;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Icon;
+import javax.swing.JMenu;
 import org.openstreetmap.gui.jmapviewer.*;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapImage;
@@ -52,13 +57,121 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapLine;
  * @author FRAZJD
  */
 public class IGCAPTMapController extends JMapController implements MouseListener, MouseMotionListener,
-MouseWheelListener {
+MouseWheelListener, ActionListener {
 
     public IGCAPTMapController(JMapViewer map) {
         super(map);
     }
    
     private static final boolean WHEELZOOMENABLED = true;
+
+    private void DeleteVertex(SgNodeInterface nodeToDelete) {
+        SgNodeInterface node = nodeToDelete;
+
+        GraphManager.getInstance().setFileDirty(true);
+        Graph currentGraph = GraphManager.getInstance().getGraph();
+        currentGraph.removeVertex(node);
+        if (currentGraph != GraphManager.getInstance().getOriginalGraph()) {
+
+            if (node instanceof SgGraph sgGraph) {
+                removeNodes(sgGraph, GraphManager.getInstance().getOriginalGraph());
+            }
+            else {
+                GraphManager.getInstance().getOriginalGraph().removeVertex(node);
+            }
+        }
+
+        IGCAPTgui.getInstance().graphChanged();
+    }
+    
+    private void AddEdge(SgNodeInterface node) {
+        
+        List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+        
+        // remove the node and any edge connected to this node
+        List<SgNodeInterface> nodesMinusSelectedNodes = nodes;
+        nodesMinusSelectedNodes.remove(node);
+
+        NodeSelectionDialog nsd = new NodeSelectionDialog(IGCAPTgui.getInstance(), true, node.getName(), new DefaultComboBoxModel(nodesMinusSelectedNodes.toArray()));
+        nsd.setVisible(true);
+        int idNumber = nsd.getToNodeIdNumber();
+
+        int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
+        SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
+        // get the end point SgNode selected by the user
+        SgNodeInterface endNodeSpecifiedByUser = null;
+        for (SgNodeInterface anode : nodes) {
+            if (anode.getId() == idNumber) {
+                endNodeSpecifiedByUser = anode;
+                break;
+            }
+        }
+        // add the edge to the jung graph
+        GraphManager.getInstance().getGraph().addEdge(e2, node, endNodeSpecifiedByUser);
+        IGCAPTgui.getInstance().graphChanged();
+    }
+    
+    private void Collapse(SgNodeInterface node) {
+        map.collapseNode(node);
+    }
+    
+    private void Expand(SgNodeInterface node) {
+ 
+        if (node instanceof SgGraph graph) {
+
+            PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
+            pickState.clear();
+            pickState.pick(graph, true);
+
+            IGCAPTgui.getInstance().expand();
+        }
+    }
+    
+    private void DeviceSettings(SgNodeInterface node) {
+        if (node instanceof SgNode anode) {
+            IGCAPTgui.getInstance().showDialog(anode);
+        }
+        else if(node instanceof SgGraph sgGraph) {
+            SgNode anode = (SgNode)sgGraph.getRefNode();
+            IGCAPTgui.getInstance().showDialog(anode);
+        }
+    }
+    
+    /**
+     * Action listener for the submenu items under the context menu displaying multiple nodes names.
+     * @param e The ActionEvent.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        NodeMenuItem nodeMenuItem = (NodeMenuItem)e.getSource();
+        SgNodeInterface node = nodeMenuItem.get_itemNode();
+        
+        switch (e.getActionCommand()) {
+            case "Delete Vertex" -> {
+                DeleteVertex(node);
+            }
+                
+            case "Add Edge" -> {
+                AddEdge(node);
+            }
+                
+            case "Collapse" -> {
+                Collapse(node);
+            }
+                
+            case "Expand" -> {
+                Expand(node);
+            }
+                
+            case "Device Settings" -> {
+                DeviceSettings(node);
+            }
+                
+            default -> {
+            }
+        }
+    }
        
     private class ClickInfo {
 
@@ -105,8 +218,14 @@ MouseWheelListener {
     public void mouseClicked(MouseEvent e) {
     }
 
-    private SgNodeInterface ptInNode(int x, int y) {
-        SgNodeInterface returnval = null;
+    /**
+     * Return all nodes at the point clicked.
+     * @param x The screen x position of the click.
+     * @param y The screen y position of the click.
+     * @return A list of nodes that are at the click point.
+     */
+    private List<SgNodeInterface> ptInNode(int x, int y) {
+        List<SgNodeInterface> returnval = new ArrayList<>();
         
         List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
 
@@ -118,8 +237,7 @@ MouseWheelListener {
                 Rectangle nodeRect = new Rectangle(nodePoint.x - SGNODECLICKWIDTH / 2, nodePoint.y - SGNODECLICKHEIGHT / 2, SGNODECLICKWIDTH, SGNODECLICKHEIGHT);
 
                 if (nodeRect.contains(x, y)) {
-                    returnval = node;
-                    break;
+                    returnval.add(node);
                 }
             }
         }
@@ -142,10 +260,102 @@ MouseWheelListener {
         }
     }
     
+    private String selectedString = "";
+    private void setSelection(String name) {
+        selectedString = name;
+    }
+    
+    private class NodeMenuItem extends JMenuItem {
+        
+       private SgNodeInterface m_itemNode;
+
+        public SgNodeInterface get_itemNode() {
+            return m_itemNode;
+        }
+
+        public void set_itemNode(SgNodeInterface itemNode) {
+            m_itemNode = itemNode;
+        }
+       
+        public NodeMenuItem(String name, SgNodeInterface node){
+           super(name);
+           
+           m_itemNode = node;
+       }
+    }
+    
+    /**
+     * Allow the user to choose which node to select when there are more than
+     * one under the click.
+     * @param clickNodeList The list of all nodes under the click.
+     * @return The node to select.
+     */
+    private SgNodeInterface getNodeSelection(List<SgNodeInterface> clickNodeList, Point mousePoint) {
+        SgNodeInterface returnval = null;
+        Map<String, SgNodeInterface> nodeNameMap = new HashMap<>();
+        selectedString = "";
+        
+        if (clickNodeList != null && !clickNodeList.isEmpty()) {
+            returnval = clickNodeList.get(0);
+            
+            if (clickNodeList.size() > 1) {
+                JPopupMenu deconMenu = new JPopupMenu();
+                
+                for (var node : clickNodeList) {
+                    nodeNameMap.put(node.getName(), node);
+                    
+                    JMenu menuItem = new JMenu(node.getName());
+                    var item = new NodeMenuItem("Delete Vertex", node);
+                    item.addActionListener(this);
+                    menuItem.add(item);
+                    
+                    item = new NodeMenuItem("Add Edge", node);
+                    item.addActionListener(this);
+                    menuItem.add(item);
+                    
+                    item = new NodeMenuItem("Collapse", node);
+                    item.addActionListener(this);
+                    menuItem.add(item);
+                    
+                    boolean collapseEnabled = false;
+                    if (node instanceof SgNode sgNode) {
+                        ArrayList<SgNodeInterface> collapseableNodes = sgNode.getCollapseableIncidentNodes(false);
+                        collapseEnabled = (collapseableNodes != null && collapseableNodes.size() > 1);
+                    }
+                    item.setEnabled(collapseEnabled);
+
+                    
+                    item = new NodeMenuItem("Expand", node);
+                    item.addActionListener(this);
+                    menuItem.add(item);
+                    
+                    // Only enable the Expand menu item if the node is of type SgGraph
+                    item.setEnabled(node.canExpand());                       
+                    
+                    item = new NodeMenuItem("Device Settings", node);
+                    item.addActionListener(this);
+                    menuItem.add(item);
+                    
+                    deconMenu.add(menuItem);                    
+                }
+                
+                deconMenu.show(map, (int)mousePoint.getX(), (int)mousePoint.getY());
+                
+                if (!selectedString.isBlank()) {
+                    returnval = nodeNameMap.get(selectedString);                    
+                }
+            }
+        }
+        
+        return returnval;
+    }
+    
     @Override
     public void mousePressed(MouseEvent e) {
         
-        SgNodeInterface clickNode = ptInNode(e.getX(), e.getY());
+        List<SgNodeInterface> clickNodes = ptInNode(e.getX(), e.getY());
+        SgNodeInterface clickNode = (clickNodes != null && !clickNodes.isEmpty()) ? clickNodes.get(0) : null;
+        
         JPopupMenu popup;
         
         if (e.getButton() == MouseEvent.BUTTON1) {            
@@ -177,7 +387,6 @@ MouseWheelListener {
             SgNodeInterface endPt1;
             SgNodeInterface endPt2;
             Point mousePoint = e.getPoint();
-            List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
             List<SgEdge> edges = new ArrayList<>(GraphManager.getInstance().getGraph().getEdges());
 
             if (clickNode != null) {
@@ -245,61 +454,25 @@ MouseWheelListener {
                 }
             }
 
-            nodeToUse = selectedNode;
+            nodeToUse = getNodeSelection(clickNodes, mousePoint);
             edgeToUse = selectedEdge;
 
-            if (mousePointIsOnNode) {
-                //System.out.println("Mouse button 2 or 3 pressed on a node = " + nodeToUse.toString());
+            if (mousePointIsOnNode && clickNodes.size() < 2) { //Mouse button 2 or 3 pressed on a node 
+                
                 popup = new JPopupMenu();
                 popup.add(new AbstractAction("Delete Vertex") {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
-                        GraphManager.getInstance().setFileDirty(true);
-                        
-                        if (nodeToUse instanceof SgNodeInterface) {
-                            SgNodeInterface node = nodeToUse;
-
-                            Graph currentGraph = GraphManager.getInstance().getGraph();
-                            currentGraph.removeVertex(node);
-                            if (currentGraph != GraphManager.getInstance().getOriginalGraph()) {
-                                
-                                if (node instanceof SgGraph sgGraph) {
-                                    removeNodes(sgGraph, GraphManager.getInstance().getOriginalGraph());
-                                }
-                                else {
-                                    GraphManager.getInstance().getOriginalGraph().removeVertex(node);
-                                }
-                            }
-                        }
-
-                        IGCAPTgui.getInstance().graphChanged();
+                        DeleteVertex(nodeToUse);
                     }
                 });
                 // Remove the menu item to remove the popup menu for adding an edge
                 // down to the end remove #EdgeMenu
                 JMenuItem addEdgeItem = popup.add(new AbstractAction("Add Edge") {
+                    @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        // remove the node and any edge connected to this node
-                        List<SgNodeInterface> nodesMinusSelectedNodes = nodes;
-                        nodesMinusSelectedNodes.remove(nodeToUse);
-
-                        NodeSelectionDialog nsd = new NodeSelectionDialog(IGCAPTgui.getInstance(), true, nodeToUse.getName(), new DefaultComboBoxModel(nodesMinusSelectedNodes.toArray()));
-                        nsd.setVisible(true);
-                        int idNumber = nsd.getToNodeIdNumber();
-
-                        int edgeIndex = GraphManager.getInstance().getNextEdgeIndex();
-                        SgEdge e2 = new SgEdge(edgeIndex, "e" + edgeIndex, 1.0, 0.0, 0.0);
-                        // get the end point SgNode selected by the user
-                        SgNodeInterface endNodeSpecifiedByUser = null;
-                        for (SgNodeInterface node : nodes) {
-                            if (node.getId() == idNumber) {
-                                endNodeSpecifiedByUser = node;
-                                break;
-                            }
-                        }
-                        // add the edge to the jung graph
-                        GraphManager.getInstance().getGraph().addEdge(e2, nodeToUse, endNodeSpecifiedByUser);
-                        IGCAPTgui.getInstance().graphChanged();
+                        AddEdge(nodeToUse);
                     }
                 });
                 addEdgeItem.setEnabled(nodeToUse instanceof SgNodeInterface);
@@ -307,7 +480,7 @@ MouseWheelListener {
                 
                 JMenuItem collapseItem = popup.add(new AbstractAction("Collapse") {
                     public void actionPerformed(ActionEvent e) {
-                        map.collapseNode(nodeToUse);
+                        Collapse(nodeToUse);
                     }
                 });
                 
@@ -322,15 +495,7 @@ MouseWheelListener {
                 JMenuItem expandItem = popup.add(new AbstractAction("Expand") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
-                        if (nodeToUse instanceof SgGraph graph) {
-                            
-                            PickedState<SgNodeInterface> pickState = GraphManager.getInstance().getVisualizationViewer().getPickedVertexState();
-                            pickState.clear();
-                            pickState.pick(graph, true);
-                            
-                            IGCAPTgui.getInstance().expand();
-                        }
+                        Expand(nodeToUse);
                     }
                 });
                 
@@ -340,14 +505,7 @@ MouseWheelListener {
                 JMenuItem settingsItem = popup.add(new AbstractAction("Device Settings") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
-                       if (nodeToUse instanceof SgNode node) {
-                            IGCAPTgui.getInstance().showDialog(node);
-                        }
-                        else if(nodeToUse instanceof SgGraph sgGraph) {
-                            SgNode node = (SgNode)sgGraph.getRefNode();
-                            IGCAPTgui.getInstance().showDialog(node);
-                        }
+                        DeviceSettings(nodeToUse);
                     }
                 });
                 settingsItem.setEnabled(nodeToUse instanceof SgNodeInterface);
@@ -409,7 +567,8 @@ MouseWheelListener {
                 m_prevNode = null;
             }
             // get the end point SgNode selected by the user (or null)
-            SgNodeInterface endNodeSpecifiedByUser = ptInNode(e.getX(), e.getY());
+            List<SgNodeInterface> endNodesSpecifiedByUser = ptInNode(e.getX(), e.getY());
+            SgNodeInterface endNodeSpecifiedByUser = (endNodesSpecifiedByUser != null && !endNodesSpecifiedByUser.isEmpty()) ? endNodesSpecifiedByUser.get(0) : null;
             // if the same node was selected or no node was selected don't make edge
             if (endNodeSpecifiedByUser != _clickInfo.getClickNode() &&
                 endNodeSpecifiedByUser != null) {
@@ -510,7 +669,8 @@ MouseWheelListener {
                 Point movePoint = new Point(e.getX(), e.getY());
                 ICoordinate end = map.getPosition(movePoint);
                 
-                SgNodeInterface endNode = ptInNode(e.getX(), e.getY());
+                List<SgNodeInterface> endNodes = ptInNode(e.getX(), e.getY());
+                SgNodeInterface endNode = (endNodes != null && !endNodes.isEmpty()) ? endNodes.get(0) : null;
                 if (endNode != null) {
                     if (endNode != _clickInfo._clickNode) {
                         if (endNode != m_prevNode) {
