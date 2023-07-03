@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.javatuples.Triplet;
+import org.json.JSONArray;
 import org.json.JSONObject;
 public class GDTAFImportController {
 
@@ -405,37 +406,40 @@ public class GDTAFImportController {
 
         if(bandwidthEdge != null) {
             String jsonString = bandwidthEdge.getValue();
-            var obj = new JSONObject(jsonString);
-            var countObj = (JSONObject) obj.get("count");
-            var valueObj = countObj.getInt("value");
-            var valueUnits = countObj.getString("units");
-            var everyObj = (JSONObject) obj.get("every");
-            var everyValue = everyObj.getInt("value");
-            var everyUnits = everyObj.getString("units");
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                var countObj = (JSONObject) obj.get("count");
+                var valueObj = countObj.getInt("value");
+                var valueUnits = countObj.getString("units");
+                var everyObj = (JSONObject) obj.get("every");
+                var everyValue = everyObj.getInt("value");
+                var everyUnits = everyObj.getString("units");
 
-            // Convert to kilobits
-            double countConversion;
-            switch (valueUnits) {
-                case "bit" -> countConversion = 1.0 / 1000.0;
-                case "kilobit" -> countConversion = 1.0;
-                case "byte" -> countConversion = 8.0 / 1000.0;
-                case "kilobyte" -> countConversion = 8.0;
-                case "megabyte" -> countConversion = 8.0 * 1000.0;
-                default -> countConversion = 1.0;
+                // Convert to kilobits
+                double countConversion;
+                switch (valueUnits) {
+                    case "bit" -> countConversion = 1.0 / 1000.0;
+                    case "kilobit" -> countConversion = 1.0;
+                    case "byte" -> countConversion = 8.0 / 1000.0;
+                    case "kilobyte" -> countConversion = 8.0;
+                    case "megabyte" -> countConversion = 8.0 * 1000.0;
+                    default -> countConversion = 1.0;
+                }
+
+                // Convert to seconds
+                double everyConversion;
+                switch (everyUnits) {
+                    case "second" -> everyConversion = 1.0;
+                    case "minute" -> everyConversion = 60.0;
+                    case "hour" -> everyConversion = 3600.0;
+                    case "day" -> everyConversion = 86400.0;
+                    default -> everyConversion = 1.0;
+                }
+
+                // Convert to kbits/second.
+                returnval = (valueObj * countConversion) / (everyValue * everyConversion);
             }
-
-            // Convert to seconds
-            double everyConversion;
-            switch (everyUnits) {
-                case "second" -> everyConversion = 1.0;
-                case "minute" -> everyConversion = 60.0;
-                case "hour" -> everyConversion = 3600.0;
-                case "day" -> everyConversion = 86400.0;
-                default -> everyConversion = 1.0;
-            }
-
-            // Convert to kbits/second.
-            returnval = valueObj * countConversion / everyValue / everyConversion;
         }
         return returnval;
     }

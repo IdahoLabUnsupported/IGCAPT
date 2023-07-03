@@ -163,9 +163,13 @@ public class EquipmentRepoMgr {
                 return "f93458a7-5fbd-4647-9952-5639c7d17644";
             case "Fuse":
                 return "d66fe77e-99f0-4270-ae35-139037fa382a";
+            case "BatteryUnit":
+                return "3988b3c7-cff5-4eda-b8e1-267c664c09a6";
+            case "Substation":
+                return "fd37c5da-5f16-46c3-8998-6980d3473a4d";
             default:
                 // UUID for Unknown
-                System.out.println(getEquip(uuid).getName());
+                System.out.println("Unknown Asset Mapping: " + getEquip(uuid).getName());
                 return "4cf6265d-b575-4de7-a2e1-2b794809fbbd";
         }
     }
