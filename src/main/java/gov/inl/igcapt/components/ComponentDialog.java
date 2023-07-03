@@ -172,9 +172,12 @@ public class ComponentDialog extends javax.swing.JDialog {
 
             try {
                 SgField field = addFieldDialog.getField();
-                existingComponent.addField(field);
-                AddField(field.getName(), field.getPayload());
-
+                if (existingComponent != null) {
+                    existingComponent.addField(field);
+                }
+                fieldListModel.addElement(new SgField(field.getName(), field.getPayload()));
+                FieldList.updateUI();    
+                
                 addFieldDialog.dispose();
                 addFieldDialog = null;
             } catch (Exception ignored) {
@@ -182,22 +185,6 @@ public class ComponentDialog extends javax.swing.JDialog {
         }
     }
     
-    private void AddField(String name, int payload) {    
-        boolean error = false;
-        try {
-            if (name.isBlank()) {
-                throw new Exception();
-            }
-        } catch (Exception ignored) {
-            error = true;
-        }
-
-        if (error) { return; }
-
-        fieldListModel.addElement(new SgField(name, payload));
-        FieldList.updateUI();
-    }
-
     // this gets called when the add field button is pushed
     // so now call it when the Add field dialog is closed
     // but get the data from the form
@@ -226,30 +213,17 @@ public class ComponentDialog extends javax.swing.JDialog {
 
             try {
                 SgAttribute attribute = addAttributeDialog.getAttribute();
-                existingComponent.addAttribute(attribute);
-                //addAttribute(attribute.getName(), attribute.getValue());
+                if (existingComponent != null) {
+                    existingComponent.addAttribute(attribute);
+                }
                 attributeListModel.addElement(new SgAttribute(attribute.getName(), attribute.getValue()));
                 attributeList.updateUI();
+                
                 addAttributeDialog.dispose();
                 addAttributeDialog = null;
             } catch (Exception ignored) {
             }
         }
-    }
-
-    private void addAttribute(String name, int value) {    
-        boolean error = false;
-        try {
-            if (name.isBlank()) {
-                throw new Exception();
-            }
-        } catch (Exception ignored) {
-            error = true;
-        }
-
-        if (error) { return; }
-        attributeListModel.addElement(new SgAttribute(name, value));
-        attributeList.updateUI();
     }
 
     public void setComponentGroup(SgComponentGroupData componentGroup) {

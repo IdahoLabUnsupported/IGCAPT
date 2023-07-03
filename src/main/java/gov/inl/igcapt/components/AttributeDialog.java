@@ -82,25 +82,6 @@ public class AttributeDialog extends javax.swing.JDialog {
         componentSelector.setBackground(NORMAL_COLOR);
     }
 
-    public SgComponentData getComponentWithAttribute() throws Exception {
-        componentSelector.setBackground(NORMAL_COLOR);
-
-        SgAttribute attribute = getAttribute();
-        SgComponentData component = null;
-
-        try {
-            component = (SgComponentData) componentSelector.getSelectedItem();
-
-            component.addAttribute(attribute);
-        } catch (Exception ignored) {
-            componentSelector.setBackground(ERROR_COLOR);
-        }
-
-        if (!validateField()) { throw new Exception(); }
-
-        return component;
-    }
-
     public void setAttribute(SgAttribute attribute) {
         this.existingAttribute = attribute;
 
