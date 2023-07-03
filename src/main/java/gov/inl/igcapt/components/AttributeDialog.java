@@ -22,13 +22,13 @@ import javax.swing.KeyStroke;
  *
  * @author wadsjc
  */
-public class FieldDialog extends javax.swing.JDialog {
+public class AttributeDialog extends javax.swing.JDialog {
 
     private final Color ERROR_COLOR = Color.red;
     private final Color NORMAL_COLOR = Color.white;
     private boolean clickedCancel = false;
     private DefaultComboBoxModel<SgComponentData> components;
-    private SgField existingField;
+    private SgAttribute existingAttribute;
     private IComponentDao componentDao;
     
     /**
@@ -43,7 +43,7 @@ public class FieldDialog extends javax.swing.JDialog {
     /**
      * Creates new form FieldDialog
      */
-    public FieldDialog(java.awt.Frame parent, boolean modal, IComponentDao componentDao) {
+    public AttributeDialog(java.awt.Frame parent, boolean modal, IComponentDao componentDao) {
         super(parent, modal);
         initComponents();
         
@@ -82,22 +82,22 @@ public class FieldDialog extends javax.swing.JDialog {
         componentSelector.setBackground(NORMAL_COLOR);
     }
 
-    public void setField(SgField field) {
-        this.existingField = field;
+    public void setAttribute(SgAttribute attribute) {
+        this.existingAttribute = attribute;
 
-        nameFld.setText(field.getName());
-        payloadFld.setText(String.valueOf(field.getPayload()));
+        nameFld.setText(attribute.getName());
+        valueFld.setText(String.valueOf(attribute.getValue()));
     }
 
-    public SgField getField() throws Exception {
-        SgField field = existingField != null ? existingField : new SgField();
+    public SgAttribute getAttribute() throws Exception {
+        SgAttribute attribute = existingAttribute != null ? existingAttribute : new SgAttribute();
 
-        field.setName(retrieveName());
-        field.setPayload(retrievePayload());
+        attribute.setName(retrieveName());
+        attribute.setValue(retrieveValue());
 
         if (!validateField()) { throw new Exception(); }
 
-        return field;
+        return attribute;
     }
 
     private String retrieveName() {
@@ -110,22 +110,23 @@ public class FieldDialog extends javax.swing.JDialog {
 
         return name;
     }
-    private int retrievePayload() {
-        payloadFld.setBackground(NORMAL_COLOR);
-        int payload = 0;
+    private int retrieveValue() {
+        valueFld.setBackground(NORMAL_COLOR);
+        int value = 0;
 
         try {
-            payload = Integer.parseInt(payloadFld.getText());
+            value = Integer.parseInt(valueFld.getText());
         } catch (Exception ignored){
-            payloadFld.setBackground(ERROR_COLOR);
+            valueFld.setBackground(ERROR_COLOR);
         }
 
-
-        return payload;
+        // CHERIE - does this need to be an int????
+//        String value = valueFld.getText();
+        return value;
     }
 
     private boolean validateField() {
-        return fieldIsNormal(nameFld) && fieldIsNormal(payloadFld)
+        return fieldIsNormal(nameFld) && fieldIsNormal(valueFld)
                 && fieldIsNormal(componentSelector);
     }
 
@@ -175,10 +176,10 @@ public class FieldDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         componentSelector = new javax.swing.JComboBox<>();
-        payloadFld = new javax.swing.JTextField();
+        valueFld = new javax.swing.JTextField();
         validationLbl = new javax.swing.JLabel();
 
-        setTitle("Component Field");
+        setTitle("Component Attribute");
         setMaximumSize(new java.awt.Dimension(416, 182));
         setMinimumSize(new java.awt.Dimension(416, 182));
         setResizable(false);
@@ -204,7 +205,7 @@ public class FieldDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Name");
 
-        jLabel2.setText("Payload (in bytes)");
+        jLabel2.setText("Value");
 
         jLabel3.setText("Component");
 
@@ -234,7 +235,7 @@ public class FieldDialog extends javax.swing.JDialog {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(componentSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(payloadFld, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(valueFld, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
 
@@ -250,7 +251,7 @@ public class FieldDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(payloadFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(valueFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(componentSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -342,8 +343,8 @@ public class FieldDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField nameFld;
     private javax.swing.JButton okButton;
-    private javax.swing.JTextField payloadFld;
     private javax.swing.JLabel validationLbl;
+    private javax.swing.JTextField valueFld;
     // End of variables declaration//GEN-END:variables
 
     private int returnStatus = RET_CANCEL;

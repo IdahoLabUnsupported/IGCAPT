@@ -61,6 +61,10 @@ public class SgComponentData implements BaseModel {
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "componentId")
     private List<SgField> fields;
+    
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "componentId")
+    private List<SgAttribute> attributes;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "componentDataId")
@@ -89,6 +93,24 @@ public class SgComponentData implements BaseModel {
         }
         fields = getFields();
         fields.add(field);
+    }
+    
+    public List<SgAttribute> getAttributes() { return attributes != null? attributes: new ArrayList<>(); }
+    public void setAttributes(List<SgAttribute> attributes) {
+        this.attributes = attributes;
+    }
+    public void addAttribute(SgAttribute attribute) {
+        attributes = getAttributes();
+        // Removes only if its already there to allow for updates
+        Iterator<SgAttribute> it = attributes.iterator();
+        while(it.hasNext()){
+            if(it.getClass().getName().equals(attribute.getName())){
+                it.remove();
+            }
+            it.next();
+        }
+        attributes = getAttributes();
+        attributes.add(attribute);
     }
 
     public List<SgUseCase> getUsecases() { return usecases != null? usecases: new ArrayList<>(); }

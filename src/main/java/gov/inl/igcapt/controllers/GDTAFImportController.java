@@ -107,12 +107,68 @@ public class GDTAFImportController {
             removeContainers();
 
             setNodeData(); //Payload and latency.
+
+            addAssetsNotInvolvedInGUCS();
             
             IGCAPTgui.getInstance().graphChanged();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    private void addAssetsNotInvolvedInGUCS(){
+
+        SgNode sgNode = null;
+        var allSolnAssets = GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getSolutionAsset();
+        for( var solnAsset: allSolnAssets){
+            if(!m_assetGuidToNodeMap.containsKey(solnAsset.getUUID()) && solnAsset.getState().value().equals("PHYSICAL")){
+                sgNode = addStandAloneNode(solnAsset);
+                if(sgNode != null) {
+                    m_assetGuidToNodeMap.put(solnAsset.getUUID(), sgNode);
+                }
+            }
+        }
+    }
+
+
+    private SgNode addStandAloneNode(SolutionAsset solnAsset) {
+        var igcaptGraph = GraphManager.getInstance().getGraph();
+        SgNode sgNode = null;
+        String equipmentId = solnAsset.getEquipment();
+        var location = solnAsset.getAtLocation();
+        if (location == null){
+            return null;
+        }
+        //lookup the Equipment Object for the SolutionAsset Equipment
+        Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
+
+        if (equipmentInstance != null) {
+            var equipInstanceIgcaptCompData =
+                    IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
+            int nodeId = GraphManager.getInstance().getNextNodeIndex();
+            String name = solnAsset.getName();
+
+            sgNode = new SgNode(nodeId,
+                    solnAsset.getUUID(),
+                    equipInstanceIgcaptCompData.getUuid(),
+                    equipInstanceIgcaptCompData.getName(),
+                    name,
+                    true,
+                    false,
+                    false,
+                    0,
+                    10,
+                    "assetGuid:" + stripUnderscoreFromUUID(solnAsset.getUUID()));
+
+            sgNode.setLat(location.getY());
+            sgNode.setLongit(location.getX());
+
+            igcaptGraph.addVertex(sgNode);
+
+            return sgNode;
+        }
+        return null;
     }
 
     /**
