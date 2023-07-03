@@ -44,8 +44,8 @@ public class ImportGdtafScenario extends javax.swing.JDialog {
     
     public void prepareForm(String fileToImport) {
         jTextField1.setText(fileToImport);
-        m_gdtafController.readGDTAFScenarioFile(fileToImport);
-        initScenarioList();
+        //m_gdtafController.readGDTAFScenarioFile(fileToImport);
+        //initScenarioList();
     }
 
     /**
@@ -75,6 +75,7 @@ public class ImportGdtafScenario extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import GDTAF Scenario");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setResizable(false);
 
         jLabel1.setText("Scenario List ");
         jLabel1.setToolTipText("");

@@ -55,7 +55,8 @@ public class ComponentDao implements IComponentDao {
     public void saveUseCase(SgUseCase useCase) { save(useCase); }
     @Override
     public void saveField(SgField field) { save(field); }
-
+    @Override
+    public void saveAttribute(SgAttribute attribute) { save(attribute); }
 
     @Override
     public List<SgComponentListData> getComponentLists() { return getAll("componentList", SgComponentListData.class); }
@@ -69,6 +70,8 @@ public class ComponentDao implements IComponentDao {
     public List<SgUseCase> getUseCases() { return getAll("usecase", SgUseCase.class); }
     @Override
     public List<SgField> getFields() { return getAll("field", SgField.class); }
+    @Override
+    public List<SgAttribute> getAttributes() { return getAll("attribute", SgAttribute.class); }
 
     @Override
     public SgUseCase getUseCaseByName(String name){
@@ -85,6 +88,16 @@ public class ComponentDao implements IComponentDao {
         for(var field : getFields()){
             if(field.getName().equals(name)){
                 return field;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public SgAttribute getAttributeByName(String name){
+        for(var attribute : getAttributes()){
+            if(attribute.getName().equals(name)){
+                return attribute;
             }
         }
         return null;

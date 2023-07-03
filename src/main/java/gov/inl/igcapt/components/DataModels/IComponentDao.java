@@ -16,6 +16,8 @@ public interface IComponentDao {
     void saveUseCase(SgUseCase useCase);
 
     void saveField(SgField field);
+    
+    void saveAttribute(SgAttribute attribute);
 
     List<SgComponentListData> getComponentLists();
 
@@ -30,8 +32,12 @@ public interface IComponentDao {
     SgUseCase getUseCaseByName(String name);
 
     List<SgField> getFields();
+    
+    List<SgAttribute> getAttributes();
 
     SgField getFieldByName(String name);
+    
+    SgAttribute getAttributeByName(String name);
 
     SgComponentData getComponentByUUID(String uuid);
 
