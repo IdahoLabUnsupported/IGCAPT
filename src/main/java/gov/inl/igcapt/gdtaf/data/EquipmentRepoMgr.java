@@ -2,6 +2,8 @@ package gov.inl.igcapt.gdtaf.data;
 
 import gov.inl.igcapt.gdtaf.model.GDTAF;
 import gov.inl.igcapt.gdtaf.model.Equipment;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -14,66 +16,76 @@ import java.util.*;
 public class EquipmentRepoMgr {
 
     private static final EquipmentRepoMgr instance = new EquipmentRepoMgr();
-    private Map<String, Equipment> m_equipMap  = new HashMap<String, Equipment>();
-    private EquipmentRepoMgr(){
+    private Map<String, Equipment> m_equipMap = new HashMap<String, Equipment>();
+
+    private EquipmentRepoMgr() {
 
     }
 
     /**
      * EquipmentRepoMgr singleton accessor method
+     *
      * @return EquipmentRepoMgr
      */
-    public static EquipmentRepoMgr getInstance(){
+    public static EquipmentRepoMgr getInstance() {
         return instance;
     }
 
     /**
      * intitialize the class with data from the GDTAF Scenario
      * must be called before use
+     *
      * @param gdtaf
      */
-    public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf){
+    public void initRepo(gov.inl.igcapt.gdtaf.model.GDTAF gdtaf) {
         resetRepo();
         var equipList = gdtaf.getEquipmentRepo().getEquipment();
-        for (var equip :equipList) {
+        for (var equip : equipList) {
             m_equipMap.put(equip.getUUID(), equip);
         }
     }
 
-    private void resetRepo(){
+    private void resetRepo() {
         m_equipMap.clear();
     }
 
     /**
      * getter to return equipment object from the map
+     *
      * @param uuid
      * @return Equipment
      */
-    public Equipment getEquip(String uuid){
+    public Equipment getEquip(String uuid) {
         return m_equipMap.get(uuid);
     }
 
-    public Collection<Equipment> getAllEquip() { return m_equipMap.values();}
+    public Collection<Equipment> getAllEquip() {
+        return m_equipMap.values();
+    }
 
     /**
      * Number of elements in the Repo
+     *
      * @return int
      */
-    public int count(){ return m_equipMap.size();}
+    public int count() {
+        return m_equipMap.size();
+    }
 
     /**
      * this is a utility to get a list of equipment derived from a particular UUID
      * This is handy when trying to associate a Operational Objective Source/Dest ID
      * to a SolutionAsset.  The Source/Dest will be the parameter uuid and the return list
      * of uuids will be things to search for as AssetSolution->Eqiupment
+     *
      * @param uuid
      * @return
      */
-    public List<String> getEquipmentDerivedFrom(String uuid){
+    public List<String> getEquipmentDerivedFrom(String uuid) {
         List<String> derivedFromList = new ArrayList<String>();
-        for(var equip:m_equipMap.values()){
-            for(var der:equip.getDerivedFrom()){
-                if(der.equals(uuid)){
+        for (var equip : m_equipMap.values()) {
+            for (var der : equip.getDerivedFrom()) {
+                if (der.equals(uuid)) {
                     derivedFromList.add(equip.getUUID());
                 }
             }
@@ -84,13 +96,14 @@ public class EquipmentRepoMgr {
     /**
      * helper function to associate the GDTAF Equipment Name to
      * a IGCAPT Component UUID
+     *
      * @param uuid
      * @return
      */
-    public String getICAPTComponentUUID(String uuid){
+    public String getICAPTComponentUUID(String uuid) {
         /// TODO It would be better to generate a sqlite call to find the UUID and return that.
 
-        switch(getEquip(uuid).getName()) {
+        switch (getEquip(uuid).getName()) {
             case "Capacitor Bank":
                 return "3822d4ce-a0e0-4900-a2e1-1692cb942b32";
             case "Recloser":
@@ -163,10 +176,158 @@ public class EquipmentRepoMgr {
                 return "f93458a7-5fbd-4647-9952-5639c7d17644";
             case "Fuse":
                 return "d66fe77e-99f0-4270-ae35-139037fa382a";
+            case "BatteryUnit":
+                return "3988b3c7-cff5-4eda-b8e1-267c664c09a6";
+            case "Substation":
+                return "fd37c5da-5f16-46c3-8998-6980d3473a4d";
             default:
                 // UUID for Unknown
-                System.out.println(getEquip(uuid).getName());
+                System.out.println("Unknown Asset Mapping: " + getEquip(uuid).getName());
                 return "4cf6265d-b575-4de7-a2e1-2b794809fbbd";
         }
+    }
+
+    public int getProjectedCapex(String equipUUID) {
+        var equipment = getEquip(equipUUID);
+        var attrList = equipment.getConstrainingAttribute();
+        for (var attr : attrList) {
+            if (attr.getType().name().equals("COST_FACTORS")) {
+                var jsonString = attr.getValue();
+                JSONArray jsonArray = new JSONArray(jsonString);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    if(obj.getString("stage").equals("projected")) {
+                        var capexObj = (JSONObject) obj.get("capex");
+                        var fixedObj = (JSONObject) capexObj.get("fixed");
+                        var valueObj = fixedObj.getInt("value");
+                        return valueObj;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int getActualCapex(String equipUUID){
+        var equipment = getEquip(equipUUID);
+        var attrList = equipment.getConstrainingAttribute();
+        for (var attr : attrList) {
+            if (attr.getType().name().equals("COST_FACTORS")) {
+                var jsonString = attr.getValue();
+                JSONArray jsonArray = new JSONArray(jsonString);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    if(obj.getString("stage").equals("actual")) {
+                        var capexObj = (JSONObject) obj.get("capex");
+                        var fixedObj = (JSONObject) capexObj.get("fixed");
+                        var valueObj = fixedObj.getInt("value");
+                        return valueObj;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int getProjectedOpexPerYear(String equipUUID){
+        int opexValue = 0;
+        int everyValue = 1;
+        int conversion = 1;
+        String everyUnits = "year";
+
+        var equipment = getEquip(equipUUID);
+        var attrList = equipment.getConstrainingAttribute();
+        for (var attr : attrList) {
+            if (attr.getType().name().equals("COST_FACTORS")) {
+                var jsonString = attr.getValue();
+                JSONArray jsonArray = new JSONArray(jsonString);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    if(obj.getString("stage").equals("projected")) {
+                        var opexArray = (JSONArray) obj.get("opex");
+                        for(int j = 0; j < opexArray.length(); j++){
+                            JSONObject opexObj = opexArray.getJSONObject(j);
+                            if(opexObj.getString("type").equals("maintenance")){
+                                JSONObject fixedObj = opexObj.getJSONObject("fixed");
+                                JSONObject everyObj = opexObj.getJSONObject("every");
+                                opexValue = fixedObj.getInt("value");
+                                everyValue = everyObj.getInt("value");
+                                everyUnits = everyObj.getString("units");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        switch(everyUnits){
+            case "year":
+                conversion = 1;
+                break;
+            case "month":
+                conversion  = 12;
+                break;
+            case "day":
+                conversion = 365;
+                break;
+            case "hour":
+                conversion = 365*24;
+                break;
+            default:
+                conversion = 1;
+                break;
+        }
+
+        return (opexValue * conversion) / everyValue;
+    }
+
+    public int getActualOpexPerYear(String equipUUID){
+        int opexValue = 0;
+        int everyValue = 1;
+        int conversion = 1;
+        String everyUnits = "year";
+
+        var equipment = getEquip(equipUUID);
+        var attrList = equipment.getConstrainingAttribute();
+        for (var attr : attrList) {
+            if (attr.getType().name().equals("COST_FACTORS")) {
+                var jsonString = attr.getValue();
+                JSONArray jsonArray = new JSONArray(jsonString);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    if(obj.getString("stage").equals("actual")) {
+                        var opexArray = (JSONArray) obj.get("opex");
+                        for(int j = 0; j < opexArray.length(); j++){
+                            JSONObject opexObj = opexArray.getJSONObject(j);
+                            if(opexObj.getString("type").equals("maintenance")){
+                                JSONObject fixedObj = opexObj.getJSONObject("fixed");
+                                JSONObject everyObj = opexObj.getJSONObject("every");
+                                opexValue = fixedObj.getInt("value");
+                                everyValue = everyObj.getInt("value");
+                                everyUnits = everyObj.getString("units");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        switch(everyUnits){
+            case "year":
+                conversion = 1;
+                break;
+            case "month":
+                conversion  = 12;
+                break;
+            case "day":
+                conversion = 365;
+                break;
+            case "hour":
+                conversion = 365*24;
+                break;
+            default:
+                conversion = 1;
+                break;
+        }
+
+        return (opexValue * conversion) / everyValue;
     }
 }
