@@ -272,7 +272,7 @@ public class GDTAFImportController {
 
     // Set the payload and latency data for nodes based on GDTAF operational objectives.
     private void setNodeData() {
-        List<String> solnAssetUUIDList = new ArrayList<String>();
+        List<String> solnAssetUUIDList = new ArrayList<>();
 
         var opObjList = getRelevantOperationalObjectives();
         int counter = 0;
@@ -311,7 +311,6 @@ public class GDTAFImportController {
 
                     List<String> destSolnAssetList = new ArrayList<>();
                     List<Integer> endpoints = new ArrayList<>();
-                    List<String> endpointTypeList = new ArrayList<>();
                     for (var destEquipUUID : opObj.getDestination()) {
                         destSolnAssetList.addAll(getSolutionAssetsRelatedToEquipUUID(destEquipUUID));
                     }
@@ -319,7 +318,6 @@ public class GDTAFImportController {
                         var lookup = m_assetGuidToNodeMap.get(endPointAssetUUID);
                         if (lookup != null) {
                             endpoints.add(lookup.getId());
-                            endpointTypeList.add(lookup.getType());
                         }
                     }
                     if (!endpoints.isEmpty()) {
@@ -392,7 +390,7 @@ public class GDTAFImportController {
         var edgeTypeList = child.getEdges();
         for(var edgeType : edgeTypeList){
             for (var solEdgeAttr: GDTAFScenarioMgr.getInstance().getEdgeAttributes()) {
-                if (solEdgeAttr.getUUID().equals(edgeType.toString()) && solEdgeAttr.getType().name().equals("LINK_CAPACITY")) {
+                if (solEdgeAttr.getUUID().equals(edgeType) && solEdgeAttr.getType().name().equals("LINK_CAPACITY")) {
 
                     return getEdgeAttributeCapacityValue(solEdgeAttr);
                 }
