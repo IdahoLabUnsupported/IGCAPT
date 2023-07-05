@@ -467,6 +467,7 @@ public class GDTAFImportController {
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
                     if (equipmentInstance != null) {
+                        System.out.println(equipmentInstance.getName() + ": " + EquipmentRepoMgr.getInstance().getActualOpexPerYear(equipmentInstance.getUUID()));
                         var equipInstanceIgcaptCompData =
                             IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
                         int nodeId = GraphManager.getInstance().getNextNodeIndex();
@@ -565,7 +566,7 @@ public class GDTAFImportController {
      * Traverse down to the children and return all the children, grandchildren, etc. that are not containers.
      * Stop traversing when only noncontainers exist.
      * @param asset The asset to start at.
-     * @return 
+     * @return  SgNode List
      */
     List<SgNode> getContainerChildren(SolutionAsset asset) {
         
