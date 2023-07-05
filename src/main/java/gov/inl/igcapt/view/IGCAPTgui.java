@@ -586,11 +586,16 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     for(SgNodeInterface node: nodes){
                         node.setRenderName(true);
                     }
+                    
+                    GraphManager.getInstance().setFileDirty(true);
+
                 } else {
                     List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
                     for(SgNodeInterface node: nodes){
                         node.setRenderName(false);
                     }
+                    
+                    GraphManager.getInstance().setFileDirty(true);
                 }
                 refresh();
             }
@@ -892,7 +897,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         loadTopology.addActionListener((ActionEvent ev) -> {
             
             JFileChooser chooser = new JFileChooser();
-            FileFilter filter = new FileNameExtensionFilter("IGCAP Files", "igc");
+            FileFilter filter = new FileNameExtensionFilter("IGCAP Files (*.igc)", "igc");
             chooser.setFileFilter(filter);
             
             if (m_lastPath != null && !m_lastPath.isEmpty()) {
@@ -917,7 +922,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                 chooser.setCurrentDirectory(new File(m_lastPath));
             }
             
-            chooser.setFileFilter(new FileNameExtensionFilter("IGCAP Files", "igc"));
+            chooser.setFileFilter(new FileNameExtensionFilter("IGCAP Files (*.igc)", "igc"));
             
             if (chooser.showSaveDialog(IGCAPTgui.getInstance()) == JFileChooser.APPROVE_OPTION) {
                 SwingUtilities.invokeLater(() -> {
@@ -1318,7 +1323,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
                     double yPos = Double.parseDouble(eElement.getElementsByTagName("yCoord").item(0).getTextContent());
                     n1.setLat(Double.parseDouble(eElement.getElementsByTagName("lat").item(0).getTextContent()));
                     n1.setLongit(Double.parseDouble(eElement.getElementsByTagName("long").item(0).getTextContent()));
-
+                    
+                    var renderNameEl = eElement.getElementsByTagName("isRenderName");
+                    if (renderNameEl != null && renderNameEl.getLength() > 0) {
+                        n1.setRenderName(eElement.getElementsByTagName("isRenderName").item(0).getTextContent().contentEquals("true"));                        
+                    }
                     
                     Element attributesElement = (Element)(eElement.getElementsByTagName("attributes").item(0));
                     

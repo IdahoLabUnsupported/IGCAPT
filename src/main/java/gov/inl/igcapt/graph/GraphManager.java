@@ -515,6 +515,11 @@ public class GraphManager {
                 longitude.appendChild(doc.createTextNode(Double.toString(sgNode.getLongit())));
                 node.appendChild(longitude);
 
+                // isRenderName element
+                Element isRenderName = doc.createElement("isRenderName");
+                isRenderName.appendChild(doc.createTextNode(Boolean.toString(sgNode.isRenderName())));
+                node.appendChild(isRenderName);
+
                 // name element
                 Element name = doc.createElement("name");
                 name.appendChild(doc.createTextNode(sgNode.getName()));
