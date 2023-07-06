@@ -673,7 +673,7 @@ public class GDTAFImportController {
                             
                             // This function returns the list of edges to get from connectedNode to childNode. There may be more than one path.
                             // Use the first path since there is not a good way to determine which one to use.
-                            var paths = gov.inl.igcapt.components.AnalysisTask.getComponentPaths(graph, (SgNode)connectedNode, childNode, true);
+                            var paths = gov.inl.igcapt.components.AnalysisTask.getNodePaths(graph, (SgNode)connectedNode, childNode, true);
                             
                             if (paths != null && !paths.isEmpty()) {
                                 

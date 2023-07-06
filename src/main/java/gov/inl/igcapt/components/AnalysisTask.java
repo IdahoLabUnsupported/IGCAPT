@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.SwingWorker;
 import gov.inl.igcapt.view.IGCAPTgui;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -24,7 +25,8 @@ import gov.inl.igcapt.view.IGCAPTgui;
     public class AnalysisTask extends SwingWorker<String, Integer> {
 
         private Graph<SgNodeInterface, SgEdge> _graph;
-        private volatile boolean _running = true;
+        private static volatile boolean _running = true;
+        private static volatile int depth = 0;
 
         public AnalysisTask(Graph<SgNodeInterface, SgEdge> graph) {
             _graph = graph;
@@ -63,13 +65,10 @@ import gov.inl.igcapt.view.IGCAPTgui;
             // Build list of data flows to be analyzed
             sgNodeList = new ArrayList<>(graph.getVertices());
             sgEdgeList = new ArrayList<>(graph.getEdges());
-
-            // Clear the node used list before an analysis.
-            for (var node : sgNodeList) {
-                if (node instanceof SgNode sgNode) {
-                    sgNode.setUsed(false);
-                }
-            }
+            
+            List<SgNodeInterface> result = sgNodeList.stream()
+                    .filter(item -> item.getName().contains("Wide"))
+                    .collect(Collectors.toList());
             
             int i = 0;
 
@@ -77,7 +76,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
             for (SgNodeInterface sgAbstractNode : sgNodeList) {
 
                 if (!_running) {
-                    break;
+                    return null;
                 }
 
                 // Only take 50% of our progress in this phase.  Take the rest below.
@@ -107,11 +106,12 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 for (gov.inl.igcapt.components.Pair<SgNode, SgNode> pair : analyzeList) {
 
                     if (!_running) {
-                        break;
+                        return null;
                     }
                     setProgress(50 + 50 * i++ / analyzeList.size());
 
-                    paths = getComponentPaths(graph, pair.first, pair.second, true);
+                    depth = 0;
+                    paths = getNodePaths(graph, pair.first, pair.second, true);
 
                     double ackPayload = Double.parseDouble(IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.ACK_SIZE));
                     
@@ -119,6 +119,11 @@ import gov.inl.igcapt.view.IGCAPTgui;
 
                     for (List<Integer> sublist : paths) {
                         for (Integer value : sublist) {
+                            
+                            if (!_running) {
+                                return null;
+                            }
+                            
                             SgEdge sgEdge = graphManager.getEdge(sgEdgeList, value);
                             
                             SgNodeInterface sgAbstractNode = pair.first;
@@ -132,15 +137,22 @@ import gov.inl.igcapt.view.IGCAPTgui;
                             }
                         }
 
-                        // Reverse communication flow for ACK
-                        for (int j = sublist.size() - 1; j >= 0; j--) {
-                            SgEdge sgEdge = GraphManager.getInstance().getEdge(sgEdgeList, sublist.get(j));
-                            SgNode sgSrcNode = pair.first;
+                        if (_running) {
+                            // Reverse communication flow for ACK
+                            for (int j = sublist.size() - 1; j >= 0; j--) {
+                                
+                                if (!_running) {
+                                    return null;
+                                }
+                                
+                                SgEdge sgEdge = GraphManager.getInstance().getEdge(sgEdgeList, sublist.get(j));
+                                SgNode sgSrcNode = pair.first;
 
-                            // This is an ACK coming back from the destination.  Use the timing from the
-                            // source and a fixed ACK payload as specified in the properties file.
-                            double ackUtilization = ackPayload * 8.0 / sgSrcNode.getMaxLatency() / 1000;
-                            sgEdge.setCalcTransRate(sgEdge.getCalcTransRate() + ackUtilization);
+                                // This is an ACK coming back from the destination.  Use the timing from the
+                                // source and a fixed ACK payload as specified in the properties file.
+                                double ackUtilization = ackPayload * 8.0 / sgSrcNode.getMaxLatency() / 1000;
+                                sgEdge.setCalcTransRate(sgEdge.getCalcTransRate() + ackUtilization);
+                            }
                         }
                     }
                 }
@@ -155,18 +167,24 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 analysisResults.append(endDate.toString());
 
                 returnval = analysisResults.toString();
+                GraphManager.getInstance().setAnalysisDirty(false);
+           
+                IGCAPTgui.getInstance().refresh();
             }
 
-            GraphManager.getInstance().setAnalysisDirty(false);
-            IGCAPTgui.getInstance().refresh();
-
-            return returnval;
+             return returnval;
         }
 
-        public static List<List<Integer>> getComponentPaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
+        public static List<List<Integer>> getNodePaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
             List<List<Integer>> returnval = new ArrayList<>();
             
+            //System.out.println("From: " + fromNode.getName() + " To: " + toNode.getName());
+            System.out.println("Depth: " + depth++);
             SgNode currentNode;
+            
+            if (!_running) {
+                return null;
+            }
 
             SgNodeInterface fromSgAbstractNode = fromNode;
             SgNodeInterface toSgAbstractNode = toNode;
@@ -177,7 +195,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 SgNode toSgNode = (SgNode) toSgAbstractNode;
 
                 currentNode = fromSgNode;
-                currentNode.setUsed(true);         // Prevent a component from being looped back on
+                currentNode.setUsed(true);         // Prevent a node from being looped back on
 
                 // Can only terminate at the destination, regardless of whether there is an intermediate node
                 // that is not transmitting. We only want complete paths that start at the from node and end at the to node.
@@ -192,14 +210,16 @@ import gov.inl.igcapt.view.IGCAPTgui;
 
                     for (SgEdge sgEdge : sgEdges) {
                         
+                        if (!_running) {
+                            return null;
+                        }
+                        
                         if (sgEdge.isEnabled()) {
                             SgNode nextComponent = null;
 
                             edu.uci.ics.jung.graph.util.Pair<SgNodeInterface> endpoints = graph.getEndpoints(sgEdge);
 
-                            if (endpoints.getFirst() instanceof SgNode && endpoints.getSecond() instanceof SgNode) {
-                                SgNode endPt1 = (SgNode) endpoints.getFirst();
-                                SgNode endPt2 = (SgNode) endpoints.getSecond();
+                            if (endpoints.getFirst() instanceof SgNode endPt1 && endpoints.getSecond() instanceof SgNode endPt2) {
 
                                 if (endPt1 != null && endPt2 != null) {
                                     if (!endPt1.getUsed()) {
@@ -211,10 +231,10 @@ import gov.inl.igcapt.view.IGCAPTgui;
                             }   
 
                             if (nextComponent != null) {
-                                List<List<Integer>> returnPaths = getComponentPaths(graph, nextComponent, toSgNode, false);
+                                List<List<Integer>> returnPaths = getNodePaths(graph, nextComponent, toSgNode, false);
 
                                 // We received a path, add our current edge to the head of each list and return it.
-                                if (!returnPaths.isEmpty()) {
+                                if (returnPaths != null && !returnPaths.isEmpty()) {
                                     for (List<Integer> path : returnPaths) {
                                         path.add(0, sgEdge.getId());
                                     }
@@ -227,6 +247,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 }
                 currentNode.setUsed(false); // Return it to the pool, just need to make sure it does not loop back downstream
             }
+            depth--;
             return returnval;
         }
     }
