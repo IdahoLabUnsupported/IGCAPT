@@ -62,6 +62,7 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                     analysisProgress.addPropertyChangeListener("abort", (PropertyChangeEvent evt) -> {
                         try {
                             analysisTask.terminate();
+                            analysisTask.cancel(true);
                             IGCAPTgui.getInstance().setAnalysisCanceled(true);
                         } catch (CancellationException ex) {
                             // Don't do anything here.  This exception always is
@@ -70,7 +71,6 @@ public class AddAnalyzeTopologyMenuItem extends JMenuItem {
                     });
 
                     analysisTask.execute();
-                    GraphManager.getInstance().setAnalysisDirty(false);
                     analysisProgress.setVisible(true);
                 }); 
             }

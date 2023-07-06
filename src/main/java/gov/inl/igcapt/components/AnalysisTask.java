@@ -64,6 +64,13 @@ import gov.inl.igcapt.view.IGCAPTgui;
             sgNodeList = new ArrayList<>(graph.getVertices());
             sgEdgeList = new ArrayList<>(graph.getEdges());
 
+            // Clear the node used list before an analysis.
+            for (var node : sgNodeList) {
+                if (node instanceof SgNode sgNode) {
+                    sgNode.setUsed(false);
+                }
+            }
+            
             int i = 0;
 
             firePropertyChange("status", "old", "Compiling endpoint pair list.");
@@ -140,84 +147,7 @@ import gov.inl.igcapt.view.IGCAPTgui;
             }
 
             if (_running) {
-//                int numExceptions = 0;
-
-//                analysisResults.append("Color Legend<br> High: &gt; <font size=\"+1\" color=\"red\"><b>"
-//                        + String.format("%.2f", SgEdge.getHighUtilizationLimit() * 100.0)
-//                        + "%</b></font>");
-//                analysisResults.append("   Medium: &gt; <font size=\"+1\" color=\"orange\"><b>"
-//                        + String.format("%.2f", SgEdge.getMediumUtilizationLimit() * 100.0)
-//                        + "%</b></font>");
-//                analysisResults.append("   Low: &gt; <font size=\"+1\" color=\"green\"><b>"
-//                        + "0.0"
-//                        + "%</b></font>");
-//                analysisResults.append("   Zero: = <font size=\"+1\" color=\"black\"><b>"
-//                        + "0.0"
-//                        + "%</b></font><br><br>");
-
-//                i = 0;
-//                for (SgEdge sgEdge : sgEdgeList) {
-//                    
-//                    edu.uci.ics.jung.graph.util.Pair<SgNodeInterface> endPts = graph.getEndpoints(sgEdge);
-//
-//                    if (endPts.getFirst() instanceof SgNode && endPts.getSecond() instanceof SgNode) {
-//
-//                        SgNode endPt1 = (SgNode) endPts.getFirst();
-//                        SgNode endPt2 = (SgNode) endPts.getSecond();
-//
-//                        if (sgEdge.isOverHighUtilizationLimit()) {
-//                            analysisResults.append("(" + endPt1.getName() + " - "
-//                                    + endPt2.getName()
-//                                    + ")/e" + sgEdge.getId()
-//                                    + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-//                                    + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-//                                    + ", Utilization = <font size=\"+1\" color=\"red\"><b>"
-//                                    + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-//                                    + "%</b></font><br>");
-//                            numExceptions++;
-//                        } else if (sgEdge.isOverMidUtilizationLimit()) {
-//                            analysisResults.append("(" + endPt1.getName() + " - "
-//                                    + endPt2.getName() + ")/e" + sgEdge.getId()
-//                                    + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-//                                    + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-//                                    + ", Utilization = <font size=\"+1\" color=\"orange\"><b>"
-//                                    + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-//                                    + "%</b></font><br>");
-//                            numExceptions++;
-//                        } else if (!sgEdge.isZeroUtilizationLimit()) {
-//                            if (IGCAPTgui.getInstance().isShowAllAnalysisResults()) { //Diagnostic output
-//                                analysisResults.append("(" + endPt1.getName() + " - "
-//                                        + endPt2.getName() + ")/e" + sgEdge.getId()
-//                                        + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-//                                        + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-//                                        + ", Utilization = <font size=\"+1\" color=\"green\"><b>"
-//                                        + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-//                                        + "%</b></font><br>");
-//                            }
-//                        } else {
-//                            if (IGCAPTgui.getInstance().isShowAllAnalysisResults()) { //Diagnostic output
-//                                analysisResults.append("(" + endPt1.getName() + " - "
-//                                        + endPt2.getName() + ")/e" + sgEdge.getId()
-//                                        + ", Network Capacity = " + String.format("%.3f", sgEdge.getEdgeRate())
-//                                        + ", Network Usage = " + String.format("%.3f", sgEdge.getCalcTransRate())
-//                                        + ", Utilization = <font size=\"+1\" color=\"black\"><b>"
-//                                        + String.format("%.2f", sgEdge.getUtilization() * 100.0)
-//                                        + "%</b></font><br>");
-//                            }
-//                        }
-//                    }
-//                }
                 Date endDate = new Date();
-
-//                analysisResults.append(numExceptions);
-//                analysisResults.append(" exceptions found.");
-//                analysisResults.append("<br>");
-
-//                JTextArea ta = new JTextArea(50, 100);
-//                ta.setWrapStyleWord(true);
-//                ta.setLineWrap(true);
-//                ta.setCaretPosition(0);
-//                ta.setEditable(false);
 
                 analysisResults.append("Analysis start time: ");
                 analysisResults.append(startDate.toString());
@@ -225,9 +155,9 @@ import gov.inl.igcapt.view.IGCAPTgui;
                 analysisResults.append(endDate.toString());
 
                 returnval = analysisResults.toString();
-//                ta.setText(returnval);
             }
 
+            GraphManager.getInstance().setAnalysisDirty(false);
             IGCAPTgui.getInstance().refresh();
 
             return returnval;

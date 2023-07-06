@@ -578,27 +578,24 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         
         // Labels Enabled
         final JCheckBox labelsCheckbox = new JCheckBox("Labels", false);
-        labelsCheckbox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (labelsCheckbox.isSelected()) {
-                    List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
-                    for(SgNodeInterface node: nodes){
-                        node.setRenderName(true);
-                    }
-                    
-                    GraphManager.getInstance().setFileDirty(true);
-
-                } else {
-                    List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
-                    for(SgNodeInterface node: nodes){
-                        node.setRenderName(false);
-                    }
-                    
-                    GraphManager.getInstance().setFileDirty(true);
+        labelsCheckbox.addActionListener((ActionEvent e) -> {
+            if (labelsCheckbox.isSelected()) {
+                List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+                for(SgNodeInterface node: nodes){
+                    node.setRenderName(true);
                 }
-                refresh();
+
+                GraphManager.getInstance().setFileDirty(true);
+                
+            } else {
+                List<SgNodeInterface> nodes = new ArrayList<>(GraphManager.getInstance().getGraph().getVertices());
+                for(SgNodeInterface node: nodes){
+                    node.setRenderName(false);
+                }
+                
+                GraphManager.getInstance().setFileDirty(true);
             }
+            refresh();
         });
 
         // Show All Analysis Results
