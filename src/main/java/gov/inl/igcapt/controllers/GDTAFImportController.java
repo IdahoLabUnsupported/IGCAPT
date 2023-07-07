@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.javatuples.Triplet;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 public class GDTAFImportController {
 
     private static final Logger logger = Logger.getLogger(GDTAFImportController.class.getName());
@@ -91,6 +92,37 @@ public class GDTAFImportController {
                     JOptionPane.WARNING_MESSAGE);
         }
     }
+    
+    private void centerDisplayOnObjects() {
+        GraphManager.getInstance().map().setDisplayPosition(new Coordinate(43.5203489, -112.0452956), 5);
+        
+        double aveLat = 0.0;
+        double aveLong = 0.0;
+        
+        var graph = GraphManager.getInstance().getOriginalGraph();
+        
+        if (graph != null) {
+            var vertices = graph.getVertices();
+            
+            int defZoomLevel = Integer.parseInt(IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.DEFAULT_ZOOM_LEVEL));
+            if (vertices != null && !vertices.isEmpty()) {
+                for (var node : vertices) {
+                    if (node instanceof SgNode sgNode) {
+                        aveLat += sgNode.getLat();
+                        aveLong += sgNode.getLongit();
+                    }
+                }
+                
+                aveLat /= vertices.size();
+                aveLong /= vertices.size();
+                
+                GraphManager.getInstance().map().setDisplayPosition(new Coordinate(aveLat, aveLong), defZoomLevel);
+            }
+            else {
+                GraphManager.getInstance().map().setDisplayPosition(new Coordinate(43.5203489, -112.0452956), defZoomLevel); // INL WCB
+            }
+        }
+    }
 
     public void applyGDTAFSelections() {
         try {
@@ -112,6 +144,7 @@ public class GDTAFImportController {
             addAssetsNotInvolvedInGUCS();
             
             IGCAPTgui.getInstance().graphChanged();
+            centerDisplayOnObjects();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

@@ -597,25 +597,10 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             }
             refresh();
         });
-
-        // Show All Analysis Results
-        final JCheckBox allAnalysisResultsCheckbox = new JCheckBox("Show All Analysis Results", false);
-        allAnalysisResultsCheckbox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (allAnalysisResultsCheckbox.isSelected()) {
-                    setShowAllAnalysisResults(true);
-                } else {
-                    setShowAllAnalysisResults(false);
-                }
-            }
-        });
-
+       
         JButton collapse = new JButton("Swap Graphs");
-        collapse.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-//                if (GraphManager.getInstance().getGraph() != originalGraph) {
+        collapse.addActionListener((ActionEvent e) -> {
+            //                if (GraphManager.getInstance().getGraph() != originalGraph) {
 //                    tempGraph = (SgGraph) GraphManager.getInstance().getLayout().getGraph();
 //                    GraphManager.getInstance().getLayout().setGraph(originalGraph);
 //                    collapse.setText("Swap Graphs");
@@ -624,8 +609,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
 //                    collapse.setText("Swap Graphs*");
 //                }
 
-                GraphManager.getInstance().getVisualizationViewer().repaint();
-            }
+GraphManager.getInstance().getVisualizationViewer().repaint();
         });
         collapse.setVisible(false);
 
@@ -650,7 +634,6 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         panelBottom.add(gisEnabled);
         panelBottom.add(toolTipsCheckbox);
         panelBottom.add(labelsCheckbox);
-        panelBottom.add(allAnalysisResultsCheckbox);
         panelBottom.add(collapse);
         panelBottom.add(expand);
 

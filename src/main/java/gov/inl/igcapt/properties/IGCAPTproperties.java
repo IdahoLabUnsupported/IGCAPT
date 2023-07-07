@@ -40,7 +40,8 @@ public final class IGCAPTproperties implements Serializable {
         SG_USE_CASE_FILE,
         UNKNOWN_NODE_ICON,
         UTILIZATION_HIGH_LIMIT,
-        UTILIZATION_MEDIUM_LIMIT
+        UTILIZATION_MEDIUM_LIMIT,
+        DEFAULT_ZOOM_LEVEL
     }
 
     /**
@@ -164,6 +165,9 @@ public final class IGCAPTproperties implements Serializable {
                 break;
             case UTILIZATION_MEDIUM_LIMIT:
                 keyString = "utilizationMediumLimit";
+                break;
+            case DEFAULT_ZOOM_LEVEL:
+                keyString = "defaultZoomLevel";
                 break;
         }
     
