@@ -44,8 +44,7 @@ public class ImportGdtafScenario extends javax.swing.JDialog {
     
     public void prepareForm(String fileToImport) {
         jTextField1.setText(fileToImport);
-        //m_gdtafController.readGDTAFScenarioFile(fileToImport);
-        //initScenarioList();
+        prepareToReadGDTAFScenarioFile();
     }
 
     /**
