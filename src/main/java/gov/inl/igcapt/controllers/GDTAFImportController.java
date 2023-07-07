@@ -105,6 +105,7 @@ public class GDTAFImportController {
             var vertices = graph.getVertices();
             
             int defZoomLevel = Integer.parseInt(IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.DEFAULT_ZOOM_LEVEL, String.valueOf(14)));
+
             if (vertices != null && !vertices.isEmpty()) {
                 for (var node : vertices) {
                     if (node instanceof SgNode sgNode) {
