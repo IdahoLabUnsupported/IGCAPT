@@ -176,9 +176,27 @@ public final class IGCAPTproperties implements Serializable {
 
     /**
      * Get a Key-Value pair from the current Properties
+     * @param key
+     * @return 
      */
     public String getPropertyKeyValue(IgcaptProperty key) {
         return properties.getProperty(convertKeyToString(key));
+    }
+
+    /**
+     * Get a Key-Value pair from the current Properties
+     * @param key
+     * @param defaultValue If the key does not exist, add it and set it to the defaultValue
+     * @return 
+     */
+    public String getPropertyKeyValue(IgcaptProperty key, String defaultValue) {
+        
+        String returnval = properties.getProperty(convertKeyToString(key));
+        if (returnval == null || returnval.isBlank()) {
+            returnval = defaultValue;
+            setPropertyKeyValue(key, defaultValue);
+        }
+        return returnval;
     }
 
     /**
