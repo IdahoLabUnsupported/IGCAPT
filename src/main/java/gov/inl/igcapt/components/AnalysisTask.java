@@ -4,6 +4,8 @@
  */
 package gov.inl.igcapt.components;
 
+import edu.uci.ics.jung.algorithms.shortestpath.ShortestPathUtils;
+import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
@@ -26,7 +28,6 @@ import java.util.stream.Collectors;
 
         private Graph<SgNodeInterface, SgEdge> _graph;
         private static volatile boolean _running = true;
-        private static volatile int depth = 0;
 
         public AnalysisTask(Graph<SgNodeInterface, SgEdge> graph) {
             _graph = graph;
@@ -110,8 +111,7 @@ import java.util.stream.Collectors;
                     }
                     setProgress(50 + 50 * i++ / analyzeList.size());
 
-                    depth = 0;
-                    paths = getNodePaths(graph, pair.first, pair.second, true);
+                    paths = getNewNodePaths(graph, pair.first, pair.second, true);
 
                     double ackPayload = Double.parseDouble(IGCAPTproperties.getInstance().getPropertyKeyValue(IgcaptProperty.ACK_SIZE));
                     
@@ -174,12 +174,31 @@ import java.util.stream.Collectors;
 
              return returnval;
         }
+        
+        public static List<List<Integer>> getNewNodePaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
+           
+            List<List<Integer>> returnval = new ArrayList<>();
+            
+            UnweightedShortestPath uwsp = new UnweightedShortestPath(GraphManager.getInstance().getOriginalGraph());
+            //var result = uwsp.getDistance(fromNode, toNode);
+            
+            var spl = ShortestPathUtils.getPath(GraphManager.getInstance().getOriginalGraph(), uwsp, fromNode, toNode);
+ 
+            List<Integer> edgeList = new ArrayList<>();
+
+            for (var element : spl) {
+                edgeList.add(((SgEdge)element).getId());
+            }
+            
+            returnval.add(edgeList);
+            
+            return returnval;
+        }
 
         public static List<List<Integer>> getNodePaths(Graph graph, SgNode fromNode, SgNode toNode, boolean isSender) {
             List<List<Integer>> returnval = new ArrayList<>();
             
             //System.out.println("From: " + fromNode.getName() + " To: " + toNode.getName());
-            System.out.println("Depth: " + depth++);
             SgNode currentNode;
             
             if (!_running) {
@@ -247,7 +266,6 @@ import java.util.stream.Collectors;
                 }
                 currentNode.setUsed(false); // Return it to the pool, just need to make sure it does not loop back downstream
             }
-            depth--;
             return returnval;
         }
     }

@@ -144,7 +144,7 @@ public class ResultsDialog extends javax.swing.JDialog {
     private void SetColumnWidth(int column, int width) {
                 
         var columnModel = resultsTable.getColumnModel();
-        columnModel.getColumn(column).setMaxWidth(width);
+        columnModel.getColumn(column).setMaxWidth(2*width);
         columnModel.getColumn(column).setMinWidth(width);
         columnModel.getColumn(column).setPreferredWidth(width);
     }
@@ -166,7 +166,6 @@ public class ResultsDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Analysis Results");
         setAlwaysOnTop(true);
-        setResizable(false);
 
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
