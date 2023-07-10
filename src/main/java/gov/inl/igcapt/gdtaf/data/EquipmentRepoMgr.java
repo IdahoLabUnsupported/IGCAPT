@@ -205,7 +205,7 @@ public class EquipmentRepoMgr {
                 }
             }
         }
-        return 0;
+        return -1;
     }
 
     public int getActualCapex(String equipUUID){
@@ -226,11 +226,11 @@ public class EquipmentRepoMgr {
                 }
             }
         }
-        return 0;
+        return -1;
     }
 
     public int getProjectedOpexPerYear(String equipUUID){
-        int opexValue = 0;
+        int opexValue = -1;
         int everyValue = 1;
         int conversion = 1;
         String everyUnits = "year";
@@ -281,7 +281,7 @@ public class EquipmentRepoMgr {
     }
 
     public int getActualOpexPerYear(String equipUUID){
-        int opexValue = 0;
+        int opexValue = -1;
         int everyValue = 1;
         int conversion = 1;
         String everyUnits = "year";
