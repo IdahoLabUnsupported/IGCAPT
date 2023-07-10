@@ -2,10 +2,7 @@
 package gov.inl.igcapt.controllers;
 
 import edu.uci.ics.jung.graph.Graph;
-import gov.inl.igcapt.components.DataModels.ComponentDao;
-import gov.inl.igcapt.components.DataModels.SgComponentData;
-import gov.inl.igcapt.components.DataModels.SgField;
-import gov.inl.igcapt.components.DataModels.SgUseCase;
+import gov.inl.igcapt.components.DataModels.*;
 import gov.inl.igcapt.gdtaf.data.*;
 import gov.inl.igcapt.gdtaf.model.*;
 import gov.inl.igcapt.graph.GraphManager;
@@ -364,8 +361,45 @@ public class GDTAFImportController {
             //need to clear the list ahead of the next opObj
             solnAssetUUIDList.clear();
         }
+        for(Map.Entry<String, SgNode> entry : m_assetGuidToNodeMap.entrySet()){
+            setCapexAttributes(entry);
+            setOpexAttributes(entry);
+        }
     }
 
+    private void setCapexAttributes(Map.Entry<String, SgNode> entry){
+        SgNode node = entry.getValue();
+        SgComponentData comp_data = node.getAssociatedComponent();
+        SolutionAsset solnAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(entry.getKey());
+        String equipUuidStr = solnAsset.getEquipment();
+        var projCapEx = EquipmentRepoMgr.getInstance().getProjectedCapex(equipUuidStr);
+        var actualCapEx = EquipmentRepoMgr.getInstance().getActualCapex(equipUuidStr);
+        if(projCapEx >= 0){
+            SgAttribute projCapexAttr = new SgAttribute("CAPEX_PROJECTED", projCapEx);
+            comp_data.addAttribute(projCapexAttr);
+        }
+        if(actualCapEx >= 0){
+            SgAttribute actCapexAttr = new SgAttribute("CAPEX_ACTUAL", actualCapEx);
+            comp_data.addAttribute(actCapexAttr);
+        }
+    }
+
+    private void setOpexAttributes(Map.Entry<String, SgNode> entry){
+        SgNode node = entry.getValue();
+        SgComponentData comp_data = node.getAssociatedComponent();
+        SolutionAsset solnAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(entry.getKey());
+        String equipUuidStr = solnAsset.getEquipment();
+        var projOpEx = EquipmentRepoMgr.getInstance().getProjectedOpexPerYear(equipUuidStr);
+        var actualOpEx = EquipmentRepoMgr.getInstance().getActualOpexPerYear(equipUuidStr);
+        if(projOpEx >= 0){
+            SgAttribute projOpexAttr = new SgAttribute("OPEX_PROJECTED", projOpEx);
+            comp_data.addAttribute(projOpexAttr);
+        }
+        if(actualOpEx >= 0){
+            SgAttribute actualOpexAttr = new SgAttribute("OPEX_ACTUAL", actualOpEx);
+            comp_data.addAttribute(actualOpexAttr);
+        }
+    }
 
     // This method  looks through the solution assets that have the equipment association of the
     //uuid parameter directly, or Solution Assets that have an equipment association that is derived
@@ -499,7 +533,7 @@ public class GDTAFImportController {
                     Equipment equipmentInstance = EquipmentRepoMgr.getInstance().getEquip(equipmentId);
 
                     if (equipmentInstance != null) {
-                        System.out.println(equipmentInstance.getName() + ": " + EquipmentRepoMgr.getInstance().getActualOpexPerYear(equipmentInstance.getUUID()));
+                       // System.out.println(equipmentInstance.getName() + ": " + EquipmentRepoMgr.getInstance().getActualOpexPerYear(equipmentInstance.getUUID()));
                         var equipInstanceIgcaptCompData =
                             IGCAPTgui.getComponentByUuid(EquipmentRepoMgr.getInstance().getICAPTComponentUUID(equipmentInstance.getUUID()));
                         int nodeId = GraphManager.getInstance().getNextNodeIndex();
