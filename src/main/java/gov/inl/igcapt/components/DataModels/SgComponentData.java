@@ -86,31 +86,37 @@ public class SgComponentData implements BaseModel {
         // Removes only if its already there to allow for updates
         Iterator<SgField> it = fields.iterator();
         while(it.hasNext()){
-            if(it.getClass().getName().equals(field.getName())){
+            SgField fld = it.next();
+            if(fld.getName().equals(field.getName())){
                 it.remove();
             }
-            it.next();
         }
         fields = getFields();
         fields.add(field);
     }
     
     public List<SgAttribute> getAttributes() { return attributes != null? attributes: new ArrayList<>(); }
+    
     public void setAttributes(List<SgAttribute> attributes) {
         this.attributes = attributes;
     }
-    public void addAttribute(SgAttribute attribute) {
+    public boolean addAttribute(SgAttribute attribute) {
+        boolean found = false;
         attributes = getAttributes();
-        // Removes only if its already there to allow for updates
-        Iterator<SgAttribute> it = attributes.iterator();
-        while(it.hasNext()){
-            if(it.getClass().getName().equals(attribute.getName())){
-                it.remove();
-            }
-            it.next();
+        if(attributes.contains(attribute)) { 
+            found = true; 
         }
-        attributes = getAttributes();
+        for (var attr : attributes) {
+            if (attr.getName().equals(attribute.getName())) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            return true;
+        }
         attributes.add(attribute);
+        return false;
     }
 
     public List<SgUseCase> getUsecases() { return usecases != null? usecases: new ArrayList<>(); }
