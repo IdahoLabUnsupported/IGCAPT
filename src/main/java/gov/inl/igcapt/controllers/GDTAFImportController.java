@@ -37,6 +37,7 @@ public class GDTAFImportController {
     private gov.inl.igcapt.gdtaf.model.GDTAF m_gdtafData = null;
     private static GDTAFImportController m_importController = null;
     private ComponentDao m_componentDao = new ComponentDao();
+   
 
     private GDTAFImportController() {
 
@@ -362,44 +363,54 @@ public class GDTAFImportController {
             solnAssetUUIDList.clear();
         }
         for(Map.Entry<String, SgNode> entry : m_assetGuidToNodeMap.entrySet()){
-            setCapexAttributes(entry);
-            setOpexAttributes(entry);
+            setAttributes(entry);
         }
     }
-
-    private void setCapexAttributes(Map.Entry<String, SgNode> entry){
+    
+    private void setAttributes(Map.Entry<String, SgNode> entry){
         SgNode node = entry.getValue();
         SgComponentData comp_data = node.getAssociatedComponent();
         SolutionAsset solnAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(entry.getKey());
         String equipUuidStr = solnAsset.getEquipment();
         var projCapEx = EquipmentRepoMgr.getInstance().getProjectedCapex(equipUuidStr);
         var actualCapEx = EquipmentRepoMgr.getInstance().getActualCapex(equipUuidStr);
+        boolean saveNeeded = true;
+        boolean found = false;
         if(projCapEx >= 0){
             SgAttribute projCapexAttr = new SgAttribute("CAPEX_PROJECTED", projCapEx);
-            comp_data.addAttribute(projCapexAttr);
+            found = comp_data.addAttribute(projCapexAttr);
+            if (found) {
+                saveNeeded = false;
+            }
         }
         if(actualCapEx >= 0){
             SgAttribute actCapexAttr = new SgAttribute("CAPEX_ACTUAL", actualCapEx);
-            comp_data.addAttribute(actCapexAttr);
+            found = comp_data.addAttribute(actCapexAttr);
+            if (found) {
+                saveNeeded = false;
+            }
         }
-    }
-
-    private void setOpexAttributes(Map.Entry<String, SgNode> entry){
-        SgNode node = entry.getValue();
-        SgComponentData comp_data = node.getAssociatedComponent();
-        SolutionAsset solnAsset = GDTAFScenarioMgr.getInstance().findSolutionAsset(entry.getKey());
-        String equipUuidStr = solnAsset.getEquipment();
         var projOpEx = EquipmentRepoMgr.getInstance().getProjectedOpexPerYear(equipUuidStr);
         var actualOpEx = EquipmentRepoMgr.getInstance().getActualOpexPerYear(equipUuidStr);
         if(projOpEx >= 0){
             SgAttribute projOpexAttr = new SgAttribute("OPEX_PROJECTED", projOpEx);
             comp_data.addAttribute(projOpexAttr);
+            if (found) {
+                saveNeeded = false;
+            }
         }
         if(actualOpEx >= 0){
             SgAttribute actualOpexAttr = new SgAttribute("OPEX_ACTUAL", actualOpEx);
             comp_data.addAttribute(actualOpexAttr);
+            
+            if (found) {
+                saveNeeded = false;
+            }
         }
-    }
+        if (saveNeeded) {
+            m_componentDao.saveComponent(comp_data);
+        }
+    }    
 
     // This method  looks through the solution assets that have the equipment association of the
     //uuid parameter directly, or Solution Assets that have an equipment association that is derived
