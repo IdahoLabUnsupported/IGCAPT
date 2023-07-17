@@ -1013,6 +1013,7 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
         JMenu analysisMenu = new JMenu("Analysis");
         JMenuItem applyPayloadItem;
         JMenuItem analyzeTopologyItem;
+        JMenuItem costAnalysisItem;
         JMenuItem importResultsItem;
         JMenuItem showHeatmapItem;
         JMenuItem clearHeatmapItem;
@@ -1022,6 +1023,7 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
         analysisMenu.add(editThreshold);
         analysisMenu.add(applyPayloadItem = new AddApplyPayloadMenuItem());
         analysisMenu.add(analyzeTopologyItem = new AddAnalyzeTopologyMenuItem());
+        analysisMenu.add(costAnalysisItem = new AddCostAnalysisMenuItem());
         analysisMenu.add(importResultsItem = new AddImportNs3ResultsMenuItem());
         analysisMenu.add(new AddClearAnalysisResultsMenuItem());
         analysisMenu.add(new JSeparator()); // SEPARATOR
@@ -1034,6 +1036,7 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
 
                 boolean isGraphPresent = GraphManager.getInstance().getOriginalGraph().getVertexCount() > 0;
                 analyzeTopologyItem.setEnabled(isGraphPresent);
+                costAnalysisItem.setEnabled(isGraphPresent);
                 applyPayloadItem.setEnabled(isGraphPresent);
                 importResultsItem.setEnabled(isGraphPresent);
                 showHeatmapItem.setEnabled(isGraphPresent);

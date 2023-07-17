@@ -42,7 +42,6 @@ public class AddApplyPayloadMenuItem extends JMenuItem {
                     
                     // Apply the payload
                     IGCAPTgui.getInstance().applyPayload();
-                    //hello
                 }
             }
         });            
