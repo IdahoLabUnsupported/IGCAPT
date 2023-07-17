@@ -11,8 +11,15 @@ public class CostAnalysisEntry {
     public CostAnalysisEntry(String componentName){
         m_componentName = componentName;
         m_quantity = 0;
+        m_capex_unit_actual = -1;
+        m_opex_unit_actual = -1;
+        m_capex_unit_projected = -1;
+        m_opex_unit_projected = -1;
     }
 
+    public String getComponentName(){
+        return m_componentName;
+    }
     public void addEntry(){
         m_quantity++;
     }
