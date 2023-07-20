@@ -85,7 +85,7 @@ import java.util.*;
         timestampStr.append("\nAnalysis end time: ");
         timestampStr.append(endDate);
         
-        var costAnalysisResults = new CostResultsDialog(IGCAPTgui.getInstance(), true);
+        var costAnalysisResults = new CostResultsDialog(IGCAPTgui.getInstance(), false);
         costAnalysisResults.UpdateResults(timestampStr.toString(), reportData);
         costAnalysisResults.setVisible(true);
 

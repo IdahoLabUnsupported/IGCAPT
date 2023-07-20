@@ -4,21 +4,14 @@
  */
 package gov.inl.igcapt.components;
 
-import edu.uci.ics.jung.graph.Graph;
-import gov.inl.igcapt.graph.GraphManager;
-import gov.inl.igcapt.graph.SgEdge;
-import gov.inl.igcapt.graph.SgNodeInterface;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.util.ArrayList;
-import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -35,34 +28,22 @@ public class CostResultsDialog extends javax.swing.JDialog {
 
             Component c = super.getTableCellRendererComponent(table, value,
                      isSelected, hasFocus, row, col);
-//            Object valueAt = table.getModel().getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
-//
-//            if (col == table.getColumnCount() - 1) {
-//                
-//                if (valueAt instanceof Double cellValueD) {
-//                    
-//                    if (SgEdge.getHighUtilizationLimit() <= cellValueD) {
-//                        c.setForeground(Color.RED);
-//                        c.setBackground(Color.WHITE);                        
-//                    }
-//                    else if (SgEdge.getMediumUtilizationLimit() <= cellValueD) {
-//                        c.setForeground(Color.ORANGE);
-//                        c.setBackground(Color.WHITE);      
-//                    }
-//                    else if (cellValueD > 0.0f) {
-//                        c.setForeground(Color.GREEN);
-//                        c.setBackground(Color.WHITE);      
-//                    }
-//                    else {
-//                        c.setForeground(Color.BLACK);
-//                        c.setBackground(Color.WHITE);                
-//                    }
-//                }
-//            }
-//            else {
-//                c.setForeground(Color.BLACK);
-//                c.setBackground(Color.WHITE);                
-//            }
+            //Object valueAt = table.getModel().getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
+
+            // Right justify all number columns
+            if (col > 0) {
+                
+            }
+            
+            // The last row/col will contain the sum of the cost. Highlight it.
+            if (col == table.getColumnCount() - 1 && row == table.getRowCount() - 1) {
+                
+                c.setFont(this.getFont().deriveFont(Font.BOLD));
+            }
+            else {
+                c.setForeground(Color.BLACK);
+                c.setBackground(Color.WHITE);                
+            }
 
             return c;
         }       
@@ -80,15 +61,13 @@ public class CostResultsDialog extends javax.swing.JDialog {
         SetColumnWidth(1, 130);
         SetColumnWidth(2, 130);
         SetColumnWidth(3, 190);
-        
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(resultsTable.getModel());
-        resultsTable.setRowSorter(sorter);
-        
-//        List<RowSorter.SortKey> sortKeys = new ArrayList<>(4);
-//        sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING));
-//        sorter.setSortKeys(sortKeys);
-        
-        resultsTable.setDefaultRenderer(Double.class, new TableCellRenderer());
+                
+        var tableCellRenderer = new TableCellRenderer();
+        tableCellRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        resultsTable.setDefaultRenderer(String.class, tableCellRenderer);
+        tableCellRenderer = new TableCellRenderer();
+        tableCellRenderer.setHorizontalAlignment(JLabel.LEFT);
+        resultsTable.getColumnModel().getColumn(0).setCellRenderer(tableCellRenderer);
     }
 
     public void UpdateResults(String analysisTimeStr, ArrayList<CostAnalysisEntry> resultsData){
@@ -107,12 +86,22 @@ public class CostResultsDialog extends javax.swing.JDialog {
                 tableModel.removeRow(i);
             }
         
+            int costSum = 0;
+            
             // Iterate through the results
             for (var resultEntry : resultsData) {
-                    
-                Object[] rowData = {resultEntry.getComponentName(), resultEntry.getQuantity(), resultEntry.getCapexUnitActual(), resultEntry.getCapexActualTotal()};
+                
+                costSum += resultEntry.getCapexActualTotal();
+                String quantityStr = Integer.toString(resultEntry.getQuantity());
+                String unitCostStr = "$" + resultEntry.getCapexUnitActual() + ".00";
+                String extCostStr = "$" + resultEntry.getCapexActualTotal() + ".00";
+                Object[] rowData = {resultEntry.getComponentName(), unitCostStr, quantityStr, extCostStr};
                 tableModel.addRow(rowData);
             }
+            
+            Object[] rowData = {null, null, "Total", "$" + costSum + ".00"};
+            tableModel.addRow(rowData);
+
         }
     }
     private void SetColumnWidth(int column, int width) {
@@ -138,7 +127,7 @@ public class CostResultsDialog extends javax.swing.JDialog {
         analysisTimeTxt = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Analysis Results");
+        setTitle("Cost Analysis Results");
         setAlwaysOnTop(true);
 
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -164,6 +153,7 @@ public class CostResultsDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        resultsTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         resultsTable.setInheritsPopupMenu(true);
         resultsTable.setName("costResultsTable"); // NOI18N
         resultsTable.setShowGrid(true);
@@ -198,6 +188,8 @@ public class CostResultsDialog extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleName("costAnalysisResults");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
