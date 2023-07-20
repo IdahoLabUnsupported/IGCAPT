@@ -30,10 +30,10 @@ import java.util.*;
 
     private ArrayList<SgNodeInterface> sgNodeList = null;
 
-    public String analyze(Graph graph) {
+    public void analyze() {
 
         Date startDate = new Date();
-        sgNodeList = new ArrayList<>(graph.getVertices());
+        sgNodeList = new ArrayList<>(_graph.getVertices());
         Map<String, CostAnalysisEntry> m_costReportData = new HashMap<>();
         for (SgNodeInterface sgAbstractNode : sgNodeList) {
 
@@ -64,27 +64,32 @@ import java.util.*;
                 entry.getValue().getCapexProjectedTotal() >= 0 ||
                 entry.getValue().getOpexActualTotal() >= 0 ||
                 entry.getValue().getOpexProjectedTotal() >= 0){
-                System.out.println(entry.getValue().getComponentName() + ":");
-                System.out.println("\t Quantity: " + entry.getValue().getQuantity());
-                System.out.println("\t Capex/unit actual: " + entry.getValue().getCapexUnitActual());
-                System.out.println("\t Capex Total: " + entry.getValue().getCapexActualTotal());
+//                System.out.println(entry.getValue().getComponentName() + ":");
+//                System.out.println("\t Quantity: " + entry.getValue().getQuantity());
+//                System.out.println("\t Capex/unit actual: " + entry.getValue().getCapexUnitActual());
+//                System.out.println("\t Capex Total: " + entry.getValue().getCapexActualTotal());
                 reportData.add(entry.getValue());
             }
         }
 
         Date endDate = new Date();
         timestampStr = new StringBuilder();
+        timestampStr.append("Scenario: ");
         timestampStr.append(GDTAFScenarioMgr.getInstance().getActiveScenario().getName());
+        timestampStr.append("\nSolution: ");
         timestampStr.append(GDTAFScenarioMgr.getInstance().getActiveSolution().getName());
+        timestampStr.append("\nSolution Option: ");
         timestampStr.append(GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getName());
-        timestampStr.append("Analysis start time: ");
+        timestampStr.append("\nAnalysis start time: ");
         timestampStr.append(startDate);
         timestampStr.append("\nAnalysis end time: ");
         timestampStr.append(endDate);
+        
+        var costAnalysisResults = new CostResultsDialog(IGCAPTgui.getInstance(), true);
+        costAnalysisResults.UpdateResults(timestampStr.toString(), reportData);
+        costAnalysisResults.setVisible(true);
 
         GraphManager.getInstance().setAnalysisDirty(false);
         IGCAPTgui.getInstance().refresh();
-
-        return timestampStr.toString();
     }
 }
