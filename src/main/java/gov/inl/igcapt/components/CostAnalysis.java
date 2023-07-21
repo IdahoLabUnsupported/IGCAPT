@@ -62,12 +62,9 @@ import java.util.*;
         for (var entry: m_costReportData.entrySet()){
             if( entry.getValue().getCapexActualTotal() >= 0 ||
                 entry.getValue().getCapexProjectedTotal() >= 0 ||
-                entry.getValue().getOpexActualTotal() >= 0 ||
-                entry.getValue().getOpexProjectedTotal() >= 0){
-//                System.out.println(entry.getValue().getComponentName() + ":");
-//                System.out.println("\t Quantity: " + entry.getValue().getQuantity());
-//                System.out.println("\t Capex/unit actual: " + entry.getValue().getCapexUnitActual());
-//                System.out.println("\t Capex Total: " + entry.getValue().getCapexActualTotal());
+                entry.getValue().getOpexPerYearActualTotal() >= 0 ||
+                entry.getValue().getOpexPerYearProjectedTotal() >= 0){
+
                 reportData.add(entry.getValue());
             }
         }

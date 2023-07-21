@@ -52,11 +52,11 @@ public class CostAnalysisEntry {
         return m_capex_unit_actual;
     }
 
-    public int getOpexUnitProjected(){
+    public int getOpexPerYearUnitProjected(){
         return m_opex_unit_projected;
     }
 
-    public int getOpexUnitActual(){
+    public int getOpexPerYearUnitActual(){
         return m_opex_unit_actual;
     }
 
@@ -68,11 +68,11 @@ public class CostAnalysisEntry {
         return m_quantity * m_capex_unit_actual;
     }
 
-    public int getOpexProjectedTotal(){
+    public int getOpexPerYearProjectedTotal(){
         return m_quantity * m_opex_unit_projected;
     }
 
-    public int getOpexActualTotal(){
+    public int getOpexPerYearActualTotal(){
         return m_quantity * m_opex_unit_actual;
     }
 }

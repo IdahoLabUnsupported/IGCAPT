@@ -4,7 +4,6 @@
  */
 package gov.inl.igcapt.components;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -29,20 +28,11 @@ public class CostResultsDialog extends javax.swing.JDialog {
             Component c = super.getTableCellRendererComponent(table, value,
                      isSelected, hasFocus, row, col);
             //Object valueAt = table.getModel().getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
-
-            // Right justify all number columns
-            if (col > 0) {
-                
-            }
             
             // The last row/col will contain the sum of the cost. Highlight it.
-            if (col == table.getColumnCount() - 1 && row == table.getRowCount() - 1) {
+            if ((col == 3 || col == 5 || col == 7 || col == 9) && row == table.getRowCount() - 1) {
                 
                 c.setFont(this.getFont().deriveFont(Font.BOLD));
-            }
-            else {
-                c.setForeground(Color.BLACK);
-                c.setBackground(Color.WHITE);                
             }
 
             return c;
@@ -57,17 +47,33 @@ public class CostResultsDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        SetColumnWidth(0, 115);
-        SetColumnWidth(1, 130);
-        SetColumnWidth(2, 130);
-        SetColumnWidth(3, 190);
-                
+        SetColumnWidth(0, 100);
+        SetColumnWidth(1, 50);
+        SetColumnWidth(2, 100);
+        SetColumnWidth(3, 100);
+        SetColumnWidth(4, 100);
+        SetColumnWidth(5, 100);
+        SetColumnWidth(6, 100);
+        SetColumnWidth(7, 100);
+        SetColumnWidth(8, 100);
+        SetColumnWidth(9, 100);
+                  
         var tableCellRenderer = new TableCellRenderer();
         tableCellRenderer.setHorizontalAlignment(JLabel.RIGHT);
         resultsTable.setDefaultRenderer(String.class, tableCellRenderer);
         tableCellRenderer = new TableCellRenderer();
         tableCellRenderer.setHorizontalAlignment(JLabel.LEFT);
         resultsTable.getColumnModel().getColumn(0).setCellRenderer(tableCellRenderer);
+    }
+    
+    private int ZeroIfNegative(int value) {
+        int returnval = value;
+        
+        if (value < 0) {
+            returnval = 0;
+        }
+        
+        return returnval;
     }
 
     public void UpdateResults(String analysisTimeStr, ArrayList<CostAnalysisEntry> resultsData){
@@ -86,20 +92,36 @@ public class CostResultsDialog extends javax.swing.JDialog {
                 tableModel.removeRow(i);
             }
         
-            int costSum = 0;
+            int capexProjectedCostSum = 0;
+            int capexActualCostSum = 0;
+            int opexProjectedCostSum = 0;
+            int opexActualCostSum = 0;
             
             // Iterate through the results
             for (var resultEntry : resultsData) {
                 
-                costSum += resultEntry.getCapexActualTotal();
+                capexProjectedCostSum += ZeroIfNegative(resultEntry.getCapexProjectedTotal());
+                capexActualCostSum += ZeroIfNegative(resultEntry.getCapexActualTotal());
+                opexProjectedCostSum += ZeroIfNegative(resultEntry.getOpexPerYearProjectedTotal());
+                opexActualCostSum += ZeroIfNegative(resultEntry.getOpexPerYearActualTotal());
                 String quantityStr = Integer.toString(resultEntry.getQuantity());
-                String unitCostStr = "$" + resultEntry.getCapexUnitActual() + ".00";
-                String extCostStr = "$" + resultEntry.getCapexActualTotal() + ".00";
-                Object[] rowData = {resultEntry.getComponentName(), unitCostStr, quantityStr, extCostStr};
+                String capexUnitProjected = "$" + ZeroIfNegative(resultEntry.getCapexUnitProjected()) + ".00";
+                String capexProjectedTotal = "$" + ZeroIfNegative(resultEntry.getCapexProjectedTotal()) + ".00";
+                String capexUnitActual = "$" + ZeroIfNegative(resultEntry.getCapexUnitActual()) + ".00";
+                String capexActualTotal = "$" + ZeroIfNegative(resultEntry.getCapexActualTotal()) + ".00";
+                String opexUnitProjected = "$" + ZeroIfNegative(resultEntry.getOpexPerYearUnitProjected()) + ".00";
+                String opexProjectedTotal = "$" + ZeroIfNegative(resultEntry.getOpexPerYearProjectedTotal()) + ".00";
+                String opexUnitActual = "$" + ZeroIfNegative(resultEntry.getOpexPerYearUnitActual()) + ".00";
+                String opexActualTotal = "$" + ZeroIfNegative(resultEntry.getOpexPerYearActualTotal()) + ".00";
+                Object[] rowData = {resultEntry.getComponentName(), quantityStr, capexUnitProjected, capexProjectedTotal,
+                                                                                 capexUnitActual, capexActualTotal,
+                                                                                 opexUnitProjected, opexProjectedTotal,
+                                                                                 opexUnitActual, opexActualTotal};
                 tableModel.addRow(rowData);
             }
             
-            Object[] rowData = {null, null, "Total", "$" + costSum + ".00"};
+            Object[] rowData = {null, null, "Total", "$" + capexProjectedCostSum + ".00", null,
+                "$" + capexActualCostSum + ".00", null, "$" + opexProjectedCostSum + ".00", null, "$" + opexActualCostSum + ".00"};
             tableModel.addRow(rowData);
 
         }
@@ -135,14 +157,14 @@ public class CostResultsDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Component Type", "Unit Cost", "Quantity", "Extended Cost"
+                "Component Type", "Quantity", "CAPEX Projected Unit Cost", "CAPEX Projected Total", "CAPEX Actual Unit Cost", "CAPEX Actual Total", "OPEX Projected Unit Cost Per Year", "OPEX Projected Total Per Year", "OPEX Actual Unit Cost Per Year", "OPEX Actual Total Per Year"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -185,8 +207,8 @@ public class CostResultsDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         getAccessibleContext().setAccessibleName("costAnalysisResults");
