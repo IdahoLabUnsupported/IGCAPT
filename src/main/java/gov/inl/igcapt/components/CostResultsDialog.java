@@ -150,14 +150,13 @@ public class CostResultsDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cost Analysis Results");
-        setAlwaysOnTop(true);
 
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Component Type", "Quantity", "CAPEX Projected Unit Cost", "CAPEX Projected Total", "CAPEX Actual Unit Cost", "CAPEX Actual Total", "OPEX Projected Unit Cost Per Year", "OPEX Projected Total Per Year", "OPEX Actual Unit Cost Per Year", "OPEX Actual Total Per Year"
+                "Component Type", "Quantity", "CAPEX Estimated Unit Cost", "CAPEX Estimated Total", "CAPEX Actual Unit Cost", "CAPEX Actual Total", "OPEX Estimated Unit Cost Per Year", "OPEX Estimated Total Per Year", "OPEX Actual Unit Cost Per Year", "OPEX Actual Total Per Year"
             }
         ) {
             Class[] types = new Class [] {
@@ -232,29 +231,23 @@ public class CostResultsDialog extends javax.swing.JDialog {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ResultsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ResultsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ResultsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ResultsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CostResultsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ResultsDialog dialog = new ResultsDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            ResultsDialog dialog = new ResultsDialog(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         });
     }
 

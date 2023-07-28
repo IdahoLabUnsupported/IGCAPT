@@ -4,7 +4,6 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Cost Analysis Results"/>
-    <Property name="alwaysOnTop" type="boolean" value="true"/>
   </Properties>
   <AccessibilityProperties>
     <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="costAnalysisResults"/>
@@ -67,12 +66,12 @@
               <Table columnCount="10" rowCount="0">
                 <Column editable="false" title="Component Type" type="java.lang.String"/>
                 <Column editable="false" title="Quantity" type="java.lang.String"/>
-                <Column editable="false" title="CAPEX Projected Unit Cost" type="java.lang.String"/>
-                <Column editable="false" title="CAPEX Projected Total" type="java.lang.String"/>
+                <Column editable="false" title="CAPEX Estimated Unit Cost" type="java.lang.String"/>
+                <Column editable="false" title="CAPEX Estimated Total" type="java.lang.String"/>
                 <Column editable="false" title="CAPEX Actual Unit Cost" type="java.lang.String"/>
                 <Column editable="false" title="CAPEX Actual Total" type="java.lang.String"/>
-                <Column editable="false" title="OPEX Projected Unit Cost Per Year" type="java.lang.String"/>
-                <Column editable="false" title="OPEX Projected Total Per Year" type="java.lang.String"/>
+                <Column editable="false" title="OPEX Estimated Unit Cost Per Year" type="java.lang.String"/>
+                <Column editable="false" title="OPEX Estimated Total Per Year" type="java.lang.String"/>
                 <Column editable="false" title="OPEX Actual Unit Cost Per Year" type="java.lang.String"/>
                 <Column editable="false" title="OPEX Actual Total Per Year" type="java.lang.String"/>
               </Table>

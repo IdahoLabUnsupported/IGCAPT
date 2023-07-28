@@ -7,6 +7,7 @@ package gov.inl.igcapt.components;
 import edu.uci.ics.jung.algorithms.shortestpath.ShortestPathUtils;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.graph.Graph;
+import gov.inl.igcapt.gdtaf.data.GDTAFScenarioMgr;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
@@ -161,7 +162,13 @@ import java.util.stream.Collectors;
             if (_running) {
                 Date endDate = new Date();
 
-                analysisResults.append("Analysis start time: ");
+                analysisResults.append("Scenario: ");
+                analysisResults.append(GDTAFScenarioMgr.getInstance().getActiveScenario().getName());
+                analysisResults.append("\nSolution: ");
+                analysisResults.append(GDTAFScenarioMgr.getInstance().getActiveSolution().getName());
+                analysisResults.append("\nSolution Option: ");
+                analysisResults.append(GDTAFScenarioMgr.getInstance().getActiveSolutionOption().getName());
+                analysisResults.append("\nAnalysis start time: ");
                 analysisResults.append(startDate.toString());
                 analysisResults.append("\nAnalysis end time: ");
                 analysisResults.append(endDate.toString());
