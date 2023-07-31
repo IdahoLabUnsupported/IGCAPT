@@ -30,7 +30,7 @@ public class CostResultsDialog extends javax.swing.JDialog {
             //Object valueAt = table.getModel().getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
             
             // The last row/col will contain the sum of the cost. Highlight it.
-            if ((col == 3 || col == 5 || col == 7 || col == 9) && row == table.getRowCount() - 1) {
+            if ((col == 0 || col == 5 || col == 7 || col == 9) && row == table.getRowCount() - 1) {
                 
                 c.setFont(this.getFont().deriveFont(Font.BOLD));
             }
@@ -120,10 +120,32 @@ public class CostResultsDialog extends javax.swing.JDialog {
                 tableModel.addRow(rowData);
             }
             
-            Object[] rowData = {null, null, "Total", "$" + capexProjectedCostSum + ".00", null,
+            Object[] rowData = {"Total", null, null, "$" + capexProjectedCostSum + ".00", null,
                 "$" + capexActualCostSum + ".00", null, "$" + opexProjectedCostSum + ".00", null, "$" + opexActualCostSum + ".00"};
             tableModel.addRow(rowData);
-
+            
+            // Hide projected columns that are zero total. Hide both unit and total if total is zero.
+            if (capexProjectedCostSum <= 0) {
+                resultsTable.getColumnModel().getColumn(2).setMinWidth(0);
+                resultsTable.getColumnModel().getColumn(2).setMaxWidth(0);
+                resultsTable.getColumnModel().getColumn(3).setMinWidth(0);
+                resultsTable.getColumnModel().getColumn(3).setMaxWidth(0);
+            }
+            else {
+                SetColumnWidth(2, 100);
+                SetColumnWidth(3, 100);
+            }
+            
+            if (opexProjectedCostSum <= 0) {
+                resultsTable.getColumnModel().getColumn(6).setMinWidth(0);
+                resultsTable.getColumnModel().getColumn(6).setMaxWidth(0);
+                resultsTable.getColumnModel().getColumn(7).setMinWidth(0);
+                resultsTable.getColumnModel().getColumn(7).setMaxWidth(0);                
+            }
+            else {
+                SetColumnWidth(6, 100);
+                SetColumnWidth(7, 100);
+            }
         }
     }
     private void SetColumnWidth(int column, int width) {
