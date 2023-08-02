@@ -21,6 +21,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import gov.inl.igcapt.view.IGCAPTgui;
+import java.util.Vector;
 
 /**
  *
@@ -28,6 +29,8 @@ import gov.inl.igcapt.view.IGCAPTgui;
  */
 public class PayloadEditorForm extends javax.swing.JDialog {
 
+    static String m_dependent = "Dependent Collection";
+    List<String> m_appliedPayloadList = null;
     public enum ReturnValue {
         Unknown,
         Ok,
@@ -46,7 +49,7 @@ public class PayloadEditorForm extends javax.swing.JDialog {
     public PayloadEditorForm(Payload payload) {
         initComponents();
         
-        payloadTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        payloadTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         
         initializePayloadTree(payload);
         setLocationRelativeTo(null);
@@ -285,7 +288,7 @@ public class PayloadEditorForm extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void addPayloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPayloadBtnActionPerformed
-        AddUseCaseDlg addUseCaseDlg = new AddUseCaseDlg(null, true);
+        AddUseCaseDlg addUseCaseDlg = new AddUseCaseDlg(null, true, m_appliedPayloadList);
         
         addUseCaseDlg.setLocationRelativeTo(IGCAPTgui.getInstance());
         addUseCaseDlg.setVisible(true);
@@ -297,13 +300,27 @@ public class PayloadEditorForm extends javax.swing.JDialog {
             DefaultMutableTreeNode root = (DefaultMutableTreeNode)payloadTree.getModel().getRoot();
             
             if (addUseCaseDlg.getDependent() == true) {
-                
-                DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
-                treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
-                
-                DefaultMutableTreeNode child = new DefaultMutableTreeNode(treeEntry, true);
-                treeModel.insertNodeInto(child, root, root.getChildCount());
-                payloadTree.scrollPathToVisible(new TreePath(child.getPath()));
+                if (m_appliedPayloadList == null) {
+                    m_appliedPayloadList = new Vector<String>();
+                    m_appliedPayloadList.add(m_dependent);
+                    
+                    DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
+                    treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
+
+                    DefaultMutableTreeNode child = new DefaultMutableTreeNode(treeEntry, true);
+                    treeModel.insertNodeInto(child, root, root.getChildCount());
+                    payloadTree.scrollPathToVisible(new TreePath(child.getPath()));                }
+                else {
+                    if (!m_appliedPayloadList.contains(m_dependent)) {
+                        m_appliedPayloadList.add(m_dependent);
+                        DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
+                        treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
+
+                        DefaultMutableTreeNode child = new DefaultMutableTreeNode(treeEntry, true);
+                        treeModel.insertNodeInto(child, root, root.getChildCount());
+                        payloadTree.scrollPathToVisible(new TreePath(child.getPath()));
+                    }
+                }
             }
             else {   
                 TreePath selectedNodeTreePath = payloadTree.getSelectionPath();
@@ -325,7 +342,20 @@ public class PayloadEditorForm extends javax.swing.JDialog {
                 }
                 
                 DefaultMutableTreeNode child = null;
-                for (String useCaseName : addUseCaseDlg.getUseCaseNameList()) {
+                List<String> newlySelectedUseCases = addUseCaseDlg.getUseCaseNameList();
+                for (String useCaseName : newlySelectedUseCases) {
+                    if (m_appliedPayloadList != null) {
+                        if (!m_appliedPayloadList.contains(useCaseName)) {
+                            m_appliedPayloadList.add(useCaseName);
+                        }
+                    }
+                    else {
+                        m_appliedPayloadList = new Vector<String>();
+                        m_appliedPayloadList.add(useCaseName);
+                    }
+
+                }
+                for (String useCaseName : newlySelectedUseCases) {
                     UseCaseEntry treeEntry = new UseCaseEntry();
                     treeEntry.setUseCaseName(useCaseName);
                     treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
@@ -352,13 +382,22 @@ public class PayloadEditorForm extends javax.swing.JDialog {
     private void removePayloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePayloadBtnActionPerformed
         DefaultTreeModel treeModel = (DefaultTreeModel)payloadTree.getModel();
         TreePath selectedNodeTreePath = payloadTree.getSelectionPath();
+        while (selectedNodeTreePath != null) {
         
-        if (selectedNodeTreePath != null) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)selectedNodeTreePath.getLastPathComponent();
+            String useCaseName;
+            if (node.getUserObject() instanceof UseCaseEntry nodeEntry) {
+                useCaseName = nodeEntry.getUseCaseName();
+            }
+            else {
+                useCaseName = m_dependent;
+            }
+            m_appliedPayloadList.remove(useCaseName);
             if (node.getParent() != null) {
                 treeModel.removeNodeFromParent(node);
             }
-        }
+            selectedNodeTreePath = payloadTree.getSelectionPath();
+        } // end while
     }//GEN-LAST:event_removePayloadBtnActionPerformed
 
     private void payloadTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_payloadTreeMouseClicked
