@@ -18,7 +18,7 @@ import javax.swing.DefaultListModel;
  * @author FRAZJD
  */
 public class AddUseCaseDlg extends javax.swing.JDialog {
-
+    List<String>m_selectedUseCaseList;
     public enum ReturnValue {
         Unknown,
         Ok,
@@ -48,7 +48,7 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
     /**
      * Creates new form AddUseCaseDlg
      */
-    public AddUseCaseDlg(java.awt.Frame parent, boolean modal) {
+    public AddUseCaseDlg(java.awt.Frame parent, boolean modal, List<String>appliedPayload) {
         super(parent, modal);
         initComponents();
         
@@ -72,7 +72,12 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
         DefaultListModel listModel = new DefaultListModel();
        
         for (String useCaseName : useCaseNameSet) {
-            listModel.addElement(useCaseName);
+            if (appliedPayload == null) {
+                listModel.addElement(useCaseName);
+            }
+            else if (!appliedPayload.contains(useCaseName)) {
+                listModel.addElement(useCaseName);
+            }
         }
         jList1.setModel(listModel);
                 
@@ -280,7 +285,7 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(() -> {
-            AddUseCaseDlg dialog = new AddUseCaseDlg(new javax.swing.JFrame(), true);
+            AddUseCaseDlg dialog = new AddUseCaseDlg(new javax.swing.JFrame(), true, null);
             dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
                 public void windowClosing(java.awt.event.WindowEvent e) {
