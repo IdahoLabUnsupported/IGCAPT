@@ -1017,7 +1017,7 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
         JMenuItem importResultsItem;
         JMenuItem showHeatmapItem;
         JMenuItem clearHeatmapItem;
-        JMenuItem editThreshold = new JMenuItem("Edit Thresholds");
+        JMenuItem editThreshold = new JMenuItem("Edit Thresholds...");
 
         
         analysisMenu.add(editThreshold);
@@ -1053,7 +1053,7 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
         });
         
         editThreshold.addActionListener((ActionEvent ev) -> {
-            ThresholdEditor thresholdEdit = new ThresholdEditor(this, false);
+            ThresholdEditor thresholdEdit = new ThresholdEditor(IGCAPTgui.getInstance(), false);
         });
         
         return analysisMenu;
