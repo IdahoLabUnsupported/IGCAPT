@@ -1132,6 +1132,13 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
             collapser = new GraphCollapser(originalGraph);
 
             GraphManager.getInstance().getVisualizationViewer().repaint();
+            
+            // Remove the old use cases from the apply payload dialog box.
+            var payloadEditor = IGCAPTgui.getInstance().getPayloadEditorForm();
+            
+            if (payloadEditor != null) {
+                payloadEditor.clearPayloadTree();
+            }
         }
         
         return returnval;

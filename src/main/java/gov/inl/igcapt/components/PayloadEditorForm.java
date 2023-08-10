@@ -31,7 +31,7 @@ import java.util.Vector;
 public class PayloadEditorForm extends javax.swing.JDialog {
 
     static String m_dependent = "Dependent Collection";
-    List<String> m_appliedPayloadList = null;
+    List<String> m_appliedPayloadList;
     public enum ReturnValue {
         Unknown,
         Ok,
@@ -48,6 +48,7 @@ public class PayloadEditorForm extends javax.swing.JDialog {
      * @param payload The current payload configuration.
      */
     public PayloadEditorForm(Payload payload) {
+        m_appliedPayloadList = new Vector<>();
         initComponents();
         
         payloadTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
@@ -55,6 +56,15 @@ public class PayloadEditorForm extends javax.swing.JDialog {
         initializePayloadTree(payload);
         setLocationRelativeTo(null);
         setModal(true);
+    }
+    
+    public void clearPayloadTree() {
+        m_appliedPayloadList.clear();
+
+        DefaultTreeModel model = (DefaultTreeModel) payloadTree.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        root.removeAllChildren();
+        model.reload();
     }
     
     private void initializePayloadTree(Payload payload) {
@@ -167,7 +177,6 @@ public class PayloadEditorForm extends javax.swing.JDialog {
         okBtn.setText("Ok");
         okBtn.setMaximumSize(new java.awt.Dimension(66, 23));
         okBtn.setMinimumSize(new java.awt.Dimension(66, 23));
-        okBtn.setOpaque(false);
         okBtn.setPreferredSize(new java.awt.Dimension(65, 23));
         okBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,22 +196,11 @@ public class PayloadEditorForm extends javax.swing.JDialog {
         payloadTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         payloadTree.setMinimumSize(new java.awt.Dimension(77, 80));
         payloadTree.setRootVisible(false);
-        payloadTree.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                payloadTreeMouseClicked(evt);
-            }
-        });
-        payloadTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-                payloadTreeValueChanged(evt);
-            }
-        });
         jScrollPane2.setViewportView(payloadTree);
 
         addPayloadBtn.setText("Add Payload");
         addPayloadBtn.setMaximumSize(new java.awt.Dimension(113, 23));
         addPayloadBtn.setMinimumSize(new java.awt.Dimension(113, 23));
-        addPayloadBtn.setOpaque(false);
         addPayloadBtn.setPreferredSize(new java.awt.Dimension(119, 23));
         addPayloadBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -302,9 +300,6 @@ public class PayloadEditorForm extends javax.swing.JDialog {
             
             List<String> newlySelectedUseCases = addUseCaseDlg.getUseCaseNameList();
             if (addUseCaseDlg.getDependent() == true) {
-                if (m_appliedPayloadList == null) {
-                    m_appliedPayloadList = new Vector<String>();
-                }
                 m_appliedPayloadList.add(m_dependent);
 
                 DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
@@ -444,23 +439,6 @@ public class PayloadEditorForm extends javax.swing.JDialog {
             }
         } // end for
     }//GEN-LAST:event_removePayloadBtnActionPerformed
-
-    private void payloadTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_payloadTreeMouseClicked
-        int row=payloadTree.getRowForLocation(evt.getX(),evt.getY());
-        
-        //When user clicks on the "empty surface"
-        if(row==-1) {//When user clicks on the "empty surface"
-            payloadTree.clearSelection();
-            removePayloadBtn.setEnabled(false);
-        }
-        else {
-            removePayloadBtn.setEnabled(true);
-        }
-    }//GEN-LAST:event_payloadTreeMouseClicked
-
-    private void payloadTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_payloadTreeValueChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_payloadTreeValueChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Payload payload = getPayload();

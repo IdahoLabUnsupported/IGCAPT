@@ -254,17 +254,6 @@ public class ImportGdtafScenario extends javax.swing.JDialog {
         jList3.setEnabled(true);
     }
     
-    // check the three text fields and enable/disable Next
-    private void enableNext() {
-//        if (!jTextField2.getText().isEmpty() && !jTextField1.getText().isEmpty() && 
-//            !jTextField3.getText().isEmpty()) {
-//            jButton2.setEnabled(true);
-//        }
-//        else {
-//            jButton2.setEnabled(false);
-//        }
-    }
-    
     // Clear the lists and call the read
     private void prepareToReadGDTAFScenarioFile() {
         if (jTextField1.getText().isEmpty()) {

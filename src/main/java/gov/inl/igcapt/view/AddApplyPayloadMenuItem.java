@@ -18,31 +18,18 @@ public class AddApplyPayloadMenuItem extends JMenuItem {
             PayloadEditorForm payloadEditorForm = IGCAPTgui.getInstance().getPayloadEditorForm();
             if (payloadEditorForm == null) {
                 IGCAPTgui.getInstance().setPayloadEditorForm(payloadEditorForm = new PayloadEditorForm(IGCAPTgui.getInstance().getPayload()));
-                payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
-                payloadEditorForm.setVisible(true);
-                
-                // Closed the Payload Editor dialog with Ok.
-                if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                    IGCAPTgui.getInstance().setPayload(payloadEditorForm.getPayload());
-                    
-                    // Apply the payload
-                    IGCAPTgui.getInstance().applyPayload();
-                }
-                
-                IGCAPTgui.getInstance().setPayloadEditorForm(payloadEditorForm = null);
             }
-            else {
-                payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
-                payloadEditorForm.setVisible(true);
-                payloadEditorForm.toFront();
-                
-                // Closed the Payload Editor dialog with Ok.
-                if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
-                    IGCAPTgui.getInstance().setPayload(payloadEditorForm.getPayload());
-                    
-                    // Apply the payload
-                    IGCAPTgui.getInstance().applyPayload();
-                }
+
+            payloadEditorForm.setLocationRelativeTo(IGCAPTgui.getInstance());
+            payloadEditorForm.setVisible(true);
+            payloadEditorForm.toFront();
+
+            // Closed the Payload Editor dialog with Ok.
+            if (payloadEditorForm.getReturnValue() == PayloadEditorForm.ReturnValue.Ok) {
+                IGCAPTgui.getInstance().setPayload(payloadEditorForm.getPayload());
+
+                // Apply the payload
+                IGCAPTgui.getInstance().applyPayload();
             }
         });            
     }
