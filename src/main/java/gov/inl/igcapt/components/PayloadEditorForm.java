@@ -23,6 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import gov.inl.igcapt.view.IGCAPTgui;
 import java.util.Vector;
 
+
 /**
  *
  * @author FRAZJD
@@ -299,35 +300,51 @@ public class PayloadEditorForm extends javax.swing.JDialog {
             DefaultTreeModel treeModel = (DefaultTreeModel)payloadTree.getModel();
             DefaultMutableTreeNode root = (DefaultMutableTreeNode)payloadTree.getModel().getRoot();
             
+            List<String> newlySelectedUseCases = addUseCaseDlg.getUseCaseNameList();
             if (addUseCaseDlg.getDependent() == true) {
                 if (m_appliedPayloadList == null) {
                     m_appliedPayloadList = new Vector<String>();
-                    m_appliedPayloadList.add(m_dependent);
-                    
-                    DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
-                    treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
+                }
+                m_appliedPayloadList.add(m_dependent);
 
-                    DefaultMutableTreeNode child = new DefaultMutableTreeNode(treeEntry, true);
-                    treeModel.insertNodeInto(child, root, root.getChildCount());
-                    payloadTree.scrollPathToVisible(new TreePath(child.getPath()));                }
-                else {
-                    if (!m_appliedPayloadList.contains(m_dependent)) {
-                        m_appliedPayloadList.add(m_dependent);
-                        DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
-                        treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
+                DependentUseCaseEntry treeEntry = new DependentUseCaseEntry();
+                treeEntry.setPercentToApply(addUseCaseDlg.getPercentApply());
 
-                        DefaultMutableTreeNode child = new DefaultMutableTreeNode(treeEntry, true);
-                        treeModel.insertNodeInto(child, root, root.getChildCount());
-                        payloadTree.scrollPathToVisible(new TreePath(child.getPath()));
+                DefaultMutableTreeNode depUseCaseNode = new DefaultMutableTreeNode(treeEntry, true);
+                treeModel.insertNodeInto(depUseCaseNode, root, root.getChildCount());
+                payloadTree.scrollPathToVisible(new TreePath(depUseCaseNode.getPath()));     
+
+                DefaultMutableTreeNode childNode = null;
+                for (String useCaseName : newlySelectedUseCases) {
+                    UseCaseEntry childTreeEntry = new UseCaseEntry();
+                    childTreeEntry.setUseCaseName(useCaseName);
+                    childNode = new DefaultMutableTreeNode(childTreeEntry);
+
+                    treeModel.insertNodeInto(childNode, depUseCaseNode, depUseCaseNode.getChildCount());
+                }
+                if (childNode != null) {
+                    payloadTree.scrollPathToVisible(new TreePath(childNode.getPath()));
+                }
+                  
+                for (String useCaseName : newlySelectedUseCases) {
+                    if (m_appliedPayloadList != null) {
+                        if (!m_appliedPayloadList.contains(useCaseName)) {
+                            m_appliedPayloadList.add(useCaseName);
+                        }
                     }
+                    else {
+                        m_appliedPayloadList = new Vector<String>();
+                        m_appliedPayloadList.add(useCaseName);
+                    }
+
                 }
             }
             else {   
                 TreePath selectedNodeTreePath = payloadTree.getSelectionPath();
                 
-                String name = "";
+                String name;
                 DefaultMutableTreeNode node = root;
-                DefaultMutableTreeNode selectedNode = null;
+                DefaultMutableTreeNode selectedNode;
                 
                 if (selectedNodeTreePath != null) {
                     selectedNode = (DefaultMutableTreeNode)selectedNodeTreePath.getLastPathComponent();               
@@ -342,7 +359,6 @@ public class PayloadEditorForm extends javax.swing.JDialog {
                 }
                 
                 DefaultMutableTreeNode child = null;
-                List<String> newlySelectedUseCases = addUseCaseDlg.getUseCaseNameList();
                 for (String useCaseName : newlySelectedUseCases) {
                     if (m_appliedPayloadList != null) {
                         if (!m_appliedPayloadList.contains(useCaseName)) {
@@ -381,23 +397,52 @@ public class PayloadEditorForm extends javax.swing.JDialog {
 
     private void removePayloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePayloadBtnActionPerformed
         DefaultTreeModel treeModel = (DefaultTreeModel)payloadTree.getModel();
-        TreePath selectedNodeTreePath = payloadTree.getSelectionPath();
-        while (selectedNodeTreePath != null) {
-        
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)selectedNodeTreePath.getLastPathComponent();
+        // allow for multi select
+        TreePath[] selPaths = payloadTree.getSelectionPaths();
+       
+        for (TreePath selPath : selPaths) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
             String useCaseName;
+            // not dependent
             if (node.getUserObject() instanceof UseCaseEntry nodeEntry) {
-                useCaseName = nodeEntry.getUseCaseName();
+                // check if the parent a dependent?
+                if (node.getParent() != null) {
+                    DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)node.getParent();
+                    // selected is Dependent so if no siblings, remove parent as well
+                    if (parentNode.toString().startsWith("Dependent") && node.getSiblingCount() == 1) {
+                        // Remove child from list
+                        String val = node.toString();
+                        val = val.substring(0, val.indexOf(" "));
+                        m_appliedPayloadList.remove(val);
+                        // remove parent from list
+                        val = parentNode.toString();
+                        val = val.substring(0, val.indexOf(" "));
+                        m_appliedPayloadList.remove(val);
+                        treeModel.removeNodeFromParent(node); 
+                        treeModel.removeNodeFromParent(parentNode);
+                    }
+                    // either not child of dependent OR there are siblings so just remove this one
+                    else {
+                        useCaseName = nodeEntry.getUseCaseName();
+                        m_appliedPayloadList.remove(useCaseName);
+                        treeModel.removeNodeFromParent(node);
+                    }
+                }
             }
+            //dependent so remove it and all children
             else {
                 useCaseName = m_dependent;
-            }
-            m_appliedPayloadList.remove(useCaseName);
-            if (node.getParent() != null) {
+                for (int i = 0; i < node.getChildCount(); i++) {
+                    String val = node.getChildAt(i).toString();
+                    // remove the percentage
+                    val = val.substring(0, val.indexOf(" "));
+                    m_appliedPayloadList.remove(val);
+                }
+                node.removeAllChildren();
+                m_appliedPayloadList.remove(useCaseName);
                 treeModel.removeNodeFromParent(node);
             }
-            selectedNodeTreePath = payloadTree.getSelectionPath();
-        } // end while
+        } // end for
     }//GEN-LAST:event_removePayloadBtnActionPerformed
 
     private void payloadTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_payloadTreeMouseClicked

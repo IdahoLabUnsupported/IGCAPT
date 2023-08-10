@@ -46,10 +46,7 @@
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="dependentCB" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="dependentCB" alignment="1" min="-2" max="-2" attributes="0"/>
                                   <Component id="percentApply" min="-2" pref="55" max="-2" attributes="0"/>
                               </Group>
                           </Group>

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -18,7 +19,6 @@ import javax.swing.DefaultListModel;
  * @author FRAZJD
  */
 public class AddUseCaseDlg extends javax.swing.JDialog {
-    List<String>m_selectedUseCaseList;
     public enum ReturnValue {
         Unknown,
         Ok,
@@ -229,6 +229,16 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+        if (_dependent == true) {
+            if (jList1.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(this, "A Dependent Use case must be selected.");
+                return;
+            }
+            else if ((Integer)percentApply.getValue() == 0) {
+                JOptionPane.showMessageDialog(this, "Percentage must be greater than 0.");
+                return;
+            }
+        } 
         _returnValue = ReturnValue.Ok;
         dispose();
     }//GEN-LAST:event_okBtnActionPerformed
@@ -246,13 +256,9 @@ public class AddUseCaseDlg extends javax.swing.JDialog {
     private void dependentCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dependentCBActionPerformed
         if (((javax.swing.JCheckBox)evt.getSource()).isSelected()) {
             _dependent = true;
-            
-            jList1.setEnabled(false);
-            jList1.setSelectedIndex(-1);
         }
         else {
-            jList1.setEnabled(true);
-            jList1.setSelectedIndex(-1);
+            _dependent = false;
         }
     }//GEN-LAST:event_dependentCBActionPerformed
 
