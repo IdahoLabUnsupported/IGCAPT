@@ -6,6 +6,8 @@ package gov.inl.igcapt.components;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -27,7 +29,6 @@ public class CostResultsDialog extends javax.swing.JDialog {
 
             Component c = super.getTableCellRendererComponent(table, value,
                      isSelected, hasFocus, row, col);
-            //Object valueAt = table.getModel().getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
             
             // The last row/col will contain the sum of the cost. Highlight it.
             if ((col == 0 || col == 5 || col == 7 || col == 9) && row == table.getRowCount() - 1) {
@@ -64,6 +65,8 @@ public class CostResultsDialog extends javax.swing.JDialog {
         tableCellRenderer = new TableCellRenderer();
         tableCellRenderer.setHorizontalAlignment(JLabel.LEFT);
         resultsTable.getColumnModel().getColumn(0).setCellRenderer(tableCellRenderer);
+        
+        
     }
     
     private int ZeroIfNegative(int value) {

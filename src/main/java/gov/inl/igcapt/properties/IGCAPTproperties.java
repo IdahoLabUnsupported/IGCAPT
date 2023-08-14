@@ -5,6 +5,8 @@
  */
 package gov.inl.igcapt.properties;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.io.*;
@@ -50,6 +52,8 @@ public final class IGCAPTproperties implements Serializable {
     private static IGCAPTproperties igcaptProperties = null;
     private Properties properties = new Properties();
     private String _fileName = "igcapt.properties";
+    
+    private final PropertyChangeSupport propertyChange = new PropertyChangeSupport(this);
 
     /**
      * Creates new IGCAPTproperties
@@ -60,6 +64,7 @@ public final class IGCAPTproperties implements Serializable {
 
     /**
      * Returns a Singleton instance of the class
+     * @return 
      */
     public static IGCAPTproperties getInstance() {
         if (igcaptProperties == null) {
@@ -67,6 +72,14 @@ public final class IGCAPTproperties implements Serializable {
         }
         return igcaptProperties;
     }
+    
+     public void addPropertyChangeListener(PropertyChangeListener listener) {
+         propertyChange.addPropertyChangeListener(listener);
+     }
+
+     public void removePropertyChangeListener(PropertyChangeListener listener) {
+         propertyChange.removePropertyChangeListener(listener);
+     }
 
     private void loadProperties() {
         
@@ -107,9 +120,13 @@ public final class IGCAPTproperties implements Serializable {
 
     /**
      * Add a new Key-Value pair in the current Properties
+     * @param key
+     * @param value
      */
     public void setPropertyKeyValue(IgcaptProperty key, String value) {
+        var oldValue = properties.getProperty(convertKeyToString(key));
         properties.setProperty(convertKeyToString(key), value);
+        propertyChange.firePropertyChange(convertKeyToString(key), oldValue, value);
     }
     
     public String convertKeyToString(IgcaptProperty key) {

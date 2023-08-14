@@ -8,8 +8,12 @@ import edu.uci.ics.jung.graph.Graph;
 import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import gov.inl.igcapt.view.IGCAPTgui;
 import java.awt.Color;
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -24,7 +28,18 @@ import javax.swing.table.TableRowSorter;
  *
  * @author FRAZJD
  */
-public class ResultsDialog extends javax.swing.JDialog {
+public class ResultsDialog extends javax.swing.JDialog implements PropertyChangeListener {
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        
+        if (evt.getPropertyName().equals("utilizationHighLimit") || evt.getPropertyName().equals("utilizationMediumLimit")) {
+            
+            // Force redraw of the results dialog table.
+            repaint();
+        }
+    }
+
 
     public class TableCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 1L;
@@ -89,6 +104,8 @@ public class ResultsDialog extends javax.swing.JDialog {
         sorter.setSortKeys(sortKeys);
         
         resultsTable.setDefaultRenderer(Double.class, new TableCellRenderer());
+        
+        IGCAPTproperties.getInstance().addPropertyChangeListener(this);
     }
 
     public void UpdateResults(String analysisTimeStr){
