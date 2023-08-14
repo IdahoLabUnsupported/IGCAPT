@@ -84,6 +84,8 @@ public class ResultsDialog extends javax.swing.JDialog implements PropertyChange
     }
     /**
      * Creates new form ResultsDialog
+     * @param parent The parent frame of this dialog.
+     * @param modal Is the dialog modal?
      */
     public ResultsDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -104,8 +106,6 @@ public class ResultsDialog extends javax.swing.JDialog implements PropertyChange
         sorter.setSortKeys(sortKeys);
         
         resultsTable.setDefaultRenderer(Double.class, new TableCellRenderer());
-        
-        IGCAPTproperties.getInstance().addPropertyChangeListener(this);
     }
 
     public void UpdateResults(String analysisTimeStr){
@@ -182,6 +182,14 @@ public class ResultsDialog extends javax.swing.JDialog implements PropertyChange
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Analysis Results");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         resultsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -242,6 +250,22 @@ public class ResultsDialog extends javax.swing.JDialog implements PropertyChange
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * 
+     * @param evt 
+     */
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        IGCAPTproperties.getInstance().removePropertyChangeListener(this);
+    }//GEN-LAST:event_formWindowClosing
+
+    /**
+     * 
+     * @param evt 
+     */
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        IGCAPTproperties.getInstance().addPropertyChangeListener(this);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments

@@ -112,6 +112,10 @@ import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -140,8 +144,38 @@ import org.w3c.dom.NodeList;
  * @author kur
  */
 
-public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTargetListener {
+public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTargetListener, PropertyChangeListener {
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+                
+        if (evt.getPropertyName().equals("utilizationHighLimit") || evt.getPropertyName().equals("utilizationMediumLimit")) {
+            
+            // Force redraw of the graph.
+            refresh();
+        }
+
+    }
+
+   private class IGCAPTWindowAdapter extends WindowAdapter {
+ 
+        IGCAPTgui window = null;
+ 
+        IGCAPTWindowAdapter(IGCAPTgui window) {
+            this.window = window;
+        }
+        
+        public void windowOpened(WindowEvent e) {
+            IGCAPTproperties.getInstance().addPropertyChangeListener(window);
+        }
+ 
+        // implement windowClosing method
+        @Override
+        public void windowClosing(WindowEvent e) {
+            IGCAPTproperties.getInstance().removePropertyChangeListener(window);
+        }
+    }
+   
     /**
      * @return the showAllAnalysisResults
      */
@@ -600,16 +634,7 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
        
         JButton collapse = new JButton("Swap Graphs");
         collapse.addActionListener((ActionEvent e) -> {
-            //                if (GraphManager.getInstance().getGraph() != originalGraph) {
-//                    tempGraph = (SgGraph) GraphManager.getInstance().getLayout().getGraph();
-//                    GraphManager.getInstance().getLayout().setGraph(originalGraph);
-//                    collapse.setText("Swap Graphs");
-//                } else if (tempGraph != null) {
-//                    GraphManager.getInstance().getLayout().setGraph(tempGraph);
-//                    collapse.setText("Swap Graphs*");
-//                }
-
-GraphManager.getInstance().getVisualizationViewer().repaint();
+            GraphManager.getInstance().getVisualizationViewer().repaint();
         });
         collapse.setVisible(false);
 
@@ -701,6 +726,8 @@ GraphManager.getInstance().getVisualizationViewer().repaint();
                 }
             }
         });
+        
+        addWindowListener(new IGCAPTWindowAdapter(this));
 
         Transformer<SgEdge, Paint> colorTransformer = (SgEdge e) -> {
 

@@ -13,11 +13,13 @@ import gov.inl.igcapt.properties.IGCAPTproperties;
 import org.openstreetmap.gui.jmapviewer.JSGMapViewer;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
+
 public class View extends JFrame implements JMapViewerEventListener, DropTargetListener {
 
     ///Private Variables
     private static View _view = new View();
     private final JSGMapViewer treeMap = new JSGMapViewer("Component");
+    
     public View() {
         super("Intelligent Grid Communications & Analysis Planning Tool");
         this.initialize();

@@ -44,6 +44,9 @@ import gov.inl.igcapt.graph.GraphManager;
 import gov.inl.igcapt.graph.SgEdge;
 import gov.inl.igcapt.graph.SgNode;
 import gov.inl.igcapt.graph.SgNodeInterface;
+import gov.inl.igcapt.properties.IGCAPTproperties;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent.COMMAND;
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
@@ -71,7 +74,7 @@ import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
  *ALL RIGHTS RESERVED 
  *
  */
-public class JMapViewer extends JPanel implements TileLoaderListener, DropTargetListener {
+public class JMapViewer extends JPanel implements TileLoaderListener, DropTargetListener, PropertyChangeListener {
     /**
      * whether debug mode is enabled or not
      */
@@ -81,8 +84,6 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
      * option to reverse zoom direction with mouse wheel
      */
     public static boolean zoomReverseWheel = true;
-
-    private IGCAPTgui _igCAPTgui;
 
     /**
      * Vectors for clock-wise tile painting
@@ -178,6 +179,16 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         }
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        
+        if (evt.getPropertyName().equals("utilizationHighLimit") || evt.getPropertyName().equals("utilizationMediumLimit")) {
+            
+            // Force redraw of the map.
+            repaint();
+        }
+    }
+
     /**
      * Appearance of zoom controls.
      */
@@ -209,7 +220,6 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     public  JMapViewer() {
         this(new MemoryTileCache());
         new IGCAPTMapController(this);
-        _igCAPTgui = IGCAPTgui.getInstance();
     }
 
     /**
@@ -244,7 +254,6 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
         mapImagesVisible = true; // KD
         mapLinesVisible = true; // KD
         tileGridVisible = false;
-        _igCAPTgui = IGCAPTgui.getInstance();
         setLayout(null);
         initializeZoomSlider();
         setMinimumSize(new Dimension(tileSource.getTileSize(), tileSource.getTileSize()));
@@ -258,9 +267,9 @@ public class JMapViewer extends JPanel implements TileLoaderListener, DropTarget
     @Override
     public String getToolTipText(MouseEvent event) {
         return super.getToolTipText(event);
-        //ICoordinate c = getPosition(event.getX(), event.getY());
-        //return c.getLat() + " " + c.getLon();
     }
+    
+    
 
     protected void initializeZoomSlider() {
         zoomSlider = new JSlider(MIN_ZOOM, tileController.getTileSource().getMaxZoom());

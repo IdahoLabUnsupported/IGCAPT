@@ -7,10 +7,6 @@ package gov.inl.igcapt.graph;
 
 import gov.inl.igcapt.components.DataModels.SgComponentData;
 import java.awt.Component;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -29,17 +25,17 @@ import javax.swing.tree.TreeCellRenderer;
  */
 public class SGComponentTreeCellRenderer implements TreeCellRenderer {
 
-    private JLabel label;
+    private final JLabel label;
 
     public SGComponentTreeCellRenderer() {
         label = new JLabel();
     }
 
+    @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
             boolean leaf, int row, boolean hasFocus) {
         Object o = ((DefaultMutableTreeNode) value).getUserObject();
-        if (o instanceof SgComponentData) {
-            SgComponentData component = (SgComponentData) o;
+        if (o instanceof SgComponentData component) {
             try {
                 label.setIcon(component.getIcon());
                 label.setText(component.getName());
