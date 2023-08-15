@@ -58,7 +58,7 @@
                       <Component id="jButton2" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -88,12 +88,12 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Medium"/>
+        <Property name="text" type="java.lang.String" value="Medium %"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="High"/>
+        <Property name="text" type="java.lang.String" value="High %"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSpinner" name="jSpinner2">

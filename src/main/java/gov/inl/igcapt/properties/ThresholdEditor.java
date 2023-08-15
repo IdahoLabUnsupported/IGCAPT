@@ -71,9 +71,9 @@ public class ThresholdEditor extends javax.swing.JDialog {
         setMinimumSize(new java.awt.Dimension(197, 140));
         setResizable(false);
 
-        jLabel2.setText("Medium");
+        jLabel2.setText("Medium %");
 
-        jLabel3.setText("High");
+        jLabel3.setText("High %");
 
         jButton1.setText("   OK   ");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -108,7 +108,7 @@ public class ThresholdEditor extends javax.swing.JDialog {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
