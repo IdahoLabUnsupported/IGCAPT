@@ -148,7 +148,7 @@ public class Heatmap {
     private int GetNodeTotalData(SgNode node) {
         int returnval = 0;
         
-        var component = IGCAPTgui.getComponentByUuid(node.getType());
+        var component = node.getAssociatedComponent();
                     
         if (component != null) {
             // Add up all data elements.
