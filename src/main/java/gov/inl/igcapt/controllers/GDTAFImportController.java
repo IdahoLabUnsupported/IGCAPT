@@ -192,7 +192,7 @@ public class GDTAFImportController {
                     false,
                     0,
                     10,
-                    "assetGuid:" + stripUnderscoreFromUUID(solnAsset.getUUID()));
+                    "assetGuid|" + stripUnderscoreFromUUID(solnAsset.getUUID()) + ";");
 
             sgNode.setLat(location.getY());
             sgNode.setLongit(location.getX());
@@ -560,7 +560,7 @@ public class GDTAFImportController {
                                 false,
                                 0,
                                 10,
-                                "assetGuid:" + stripUnderscoreFromUUID(solutionAsset.getUUID()));
+                                "assetGuid|" + stripUnderscoreFromUUID(solutionAsset.getUUID()) + ";");
 
                         m_assetGuidToNodeMap.put(solutionAsset.getUUID(), sgNode);
 

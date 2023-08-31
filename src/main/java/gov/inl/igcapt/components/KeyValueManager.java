@@ -12,7 +12,7 @@ import com.google.common.base.Splitter;
 /**
  *
  * @author FRAZJD
- * Take a string of the form: key|value;key|value and parse it into the dictionary.
+ * Take a string of the form: key|value;key|value; and parse it into the dictionary.
  */
 public class KeyValueManager {
     private Map<String, String> _keyValues;
@@ -24,7 +24,7 @@ public class KeyValueManager {
                 .trimResults()
                 .omitEmptyStrings()
                 .withKeyValueSeparator(
-                    Splitter.on(':')
+                    Splitter.on('|')
                         .limit(2)
                         .trimResults())
                 .split(keyValues);

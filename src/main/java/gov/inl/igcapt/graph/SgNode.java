@@ -347,7 +347,7 @@ public class SgNode implements SgNodeInterface {
     }
     
     public void clearUseCaseUserData(){
-                // Remove old userData that are useCase entries (they begin with "@$")
+        // Remove old userData that are useCase entries (they begin with "@$")
         KeyValueManager kVManager = new KeyValueManager(this.getUserData());
         if (kVManager.KeyValues() != null && kVManager.KeyValues().entrySet() != null && !kVManager.KeyValues().entrySet().isEmpty()) {
             kVManager.KeyValues().entrySet().removeIf(e -> e.getKey().startsWith("@$"));
