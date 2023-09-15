@@ -5,6 +5,11 @@
  */
 package gov.inl.igcapt.view;
 
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfWriter;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.LayeredIcon;
@@ -101,6 +106,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.awt.Rectangle;
 
 import gov.inl.igcapt.controllers.IGCAPTGraphMousePlugin;
 import gov.inl.igcapt.wizard.ImportGdtafScenario;
@@ -112,10 +118,12 @@ import gov.inl.igcapt.properties.ThresholdEditor;
 import gov.inl.igcapt.wizard.CreateScenarioWizard;
 import gov.inl.igcapt.wizard.RestSvcConnection;
 import java.awt.GridLayout;
+import java.awt.Robot;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileOutputStream;
 import org.apache.commons.collections15.Factory;
 import org.apache.commons.collections15.Transformer;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -965,7 +973,9 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         JMenu helpMenu = new JMenu("Help");
         JMenuItem helpIGCAPT = new JMenuItem("IGCAPT Help");
         JMenuItem aboutIGCAPT = new JMenuItem("About IGCAPT");
+        JMenuItem pdfTest = new JMenuItem("PDF Test");
         helpMenu.add(helpIGCAPT);
+        helpMenu.add(pdfTest);
         helpMenu.add(new JSeparator()); // SEPARATOR
         helpMenu.add(aboutIGCAPT);
         menuBar.add(helpMenu);
@@ -974,6 +984,11 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
             HelpDialog helpDialog = new HelpDialog(null, true);
             
             helpDialog.setVisible(true);
+        });
+        
+        pdfTest.addActionListener((ActionEvent ev) -> {
+            executePdfTest();
+            // put dialog here with info about the test
         });
 
         aboutIGCAPT.addActionListener((ActionEvent ev) -> {
@@ -999,6 +1014,81 @@ public class IGCAPTgui extends JFrame implements JMapViewerEventListener, DropTa
         loadLayerIcons();
 
         pack();
+    }
+    
+    public Rectangle getMapBounds() {
+        return jtp.getBounds();
+    }
+    
+    public BufferedImage getMapImage() {
+        Rectangle rect = jtp.getBounds();   //jtp.getVisibleRect();
+        System.out.println("rect w=="+rect.width+"  h=="+rect.height);
+        Double w = Double.valueOf(rect.width)*1.1;
+        Double h = Double.valueOf(rect.height)*1.1;
+        System.out.println("new rect w=="+w+"  h=="+h);
+        BufferedImage bImage = 
+            new BufferedImage(w.intValue(), h.intValue(), BufferedImage.TYPE_INT_ARGB);
+        jtp.paint(bImage.getGraphics());
+        return bImage;
+    }
+        
+    private void executePdfTest() {
+        System.out.println("Adding pdf code here for place holder");
+        com.lowagie.text.Document document = new com.lowagie.text.Document(PageSize.A4, 50, 50, 50, 50);
+        try {
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\IGCAPT\\pdfTest\\cherie.pdf"));
+            BaseFont bf_times = BaseFont.createFont(BaseFont.TIMES_ROMAN, "Cp1252", false);
+            document.open();
+            
+            // add an image    
+            try {
+                Rectangle rect = IGCAPTgui.getInstance().getMapBounds();
+                
+                Double w = Math.ceil(rect.getWidth());
+                Double h = Math.ceil(rect.getHeight());
+                
+                int width = w.intValue();
+                int height = h.intValue();
+                
+                java.awt.Image awtMapImage = IGCAPTgui.getInstance().createImage(width, height);
+                
+                com.lowagie.text.Image simple = com.lowagie.text.Image.getInstance(awtMapImage, null);
+                // this part just gives a grey rectangle.
+                //document.add(simple);
+                
+                
+                // about the correct size but need the offset from top
+                Robot r = new Robot();
+                String path="C:\\IGCAPT\\pdfTest\\newImage.jpg";
+                //Rectangle capture = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+                BufferedImage bufferedImage=r.createScreenCapture(rect);
+                ImageIO.write(bufferedImage, "jpg", new File(path));
+                //simple = Image.getInstance("C:\\IGCAPT\\source\\IGCAPT\\sgicons\\newImage.jpg");
+                
+                //document.add(simple);
+                
+                bufferedImage = IGCAPTgui.getInstance().getMapImage();
+                ImageIO.write(bufferedImage, "jpg", new File(path));
+                simple = Image.getInstance("C:\\IGCAPT\\pdfTest\\newImage.jpg");
+                document.add(simple);
+                
+                
+            }
+            catch (Exception ex) {
+            }
+            
+            // Add text
+            Paragraph par = new Paragraph("New paragraph");
+            document.add(par);
+            
+            par = new Paragraph("Another new paragraph -- skipping the formatting");
+            document.add(par);
+            
+            document.close();
+        }
+        catch (Exception e) {
+            
+        }
     }
     
     private JMenu createGdtafMenu() {
