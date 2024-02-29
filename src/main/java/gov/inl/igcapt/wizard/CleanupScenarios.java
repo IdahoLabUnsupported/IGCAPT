@@ -24,8 +24,6 @@ import javax.swing.JOptionPane;
  */
 // Class to guide user through the process to update scenario with GUCS/CNRM
 public class CleanupScenarios extends javax.swing.JDialog {
-    private String m_webServiceHost = null;
-    private String m_webServiceKey = null;
     List<ScenarioInformation>m_scenarioList = null;
     
     
@@ -34,8 +32,6 @@ public class CleanupScenarios extends javax.swing.JDialog {
      */
     public CleanupScenarios() {
         super();
-        m_webServiceHost = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
-        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
         initComponents();
         getScenarioList();
         
@@ -124,16 +120,9 @@ public class CleanupScenarios extends javax.swing.JDialog {
     // Get the scenario list from the web service
     private void getScenarioList() {
         String output;
-
-        if (m_webServiceHost == null || m_webServiceKey == null) {
-            JOptionPane.showMessageDialog(null, "Please set Web Service Connection and try again.");
-            dispose();
-            return;
-        }
-        
+      
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios" +
-                              "?subscription-key=" + m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios"));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -173,8 +162,7 @@ public class CleanupScenarios extends javax.swing.JDialog {
         HttpURLConnection conn = null;
         
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios/"
-                + id + "?subscription-key=" + m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios/" + id));
             
             conn = (HttpURLConnection)url.openConnection();
             conn.setRequestMethod("DELETE");

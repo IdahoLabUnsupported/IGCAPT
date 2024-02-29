@@ -39,7 +39,7 @@ public class RestSvcConnection extends javax.swing.JDialog {
         m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
         jTextField1.setText(m_webServiceHost);
         jTextField2.setText(m_webServiceKey);
-        if (jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty()) {
+        if (jTextField1.getText().isEmpty()) { // || jTextField2.getText().isEmpty()) {
             jButton2.setEnabled(false);
         }
     }
@@ -149,20 +149,25 @@ public class RestSvcConnection extends javax.swing.JDialog {
         // Save to properties
         RestSvcVersion version = null;
         String output;
-        m_webServiceHost = jTextField1.getText();
-        m_webServiceKey = jTextField2.getText();
-        if (m_webServiceHost.isEmpty() || m_webServiceKey.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter both Host and Key");
+        String newWebServiceHost = jTextField1.getText();
+        String newWebServiceKey = jTextField2.getText();
+        if (newWebServiceHost.isEmpty()) { // || m_webServiceKey.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter both Host");
             return;
         }
+        WebServiceProperties.getInstance().setPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY, newWebServiceKey);
+        WebServiceProperties.getInstance().setPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST, newWebServiceHost);
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/framework" +
-                        "?subscription-key=" + m_webServiceKey);
-            System.out.println(url);
+            String urlString = WebServiceProperties.getInstance().buildUrlString("/framework");
+            URL url = new URL(urlString);
+                        
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             if (conn.getResponseCode() != 200) {
+                WebServiceProperties.getInstance().setPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY, m_webServiceKey);
+                WebServiceProperties.getInstance().setPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST, m_webServiceHost);
+        
                 throw new RuntimeException("Failed : HTTP Error code : "+ conn.getResponseCode());
             }
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -175,13 +180,13 @@ public class RestSvcConnection extends javax.swing.JDialog {
                 }
             }
             conn.disconnect();
+            m_webServiceKey = newWebServiceKey;
+            m_webServiceHost = newWebServiceHost;
         }
         catch (Exception e3) {
             JOptionPane.showMessageDialog(this, "Could not connect - Invalid Web Service Host or Key!!");
             return;
         }
-        WebServiceProperties.getInstance().setPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST, m_webServiceHost);
-        WebServiceProperties.getInstance().setPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY, m_webServiceKey);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 

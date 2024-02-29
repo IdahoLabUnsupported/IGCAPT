@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import org.json.JSONObject;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
+import gov.inl.igcapt.properties.WebServiceProperties;
 import java.awt.Frame;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -30,8 +31,6 @@ import javax.swing.JOptionPane;
 public class AddToScenarioWizard extends javax.swing.JDialog {
     private List<GucsInformation>m_gucsList = null;
     private List<CnrmInformation>m_cnrmList = null;
-    private String m_webServiceHost = null;
-    private String m_webServiceKey = null;
     private Frame m_parent = null;
     enum FieldStates {
         GUCS_FIELD,   
@@ -305,13 +304,10 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
     private void cleanupScenarios() {
         String output;
 
-        m_webServiceKey = "";
-        m_webServiceHost = "";
         List<ScenarioInformation>scenarioList = null;
         ScenarioInformation scenarioInformation = null;
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios" +
-                              "?subscription-key=" + m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios"));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -352,9 +348,7 @@ public class AddToScenarioWizard extends javax.swing.JDialog {
         HttpURLConnection conn = null;
         
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios/"
-                + id + "?subscription-key=" + m_webServiceKey);
-            
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios/"));
             conn = (HttpURLConnection)url.openConnection();
             conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Accept", "application/json");

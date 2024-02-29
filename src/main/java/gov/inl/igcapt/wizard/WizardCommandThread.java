@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import gov.inl.igcapt.properties.WebServiceProperties;
-import gov.inl.igcapt.properties.WebServiceProperties.WebServiceProperty;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,8 +43,6 @@ public class WizardCommandThread extends Thread {
     private List<GucsInformation> m_gucsList = null;
     private List<CnrmInformation> m_cnrmList = null;
     private boolean m_connectionValid = false;
-    private final String m_webServiceHost;
-    private final String m_webServiceKey;
     private String m_errorMsg = null;
     private String m_cimRdfFile = null;
     private String m_name = null;
@@ -58,10 +55,8 @@ public class WizardCommandThread extends Thread {
 
     public WizardCommandThread (CommandType command) {
         m_command = command;
-        m_webServiceHost = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
-        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
     }
-    
+       
     // thread will execute based on m_command which is set in constructor
     public void run() {
         switch (m_command) {
@@ -91,8 +86,7 @@ public class WizardCommandThread extends Thread {
     // (Not currently used but) Verifies web service connection
     private void verifyConnection() {
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/framework" +
-            "?subscription-key=" + m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/framework"));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -157,8 +151,7 @@ public class WizardCommandThread extends Thread {
         ScenarioInformation scenInfo;
         try {
            
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios?subscription-key="+m_webServiceKey);
-            
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios"));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
@@ -217,9 +210,8 @@ public class WizardCommandThread extends Thread {
         String fileName = null;
         ScenarioDetails scenarioDetails = null;
         try {
-            URL url = new URL("https://" + m_webServiceHost + "/scenarios/" +
-                    m_scenarioId + "?subscription-key=" + 
-                    m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios/" +
+                    m_scenarioId));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -271,11 +263,9 @@ public class WizardCommandThread extends Thread {
         }       
         
         try {
-            String urlString = "https://" + m_webServiceHost + 
-                    "/scenarios/" + m_scenarioId + "/gucs?subscription-key=" +
-                    m_webServiceKey; 
-            URL url = new URL(urlString);
-            
+            URL url = new 
+                URL(WebServiceProperties.getInstance().buildUrlString("/scenarios/" +
+                        m_scenarioId + "/gucs"));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setRequestMethod("PUT");
@@ -319,10 +309,7 @@ public class WizardCommandThread extends Thread {
         }       
         
         try {
-            String urlString = "https://" + m_webServiceHost + 
-                    "/scenarios/" + m_scenarioId + "/cnrm?subscription-key=" + 
-                    m_webServiceKey;
-            URL url = new URL(urlString);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/scenarios/" + m_scenarioId + "/cnrm"));
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
@@ -371,8 +358,7 @@ public class WizardCommandThread extends Thread {
         m_errorMsg = null;
              
         try {
-            URL url = new URL("https://" + m_webServiceHost + 
-                    "/gucs?subscription-key=" + m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/gucs"));
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
@@ -425,8 +411,8 @@ public class WizardCommandThread extends Thread {
         String output;
         
         try {
-            URL url = new URL("https://" + m_webServiceHost + 
-                    "/cnrm?subscription-key=" + m_webServiceKey);
+            URL url = new URL(WebServiceProperties.getInstance().buildUrlString("/cnrm"));
+            
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
