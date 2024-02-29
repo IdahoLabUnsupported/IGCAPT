@@ -109,6 +109,22 @@ public final class WebServiceProperties implements Serializable {
     
         return keyString;
     }
+    
+    public String buildUrlString(String path) {
+        // NOTE: Host may be just a name or a name:port
+        String host = getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
+        String key = getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
+        String urlString = "";
+        
+        if (key.equals("")) {
+            urlString = "http://" + host + path;
+        }
+        else {
+            urlString = "https://" + host + path + "?subscription-key=" + key;
+        }
+        
+        return urlString;        
+    }
 
     /**
      * Get a Key-Value pair from the current Properties

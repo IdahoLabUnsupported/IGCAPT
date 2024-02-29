@@ -7,7 +7,6 @@ package gov.inl.igcapt.wizard;
 import gov.inl.igcapt.properties.IGCAPTproperties;
 import gov.inl.igcapt.properties.IGCAPTproperties.IgcaptProperty;
 import gov.inl.igcapt.properties.WebServiceProperties;
-import gov.inl.igcapt.properties.WebServiceProperties.WebServiceProperty;
 import java.awt.Frame;
 import javax.swing.JFileChooser;
 import java.io.File;
@@ -21,8 +20,6 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
 
     private Frame localParent;
     private boolean m_needData = true;
-    String m_webServiceHost = null;
-    String m_webServiceKey = null;
     
     /**
      * Creates new form ScenarioWizard
@@ -30,14 +27,7 @@ public class CreateScenarioWizard extends javax.swing.JDialog {
     public CreateScenarioWizard(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         localParent = parent;
-        m_webServiceHost = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_HOST);
-        m_webServiceKey = WebServiceProperties.getInstance().getPropertyKeyValue(WebServiceProperty.WEB_SERVICE_KEY);
-        if (m_webServiceHost == null || m_webServiceKey == null) {
-            JOptionPane.showMessageDialog(this, 
-                    "You must enter a Web Service connection. \n(File->Initialize Connection)");
-            dispose();
-            return;
-        }
+        
         initComponents();
         jButton2.setEnabled(false);
         WizardDriver.getHandle().refresh();
